@@ -1,5 +1,6 @@
 package ntut.csie.islab.miro.adapter.repository.stickyNote;
 
+import ntut.csie.islab.miro.entity.Style;
 import ntut.csie.islab.miro.entity.stickyNote.StickyNote;
 import ntut.csie.islab.miro.usecase.stickyNote.CreateStickyNoteInput;
 
@@ -27,5 +28,10 @@ public class StickyNoteRepository {
 
     public void delete(StickyNote stickyNote) {
         stickyNoteList.remove(stickyNote);
+    }
+
+    public void edit(StickyNote stickyNote, String content, Style style) {
+        stickyNote.setContent(content);
+        stickyNote.setStyle(style);
     }
 }
