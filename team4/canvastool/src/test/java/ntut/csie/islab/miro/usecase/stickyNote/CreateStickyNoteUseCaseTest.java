@@ -2,6 +2,8 @@ package ntut.csie.islab.miro.usecase.stickyNote;
 
 import ntut.csie.islab.miro.entity.ShapeKindEnum;
 import ntut.csie.islab.miro.entity.Style;
+import ntut.csie.islab.miro.adapter.repository.stickyNote.StickyNoteRepository;
+import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,14 +16,16 @@ import java.util.UUID;
 
 public class CreateStickyNoteUseCaseTest {
     public DomainEventBus domainEventBus;
+    public StickyNoteRepository stickyNoteRepository;
     @BeforeEach
     public void setUp(){
-        domainEventBus = new DomainEventBus();
+        domainEventBus = new GoogleEventBus();
+        stickyNoteRepository = new StickyNoteRepository();
     }
 
     @Test
     public void test_create_sticky_note(){
-        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase();
+        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         CreateStickyNoteInput input = createStickyNoteUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
 
@@ -31,9 +35,10 @@ public class CreateStickyNoteUseCaseTest {
         input.setStyle(new Style(12, ShapeKindEnum.CIRCLE, 87.87, "#948700"));
         createStickyNoteUseCase.execute(input, output);
 
-
         assertNotNull(output.getId());
         assertEquals(ExitCode.SUCCESS,output.getExitCode());
+
+        assertEquals("Content", stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getContent());
     }
 
 }
