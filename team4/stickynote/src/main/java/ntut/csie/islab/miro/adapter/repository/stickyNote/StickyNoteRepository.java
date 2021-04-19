@@ -24,4 +24,8 @@ public class StickyNoteRepository {
                 .filter(s -> s.getId().equals(id))
                 .findFirst();
     }
+
+    public void delete(StickyNote stickyNote) {
+        stickyNoteList.remove(stickyNote);
+    }
 }
