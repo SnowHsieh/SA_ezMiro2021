@@ -1,15 +1,15 @@
-package ntut.csie.islab.miro.usecase.figure.stickyNote;
+package ntut.csie.islab.miro.usecase.stickyNote;
 
-import ntut.csie.islab.miro.entity.figure.FigurePosition;
-import ntut.csie.islab.miro.entity.figure.FigureStyle;
+import ntut.csie.islab.miro.entity.Position;
+import ntut.csie.islab.miro.entity.Style;
 
 import java.util.UUID;
 
 public class CreateStickyNoteInput {
     private UUID boardId;
-    private FigurePosition position;
+    private Position position;
     private String content;
-    private FigureStyle style;
+    private Style style;
 
     public UUID getBoardId() {
         return boardId;
@@ -27,18 +27,18 @@ public class CreateStickyNoteInput {
         this.content = content;
     }
 
-    public FigureStyle getStyle() {
+    public Style getStyle() {
         return style;
     }
 
-    public void setStyle(FigureStyle style) {
+    public void setStyle(Style style) {
         this.style = style;
     }
 
     public void setPosition(double x, double y) {
-        this.position = new FigurePosition(x,y);
+        this.position = new Position(x,y);
     }
-    public FigurePosition getPosition() {
+    public Position getPosition() {
         return this.position;
     }
 }

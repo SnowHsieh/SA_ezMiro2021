@@ -1,18 +1,19 @@
-package ntut.csie.islab.miro.entity.figure.stickyNote;
+package ntut.csie.islab.miro.entity.stickyNote;
 
-import ntut.csie.islab.miro.entity.figure.FigurePosition;
-import ntut.csie.islab.miro.entity.figure.FigureStyle;
+import ntut.csie.islab.miro.entity.Style;
+import ntut.csie.islab.miro.entity.Position;
+import ntut.csie.sslab.ddd.model.AggregateRoot;
 import ntut.csie.sslab.ddd.model.Entity;
 
 import java.util.UUID;
 
-public class StickyNote extends Entity<UUID> {
+public class StickyNote extends AggregateRoot<UUID> {
     private UUID boardId;
-    private FigurePosition position;
+    private Position position;
     private String content;
-    private FigureStyle style;
+    private Style style;
 
-    public StickyNote(UUID boardId, FigurePosition position, String content, FigureStyle style) {
+    public StickyNote(UUID boardId, Position position, String content, Style style) {
         super(UUID.randomUUID());
         this.boardId = boardId;
         this.position = position;
@@ -28,11 +29,11 @@ public class StickyNote extends Entity<UUID> {
         this.boardId = boardId;
     }
 
-    public FigurePosition getPosition() {
+    public Position getPosition() {
         return position;
     }
 
-    public void setPosition(FigurePosition position) {
+    public void setPosition(Position position) {
         this.position = position;
     }
 
@@ -44,11 +45,11 @@ public class StickyNote extends Entity<UUID> {
         this.content = content;
     }
 
-    public FigureStyle getStyle() {
+    public Style getStyle() {
         return style;
     }
 
-    public void setStyle(FigureStyle style) {
+    public void setStyle(Style style) {
         this.style = style;
     }
 }

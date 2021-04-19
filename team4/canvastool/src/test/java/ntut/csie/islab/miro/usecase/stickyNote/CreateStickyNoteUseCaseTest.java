@@ -1,22 +1,23 @@
-package ntut.csie.islab.miro.usecase.figure.stickyNote;
+package ntut.csie.islab.miro.usecase.stickyNote;
 
-import static org.junit.Assert.*;
-
-import javafx.scene.paint.Color;
-import ntut.csie.islab.miro.entity.figure.FigureShapeKindEnum;
-import ntut.csie.islab.miro.entity.figure.FigureStyle;
+import ntut.csie.islab.miro.entity.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.Style;
+import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 
 import java.util.UUID;
 
 public class CreateStickyNoteUseCaseTest {
+    public DomainEventBus domainEventBus;
+    @BeforeEach
+    public void setUp(){
+        domainEventBus = new DomainEventBus();
+    }
 
     @Test
     public void test_create_sticky_note(){
@@ -27,8 +28,9 @@ public class CreateStickyNoteUseCaseTest {
         input.setBoardId(UUID.randomUUID());
         input.setPosition(1.0,1.0);
         input.setContent("Content");
-        input.setStyle(new FigureStyle(12, FigureShapeKindEnum.CIRCLE, 87.87, "#948700"));
+        input.setStyle(new Style(12, ShapeKindEnum.CIRCLE, 87.87, "#948700"));
         createStickyNoteUseCase.execute(input, output);
+
 
         assertNotNull(output.getId());
         assertEquals(ExitCode.SUCCESS,output.getExitCode());

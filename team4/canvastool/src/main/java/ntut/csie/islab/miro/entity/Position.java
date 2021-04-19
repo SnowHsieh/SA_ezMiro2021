@@ -1,10 +1,10 @@
-package ntut.csie.islab.miro.entity.figure;
+package ntut.csie.islab.miro.entity;
 
-public class FigurePosition {
+public class Position {
     private double x;
     private double y ;
 
-    public FigurePosition(double x, double y) {
+    public Position(double x, double y) {
         this.x = x;
         this.y = y;
     }

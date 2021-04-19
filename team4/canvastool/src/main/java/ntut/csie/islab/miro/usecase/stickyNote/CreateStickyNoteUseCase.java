@@ -1,10 +1,9 @@
-package ntut.csie.islab.miro.usecase.figure.stickyNote;
+package ntut.csie.islab.miro.usecase.stickyNote;
 
-import ntut.csie.islab.miro.entity.figure.stickyNote.StickyNote;
-import ntut.csie.islab.miro.entity.figure.stickyNote.StickyNoteRepository;
+import ntut.csie.islab.miro.entity.stickyNote.StickyNote;
+import ntut.csie.islab.miro.entity.stickyNote.StickyNoteRepository;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.*;
-import org.apache.catalina.Store;
 
 public class CreateStickyNoteUseCase {
 

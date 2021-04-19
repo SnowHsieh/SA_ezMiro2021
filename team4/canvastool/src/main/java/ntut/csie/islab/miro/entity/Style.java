@@ -1,12 +1,12 @@
-package ntut.csie.islab.miro.entity.figure;
+package ntut.csie.islab.miro.entity;
 
-public class FigureStyle {
+public class Style {
     private int fontSize;
-    private FigureShapeKindEnum shape;
+    private ShapeKindEnum shape;
     private double figureSize;
     private String color;
 
-    public FigureStyle(int fontSize, FigureShapeKindEnum shape, double figureSize, String color) {
+    public Style(int fontSize, ShapeKindEnum shape, double figureSize, String color) {
         this.fontSize = fontSize;
         this.shape = shape;
         this.figureSize = figureSize;
@@ -21,11 +21,11 @@ public class FigureStyle {
         this.fontSize = fontSize;
     }
 
-    public FigureShapeKindEnum getShape() {
+    public ShapeKindEnum getShape() {
         return shape;
     }
 
-    public void setShape(FigureShapeKindEnum shape) {
+    public void setShape(ShapeKindEnum shape) {
         this.shape = shape;
     }
 
