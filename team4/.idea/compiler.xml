@@ -22,7 +22,7 @@
           <entry name="$MAVEN_REPOSITORY$/joda-time/joda-time/2.9/joda-time-2.9.jar" />
         </processorPath>
         <module name="dddcore" />
-        <module name="canvastool" />
+        <module name="stickynote" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
