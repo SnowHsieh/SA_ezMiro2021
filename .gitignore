@@ -1,4 +1,5 @@
-
+**/.idea/**
 team4/.DS_Store
 
 .DS_Store
+team3/**/target/
