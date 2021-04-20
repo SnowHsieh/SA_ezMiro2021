@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: ntut.csie.sslab.kanban.application.springboot.web.EzKanbanWebMain
+
