@@ -1,5 +1,7 @@
 package ntut.csie.sslab.kanban.usecase.board.create;
 
+import ntut.csie.sslab.ddd.model.DomainEvent;
+import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.kanban.entity.model.board.Board;
@@ -8,9 +10,11 @@ import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
 public class CreateBoardUseCaseImpl implements CreateBoardUseCase{
 
     private BoardRepository boardRepository;
+    private DomainEventBus domainEventBus;
 
-    public CreateBoardUseCaseImpl(BoardRepository boardRepository) {
+    public CreateBoardUseCaseImpl(BoardRepository boardRepository, DomainEventBus domainEventBus) {
         this.boardRepository = boardRepository;
+        this.domainEventBus = domainEventBus;
     }
 
     @Override
@@ -19,6 +23,7 @@ public class CreateBoardUseCaseImpl implements CreateBoardUseCase{
             Board board = new Board(input.getBoardId(), input.getBoardName());
 
             boardRepository.save(board);
+//            domainEventBus.postAll(board);
 
             output.setId(board.getId())
                     .setExitCode(ExitCode.SUCCESS);

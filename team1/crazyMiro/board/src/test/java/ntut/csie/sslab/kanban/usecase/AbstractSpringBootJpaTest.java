@@ -1,4 +1,4 @@
-//package ntut.csie.sslab.kanban.usecase;
+package ntut.csie.sslab.kanban.usecase;
 //
 //import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 //import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
@@ -69,70 +69,59 @@
 //import static org.junit.jupiter.api.Assertions.assertEquals;
 //import static org.junit.jupiter.api.Assertions.assertNotNull;
 //
-//@SpringBootTest
-//@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-//@ExtendWith(SpringExtension.class)
-//@ContextConfiguration(classes= JpaApplicationTest.class)
-//@TestPropertySource(locations = "classpath:test.properties")
-//@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
-//public abstract class AbstractSpringBootJpaTest {
-//
-//    public static final long WAITING = 1000;
-//
-//    public BoardRepository boardRepository;
-//    public WorkflowRepository workflowRepository;
-//    public CardRepository cardRepository;
-//    public DomainEventBus domainEventBus;
-//    public NotifyBoardAdapter notifyBoardAdapter;
-//    public NotifyWorkflowAdapter notifyWorkflowAdapter;
-//    public String teamId;
-//    public String teamName;
-//    public String projectId;
-//    public String projectName;
-//    public String boardId;
-//    public String workflowId;
-//    public String rootStageId;
-//    public String tagId;
-//    public String userId;
-//    public String username;
-//    public String boardName;
-//
-//
-//    @Autowired
-//    private BoardRepositoryPeer boardRepositoryPeer;
-//
-//    @Autowired
-//    private WorkflowRepositoryPeer workflowRepositoryPeer;
-//
-//    @Autowired
-//    private CardRepositoryPeer cardRepositoryPeer;
-//
-//
-//
-//    @BeforeEach
-//    public void setUp() {
-//
-//        boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
-//        workflowRepository = new WorkflowRepositoryImpl(workflowRepositoryPeer);
-//        cardRepository = new CardRepositoryImpl(cardRepositoryPeer);
-//        domainEventBus = new GoogleEventBus();
-//
-//        teamId = UUID.randomUUID().toString();
-//        teamName = "ntut team";
-//        projectId = UUID.randomUUID().toString();
-//        projectName = "ezkanban project";
-//        boardId = UUID.randomUUID().toString();
-//        workflowId = UUID.randomUUID().toString();
-//        tagId = UUID.randomUUID().toString();
-//        rootStageId = UUID.randomUUID().toString();
-//        userId = UUID.randomUUID().toString();
-//        username = "Teddy";
-//        boardName = "Scrum Board";
-//
-//        notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
-//        notifyWorkflowAdapter = new NotifyWorkflowAdapter(new NotifyWorkflow(cardRepository, workflowRepository, domainEventBus));
-//
-//    }
+
+import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
+import ntut.csie.sslab.ddd.model.DomainEventBus;
+import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
+import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.workspace.WorkspaceRepositoryImpl;
+import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
+import ntut.csie.sslab.kanban.usecase.workspace.WorkspaceRepository;
+import ntut.csie.sslab.kanban.usecase.workspace.create.CreateWorkspaceInput;
+import ntut.csie.sslab.kanban.usecase.workspace.create.CreateWorkspaceUseCase;
+import ntut.csie.sslab.kanban.usecase.workspace.create.CreateWorkspaceUseCaseImpl;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.UUID;
+
+@SpringBootTest
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes= JpaApplicationTest.class)
+@TestPropertySource(locations = "classpath:test.properties")
+@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+public abstract class AbstractSpringBootJpaTest {
+
+    protected BoardRepository boardRepository;
+    protected WorkspaceRepository workspaceRepository;
+
+    protected DomainEventBus eventBus;
+
+    @BeforeEach
+    public void setUp() {
+
+        boardRepository = new BoardRepositoryImpl();
+        workspaceRepository = new WorkspaceRepositoryImpl();
+
+
+    }
+
+    protected String createWorkspace() {
+        String boardId = UUID.randomUUID().toString();
+        CreateWorkspaceUseCase createWorkspaceUseCase = new CreateWorkspaceUseCaseImpl(workspaceRepository);
+        CreateWorkspaceInput input = createWorkspaceUseCase.newInput();
+        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
+        input.setBoardId(boardId);
+        createWorkspaceUseCase.execute(input, output);
+        return output.getId();
+    }
 //
 //
 //    public CreateBoardUseCase newCreateBoardUseCase (){
@@ -434,4 +423,4 @@
 //    public BoardRepository getBoardRepository(){
 //        return boardRepository;
 //    }
-//}
+}
