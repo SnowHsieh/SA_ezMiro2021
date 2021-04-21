@@ -1,9 +1,8 @@
-package ntut.csie.selab.usecase;
+package ntut.csie.selab.usecase.board;
 
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.model.DomainEventBus;
-import ntut.csie.selab.usecase.board.BoardRepository;
-import ntut.csie.selab.usecase.board.CreateBoardUseCase;
+import ntut.csie.selab.usecase.board.create.CreateBoardUseCase;
 import ntut.csie.selab.usecase.board.create.CreateBoardInput;
 import ntut.csie.selab.usecase.board.create.CreateBoardOutput;
 import org.junit.Assert;

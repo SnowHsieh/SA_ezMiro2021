@@ -1,4 +1,4 @@
-package ntut.csie.selab.usecase;
+package ntut.csie.selab.usecase.widget;
 
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
@@ -7,7 +7,6 @@ import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteInput;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteOutput;

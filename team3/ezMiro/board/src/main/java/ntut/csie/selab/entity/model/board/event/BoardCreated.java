@@ -1,4 +1,4 @@
-package ntut.csie.selab.usecase.board.create;
+package ntut.csie.selab.entity.model.board.event;
 
 import ntut.csie.selab.model.DomainEvent;
 
