@@ -70,7 +70,10 @@ package ntut.csie.sslab.kanban.usecase;
 //import static org.junit.jupiter.api.Assertions.assertNotNull;
 //
 
+import com.google.common.eventbus.Subscribe;
+import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
+import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.workspace.WorkspaceRepositoryImpl;
@@ -101,27 +104,41 @@ public abstract class AbstractSpringBootJpaTest {
 
     protected BoardRepository boardRepository;
     protected WorkspaceRepository workspaceRepository;
-
-    protected DomainEventBus eventBus;
+    protected DomainEventBus domainEventBus;
+    protected EventListener eventListener;
 
     @BeforeEach
     public void setUp() {
-
         boardRepository = new BoardRepositoryImpl();
         workspaceRepository = new WorkspaceRepositoryImpl();
-
-
+        domainEventBus = new GoogleEventBus();
+        eventListener = new EventListener();
+        domainEventBus.register(eventListener);
     }
 
     protected String createWorkspace() {
         String boardId = UUID.randomUUID().toString();
-        CreateWorkspaceUseCase createWorkspaceUseCase = new CreateWorkspaceUseCaseImpl(workspaceRepository);
+        CreateWorkspaceUseCase createWorkspaceUseCase = new CreateWorkspaceUseCaseImpl(workspaceRepository, domainEventBus);
         CreateWorkspaceInput input = createWorkspaceUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);
         createWorkspaceUseCase.execute(input, output);
         return output.getId();
     }
+
+    protected class EventListener {
+        private int eventCount;
+
+        @Subscribe
+        public void eventHandler(DomainEvent domainEvent){
+            eventCount++;
+        }
+
+        public int getEventCount() {
+            return eventCount;
+        }
+    }
+
 //
 //
 //    public CreateBoardUseCase newCreateBoardUseCase (){

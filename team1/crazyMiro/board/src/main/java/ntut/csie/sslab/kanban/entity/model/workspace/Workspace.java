@@ -1,6 +1,9 @@
 package ntut.csie.sslab.kanban.entity.model.workspace;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
+import ntut.csie.sslab.ddd.model.common.DateProvider;
+import ntut.csie.sslab.kanban.entity.model.workspace.event.StickerCreated;
+import ntut.csie.sslab.kanban.entity.model.workspace.event.WorkspaceCreated;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,7 @@ public class Workspace extends AggregateRoot<String> {
         this.boardId = boardId;
         this.workspaceId = workspaceId;
         this.figures = new ArrayList<>();
+        addDomainEvent(new WorkspaceCreated(workspaceId, boardId));
     }
 
     public String getBoardId() {
@@ -39,6 +43,7 @@ public class Workspace extends AggregateRoot<String> {
     public String createSticker(String content, int size, String color, Coordinate position) {
         Sticker sticker = new Sticker(UUID.randomUUID().toString(), content, size, color, position);
         figures.add(sticker);
+        addDomainEvent(new StickerCreated(workspaceId, sticker.getFigureId(), content, size, color, position));
         return sticker.getFigureId();
     }
 }

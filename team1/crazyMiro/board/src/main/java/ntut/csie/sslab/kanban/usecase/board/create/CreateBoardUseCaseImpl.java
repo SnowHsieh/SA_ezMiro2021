@@ -23,7 +23,7 @@ public class CreateBoardUseCaseImpl implements CreateBoardUseCase{
             Board board = new Board(input.getBoardId(), input.getBoardName());
 
             boardRepository.save(board);
-//            domainEventBus.postAll(board);
+            domainEventBus.postAll(board);
 
             output.setId(board.getId())
                     .setExitCode(ExitCode.SUCCESS);

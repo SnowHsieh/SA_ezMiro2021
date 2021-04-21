@@ -1,19 +1,20 @@
 package ntut.csie.sslab.kanban.usecase.workspace.create;
 
+import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.kanban.entity.model.workspace.Workspace;
 import ntut.csie.sslab.kanban.usecase.workspace.WorkspaceRepository;
-import ntut.csie.sslab.kanban.usecase.workspace.create.CreateWorkspaceInput;
-import ntut.csie.sslab.kanban.usecase.workspace.create.CreateWorkspaceUseCase;
 
 import java.util.UUID;
 
 public class CreateWorkspaceUseCaseImpl implements CreateWorkspaceUseCase {
     private WorkspaceRepository workspaceRepository;
+    private DomainEventBus domainEventBus;
 
-    public CreateWorkspaceUseCaseImpl(WorkspaceRepository workspaceRepository) {
+    public CreateWorkspaceUseCaseImpl(WorkspaceRepository workspaceRepository, DomainEventBus domainEventBus) {
         this.workspaceRepository = workspaceRepository;
+        this.domainEventBus = domainEventBus;
     }
 
     @Override
@@ -21,6 +22,7 @@ public class CreateWorkspaceUseCaseImpl implements CreateWorkspaceUseCase {
         try{
             Workspace workspace = new Workspace(UUID.randomUUID().toString(), input.getBoardId());
             workspaceRepository.save(workspace);
+            domainEventBus.postAll(workspace);
             output.setId(workspace.getId())
                     .setExitCode(ExitCode.SUCCESS);
         }catch (Exception e) {

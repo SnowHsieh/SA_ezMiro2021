@@ -1,5 +1,6 @@
 package ntut.csie.sslab.kanban.usecase.sticker.create;
 
+import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.kanban.entity.model.workspace.Coordinate;
@@ -10,9 +11,11 @@ import ntut.csie.sslab.kanban.usecase.workspace.WorkspaceRepository;
 
 public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
     private WorkspaceRepository workspaceRepository;
+    private DomainEventBus domainEventBus;
 
-    public CreateStickerUseCaseImpl(WorkspaceRepository workspaceRepository) {
+    public CreateStickerUseCaseImpl(WorkspaceRepository workspaceRepository, DomainEventBus domainEventBus) {
         this.workspaceRepository = workspaceRepository;
+        this.domainEventBus = domainEventBus;
     }
 
     @Override
@@ -25,6 +28,7 @@ public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
                     input.getColor(),
                     input.getPosition());
             workspaceRepository.save(workspace);
+            domainEventBus.postAll(workspace);
 
             output.setId(stickerId).setExitCode(ExitCode.SUCCESS);
         }catch (Exception e) {
