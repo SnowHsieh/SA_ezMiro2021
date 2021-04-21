@@ -1,4 +1,4 @@
-package ntut.csie.selab.usecase.widget.create;
+package ntut.csie.selab.entity.model.widget.event;
 
 import ntut.csie.selab.model.DomainEvent;
 

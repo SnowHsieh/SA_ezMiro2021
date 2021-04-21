@@ -1,10 +1,10 @@
 package ntut.csie.selab.usecase.board;
 
+import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.create.BoardCreated;
 import ntut.csie.selab.usecase.board.create.CreateBoardInput;
 import ntut.csie.selab.usecase.board.create.CreateBoardOutput;
-import ntut.csie.selab.entity.model.Board;
 
 import java.util.Date;
 import java.util.UUID;

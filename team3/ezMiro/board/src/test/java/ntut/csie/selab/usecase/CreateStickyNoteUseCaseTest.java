@@ -2,8 +2,8 @@ package ntut.csie.selab.usecase;
 
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
-import ntut.csie.selab.entity.model.Board;
-import ntut.csie.selab.entity.model.Coordinate;
+import ntut.csie.selab.entity.model.board.Board;
+import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
@@ -63,6 +63,7 @@ public class CreateStickyNoteUseCaseTest {
 
         // Assert
         Assert.assertEquals(1, boardRepository.findById(boardId).get().getWidgetIds().size());
+        Assert.assertEquals(2, domainEventBus.getCount());
     }
 
     private Board createSimpleBoardWith(String boardId) {

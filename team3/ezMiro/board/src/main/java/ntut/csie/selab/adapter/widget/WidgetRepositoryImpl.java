@@ -1,6 +1,6 @@
 package ntut.csie.selab.adapter.widget;
 
-import ntut.csie.selab.entity.model.Widget;
+import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 
 import java.util.ArrayList;

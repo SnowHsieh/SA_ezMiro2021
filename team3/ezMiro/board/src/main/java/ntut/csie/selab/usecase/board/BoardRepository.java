@@ -1,6 +1,7 @@
 package ntut.csie.selab.usecase.board;
 
-import ntut.csie.selab.entity.model.Board;
+
+import ntut.csie.selab.entity.model.board.Board;
 
 import java.util.Optional;
 

@@ -1,9 +1,9 @@
 package ntut.csie.selab.usecase;
 
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
-import ntut.csie.selab.entity.model.Coordinate;
-import ntut.csie.selab.entity.model.StickyNote;
-import ntut.csie.selab.entity.model.Widget;
+import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.StickyNote;
+import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.usecase.widget.edit.EditTextOfStickyNoteInput;
 import ntut.csie.selab.usecase.widget.edit.EditTextOfStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.edit.EditTextOfStickyNoteUseCase;

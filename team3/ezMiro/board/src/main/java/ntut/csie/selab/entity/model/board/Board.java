@@ -1,4 +1,4 @@
-package ntut.csie.selab.entity.model;
+package ntut.csie.selab.entity.model.board;
 
 import java.util.ArrayList;
 import java.util.List;

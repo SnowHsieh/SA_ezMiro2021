@@ -1,6 +1,7 @@
 package ntut.csie.selab.usecase.widget.create;
 
-import ntut.csie.selab.entity.model.Coordinate;
+
+import ntut.csie.selab.entity.model.widget.Coordinate;
 
 import java.awt.*;
 
