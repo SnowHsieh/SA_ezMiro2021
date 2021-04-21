@@ -13,7 +13,7 @@
 
 
     <groupId>ntut.csie.sslab</groupId>
-    <artifactId>ezKanban</artifactId>
+    <artifactId>ezMiro</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
 
