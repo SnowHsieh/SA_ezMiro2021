@@ -1,4 +1,4 @@
-package ntut.csie.sslab.kanban.usecase.workspace.create.sticker;
+package ntut.csie.sslab.kanban.usecase.sticker.create;
 
 import ntut.csie.sslab.ddd.usecase.Input;
 import ntut.csie.sslab.kanban.entity.model.workspace.Coordinate;

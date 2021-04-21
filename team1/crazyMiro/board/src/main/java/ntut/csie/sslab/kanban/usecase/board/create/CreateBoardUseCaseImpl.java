@@ -1,6 +1,7 @@
 package ntut.csie.sslab.kanban.usecase.board.create;
 
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
+import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.kanban.entity.model.board.Board;
 import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
 
@@ -14,11 +15,17 @@ public class CreateBoardUseCaseImpl implements CreateBoardUseCase{
 
     @Override
     public void execute(CreateBoardInput input, CqrsCommandOutput output) {
-        Board board = new Board(input.getBoardId(), input.getBoardName());
+        try{
+            Board board = new Board(input.getBoardId(), input.getBoardName());
 
-        boardRepository.save(board);
+            boardRepository.save(board);
 
-        output.setId(board.getId());
+            output.setId(board.getId())
+                    .setExitCode(ExitCode.SUCCESS);
+        }catch (Exception e){
+            output.setExitCode(ExitCode.FAILURE)
+                    .setMessage(e.getMessage());
+        }
     }
 
     @Override

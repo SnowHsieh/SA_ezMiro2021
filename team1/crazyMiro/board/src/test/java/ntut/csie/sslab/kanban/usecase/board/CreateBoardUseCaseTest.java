@@ -1,6 +1,7 @@
 package ntut.csie.sslab.kanban.usecase.board;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
+import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.kanban.entity.model.board.Board;
 import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardInput;
@@ -36,6 +37,7 @@ public class CreateBoardUseCaseTest {
         createBoardUseCase.execute(input, output);
 
         assertEquals(boardId, output.getId());
+        assertEquals(ExitCode.SUCCESS, output.getExitCode());
         assertTrue(boardRepository.getBoardById(input.getBoardId()).isPresent());
         Board board = boardRepository.getBoardById(input.getBoardId()).get();
         assertEquals(boardId, board.getBoardId());
