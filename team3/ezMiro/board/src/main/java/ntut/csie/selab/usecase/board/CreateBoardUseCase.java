@@ -1,6 +1,5 @@
 package ntut.csie.selab.usecase.board;
 
-import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.create.BoardCreated;
 import ntut.csie.selab.usecase.board.create.CreateBoardInput;
@@ -12,10 +11,11 @@ import java.util.UUID;
 
 public class CreateBoardUseCase {
 
-    private BoardRepositoryImpl boardRepositoryImpl;
+    private BoardRepository boardRepository;
     private DomainEventBus domainEventBus;
-    public CreateBoardUseCase(BoardRepositoryImpl boardRepositoryImpl, DomainEventBus domainEventBus) {
-        this.boardRepositoryImpl = boardRepositoryImpl;
+
+    public CreateBoardUseCase(BoardRepository boardRepository, DomainEventBus domainEventBus) {
+        this.boardRepository = boardRepository;
         this.domainEventBus = domainEventBus;
     }
 
@@ -23,7 +23,7 @@ public class CreateBoardUseCase {
         String boardId = UUID.randomUUID().toString();
         Board board = new Board(boardId, input.getTeamId(), input.getBoardName());
 
-        boardRepositoryImpl.add(board);
+        boardRepository.add(board);
         domainEventBus.post(new BoardCreated(new Date(), boardId, input.getTeamId()));
 
         output.setBoardId(board.getId());
