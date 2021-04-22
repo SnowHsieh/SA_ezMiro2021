@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.usecase.stickyNote;
 
-import ntut.csie.islab.miro.adapter.repository.figure.FigureRepository;
+import ntut.csie.islab.miro.figure.adapter.repository.figure.FigureRepository;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
@@ -12,9 +12,9 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import ntut.csie.islab.miro.adapter.repository.figure.FigureRepository;
-import ntut.csie.islab.miro.entity.figure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.figure.Style;
+
+import ntut.csie.islab.miro.figure.entity.figure.ShapeKindEnum;
+import ntut.csie.islab.miro.figure.entity.figure.Style;
 
 
 public class EditStickyNoteUseCaseTest {

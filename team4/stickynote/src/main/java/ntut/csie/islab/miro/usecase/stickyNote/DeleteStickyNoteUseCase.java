@@ -1,13 +1,10 @@
 package ntut.csie.islab.miro.usecase.stickyNote;
 
-import ntut.csie.islab.miro.adapter.repository.figure.FigureRepository;
-import ntut.csie.islab.miro.entity.Figure;
-import ntut.csie.islab.miro.entity.stickyNote.StickyNote;
+import ntut.csie.islab.miro.figure.adapter.repository.figure.FigureRepository;
+import ntut.csie.islab.miro.figure.entity.figure.Figure;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
-
-import java.util.UUID;
 
 public class DeleteStickyNoteUseCase {
 

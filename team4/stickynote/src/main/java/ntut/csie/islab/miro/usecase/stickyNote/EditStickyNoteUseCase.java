@@ -1,15 +1,11 @@
 package ntut.csie.islab.miro.usecase.stickyNote;
 
 
-import ntut.csie.islab.miro.entity.stickyNote.StickyNote;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
-import ntut.csie.islab.miro.entity.Figure;
-import ntut.csie.islab.miro.entity.stickyNote.StickyNote;
-import ntut.csie.islab.miro.entity.figure.Style;
-import ntut.csie.islab.miro.entity.figure.Position;
-import ntut.csie.islab.miro.adapter.repository.figure.FigureRepository;
+import ntut.csie.islab.miro.figure.entity.figure.Figure;
+import ntut.csie.islab.miro.figure.adapter.repository.figure.FigureRepository;
 
 public class EditStickyNoteUseCase {
     private FigureRepository stickyNoteRepository;

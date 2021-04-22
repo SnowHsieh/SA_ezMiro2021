@@ -1,11 +1,9 @@
 package ntut.csie.islab.miro.usecase.stickyNote;
 
 import java.util.UUID;
-import ntut.csie.islab.miro.adapter.repository.figure.FigureRepository;
-import ntut.csie.islab.miro.entity.Figure;
-import ntut.csie.islab.miro.entity.stickyNote.StickyNote;
-import ntut.csie.islab.miro.entity.figure.Style;
-import ntut.csie.islab.miro.entity.figure.Position;
+
+import ntut.csie.islab.miro.figure.entity.figure.Style;
+import ntut.csie.islab.miro.figure.entity.figure.Position;
 public class CreateStickyNoteInput {
     private UUID boardId;
     private Position position;

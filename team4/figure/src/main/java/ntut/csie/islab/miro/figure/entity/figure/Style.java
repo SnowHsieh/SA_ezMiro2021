@@ -1,5 +1,5 @@
-package ntut.csie.islab.miro.entity.figure;
-import ntut.csie.islab.miro.entity.figure.ShapeKindEnum;
+package ntut.csie.islab.miro.figure.entity.figure;
+
 public class Style {
     private int fontSize;
     private ShapeKindEnum shape;

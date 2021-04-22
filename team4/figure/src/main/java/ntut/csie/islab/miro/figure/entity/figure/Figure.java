@@ -1,8 +1,7 @@
-package ntut.csie.islab.miro.entity;
+package ntut.csie.islab.miro.figure.entity.figure;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
-import ntut.csie.islab.miro.entity.figure.Style;
-import ntut.csie.islab.miro.entity.figure.Position;
+
 import java.util.UUID;
 
 public abstract class Figure extends AggregateRoot<UUID> {

@@ -13,7 +13,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ntut.csie.sslab</groupId>
 
-    <artifactId>canvastool</artifactId>
+    <artifactId>stickynote</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0-SNAPSHOT</version>
 

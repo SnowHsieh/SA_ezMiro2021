@@ -21,9 +21,8 @@
           <entry name="$MAVEN_REPOSITORY$/org/springframework/spring-context/4.0.3.RELEASE/spring-context-4.0.3.RELEASE.jar" />
           <entry name="$MAVEN_REPOSITORY$/joda-time/joda-time/2.9/joda-time-2.9.jar" />
         </processorPath>
-        <module name="stickynote" />
         <module name="dddcore" />
-        <module name="canvastool" />
+        <module name="stickynote" />
       </profile>
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />

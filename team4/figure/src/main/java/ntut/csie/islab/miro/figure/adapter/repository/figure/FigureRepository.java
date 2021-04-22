@@ -1,7 +1,7 @@
-package ntut.csie.islab.miro.adapter.repository.figure;
+package ntut.csie.islab.miro.figure.adapter.repository.figure;
 
-import ntut.csie.islab.miro.entity.figure.Style;
-import ntut.csie.islab.miro.entity.Figure;
+import ntut.csie.islab.miro.figure.entity.figure.Style;
+import ntut.csie.islab.miro.figure.entity.figure.Figure;
 
 import java.util.ArrayList;
 import java.util.List;
