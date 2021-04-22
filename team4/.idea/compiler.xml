@@ -28,6 +28,7 @@
     <bytecodeTargetLevel>
       <module name="account" target="1.8" />
       <module name="board" target="1.8" />
+      <module name="canvastool" target="1.8" />
       <module name="cavastool" target="8" />
       <module name="monomain" target="1.8" />
       <module name="team" target="1.8" />
