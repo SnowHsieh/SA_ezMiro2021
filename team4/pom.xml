@@ -20,10 +20,7 @@
     <modules>
         <module>dddcore</module>
         <module>stickynote</module>
-<!--        <module>account</module>-->
-<!--        <module>monomain</module>-->
-<!--        <module>team</module>-->
-<!--        <module>canvastool</module>-->
+        <module>figure</module>
     </modules>
 
 

@@ -1,19 +1,17 @@
 package ntut.csie.islab.miro.usecase.stickyNote;
 
-import ntut.csie.islab.miro.adapter.repository.stickyNote.StickyNoteRepository;
-import ntut.csie.islab.miro.entity.stickyNote.StickyNote;
+import ntut.csie.islab.miro.figure.adapter.repository.figure.FigureRepository;
+import ntut.csie.islab.miro.figure.entity.figure.Figure;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 
-import java.util.UUID;
-
 public class DeleteStickyNoteUseCase {
 
-    private StickyNoteRepository stickyNoteRepository;
+    private FigureRepository stickyNoteRepository;
     private DomainEventBus domainEventBus;
 
-    public DeleteStickyNoteUseCase(StickyNoteRepository stickyNoteRepository, DomainEventBus domainEventBus) {
+    public DeleteStickyNoteUseCase(FigureRepository stickyNoteRepository, DomainEventBus domainEventBus) {
         this.stickyNoteRepository = stickyNoteRepository;
         this.domainEventBus = domainEventBus;
     }
@@ -23,7 +21,7 @@ public class DeleteStickyNoteUseCase {
     }
 
     public void execute(DeleteStickyNoteInput input, CqrsCommandOutput output) {
-        StickyNote stickyNote = stickyNoteRepository.findById(input.getStickyNoteId()).orElse(null);
+        Figure stickyNote = stickyNoteRepository.findById(input.getStickyNoteId()).orElse(null);
 
         if (null == stickyNote){
             output.setId(input.getStickyNoteId().toString())
