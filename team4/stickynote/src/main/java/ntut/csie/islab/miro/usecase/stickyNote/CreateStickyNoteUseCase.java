@@ -1,16 +1,20 @@
 package ntut.csie.islab.miro.usecase.stickyNote;
 
 import ntut.csie.islab.miro.entity.stickyNote.StickyNote;
-import ntut.csie.islab.miro.adapter.repository.stickyNote.StickyNoteRepository;
+import ntut.csie.islab.miro.adapter.repository.figure.FigureRepository;
+import ntut.csie.islab.miro.entity.Figure;
+import ntut.csie.islab.miro.entity.stickyNote.StickyNote;
+import ntut.csie.islab.miro.entity.figure.Style;
+import ntut.csie.islab.miro.entity.figure.Position;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.*;
 
 public class CreateStickyNoteUseCase {
 
-    private StickyNoteRepository stickyNoteRepository;
+    private FigureRepository stickyNoteRepository;
     private DomainEventBus domainEventBus;
 
-    public CreateStickyNoteUseCase(StickyNoteRepository stickyNoteRepository, DomainEventBus domainEventBus) {
+    public CreateStickyNoteUseCase(FigureRepository stickyNoteRepository, DomainEventBus domainEventBus) {
         this.stickyNoteRepository = stickyNoteRepository;
         this.domainEventBus = domainEventBus;
     }

@@ -302,6 +302,12 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>ntut.csie.sslab</groupId>
+            <artifactId>figure</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
 
         <!--        <dependency>-->
         <!--            <groupId>org.springframework.boot</groupId>-->
