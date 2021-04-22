@@ -1,8 +1,6 @@
 package ntut.csie.islab.miro.usecase.stickyNote;
 
-import ntut.csie.islab.miro.adapter.repository.stickyNote.StickyNoteRepository;
-import ntut.csie.islab.miro.entity.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.Style;
+import ntut.csie.islab.miro.figure.adapter.repository.figure.FigureRepository;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
@@ -15,13 +13,17 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import ntut.csie.islab.miro.figure.entity.figure.ShapeKindEnum;
+import ntut.csie.islab.miro.figure.entity.figure.Style;
+
+
 public class EditStickyNoteUseCaseTest {
     public DomainEventBus domainEventBus;
-    public StickyNoteRepository stickyNoteRepository;
+    public FigureRepository stickyNoteRepository;
     @BeforeEach
     public void setUp(){
         domainEventBus = new GoogleEventBus();
-        stickyNoteRepository = new StickyNoteRepository();
+        stickyNoteRepository = new FigureRepository();
     }
 
     @Test

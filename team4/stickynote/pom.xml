@@ -13,7 +13,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ntut.csie.sslab</groupId>
 
-    <artifactId>canvastool</artifactId>
+    <artifactId>stickynote</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0-SNAPSHOT</version>
 
@@ -24,7 +24,7 @@
     </properties>
 
     <build>
-        <finalName>kanban</finalName>
+        <finalName>stickynote</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -295,17 +295,18 @@
             <version>3.0.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>ntut.csie.sslab</groupId>
-            <artifactId>account</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ntut.csie.sslab</groupId>
+            <artifactId>figure</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
 
         <!--        <dependency>-->

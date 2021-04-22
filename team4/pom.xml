@@ -19,11 +19,8 @@
 
     <modules>
         <module>dddcore</module>
-        <module>board</module>
-        <module>account</module>
-        <module>monomain</module>
-        <module>team</module>
-        <module>canvastool</module>
+        <module>stickynote</module>
+        <module>figure</module>
     </modules>
 
 

@@ -24,10 +24,17 @@
         <module name="dddcore" />
         <module name="stickynote" />
       </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="figure" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="account" target="1.8" />
       <module name="board" target="1.8" />
+      <module name="canvastool" target="1.8" />
       <module name="cavastool" target="8" />
       <module name="monomain" target="1.8" />
       <module name="team" target="1.8" />

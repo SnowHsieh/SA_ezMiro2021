@@ -1,7 +1,6 @@
 package ntut.csie.selab.usecase.widget.edit;
 
-import ntut.csie.selab.entity.model.StickyNote;
-import ntut.csie.selab.entity.model.Widget;
+import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 
 import java.util.Optional;
