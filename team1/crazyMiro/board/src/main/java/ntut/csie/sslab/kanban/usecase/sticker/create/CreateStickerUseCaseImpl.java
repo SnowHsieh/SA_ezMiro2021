@@ -1,12 +1,11 @@
 package ntut.csie.sslab.kanban.usecase.sticker.create;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
+import ntut.csie.sslab.ddd.usecase.cqrs.Command;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.kanban.entity.model.workspace.Coordinate;
 import ntut.csie.sslab.kanban.entity.model.workspace.Workspace;
-import ntut.csie.sslab.kanban.usecase.sticker.create.CreateStickerInput;
-import ntut.csie.sslab.kanban.usecase.sticker.create.CreateStickerUseCase;
 import ntut.csie.sslab.kanban.usecase.workspace.WorkspaceRepository;
 
 public class CreateStickerUseCaseImpl implements CreateStickerUseCase {

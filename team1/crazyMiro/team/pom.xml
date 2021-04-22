@@ -5,8 +5,7 @@
 
 
     <parent>
-        <artifactId>ezKanban</artifactId>
-        <groupId>ntut.csie.sslab</groupId>
+        <artifactId>crazyMiro</artifactId>        <groupId>ntut.csie.sslab</groupId>
         <!--suppress MavenPropertyInParent -->
         <version>1.0.0-SNAPSHOT</version>
     </parent>

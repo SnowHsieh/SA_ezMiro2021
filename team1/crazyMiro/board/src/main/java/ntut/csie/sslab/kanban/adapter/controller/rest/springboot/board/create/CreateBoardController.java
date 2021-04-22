@@ -1,9 +1,18 @@
-package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.board.create;
-
-import org.springframework.web.bind.annotation.*;
-
-@RestController
-public class CreateBoardController {
+//package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.board.create;
+//
+//import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
+//import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
+//import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardInput;
+//import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardUseCase;
+//import org.json.JSONException;
+//import org.json.JSONObject;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.web.bind.annotation.*;
+//
+//import javax.ws.rs.QueryParam;
+//
+//@RestController
+//public class CreateBoardController {
 //    private CreateBoardUseCase createBoardUseCase;
 //
 //    @Autowired
@@ -35,4 +44,4 @@ public class CreateBoardController {
 //        createBoardUseCase.execute(input, presenter);
 //        return presenter.buildViewModel();
 //    }
-}
+//}
