@@ -13,8 +13,8 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import ntut.csie.islab.miro.figure.entity.figure.ShapeKindEnum;
-import ntut.csie.islab.miro.figure.entity.figure.Style;
+import ntut.csie.islab.miro.figure.entity.model.figure.ShapeKindEnum;
+import ntut.csie.islab.miro.figure.entity.model.figure.Style;
 
 
 public class EditStickyNoteUseCaseTest {

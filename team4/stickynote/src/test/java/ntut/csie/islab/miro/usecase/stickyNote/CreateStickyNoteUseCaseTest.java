@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.islab.miro.figure.adapter.repository.figure.FigureRepository;
-import ntut.csie.islab.miro.figure.entity.figure.ShapeKindEnum;
-import ntut.csie.islab.miro.figure.entity.figure.Style;
+import ntut.csie.islab.miro.figure.entity.model.figure.ShapeKindEnum;
+import ntut.csie.islab.miro.figure.entity.model.figure.Style;
 import java.util.UUID;
 
 public class CreateStickyNoteUseCaseTest {
