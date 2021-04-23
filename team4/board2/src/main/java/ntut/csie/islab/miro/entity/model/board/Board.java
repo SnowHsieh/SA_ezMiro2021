@@ -1,5 +1,7 @@
 package ntut.csie.islab.miro.entity.model.board;
 
+import ntut.csie.islab.miro.entity.model.board.event.BoardCreatedDomainEvent;
+import ntut.csie.islab.miro.entity.model.board.event.FigureCommittedDomainEvent;
 import ntut.csie.islab.miro.figure.entity.model.figure.Figure;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 
@@ -18,6 +20,8 @@ public class Board extends AggregateRoot<UUID> {
         this.teamId = teamId;
         this.boardName = boardName;
         this.figureList = new ArrayList<CommittedFigure>();
+        addDomainEvent(new BoardCreatedDomainEvent(teamId, getBoardId()));
+
     }
 
     public UUID getTeamId() {
@@ -42,6 +46,8 @@ public class Board extends AggregateRoot<UUID> {
 
     public void commitFigure(UUID figureId) {
         addFigure(figureId);
+        addDomainEvent(new FigureCommittedDomainEvent(getBoardId(), figureId));
+
     }
     private void addFigure(UUID figureId) {
         CommittedFigure committedFigure = new CommittedFigure(getBoardId(), figureId);
