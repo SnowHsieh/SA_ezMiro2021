@@ -11,7 +11,7 @@
     <modules>
         <module>dddcore</module>
         <module>board</module>
+        <module>team</module>
     </modules>
-
 
 </project>

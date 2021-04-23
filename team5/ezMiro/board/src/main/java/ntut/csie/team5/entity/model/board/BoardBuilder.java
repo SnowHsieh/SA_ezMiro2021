@@ -3,6 +3,7 @@ package ntut.csie.team5.entity.model.board;
 import java.util.UUID;
 
 public class BoardBuilder {
+
     private String boardId;
     private String name;
     private String projectId;

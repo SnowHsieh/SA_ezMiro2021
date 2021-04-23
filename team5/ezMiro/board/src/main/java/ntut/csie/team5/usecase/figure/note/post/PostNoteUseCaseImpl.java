@@ -34,7 +34,7 @@ public class PostNoteUseCaseImpl implements PostNoteUseCase {
 
         figureRepository.save(note);
 
-        output.setId(note.getNoteId());
+        output.setId(note.getId());
         output.setExitCode(ExitCode.SUCCESS);
     }
 

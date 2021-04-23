@@ -3,6 +3,7 @@ package ntut.csie.team5.usecase.figure.note.delete;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
+import ntut.csie.team5.entity.model.figure.Figure;
 import ntut.csie.team5.entity.model.figure.note.Note;
 import ntut.csie.team5.entity.model.figure.note.NoteBuilder;
 import ntut.csie.team5.usecase.figure.note.FigureRepository;
@@ -28,7 +29,7 @@ public class DeleteNoteUseCaseImpl implements DeleteNoteUseCase {
 
     @Override
     public void execute(DeleteNoteInput input, CqrsCommandOutput output) {
-        Note note = figureRepository.findById(input.getNoteId()).orElse(null);
+        Figure note = figureRepository.findById(input.getNoteId()).orElse(null);
 
         if(null == note)
         {
@@ -38,9 +39,9 @@ public class DeleteNoteUseCaseImpl implements DeleteNoteUseCase {
             return;
         }
 
-        figureRepository.deleteById(note.getNoteId());
+        figureRepository.deleteById(note.getId());
 
-        output.setId(note.getNoteId());
+        output.setId(note.getId());
         output.setExitCode(ExitCode.SUCCESS);
     }
 
