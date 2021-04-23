@@ -57,6 +57,8 @@ public abstract class Figure extends AggregateRoot<UUID> {
 
     public abstract void markAsRemoved(UUID boardId, UUID figureId);
 
+    public abstract void changeContent(String newContent);
+
 
 //    public void commitFigureToBoard(UUID boardId){
 //        Board board = BoardRepository.findById(boardId).orElse(null);
