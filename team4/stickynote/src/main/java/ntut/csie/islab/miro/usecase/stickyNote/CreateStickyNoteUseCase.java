@@ -2,6 +2,7 @@ package ntut.csie.islab.miro.usecase.stickyNote;
 
 import ntut.csie.islab.miro.entity.model.stickyNote.StickyNote;
 import ntut.csie.islab.miro.figure.adapter.repository.figure.FigureRepository;
+import ntut.csie.islab.miro.figure.entity.model.figure.Figure;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.*;
 
@@ -19,7 +20,7 @@ public class CreateStickyNoteUseCase {
     }
 
     public void execute(CreateStickyNoteInput input, ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput output) {
-        StickyNote stickyNote = new StickyNote(input.getBoardId(), input.getPosition(), input.getContent(), input.getStyle());
+        Figure stickyNote = new StickyNote(input.getBoardId(), input.getPosition(), input.getContent(), input.getStyle());
 
         stickyNoteRepository.save(stickyNote);
         domainEventBus.postAll(stickyNote);

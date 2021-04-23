@@ -51,6 +51,9 @@ public abstract class Figure extends AggregateRoot<UUID> {
         this.style = style;
     }
 
+    public  UUID getFigureId(){
+        return this.getId();
+    }
 //    public void commitFigureToBoard(UUID boardId){
 //        Board board = BoardRepository.findById(boardId).orElse(null);
 //
