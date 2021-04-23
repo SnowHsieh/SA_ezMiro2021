@@ -20,4 +20,13 @@ public class StickNoteDomainEventTest {
         Figure stickyNote = createStickyNote();
         assertEquals(1,stickyNote.getDomainEvents().size());
     }
+    @Test
+    public void delete_a_stickyNote_then_publishes_a_stickyNote_deleted_domain_event(){
+        Figure stickyNote = createStickyNote();
+        assertEquals(1,stickyNote.getDomainEvents().size());
+
+        stickyNote.markAsRemoved(stickyNote.getBoardId(),stickyNote.getFigureId());
+        assertEquals(2,stickyNote.getDomainEvents().size());
+
+    }
 }

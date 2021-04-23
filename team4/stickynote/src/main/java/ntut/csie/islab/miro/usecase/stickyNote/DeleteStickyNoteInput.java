@@ -3,13 +3,13 @@ package ntut.csie.islab.miro.usecase.stickyNote;
 import java.util.UUID;
 
 public class DeleteStickyNoteInput {
-    private UUID stickyNoteId;
+    private UUID figureId;
 
-    public UUID getStickyNoteId() {
-        return stickyNoteId;
+    public UUID getFigureId() {
+        return figureId;
     }
 
-    public void setStickyNoteId(UUID stickyNoteId) {
-        this.stickyNoteId = stickyNoteId;
+    public void setFigureId(UUID figureId) {
+        this.figureId = figureId;
     }
 }

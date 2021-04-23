@@ -21,12 +21,12 @@ public class EditStickyNoteUseCase {
     }
 
     public void execute(EditStickyNoteInput input, CqrsCommandPresenter output) {
-        Figure stickyNote = stickyNoteRepository.findById(input.getStickyNoteId()).orElse(null);
+        Figure stickyNote = stickyNoteRepository.findById(input.getFigureId()).orElse(null);
 
         if (null == stickyNote){
-            output.setId(input.getStickyNoteId().toString())
+            output.setId(input.getFigureId().toString())
                     .setExitCode(ExitCode.FAILURE)
-                    .setMessage("Edit stickyNote failed: stickyNote not found, stickyNote id = " + input.getStickyNoteId());
+                    .setMessage("Edit stickyNote failed: stickyNote not found, stickyNote id = " + input.getFigureId());
             return;
         }
 

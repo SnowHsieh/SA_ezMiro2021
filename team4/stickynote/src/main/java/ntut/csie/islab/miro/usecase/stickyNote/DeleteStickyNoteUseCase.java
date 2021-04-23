@@ -21,14 +21,19 @@ public class DeleteStickyNoteUseCase {
     }
 
     public void execute(DeleteStickyNoteInput input, CqrsCommandOutput output) {
-        Figure stickyNote = stickyNoteRepository.findById(input.getStickyNoteId()).orElse(null);
+        Figure stickyNote = stickyNoteRepository.findById(input.getFigureId()).orElse(null);
 
         if (null == stickyNote){
-            output.setId(input.getStickyNoteId().toString())
+            output.setId(input.getFigureId().toString())
                     .setExitCode(ExitCode.FAILURE)
-                    .setMessage("Delete stickyNote failed: stickyNote not found, stickyNote id = " + input.getStickyNoteId());
+                    .setMessage("Delete stickyNote failed: stickyNote not found, stickyNote id = " + input.getFigureId());
             return;
         }
+
+        stickyNote.markAsRemoved(
+                stickyNote.getBoardId(),
+                stickyNote.getFigureId()
+        );
 
         stickyNoteRepository.delete(stickyNote);
         domainEventBus.postAll(stickyNote);

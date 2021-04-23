@@ -5,16 +5,16 @@ import java.util.UUID;
 import ntut.csie.islab.miro.figure.entity.model.figure.Style;
 
 public class EditStickyNoteInput {
-    private UUID stickyNoteId;
+    private UUID figureId;
     private String content;
     private Style style;
 
-    public UUID getStickyNoteId() {
-        return stickyNoteId;
+    public UUID getFigureId() {
+        return figureId;
     }
 
-    public void setStickyNoteId(UUID stickyNoteId) {
-        this.stickyNoteId = stickyNoteId;
+    public void setFigureId(UUID figureId) {
+        this.figureId = figureId;
     }
 
     public String getContent() {

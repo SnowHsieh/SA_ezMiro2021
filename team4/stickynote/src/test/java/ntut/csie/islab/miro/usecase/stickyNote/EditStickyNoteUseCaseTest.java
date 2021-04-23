@@ -41,7 +41,7 @@ public class EditStickyNoteUseCaseTest {
         EditStickyNoteInput input = editStickyNoteUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
 
-        input.setStickyNoteId(UUID.fromString(createStickyNoteOutput.getId()));
+        input.setFigureId(UUID.fromString(createStickyNoteOutput.getId()));
         input.setContent("new content");
         input.setStyle(new Style(10, ShapeKindEnum.TRIANGLE, 0.87, "#009487"));
         editStickyNoteUseCase.execute(input, output);

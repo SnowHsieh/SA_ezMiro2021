@@ -40,7 +40,7 @@ public class DeleteStickyNoteUseCaseTest {
         DeleteStickyNoteInput input = deleteStickyNoteUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
 
-        input.setStickyNoteId(UUID.fromString(createStickyNoteOutput.getId()));
+        input.setFigureId(UUID.fromString(createStickyNoteOutput.getId()));
         deleteStickyNoteUseCase.execute(input, output);
 
         assertNotNull(output.getId());
