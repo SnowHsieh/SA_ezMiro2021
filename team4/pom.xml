@@ -21,7 +21,7 @@
         <module>dddcore</module>
         <module>stickynote</module>
         <module>figure</module>
-        <module>board2</module>
+        <module>board</module>
 
     </modules>
 

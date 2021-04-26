@@ -11,7 +11,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>ntut.csie.sslab</groupId>
+    <groupId>ntut.csie.islab</groupId>
 
     <artifactId>stickynote</artifactId>
     <packaging>jar</packaging>
@@ -303,14 +303,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>ntut.csie.sslab</groupId>
+            <groupId>ntut.csie.islab</groupId>
             <artifactId>figure</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>ntut.csie.sslab</groupId>
-            <artifactId>board2</artifactId>
+            <groupId>ntut.csie.islab</groupId>
+            <artifactId>board</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
