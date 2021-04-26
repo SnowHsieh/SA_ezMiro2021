@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static java.util.stream.Collectors.toList;
+
 public class FigureRepository {
     private List<Figure> stickyNoteList;
 
@@ -19,17 +21,26 @@ public class FigureRepository {
         this.stickyNoteList.add(stickyNote);
     }
 
-    public Optional<Figure> findById(UUID id) {
+    public Optional<Figure> findById(UUID boardId , UUID figureId) {
+
         return stickyNoteList.stream()
-                .filter(s -> s.getId().equals(id))
+                .filter(s -> s.getBoardId().equals(boardId))
+                .filter(s -> s.getId().equals(figureId))
                 .findFirst();
+    }
+
+    public List<Figure> findFiguresByBoardId(UUID boardId) {
+        return stickyNoteList.stream()
+                .filter(s -> s.getBoardId().equals(boardId))
+                .collect(toList());
     }
 
     public void delete(Figure stickyNote) {
         stickyNoteList.remove(stickyNote);
     }
 
-    public void edit(Figure stickyNote, String content, Style style) {
+    public void edit(UUID boardId ,Figure stickyNote, String content, Style style) {
+
         stickyNote.setContent(content);
         stickyNote.setStyle(style);
     }

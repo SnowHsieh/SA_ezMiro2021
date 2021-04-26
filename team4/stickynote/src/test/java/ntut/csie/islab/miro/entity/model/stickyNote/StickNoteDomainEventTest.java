@@ -50,6 +50,6 @@ public class StickNoteDomainEventTest {
         assertEquals(stickyNote.getFigureId(), stickyNoteEditedDomainEvent.getFigureId());
         assertEquals(newContent, stickyNoteEditedDomainEvent.getNewContent());
         assertEquals(oldContent, stickyNoteEditedDomainEvent.getOriginalContent());
-        
+
     }
 }

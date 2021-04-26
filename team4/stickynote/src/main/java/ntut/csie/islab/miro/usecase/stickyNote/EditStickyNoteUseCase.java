@@ -21,7 +21,7 @@ public class EditStickyNoteUseCase {
     }
 
     public void execute(EditStickyNoteInput input, CqrsCommandPresenter output) {
-        Figure stickyNote = stickyNoteRepository.findById(input.getFigureId()).orElse(null);
+        Figure stickyNote = stickyNoteRepository.findById(input.getBoardId(),input.getFigureId()).orElse(null);
 
         if (null == stickyNote){
             output.setId(input.getFigureId().toString())
@@ -30,7 +30,7 @@ public class EditStickyNoteUseCase {
             return;
         }
 
-        stickyNoteRepository.edit(stickyNote, input.getContent(), input.getStyle());
+        stickyNoteRepository.edit(input.getBoardId(),stickyNote, input.getContent(), input.getStyle());
         domainEventBus.postAll(stickyNote);
         output.setId(stickyNote.getId().toString());
         output.setExitCode(ExitCode.SUCCESS);

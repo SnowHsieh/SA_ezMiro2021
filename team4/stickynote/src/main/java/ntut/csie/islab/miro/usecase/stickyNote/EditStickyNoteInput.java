@@ -5,6 +5,7 @@ import java.util.UUID;
 import ntut.csie.islab.miro.figure.entity.model.figure.Style;
 
 public class EditStickyNoteInput {
+    private UUID boardId;
     private UUID figureId;
     private String content;
     private Style style;
@@ -31,5 +32,13 @@ public class EditStickyNoteInput {
 
     public void setStyle(Style style) {
         this.style = style;
+    }
+
+    public UUID getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(UUID boardId) {
+        this.boardId = boardId;
     }
 }

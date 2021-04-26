@@ -21,7 +21,7 @@ public class DeleteStickyNoteUseCase {
     }
 
     public void execute(DeleteStickyNoteInput input, CqrsCommandOutput output) {
-        Figure stickyNote = stickyNoteRepository.findById(input.getFigureId()).orElse(null);
+        Figure stickyNote = stickyNoteRepository.findById(input.getBoardId(),input.getFigureId()).orElse(null);
 
         if (null == stickyNote){
             output.setId(input.getFigureId().toString())

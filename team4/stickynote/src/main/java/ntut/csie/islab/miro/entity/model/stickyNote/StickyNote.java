@@ -11,6 +11,7 @@ import java.util.UUID;
 public class StickyNote extends Figure {
     public StickyNote(UUID boardId, Position position, String content, Style style) {
         super(boardId,position,content,style);
+
         addDomainEvent(new StickyNoteCreatedDomainEvent(boardId, getFigureId()));
     }
     @Override

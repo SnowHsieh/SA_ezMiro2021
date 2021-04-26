@@ -28,17 +28,18 @@ public class CreateStickyNoteUseCaseTest {
         CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         CreateStickyNoteInput input = createStickyNoteUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-
-        input.setBoardId(UUID.randomUUID());
+        UUID boardId = UUID.randomUUID();
+        input.setBoardId(boardId);
         input.setPosition(1.0,1.0);
-        input.setContent("Content");
+        input.setContent("");
         input.setStyle(new Style(12, ShapeKindEnum.CIRCLE, 87.87, "#948700"));
         createStickyNoteUseCase.execute(input, output);
 
         assertNotNull(output.getId());
         assertEquals(ExitCode.SUCCESS,output.getExitCode());
-
-        assertEquals("Content", stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getContent());
+        assertEquals(boardId,stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get().getBoardId());
+        assertNotNull(stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get());
+        assertEquals("", stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get().getContent());
     }
 
 }
