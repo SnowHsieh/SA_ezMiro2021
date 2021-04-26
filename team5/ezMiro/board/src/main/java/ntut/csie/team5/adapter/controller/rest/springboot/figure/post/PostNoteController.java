@@ -2,6 +2,7 @@ package ntut.csie.team5.adapter.controller.rest.springboot.figure.post;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
+import ntut.csie.team5.entity.model.figure.FigureType;
 import ntut.csie.team5.usecase.figure.note.post.PostNoteInput;
 import ntut.csie.team5.usecase.figure.note.post.PostNoteUseCase;
 import org.json.JSONException;
@@ -42,6 +43,7 @@ public class PostNoteController {
         input.setBoardId(boardId);
         input.setPosition(new Point(x, y));
         input.setColor(color);
+        input.setFigureType(FigureType.NOTE);
 
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 

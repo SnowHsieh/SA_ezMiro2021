@@ -9,6 +9,7 @@ public class NoteDto extends FigureDto {
     private int x;
     private int y;
     private String color;
+    private String figureType;
 
     public int getX() {
         return x;
@@ -31,4 +32,11 @@ public class NoteDto extends FigureDto {
         this.color = String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
     }
 
+    public String getFigureType() {
+        return figureType;
+    }
+
+    public void setFigureType(String figureType) {
+        this.figureType = figureType;
+    }
 }
