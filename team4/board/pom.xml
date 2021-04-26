@@ -33,7 +33,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>ntut.csie.sslab</groupId>
+            <groupId>ntut.csie.islab</groupId>
             <artifactId>figure</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <scope>compile</scope>
