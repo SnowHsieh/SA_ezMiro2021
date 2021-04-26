@@ -33,7 +33,7 @@ public class PostNoteController {
             JSONObject noteJSON = new JSONObject(noteInfo);
             x = noteJSON.getInt("x");
             y = noteJSON.getInt("y");
-            color = Color.getColor(noteJSON.getString("color"));
+            color = Color.decode(noteJSON.getString("color"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
