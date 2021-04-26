@@ -3,6 +3,7 @@ package ntut.csie.team5.usecase.figure.note.post;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
+import ntut.csie.team5.entity.model.figure.FigureType;
 import ntut.csie.team5.entity.model.figure.note.Note;
 import ntut.csie.team5.entity.model.figure.note.NoteBuilder;
 import ntut.csie.team5.usecase.figure.note.FigureRepository;
@@ -30,9 +31,11 @@ public class PostNoteUseCaseImpl implements PostNoteUseCase {
                 .boardId(input.getBoardId())
                 .position(input.getPosition())
                 .color(input.getColor())
+                .figureType(input.getFigureType())
                 .build();
 
         figureRepository.save(note);
+        domainEventBus.postAll(note);
 
         output.setId(note.getId());
         output.setExitCode(ExitCode.SUCCESS);
@@ -43,6 +46,7 @@ public class PostNoteUseCaseImpl implements PostNoteUseCase {
         private String boardId;
         private Point position;
         private Color color;
+        private FigureType figureType;
 
         @Override
         public String getBoardId() {
@@ -71,6 +75,16 @@ public class PostNoteUseCaseImpl implements PostNoteUseCase {
         @Override
         public void setColor(Color color) {
             this.color = color;
+        }
+
+        @Override
+        public FigureType getFigureType() {
+            return figureType;
+        }
+
+        @Override
+        public void setFigureType(FigureType figureType) {
+            this.figureType = figureType;
         }
     }
 }

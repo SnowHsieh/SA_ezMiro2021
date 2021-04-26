@@ -6,8 +6,8 @@ public abstract class ConnectableFigure extends Figure {
 
     private Point position;
 
-    public ConnectableFigure(String figureId, String boardId, Point position) {
-        super(figureId, boardId);
+    public ConnectableFigure(String figureId, String boardId, Point position, FigureType figureType) {
+        super(figureId, boardId, figureType);
         this.position = position;
     }
 

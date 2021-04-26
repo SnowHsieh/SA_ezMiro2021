@@ -2,6 +2,8 @@ package ntut.csie.team5.entity.model.figure.note;
 
 import ntut.csie.sslab.ddd.model.Entity;
 import ntut.csie.team5.entity.model.figure.ConnectableFigure;
+import ntut.csie.team5.entity.model.figure.Figure;
+import ntut.csie.team5.entity.model.figure.FigureType;
 
 import java.awt.*;
 
@@ -9,8 +11,8 @@ public class Note extends ConnectableFigure {
 
     private Color color;
 
-    public Note(String noteId, String boardId, Point position, Color color) {
-        super(noteId, boardId, position);
+    public Note(String noteId, String boardId, Point position, Color color, FigureType figureType) {
+        super(noteId, boardId, position, figureType);
         this.color = color;
     }
 

@@ -1,39 +1,22 @@
 package ntut.csie.team5.usecase.figure.note;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
-import ntut.csie.team5.adapter.board.BoardRepositoryImpl;
-import ntut.csie.team5.adapter.figure.FigureRepositoryImpl;
 import ntut.csie.team5.entity.model.board.Board;
 import ntut.csie.team5.entity.model.figure.Figure;
+import ntut.csie.team5.entity.model.figure.FigureType;
 import ntut.csie.team5.entity.model.figure.note.Note;
-import ntut.csie.team5.usecase.board.BoardRepository;
-import ntut.csie.team5.usecase.board.create.CreateBoardInput;
-import ntut.csie.team5.usecase.board.create.CreateBoardUseCase;
-import ntut.csie.team5.usecase.board.create.CreateBoardUseCaseImpl;
+import ntut.csie.team5.usecase.AbstractTest;
 import ntut.csie.team5.usecase.figure.note.post.PostNoteInput;
 import ntut.csie.team5.usecase.figure.note.post.PostNoteUseCase;
 import ntut.csie.team5.usecase.figure.note.post.PostNoteUseCaseImpl;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
 
 import static org.junit.Assert.*;
 
-public class PostNoteUseCaseTest {
-
-    private BoardRepository boardRepository;
-    private FigureRepository figureRepository;
-    private DomainEventBus domainEventBus;
-
-    @Before
-    public void setUp() throws Exception {
-        boardRepository = new BoardRepositoryImpl();
-        figureRepository = new FigureRepositoryImpl();
-        domainEventBus = new DomainEventBus();
-    }
+public class PostNoteUseCaseTest extends AbstractTest {
 
     @Test
     public void should_succeed_when_post_note() {
@@ -41,9 +24,10 @@ public class PostNoteUseCaseTest {
         PostNoteInput postNoteInput = postNoteUseCase.newInput();
         CqrsCommandPresenter postNoteOutput = CqrsCommandPresenter.newInstance();
 
-        postNoteInput.setBoardId("1");
-        postNoteInput.setPosition(new Point(1, 1));
-        postNoteInput.setColor(Color.RED);
+        postNoteInput.setBoardId(boardId);
+        postNoteInput.setPosition(defaultPosition);
+        postNoteInput.setColor(defaultColor);
+        postNoteInput.setFigureType(FigureType.NOTE);
 
         postNoteUseCase.execute(postNoteInput, postNoteOutput);
 
@@ -54,14 +38,15 @@ public class PostNoteUseCaseTest {
         assertTrue(figure instanceof Note);
         Note note = (Note) figure;
         assertEquals(postNoteOutput.getId(), note.getId());
-        assertEquals("1", note.getBoardId());
-        assertEquals(new Point(1, 1), note.getPosition());
-        assertEquals(Color.RED, note.getColor());
+        assertEquals(boardId, note.getBoardId());
+        assertEquals(defaultPosition, note.getPosition());
+        assertEquals(defaultColor, note.getColor());
+        assertEquals(FigureType.NOTE, note.getFigureType());
     }
 
     @Test
     public void should_succeed_when_post_note_in_board() {
-        String boardId = createBoard();
+        String boardId = createBoard(projectId, boardName);
         Board board = boardRepository.findById(boardId).get();
 
         String firstNodeId = postNote(boardId, new Point(1,1), Color.RED);
@@ -80,30 +65,5 @@ public class PostNoteUseCaseTest {
 
         board = boardRepository.findById(boardId).get();
         assertEquals(2, board.getCommittedFigures().size());
-    }
-
-    private String createBoard() {
-        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCaseImpl(boardRepository, domainEventBus);
-        CreateBoardInput createBoardInput = createBoardUseCase.newInput();
-        CqrsCommandPresenter createBoardOutput = CqrsCommandPresenter.newInstance();
-
-        createBoardInput.setProjectId("1");
-        createBoardInput.setBoardName("Board Name");
-
-        createBoardUseCase.execute(createBoardInput, createBoardOutput);
-        return createBoardOutput.getId();
-    }
-
-    private String postNote(String boardId, Point position, Color color) {
-        PostNoteUseCase postNoteUseCase = new PostNoteUseCaseImpl(figureRepository, domainEventBus);
-        PostNoteInput postNoteInput = postNoteUseCase.newInput();
-        CqrsCommandPresenter postNoteOutput = CqrsCommandPresenter.newInstance();
-
-        postNoteInput.setBoardId(boardId);
-        postNoteInput.setPosition(position);
-        postNoteInput.setColor(color);
-
-        postNoteUseCase.execute(postNoteInput, postNoteOutput);
-        return postNoteOutput.getId();
     }
 }
