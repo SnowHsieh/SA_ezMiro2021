@@ -308,12 +308,12 @@
             <version>1.0.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>ntut.csie.islab</groupId>
-            <artifactId>board</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ntut.csie.islab</groupId>-->
+<!--            <artifactId>board</artifactId>-->
+<!--            <version>1.0.0-SNAPSHOT</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
 
         <!--        <dependency>-->
         <!--            <groupId>org.springframework.boot</groupId>-->

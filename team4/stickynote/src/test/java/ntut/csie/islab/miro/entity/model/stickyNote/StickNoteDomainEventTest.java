@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.entity.model.stickyNote;
 
-import ntut.csie.islab.miro.entity.model.board.Board;
+
 import ntut.csie.islab.miro.entity.model.stickyNote.event.StickyNoteEditedDomainEvent;
 import ntut.csie.islab.miro.figure.entity.model.figure.Figure;
 import ntut.csie.islab.miro.figure.entity.model.figure.Position;
