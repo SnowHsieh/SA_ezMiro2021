@@ -1,4 +1,4 @@
-package ntut.csie.islab.miro.adapter.controller.rest.springboot.board.create;
+package ntut.csie.islab.miro.adapter.controller.rest.springboot.stickyNote.create;
 
 
 import ntut.csie.islab.miro.usecase.board.CreateBoardInput;
@@ -8,14 +8,11 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -26,7 +23,7 @@ public class CreateBoardController {
     public void setCreateBoardUseCase(CreateBoardUseCase createBoardUseCase) {
         this.createBoardUseCase = createBoardUseCase;
     }
-//    locolhost:8080/team/fff-ffff-ffff-fffff/boards
+
     @PostMapping(path = "/team/{teamId}/boards", consumes = "application/json", produces = "application/json")
     public CqrsCommandViewModel createBoard(
             @PathVariable("teamId") UUID teamId,

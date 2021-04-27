@@ -1,9 +1,9 @@
 package ntut.csie.islab.miro.application.springboot.web.config;
 
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
 import ntut.csie.islab.miro.figure.adapter.repository.figure.FigureRepository;
-import ntut.csie.islab.miro.usecase.board.CreateBoardUseCase;
-import ntut.csie.islab.miro.usecase.board.GetBoardContentUseCase;
+import ntut.csie.islab.miro.usecase.stickyNote.CreateStickyNoteUseCase;
+import ntut.csie.islab.miro.usecase.stickyNote.DeleteStickyNoteUseCase;
+import ntut.csie.islab.miro.usecase.stickyNote.EditStickyNoteUseCase;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,23 +11,22 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration("EzMiroUserCaseInjection")
 public class UseCaseInjection {
-    private BoardRepository boardRepository;
     private FigureRepository figureRepository;
     private DomainEventBus eventBus;
 
-    @Bean(name = "createBoardUseCase")
-    public CreateBoardUseCase createBoardUseCase() {
-        return new CreateBoardUseCase(eventBus, boardRepository);
+    @Bean(name = "createStickyNoteUseCase")
+    public CreateStickyNoteUseCase createStickyNoteUseCase() {
+        return new CreateStickyNoteUseCase(figureRepository,eventBus);
     }
 
-    @Bean(name = "getBoardContentUseCase")
-    public GetBoardContentUseCase getBoardContentUseCase() {
-        return new GetBoardContentUseCase(eventBus,boardRepository, figureRepository);
+    @Bean(name = "editStickyNoteUseCase")
+    public EditStickyNoteUseCase editStickyNoteUseCase() {
+        return new EditStickyNoteUseCase(figureRepository,eventBus);
     }
 
-    @Autowired
-    public void setBoardRepository(BoardRepository boardRepository) {
-        this.boardRepository = boardRepository;
+    @Bean(name = "deleteStickyNoteUseCase")
+    public DeleteStickyNoteUseCase deleteStickyNoteUseCase() {
+        return new DeleteStickyNoteUseCase(figureRepository,eventBus);
     }
 
     @Autowired
@@ -39,6 +38,5 @@ public class UseCaseInjection {
     public void setEventBus(DomainEventBus eventBus) {
         this.eventBus = eventBus;
     }
-
 
 }
