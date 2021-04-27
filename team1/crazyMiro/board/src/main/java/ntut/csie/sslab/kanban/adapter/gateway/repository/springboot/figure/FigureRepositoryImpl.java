@@ -1,11 +1,13 @@
 package ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.figure;
 
 import ntut.csie.sslab.kanban.entity.model.figure.Figure;
+import ntut.csie.sslab.kanban.entity.model.figure.FigureType;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class FigureRepositoryImpl implements FigureRepository {
     private List<Figure> figures;
@@ -32,5 +34,13 @@ public class FigureRepositoryImpl implements FigureRepository {
     @Override
     public void deleteById(String s) {
 
+    }
+
+    @Override
+    public List<Figure> getStickersByBoardId(String boardId) {
+        return figures.stream()
+                .filter(x -> x.getBoardId().equals(boardId) &&
+                                x.getType().equals(FigureType.Sticker))
+                .collect(Collectors.toList());
     }
 }
