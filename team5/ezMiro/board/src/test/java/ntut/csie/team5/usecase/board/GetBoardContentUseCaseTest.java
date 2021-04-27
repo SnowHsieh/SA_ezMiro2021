@@ -29,7 +29,7 @@ public class GetBoardContentUseCaseTest extends AbstractTest {
 
         String boardId = createBoard(projectName, boardName);
 
-        String firstNoteId = postNote(boardId, new Point(1,1), Color.RED);
+        String firstNoteId = postNote(boardId, defaultLeftTopPosition, defaultRightBottomPosition, Color.RED);
 
         GetBoardContentUseCase useCase = new GetBoardContentUseCaseImpl(boardRepository,figureRepository, domainEventBus);
         GetBoardContentInput input = (GetBoardContentInput) useCase;

@@ -6,22 +6,37 @@ import java.awt.*;
 
 public class NoteDto extends FigureDto {
 
-    private int x;
-    private int y;
+    private int leftTopPositionX;
+    private int leftTopPositionY;
+    private int rightBottomPositionX;
+    private int rightBottomPositionY;
     private String color;
     private String figureType;
 
-    public int getX() {
-        return x;
+    public int getLeftTopPositionX() {
+        return leftTopPositionX;
     }
 
-    public int getY() {
-        return y;
+    public int getLeftTopPositionY() {
+        return leftTopPositionY;
     }
 
-    public void setPosition(Point position) {
-        this.x = position.x;
-        this.y = position.y;
+    public int getRightBottomPositionX() {
+        return rightBottomPositionX;
+    }
+
+    public int getRightBottomPositionY() {
+        return rightBottomPositionY;
+    }
+
+    public void setLeftTopPosition(Point leftTopPosition) {
+        this.leftTopPositionX = leftTopPosition.x;
+        this.leftTopPositionY = leftTopPosition.y;
+    }
+
+    public void setRightBottomPosition(Point rightBottomPosition) {
+        this.rightBottomPositionX = rightBottomPosition.x;
+        this.rightBottomPositionY = rightBottomPosition.y;
     }
 
     public String getColor() {

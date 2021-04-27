@@ -11,9 +11,13 @@ public interface PostNoteInput extends Input {
 
     void setBoardId(String boardId);
 
-    Point getPosition();
+    Point getLeftTopPosition();
 
-    void setPosition(Point position);
+    void setLeftTopPosition(Point leftTopPosition);
+
+    Point getRightBottomPosition();
+
+    void setRightBottomPosition(Point rightBottomPosition);
 
     Color getColor();
 

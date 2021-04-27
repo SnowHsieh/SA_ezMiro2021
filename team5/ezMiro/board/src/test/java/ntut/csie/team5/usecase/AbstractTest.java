@@ -5,6 +5,7 @@ import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.team5.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.team5.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
 import ntut.csie.team5.adapter.project.ProjectRepositoryImpl;
+import ntut.csie.team5.entity.model.figure.FigureType;
 import ntut.csie.team5.usecase.board.BoardRepository;
 import ntut.csie.team5.usecase.board.create.CreateBoardInput;
 import ntut.csie.team5.usecase.board.create.CreateBoardUseCase;
@@ -37,7 +38,8 @@ public abstract class AbstractTest {
     public String projectName;
     public String boardId;
     public String boardName;
-    public Point defaultPosition;
+    public Point defaultLeftTopPosition;
+    public Point defaultRightBottomPosition;
     public Color defaultColor;
 
     @Before
@@ -54,7 +56,8 @@ public abstract class AbstractTest {
         projectName = "ezmiro project";
         boardId = UUID.randomUUID().toString();
         boardName = "ezmiro board";
-        defaultPosition = new Point(0,0);
+        defaultLeftTopPosition = new Point(0,0);
+        defaultRightBottomPosition = new Point(10,10);
         defaultColor = Color.BLACK;
     }
 
@@ -83,14 +86,16 @@ public abstract class AbstractTest {
         return createBoardOutput.getId();
     }
 
-    public String postNote(String boardId, Point position, Color color) {
+    public String postNote(String boardId, Point leftTopPosition, Point rightBottomPosition, Color color) {
         PostNoteUseCase postNoteUseCase = new PostNoteUseCaseImpl(figureRepository, domainEventBus);
         PostNoteInput postNoteInput = postNoteUseCase.newInput();
         CqrsCommandPresenter postNoteOutput = CqrsCommandPresenter.newInstance();
 
         postNoteInput.setBoardId(boardId);
-        postNoteInput.setPosition(position);
+        postNoteInput.setLeftTopPosition(leftTopPosition);
+        postNoteInput.setRightBottomPosition(rightBottomPosition);
         postNoteInput.setColor(color);
+        postNoteInput.setFigureType(FigureType.NOTE);
 
         postNoteUseCase.execute(postNoteInput, postNoteOutput);
         return postNoteOutput.getId();

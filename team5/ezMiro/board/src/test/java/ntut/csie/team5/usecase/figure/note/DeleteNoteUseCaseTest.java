@@ -22,7 +22,7 @@ public class DeleteNoteUseCaseTest extends AbstractTest {
         CqrsCommandPresenter postNoteOutput = CqrsCommandPresenter.newInstance();
 
         postNoteInput.setBoardId(boardId);
-        postNoteInput.setPosition(defaultPosition);
+        postNoteInput.setLeftTopPosition(defaultLeftTopPosition);
         postNoteInput.setColor(defaultColor);
 
         postNoteUseCase.execute(postNoteInput, postNoteOutput);
@@ -34,7 +34,7 @@ public class DeleteNoteUseCaseTest extends AbstractTest {
         CqrsCommandPresenter deleteNoteOutput = CqrsCommandPresenter.newInstance();
 
         deleteNoteInput.setBoardId(boardId);
-        deleteNoteInput.setPosition(defaultPosition);
+        deleteNoteInput.setPosition(defaultLeftTopPosition);
         deleteNoteInput.setColor(defaultColor);
         deleteNoteInput.setNoteId(noteId);
 

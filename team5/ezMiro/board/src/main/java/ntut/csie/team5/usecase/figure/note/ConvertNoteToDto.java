@@ -9,7 +9,8 @@ public class ConvertNoteToDto {
         NoteDto noteDto = new NoteDto();
         noteDto.setBoardId(note.getBoardId());
         noteDto.setFigureId(note.getId());
-        noteDto.setPosition(note.getPosition());
+        noteDto.setLeftTopPosition(note.getLeftTopPosition());
+        noteDto.setRightBottomPosition(note.getRightBottomPosition());
         noteDto.setColor(note.getColor());
         noteDto.setFigureType(note.getFigureType().toString());
         return noteDto;

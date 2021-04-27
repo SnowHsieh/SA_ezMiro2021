@@ -11,8 +11,8 @@ public class Note extends ConnectableFigure {
 
     private Color color;
 
-    public Note(String noteId, String boardId, Point position, Color color, FigureType figureType) {
-        super(noteId, boardId, position, figureType);
+    public Note(String noteId, String boardId, Point leftTopPosition, Point rightBottomPosition, Color color, FigureType figureType) {
+        super(noteId, boardId, leftTopPosition, rightBottomPosition, figureType);
         this.color = color;
     }
 

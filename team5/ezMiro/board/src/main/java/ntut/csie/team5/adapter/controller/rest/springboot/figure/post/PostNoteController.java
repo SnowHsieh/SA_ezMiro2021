@@ -27,13 +27,17 @@ public class PostNoteController {
 
     @PostMapping(path = "/notes", consumes = "application/json", produces = "application/json")
     public CqrsCommandViewModel postNote(@QueryParam("boardId") String boardId, @RequestBody String noteInfo) {
-        int x = 0;
-        int y = 0;
+        int leftTopPositionX = 0;
+        int leftTopPositionY = 0;
+        int rightBottomPositionX = 0;
+        int rightBottomPositionY = 0;
         Color color = Color.BLACK;
         try {
             JSONObject noteJSON = new JSONObject(noteInfo);
-            x = noteJSON.getInt("x");
-            y = noteJSON.getInt("y");
+            leftTopPositionX = noteJSON.getInt("leftTopPositionX");
+            leftTopPositionY = noteJSON.getInt("leftTopPositionY");
+            rightBottomPositionX = noteJSON.getInt("rightBottomPositionX");
+            rightBottomPositionY = noteJSON.getInt("rightBottomPositionY");
             color = Color.decode(noteJSON.getString("color"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -41,7 +45,8 @@ public class PostNoteController {
 
         PostNoteInput input = postNoteUseCase.newInput();
         input.setBoardId(boardId);
-        input.setPosition(new Point(x, y));
+        input.setLeftTopPosition(new Point(leftTopPositionX, leftTopPositionY));
+        input.setRightBottomPosition(new Point(rightBottomPositionX, rightBottomPositionY));
         input.setColor(color);
         input.setFigureType(FigureType.NOTE);
 

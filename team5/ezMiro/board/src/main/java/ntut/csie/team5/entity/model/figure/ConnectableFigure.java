@@ -4,19 +4,28 @@ import java.awt.*;
 
 public abstract class ConnectableFigure extends Figure {
 
-    private Point position;
+    private Point leftTopPosition;
+    private Point rightBottomPosition;
 
-    public ConnectableFigure(String figureId, String boardId, Point position, FigureType figureType) {
+    public ConnectableFigure(String figureId, String boardId, Point leftTopPosition, Point rightBottomPosition, FigureType figureType) {
         super(figureId, boardId, figureType);
-        this.position = position;
+        this.leftTopPosition = leftTopPosition;
+        this.rightBottomPosition = rightBottomPosition;
     }
 
-    public Point getPosition() {
-        return position;
+    public Point getLeftTopPosition() {
+        return leftTopPosition;
     }
 
-    public void setPosition(Point position) {
-        this.position = position;
+    public void setLeftTopPosition(Point leftTopPosition) {
+        this.leftTopPosition = leftTopPosition;
     }
 
+    public Point getRightBottomPosition() {
+        return rightBottomPosition;
+    }
+
+    public void setRightBottomPosition(Point rightBottomPosition) {
+        this.rightBottomPosition = rightBottomPosition;
+    }
 }

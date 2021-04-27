@@ -1,7 +1,5 @@
 package ntut.csie.team5.entity.model.figure.note;
 
-import ntut.csie.team5.entity.model.board.Board;
-import ntut.csie.team5.entity.model.board.BoardBuilder;
 import ntut.csie.team5.entity.model.figure.FigureType;
 
 import java.awt.*;
@@ -11,7 +9,8 @@ public class NoteBuilder {
 
     private String noteId;
     private String boardId;
-    private Point position;
+    private Point leftTopPosition;
+    private Point rightBottomPosition;
     private Color color;
     private FigureType figureType;
 
@@ -24,8 +23,13 @@ public class NoteBuilder {
         return this;
     }
 
-    public NoteBuilder position(Point position) {
-        this.position = position;
+    public NoteBuilder leftTopPosition(Point leftTopPosition) {
+        this.leftTopPosition = leftTopPosition;
+        return this;
+    }
+
+    public NoteBuilder rightBottomPosition(Point rightBottomPosition) {
+        this.rightBottomPosition = rightBottomPosition;
         return this;
     }
 
@@ -41,7 +45,7 @@ public class NoteBuilder {
 
     public Note build() {
         noteId = UUID.randomUUID().toString();
-        Note note = new Note(noteId, boardId, position, color, figureType);
+        Note note = new Note(noteId, boardId, leftTopPosition, rightBottomPosition, color, figureType);
         return note;
     }
 }
