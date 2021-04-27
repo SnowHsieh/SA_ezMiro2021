@@ -1,22 +1,21 @@
 package ntut.csie.selab.entity.model.widget;
 
-import java.awt.*;
+import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
+import ntut.csie.selab.model.AggregateRoot;
 
-public class Widget {
-    protected String id;
+import java.util.Date;
+
+public class Widget extends AggregateRoot<String> {
     protected String boardId;
     protected Coordinate coordinate;
-
     protected String text;
 
     public Widget(String id, String boardId, Coordinate coordinate) {
-        this.id = id;
+        super(id);
         this.boardId = boardId;
         this.coordinate = coordinate;
-    }
 
-    public String getId() {
-        return id;
+        addDomainEvent(new WidgetCreated(new Date(), boardId, id));
     }
 
     public String getBoardId() {

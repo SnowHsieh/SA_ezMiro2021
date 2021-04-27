@@ -24,7 +24,7 @@ public class CreateStickyNoteUseCase {
         Widget widget = new StickyNote(stickyNoteId, input.getBoardId(), input.getCoordinate());
 
         widgetRepository.add(widget);
-        domainEventBus.post(new WidgetCreated(new Date(), input.getBoardId(), stickyNoteId));
+        domainEventBus.postAll(widget);
 
         output.setStickyNoteId(widget.getId());
         output.setBoardId(widget.getBoardId());

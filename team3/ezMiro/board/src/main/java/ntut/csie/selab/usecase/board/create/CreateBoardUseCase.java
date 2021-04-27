@@ -1,6 +1,7 @@
 package ntut.csie.selab.usecase.board.create;
 
 import ntut.csie.selab.entity.model.board.Board;
+import ntut.csie.selab.model.AggregateRoot;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.entity.model.board.event.BoardCreated;
@@ -23,7 +24,7 @@ public class CreateBoardUseCase {
         Board board = new Board(boardId, input.getTeamId(), input.getBoardName());
 
         boardRepository.add(board);
-        domainEventBus.post(new BoardCreated(new Date(), boardId, input.getTeamId()));
+        domainEventBus.postAll(board);
 
         output.setBoardId(board.getId());
         output.setTeamId(board.getTeamId());
