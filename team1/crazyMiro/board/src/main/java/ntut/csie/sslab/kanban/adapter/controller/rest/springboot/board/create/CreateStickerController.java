@@ -11,10 +11,7 @@ import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCase
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
 
@@ -26,6 +23,7 @@ import javax.ws.rs.QueryParam;
 //import javax.ws.rs.QueryParam;
 //
 @RestController
+@CrossOrigin
 public class CreateStickerController {
     private CreateStickerUseCase createStickerUseCase;
 

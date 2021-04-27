@@ -30,6 +30,7 @@ import java.util.List;
 //import javax.ws.rs.QueryParam;
 //
 @RestController
+@CrossOrigin
 public class GetStickersController {
     private FigureRepository figureRepository;
 
