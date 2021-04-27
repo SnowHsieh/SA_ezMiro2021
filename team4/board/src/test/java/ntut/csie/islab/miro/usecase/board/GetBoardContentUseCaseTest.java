@@ -387,8 +387,8 @@ public class GetBoardContentUseCaseTest {
         assertEquals(4, oneFigureEditedInBoardViewModel.getFigureDtos().size());
 
         //Check is EditEvent(Content and Color had been changed) Success
-        FigureDto domainEventStickyNoteDto = oneFigureEditedInBoardViewModel.getFigureDtos().stream().filter(s->s.getFigureId().equals(UUID.fromString(domainEventStickyNote.getId()))).findFirst().get();
-
+//        FigureDto domainEventStickyNoteDto = oneFigureEditedInBoardViewModel.getFigureDtos().stream().filter(s->s.getFigureId().equals(UUID.fromString(domainEventStickyNote.getId()))).findFirst().get();
+        FigureDto domainEventStickyNoteDto = getSpecifiedFigureDto(oneFigureEditedInBoardViewModel,domainEventStickyNote.getId());
         assertEquals(boardId, domainEventStickyNoteDto.getBoardId());
         assertEquals("sticky\n note \n created", domainEventStickyNoteDto.getContent());
         assertEquals("#f28500", domainEventStickyNoteDto.getStyle().getColor());
@@ -400,11 +400,10 @@ public class GetBoardContentUseCaseTest {
 
     }
 
-//    private  FigureDto getSpecifiedFigureDto(,FigureDto StickyNoteDto){
-//
-//        return oneFigureEditedInBoardViewModel.getFigureDtos().stream().filter(s->s.getFigureId().equals(UUID.fromString(domainEventStickyNote.getId()))).findFirst().get();
-//
-//    }
+    private  FigureDto getSpecifiedFigureDto(BoardContentViewModel boardContentViewModel,String id){
+        return boardContentViewModel.getFigureDtos().stream().filter(s->s.getFigureId().equals(UUID.fromString(id))).findFirst().get();
+
+    }
 
 
     private CqrsCommandPresenter generateCreateBoardUseCaseoutput(UUID id,String boardName){
