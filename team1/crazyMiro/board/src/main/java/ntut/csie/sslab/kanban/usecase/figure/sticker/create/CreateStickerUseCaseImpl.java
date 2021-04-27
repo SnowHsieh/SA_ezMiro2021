@@ -1,39 +1,45 @@
-package ntut.csie.sslab.kanban.usecase.sticker.create;
+package ntut.csie.sslab.kanban.usecase.figure.sticker.create;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.sslab.ddd.usecase.cqrs.Command;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
-import ntut.csie.sslab.kanban.entity.model.workspace.Coordinate;
-import ntut.csie.sslab.kanban.entity.model.workspace.Workspace;
-import ntut.csie.sslab.kanban.usecase.workspace.WorkspaceRepository;
+import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.figure.Figure;
+import ntut.csie.sslab.kanban.entity.model.figure.Sticker;
+import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
+
+import java.util.UUID;
 
 public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
-    private WorkspaceRepository workspaceRepository;
+    private FigureRepository figureRepository;
     private DomainEventBus domainEventBus;
 
-    public CreateStickerUseCaseImpl(WorkspaceRepository workspaceRepository, DomainEventBus domainEventBus) {
-        this.workspaceRepository = workspaceRepository;
+    public CreateStickerUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
+        this.figureRepository = figureRepository;
         this.domainEventBus = domainEventBus;
     }
 
     @Override
     public void execute(CreateStickerInput input, CqrsCommandOutput output) {
-        try {
-            Workspace workspace = workspaceRepository.findById(input.getWorkspaceId()).get();
-            String stickerId = workspace.createSticker(
+        try{
+            String stickerId = UUID.randomUUID().toString();
+            Figure sticker = new Sticker(input.getBoardId(),
+                    stickerId,
                     input.getContent(),
                     input.getSize(),
                     input.getColor(),
                     input.getPosition());
-            workspaceRepository.save(workspace);
-            domainEventBus.postAll(workspace);
 
-            output.setId(stickerId).setExitCode(ExitCode.SUCCESS);
+            figureRepository.save(sticker);
+            domainEventBus.postAll(sticker);
+
+            output.setId(sticker.getId())
+                    .setExitCode(ExitCode.SUCCESS);
         }catch (Exception e) {
             output.setExitCode(ExitCode.FAILURE)
                     .setMessage(e.getMessage());
         }
+
     }
 
     @Override
@@ -42,20 +48,20 @@ public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
     }
 
     private class CreateStickerInputImpl implements CreateStickerInput {
-        private String workspaceId;
+        private String boardId;
         private String content;
         private int size;
         private String color;
         private Coordinate position;
 
         @Override
-        public String getWorkspaceId() {
-            return workspaceId;
+        public String getBoardId() {
+            return boardId;
         }
 
         @Override
-        public void setWorkspaceId(String workspaceId) {
-            this.workspaceId = workspaceId;
+        public void setBoardId(String boardIdId) {
+            this.boardId = boardIdId;
         }
 
         @Override

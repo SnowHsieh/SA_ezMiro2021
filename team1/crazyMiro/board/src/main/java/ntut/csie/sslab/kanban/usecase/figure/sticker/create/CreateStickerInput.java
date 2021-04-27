@@ -1,12 +1,12 @@
-package ntut.csie.sslab.kanban.usecase.sticker.create;
+package ntut.csie.sslab.kanban.usecase.figure.sticker.create;
 
 import ntut.csie.sslab.ddd.usecase.Input;
-import ntut.csie.sslab.kanban.entity.model.workspace.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
 
 public interface CreateStickerInput extends Input {
-    void setWorkspaceId(String workspaceId);
+    void setBoardId(String boardId);
 
-    String getWorkspaceId();
+    String getBoardId();
 
     void setContent(String content);
 

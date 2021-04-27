@@ -1,32 +1,34 @@
-package ntut.csie.sslab.kanban.usecase.workspace;
+package ntut.csie.sslab.kanban.usecase.figure;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.kanban.entity.model.workspace.Coordinate;
-import ntut.csie.sslab.kanban.entity.model.workspace.Sticker;
-import ntut.csie.sslab.kanban.entity.model.workspace.Workspace;
+import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.figure.FigureType;
+import ntut.csie.sslab.kanban.entity.model.figure.Figure;
 import ntut.csie.sslab.kanban.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.sslab.kanban.usecase.sticker.create.CreateStickerInput;
-import ntut.csie.sslab.kanban.usecase.sticker.create.CreateStickerUseCase;
-import ntut.csie.sslab.kanban.usecase.sticker.create.CreateStickerUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerInput;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCaseImpl;
 import org.junit.jupiter.api.Test;
 import java.util.Random;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CreateStickerUseCaseTest extends AbstractSpringBootJpaTest {
 
     @Test
     public void create_a_sticker(){
-        String workspaceId = createWorkspace();
+        String boardId = UUID.randomUUID().toString();
         String content = "stickerIsCreated";
         int size = 10;
         String color = "black";
         long x = new Random().nextLong();
         long y = new Random().nextLong();
         Coordinate position = new Coordinate(x, y);
-        CreateStickerUseCase createStickerUseCase = new CreateStickerUseCaseImpl(workspaceRepository, domainEventBus);
+        CreateStickerUseCase createStickerUseCase = new CreateStickerUseCaseImpl(figureRepository, domainEventBus);
         CreateStickerInput input = createStickerUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-        input.setWorkspaceId(workspaceId);
+        input.setBoardId(boardId);
         input.setContent(content);
         input.setSize(size);
         input.setColor(color);
@@ -35,14 +37,14 @@ public class CreateStickerUseCaseTest extends AbstractSpringBootJpaTest {
         createStickerUseCase.execute(input, output);
 
         assertNotNull(output.getId());
-        Workspace workspace = workspaceRepository.findById(workspaceId).get();
-        assertTrue(workspace.getFigureById(output.getId()).isPresent());
-        Sticker sticker = (Sticker) workspace.getFigureById(output.getId()).get();
+        assertTrue(figureRepository.findById(output.getId()).isPresent());
+        Figure sticker = figureRepository.findById(output.getId()).get();
         assertEquals(content, sticker.getContent());
         assertEquals(size, sticker.getSize());
         assertEquals(color, sticker.getColor());
         assertEquals(x, sticker.getPosition().getX());
         assertEquals(y, sticker.getPosition().getY());
-        assertEquals(2, eventListener.getEventCount());
+        assertEquals(FigureType.Sticker, sticker.getType());
+        assertEquals(1, eventListener.getEventCount());
     }
 }

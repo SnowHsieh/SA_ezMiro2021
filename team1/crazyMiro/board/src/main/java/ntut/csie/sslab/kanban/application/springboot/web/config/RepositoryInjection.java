@@ -1,5 +1,10 @@
 package ntut.csie.sslab.kanban.application.springboot.web.config;
 
+import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
+import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
+import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
+import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
@@ -29,10 +34,10 @@ public class RepositoryInjection {
 //  }
 //
 //
-//  @Bean(name="boardRepository")
-//  public BoardRepository boardRepository() {
-//    return new BoardRepositoryImpl(boardRepositoryPeer);
-//  }
+  @Bean(name="figureRepository")
+  public FigureRepository figureRepository() {
+    return new FigureRepositoryImpl();
+  }
 //
 //  @Bean(name="workflowRepository")
 //  public WorkflowRepository workflowRepository() {

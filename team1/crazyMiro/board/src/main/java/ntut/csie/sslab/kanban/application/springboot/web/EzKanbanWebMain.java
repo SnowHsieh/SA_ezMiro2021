@@ -56,7 +56,7 @@ public class EzKanbanWebMain extends SpringBootServletInitializer implements Com
     public void run(String... arg0) throws Exception {
         System.out.println("EzKanbanWebMain run");
 
-        domainEventBus.register(notifyBoardAdapter);
+//        domainEventBus.register(notifyBoardAdapter);
 //        domainEventBus.register(notifyWorkflowAdapter);
     }
 }

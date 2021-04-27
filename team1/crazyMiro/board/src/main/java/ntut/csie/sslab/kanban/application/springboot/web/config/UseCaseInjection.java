@@ -1,14 +1,26 @@
 package ntut.csie.sslab.kanban.application.springboot.web.config;
 
+import ntut.csie.sslab.ddd.model.DomainEventBus;
+import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
+import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardUseCase;
+import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCaseImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
 @Configuration("KanbanUseCaseInjection")
 public class UseCaseInjection {
-//    private BoardRepository boardRepository;
+
+
+    @Autowired
+    private FigureRepository figureRepository;
 //    private WorkflowRepository workflowRepository;
 //    private CardRepository cardRepository;
-//    private DomainEventBus eventBus;
+    private DomainEventBus eventBus;
 //    private ExecutorService executor;
 //
 //
@@ -23,10 +35,10 @@ public class UseCaseInjection {
 //    }
 //
 //
-//    @Bean(name="createBoardUseCase")
-//    public CreateBoardUseCase createBoardUseCase() {
-//        return new CreateBoardUseCaseImpl(boardRepository, eventBus);
-//    }
+    @Bean(name="createStickerUseCase")
+    public CreateStickerUseCase createStickerUseCase() {
+        return new CreateStickerUseCaseImpl(figureRepository, eventBus);
+    }
 //
 //
 //    @Bean(name="createWorkflowUseCase")

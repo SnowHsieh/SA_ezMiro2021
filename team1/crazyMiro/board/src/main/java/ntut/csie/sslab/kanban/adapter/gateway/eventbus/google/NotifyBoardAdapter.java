@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class NotifyBoardAdapter {
-//
-//    private NotifyBoard notifyBoard;
-//
+
+    private NotifyBoard notifyBoard;
+
 //    @Autowired
 //    public NotifyBoardAdapter(NotifyBoard notifyBoard) {
 //        this.notifyBoard = notifyBoard;

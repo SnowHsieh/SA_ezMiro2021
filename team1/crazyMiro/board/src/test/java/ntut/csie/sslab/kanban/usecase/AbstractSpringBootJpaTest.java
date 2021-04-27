@@ -72,16 +72,12 @@ package ntut.csie.sslab.kanban.usecase;
 
 import com.google.common.eventbus.Subscribe;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
-import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
-import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.workspace.WorkspaceRepositoryImpl;
+import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
 import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
-import ntut.csie.sslab.kanban.usecase.workspace.WorkspaceRepository;
-import ntut.csie.sslab.kanban.usecase.workspace.create.CreateWorkspaceInput;
-import ntut.csie.sslab.kanban.usecase.workspace.create.CreateWorkspaceUseCase;
-import ntut.csie.sslab.kanban.usecase.workspace.create.CreateWorkspaceUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -92,8 +88,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.UUID;
-
 @SpringBootTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @ExtendWith(SpringExtension.class)
@@ -103,28 +97,28 @@ import java.util.UUID;
 public abstract class AbstractSpringBootJpaTest {
 
     protected BoardRepository boardRepository;
-    protected WorkspaceRepository workspaceRepository;
+    protected FigureRepository figureRepository;
     protected DomainEventBus domainEventBus;
     protected EventListener eventListener;
 
     @BeforeEach
     public void setUp() {
         boardRepository = new BoardRepositoryImpl();
-        workspaceRepository = new WorkspaceRepositoryImpl();
+        figureRepository = new FigureRepositoryImpl();
         domainEventBus = new GoogleEventBus();
         eventListener = new EventListener();
         domainEventBus.register(eventListener);
     }
 
-    protected String createWorkspace() {
-        String boardId = UUID.randomUUID().toString();
-        CreateWorkspaceUseCase createWorkspaceUseCase = new CreateWorkspaceUseCaseImpl(workspaceRepository, domainEventBus);
-        CreateWorkspaceInput input = createWorkspaceUseCase.newInput();
-        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-        input.setBoardId(boardId);
-        createWorkspaceUseCase.execute(input, output);
-        return output.getId();
-    }
+//    protected String createWorkspace() {
+//        String boardId = UUID.randomUUID().toString();
+//        CreateWorkspaceUseCase createWorkspaceUseCase = new CreateWorkspaceUseCaseImpl(workspaceRepository, domainEventBus);
+//        CreateWorkspaceInput input = createWorkspaceUseCase.newInput();
+//        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
+//        input.setBoardId(boardId);
+//        createWorkspaceUseCase.execute(input, output);
+//        return output.getId();
+//    }
 
     protected class EventListener {
         private int eventCount;

@@ -1,17 +1,22 @@
-package ntut.csie.sslab.kanban.entity.model.workspace;
+package ntut.csie.sslab.kanban.entity.model.figure;
 
+import ntut.csie.sslab.ddd.model.AggregateRoot;
 import ntut.csie.sslab.ddd.model.Entity;
+import ntut.csie.sslab.kanban.entity.model.board.Board;
 
-public abstract class Figure extends Entity<String> {
 
+public abstract class Figure extends AggregateRoot<String> {
+
+    private String boardId;
     private String figureId;
     private String content;
     private int size;
     private String color;
     private Coordinate position;
 
-    public Figure(String figureId, String content, int size, String color, Coordinate position) {
+    public Figure(String boardId, String figureId, String content, int size, String color, Coordinate position) {
         super(figureId);
+        this.boardId = boardId;
         this.figureId = figureId;
         this.content = content;
         this.size = size;
@@ -59,4 +64,9 @@ public abstract class Figure extends Entity<String> {
         this.position = position;
     }
 
+    public String getBoardId() {
+        return boardId;
+    }
+
+    public abstract FigureType getType();
 }
