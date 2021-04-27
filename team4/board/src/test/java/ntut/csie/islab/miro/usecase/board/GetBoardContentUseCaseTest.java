@@ -4,13 +4,10 @@ import ntut.csie.islab.miro.adapter.presenter.GetBoardContentPresenter;
 import ntut.csie.islab.miro.adapter.presenter.getContent.BoardContentViewModel;
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
 import ntut.csie.islab.miro.figure.adapter.repository.figure.FigureRepository;
-import ntut.csie.islab.miro.figure.entity.model.figure.Figure;
 import ntut.csie.islab.miro.figure.entity.model.figure.Position;
 import ntut.csie.islab.miro.figure.entity.model.figure.ShapeKindEnum;
 import ntut.csie.islab.miro.figure.entity.model.figure.Style;
 import ntut.csie.islab.miro.figure.usecase.figure.FigureDto;
-import ntut.csie.islab.miro.usecase.board.CreateBoardUseCase;
-import ntut.csie.islab.miro.usecase.board.CreateBoardUseCaseInput;
 import ntut.csie.islab.miro.usecase.stickyNote.CreateStickyNoteInput;
 import ntut.csie.islab.miro.usecase.stickyNote.CreateStickyNoteUseCase;
 import ntut.csie.islab.miro.usecase.stickyNote.EditStickyNoteInput;
@@ -42,7 +39,7 @@ public class GetBoardContentUseCaseTest {
     @Test
     public void test_get_board_with_empty_content_with_exist_board_id() {
         GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(domainEventBus, boardRepository, figureRepository);
-        GetBoardContentUseCaseInput input = getBoardContentUseCase.newInput();
+        GetBoardContentInput input = getBoardContentUseCase.newInput();
         UUID boardId = UUID.randomUUID();
         input.setBoardId(boardId);
         GetBoardContentPresenter output = new GetBoardContentPresenter();
@@ -486,7 +483,7 @@ public class GetBoardContentUseCaseTest {
         assertEquals(boardId,  aggregateStickyNoteDto.getBoardId());
         assertEquals("sticky note",  aggregateStickyNoteDto.getContent());
         assertEquals("#f9f900",  aggregateStickyNoteDto.getStyle().getColor());
-        
+
     }
 
 
@@ -537,7 +534,7 @@ public class GetBoardContentUseCaseTest {
     private GetBoardContentPresenter generateGetBoardContentUseCaseOutput(UUID boardId) {
 
         GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(domainEventBus, boardRepository, figureRepository);
-        GetBoardContentUseCaseInput input = getBoardContentUseCase.newInput();
+        GetBoardContentInput input = getBoardContentUseCase.newInput();
         input.setBoardId(boardId);
         GetBoardContentPresenter presenter = new GetBoardContentPresenter();
         getBoardContentUseCase.execute(input, presenter);

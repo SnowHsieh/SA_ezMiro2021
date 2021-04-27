@@ -7,7 +7,6 @@ import ntut.csie.islab.miro.entity.model.board.event.BoardContentMightExpire;
 import ntut.csie.islab.miro.figure.adapter.repository.figure.FigureRepository;
 import ntut.csie.islab.miro.figure.entity.model.figure.Figure;
 import ntut.csie.islab.miro.figure.usecase.figure.FigureDto;
-import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 
@@ -25,12 +24,12 @@ public class GetBoardContentUseCase {
         this.figureRepository = figureRepository;
     }
 
-    public GetBoardContentUseCaseInput newInput() {
-        return new GetBoardContentUseCaseInput();
+    public GetBoardContentInput newInput() {
+        return new GetBoardContentInput();
     }
 
 
-    public void execute(GetBoardContentUseCaseInput input, GetBoardContentPresenter presenter) {
+    public void execute(GetBoardContentInput input, GetBoardContentPresenter presenter) {
         Board board = this.boardRepository.findById(input.getBoardId()).orElse(null);
         if (null == board){
             presenter.setBoardId(input.getBoardId())
