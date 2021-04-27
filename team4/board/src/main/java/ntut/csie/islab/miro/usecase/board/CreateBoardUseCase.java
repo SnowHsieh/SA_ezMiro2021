@@ -15,11 +15,11 @@ public class CreateBoardUseCase {
         this.boardRepository = boardRepository;
     }
 
-    public CreateBoardUseCaseInput newInput() {
-        return new CreateBoardUseCaseInput();
+    public CreateBoardInput newInput() {
+        return new CreateBoardInput();
     }
 
-    public void execute(CreateBoardUseCaseInput input, CqrsCommandPresenter output) {
+    public void execute(CreateBoardInput input, CqrsCommandPresenter output) {
         Board board = new Board(input.getTeamId(),input.getBoardName());
 
 

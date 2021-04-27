@@ -1,9 +1,6 @@
 package ntut.csie.islab.miro.usecase.board;
 
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
-import ntut.csie.islab.miro.figure.adapter.repository.figure.FigureRepository;
-import ntut.csie.islab.miro.usecase.board.CreateBoardUseCase;
-import ntut.csie.islab.miro.usecase.board.CreateBoardUseCaseInput;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
@@ -26,7 +23,7 @@ public class CreateBoardUseCaseTest {
     @Test
     public void test_create_board(){
         CreateBoardUseCase createBoardUseCase= new CreateBoardUseCase(domainEventBus,boardRepository);
-        CreateBoardUseCaseInput input =  createBoardUseCase.newInput();
+        CreateBoardInput input =  createBoardUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setTeamId(UUID.randomUUID());
         input.setBoardName("Board name");

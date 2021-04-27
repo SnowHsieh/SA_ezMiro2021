@@ -61,11 +61,11 @@ public class GetBoardContentUseCaseTest {
     public void test_get_board_with_nonempty_content_with_exist_board_id() {
         //Create a Board
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(domainEventBus, boardRepository);
-        CreateBoardUseCaseInput createBoardUseCaseInput = createBoardUseCase.newInput();
+        CreateBoardInput createBoardInput = createBoardUseCase.newInput();
         CqrsCommandPresenter createBoardUseCaseoutput = CqrsCommandPresenter.newInstance();
-        createBoardUseCaseInput.setTeamId(UUID.randomUUID());
-        createBoardUseCaseInput.setBoardName("EventStorming");
-        createBoardUseCase.execute(createBoardUseCaseInput, createBoardUseCaseoutput);
+        createBoardInput.setTeamId(UUID.randomUUID());
+        createBoardInput.setBoardName("EventStorming");
+        createBoardUseCase.execute(createBoardInput, createBoardUseCaseoutput);
         assertNotNull(createBoardUseCaseoutput.getId());
         assertEquals(ExitCode.SUCCESS, createBoardUseCaseoutput.getExitCode());
 
@@ -494,11 +494,11 @@ public class GetBoardContentUseCaseTest {
 
     private CqrsCommandPresenter generateCreateBoardUseCaseoutput(UUID id, String boardName) {
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(domainEventBus, boardRepository);
-        CreateBoardUseCaseInput createBoardUseCaseInput = createBoardUseCase.newInput();
+        CreateBoardInput createBoardInput = createBoardUseCase.newInput();
         CqrsCommandPresenter createBoardUseCaseoutput = CqrsCommandPresenter.newInstance();
-        createBoardUseCaseInput.setTeamId(id);
-        createBoardUseCaseInput.setBoardName(boardName);
-        createBoardUseCase.execute(createBoardUseCaseInput, createBoardUseCaseoutput);
+        createBoardInput.setTeamId(id);
+        createBoardInput.setBoardName(boardName);
+        createBoardUseCase.execute(createBoardInput, createBoardUseCaseoutput);
 
         return createBoardUseCaseoutput;
     }

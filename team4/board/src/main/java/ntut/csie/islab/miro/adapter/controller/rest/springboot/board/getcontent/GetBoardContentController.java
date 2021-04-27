@@ -20,9 +20,9 @@ public class GetBoardContentController {
         this.getBoardContentUseCase = getBoardContentUseCase;
     }
 
-    @GetMapping(path = "$/boards/{boardId}/content", produces = "application/json")
+    @GetMapping(path = "/boards/{boardId}/content", produces = "application/json")
     public BoardContentViewModel getBoardContent(@PathVariable("boardId") String boardId) {
-
+        System.out.println("in BoardContentViewModel");
         //todo: Kanban getBoardContentUseCaseimpl implement the GetBoardContentInput and getBoardContentUseCase.
         GetBoardContentInput input = getBoardContentUseCase.newInput();
         input.setBoardId(UUID.fromString(boardId));

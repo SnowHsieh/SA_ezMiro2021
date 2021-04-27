@@ -2,7 +2,7 @@ package ntut.csie.islab.miro.usecase.board;
 
 import java.util.UUID;
 
-public class CreateBoardUseCaseInput {
+public class CreateBoardInput {
     private UUID teamId;
     private String boardName;
 
