@@ -1,0 +1,6 @@
+ntut/csie/islab/miro/figure/usecase/figure/FigureDto.class
+ntut/csie/islab/miro/figure/entity/model/figure/ShapeKindEnum.class
+ntut/csie/islab/miro/figure/entity/model/figure/Figure.class
+ntut/csie/islab/miro/figure/entity/model/figure/Style.class
+ntut/csie/islab/miro/figure/entity/model/figure/Position.class
+ntut/csie/islab/miro/figure/adapter/repository/figure/FigureRepository.class

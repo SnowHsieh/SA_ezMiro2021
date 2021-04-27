@@ -1,0 +1,4 @@
+ntut/csie/islab/miro/entity/model/board/BoardTest.class
+ntut/csie/islab/miro/usecase/board/CreateBoardUseCaseTest.class
+ntut/csie/islab/miro/usecase/board/GetBoardContentUseCaseTest.class
+ntut/csie/islab/miro/entity/model/board/BoardDomainEventTest.class

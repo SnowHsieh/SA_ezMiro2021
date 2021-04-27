@@ -34,6 +34,4 @@ public class EZMiroWebMain extends SpringBootServletInitializer implements Comma
         System.out.println("Team4 EZMiroWebMain run");
     }
 
-
-
 }
