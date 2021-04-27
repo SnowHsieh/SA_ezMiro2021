@@ -133,8 +133,8 @@ public class UseCaseInjection {
 //    }
 //
 //
-//    @Autowired
-//    public void setEventBus(DomainEventBus eventBus) { this.eventBus = eventBus; }
+    @Autowired
+    public void setEventBus(DomainEventBus eventBus) { this.eventBus = eventBus; }
 
 
 }
