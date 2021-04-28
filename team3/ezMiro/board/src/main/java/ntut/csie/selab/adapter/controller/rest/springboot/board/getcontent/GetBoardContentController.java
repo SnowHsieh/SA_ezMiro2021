@@ -53,19 +53,19 @@ public class GetBoardContentController {
         Board board = new Board(boardId,"firstTeam", "firstBoard");
         boardRepository.add(board);
 
-        Widget readModel = new StickyNote("readModelId", boardId, new Coordinate(0, 20, 10, 30));
+        Widget readModel = new StickyNote("readModelId", boardId, new Coordinate(0, 200, 100, 300));
         widgetRepository.add(readModel);
         board.commitWidgetCreation(boardId, "readModelId");
 
-        Widget command = new StickyNote("commandId", boardId, new Coordinate(15, 20, 25, 30));
+        Widget command = new StickyNote("commandId", boardId, new Coordinate(150, 200, 250, 300));
         widgetRepository.add(command);
         board.commitWidgetCreation(boardId, "commandId");
 
-        Widget aggregate = new StickyNote("aggregateId", boardId, new Coordinate(20, 0, 30, 10));
+        Widget aggregate = new StickyNote("aggregateId", boardId, new Coordinate(200, 0, 300, 100));
         widgetRepository.add(aggregate);
         board.commitWidgetCreation(boardId, "aggregateId");
 
-        Widget domainEvent = new StickyNote("domainEventId", boardId, new Coordinate(30, 20, 40, 30));
+        Widget domainEvent = new StickyNote("domainEventId", boardId, new Coordinate(300, 200, 400, 300));
         widgetRepository.add(domainEvent);
         board.commitWidgetCreation(boardId, "domainEventId");
     }
