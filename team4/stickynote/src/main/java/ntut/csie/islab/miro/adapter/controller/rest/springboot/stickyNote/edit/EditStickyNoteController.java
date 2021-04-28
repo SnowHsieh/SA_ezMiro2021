@@ -1,17 +1,17 @@
-package ntut.csie.islab.miro.adapter.controller.rest.springboot.stickyNote.create;
-
+package ntut.csie.islab.miro.adapter.controller.rest.springboot.stickyNote.edit;
 
 import ntut.csie.islab.miro.figure.entity.model.figure.Position;
 import ntut.csie.islab.miro.figure.entity.model.figure.ShapeKindEnum;
 import ntut.csie.islab.miro.figure.entity.model.figure.Style;
 import ntut.csie.islab.miro.usecase.stickyNote.CreateStickyNoteInput;
 import ntut.csie.islab.miro.usecase.stickyNote.CreateStickyNoteUseCase;
+import ntut.csie.islab.miro.usecase.stickyNote.EditStickyNoteInput;
+import ntut.csie.islab.miro.usecase.stickyNote.EditStickyNoteUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,52 +19,47 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-public class CreateStickyNoteController {
-    private CreateStickyNoteUseCase createStickyNoteUseCase;
-
+public class EditStickyNoteController {
+    private EditStickyNoteUseCase editStickyNoteUseCase;
     @Autowired
-    public void setCreateBoardUseCase(CreateStickyNoteUseCase createStickyNoteUseCase) {
-        this.createStickyNoteUseCase = createStickyNoteUseCase;
+    public void setEditStickyNoteUseCase(EditStickyNoteUseCase editStickyNoteUseCase) {
+        this.editStickyNoteUseCase = editStickyNoteUseCase;
     }
 
-    //todo
-//    @PostMapping(path = "/board/{boardId}/createStikcyNote", consumes = "application/json", produces = "application/json")
-//    public CqrsCommandViewModel createBoard(
-//            @PathVariable("boardId") UUID boardId,
-//            @RequestBody String stickyNoteInfo) {
-    @PostMapping(path = "/board/createStickyNote", consumes = "application/json", produces = "application/json")
-    public CqrsCommandViewModel createBoard(
+    @PostMapping(path = "/board/editStickyNote", consumes = "application/json", produces = "application/json")
+    public CqrsCommandViewModel editStickyNote(
             @RequestBody String stickyNoteInfo) {
-
+        UUID figureId = null;
         String content = "";
-        Position position = null;
+
         Style style = null;
         JSONObject styleJsonObject;
         try {
             JSONObject stickyNoteJSON = new JSONObject(stickyNoteInfo);
+            figureId = UUID.fromString(stickyNoteJSON.getString("figureId"));
             content = stickyNoteJSON.getString("content");
-            position = new Position(stickyNoteJSON.getJSONObject("position").getDouble("x"), stickyNoteJSON.getJSONObject("position").getDouble("y"));
             styleJsonObject = stickyNoteJSON.getJSONObject("style");
             style = new Style(styleJsonObject.getInt("fontSize"),
-                    ShapeKindEnum.CIRCLE,//todo
+                    ShapeKindEnum.RECTANGLE,//todo
                     styleJsonObject.getDouble("figureSize"),
                     styleJsonObject.getString("color"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        CreateStickyNoteInput input = createStickyNoteUseCase.newInput();
+        EditStickyNoteInput input = editStickyNoteUseCase.newInput();
 
-//        input.setBoardId(boardId);
         input.setBoardId(UUID.fromString("61e76b6c-d127-4949-a0b6-48557edc70e2"));
-        input.setPosition(position);
+        input.setFigureId(figureId);
         input.setContent(content);
         input.setStyle(style);
 
+
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
-        createStickyNoteUseCase.execute(input, presenter);
+        editStickyNoteUseCase.execute(input, presenter);
         return presenter.buildViewModel();
     }
+
 
 }

@@ -27,5 +27,6 @@ public class CreateBoardUseCase {
         this.domainEventBus.postAll(board);
         output.setId(board.getId().toString());
         output.setExitCode(ExitCode.SUCCESS);
+        output.setMessage("Create board success");
     }
 }

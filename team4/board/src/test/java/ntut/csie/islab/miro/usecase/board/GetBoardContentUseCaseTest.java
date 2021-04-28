@@ -365,7 +365,7 @@ public class GetBoardContentUseCaseTest {
         assertEquals(boardId, fourFiguresInBoardViewModel.getBoardId());
         assertEquals(4, fourFiguresInBoardViewModel.getFigureDtos().size());
 
-        // edit DomainEventStickyNote
+        // getcontent DomainEventStickyNote
         CqrsCommandPresenter editDomainEventStickyNoteOutput = editStickyNoteUseCaseOutput(
                 boardId,
                 domainEventStickyNote.getId(),
@@ -390,7 +390,7 @@ public class GetBoardContentUseCaseTest {
         assertEquals("sticky\n note \n created", domainEventStickyNoteDto.getContent());
         assertEquals("#f28500", domainEventStickyNoteDto.getStyle().getColor());
 
-        //edit CommandStickyNote
+        //getcontent CommandStickyNote
         CqrsCommandPresenter editCommandStickyNoteOutput = editStickyNoteUseCaseOutput(
                 boardId,
                 commandStickyNote.getId(),
@@ -417,7 +417,7 @@ public class GetBoardContentUseCaseTest {
         assertEquals("create sticky note", commandStickyNoteDto.getContent());
         assertEquals("#0080ff", commandStickyNoteDto.getStyle().getColor());
 
-        //edit ReadModelStickyNote
+        //getcontent ReadModelStickyNote
         CqrsCommandPresenter editReadModelStickyNoteOutput = editStickyNoteUseCaseOutput(
                 boardId,
                 readModelStickyNote.getId(),

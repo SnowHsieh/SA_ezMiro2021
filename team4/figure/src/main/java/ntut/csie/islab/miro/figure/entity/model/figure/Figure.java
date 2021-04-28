@@ -15,7 +15,7 @@ public abstract class Figure extends AggregateRoot<UUID> {
         super(UUID.randomUUID());
         this.boardId = boardId;
         this.position = position;
-        this.content = content;//todo if copies figure ,it should be revised.
+        this.content = content;
         this.style = style;
     }
 

@@ -26,5 +26,6 @@ public class CreateStickyNoteUseCase {
         domainEventBus.postAll(stickyNote);
         output.setId(stickyNote.getId().toString());
         output.setExitCode(ExitCode.SUCCESS);
+        output.setMessage("Create stickyNote success");
     }
 }

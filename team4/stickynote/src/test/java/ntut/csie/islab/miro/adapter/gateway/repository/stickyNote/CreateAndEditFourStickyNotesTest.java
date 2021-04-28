@@ -139,7 +139,7 @@ public class CreateAndEditFourStickyNotesTest {
         CqrsCommandPresenter editCommandStickyNoteOutput = editStickyNoteUseCaseOutput(
                 boardId,
                 commandStickyNote.getId(),
-                "edit\n" +
+                "getcontent\n" +
                         "\n" +
                         "sticky\n" +
                         "\n" +
@@ -166,7 +166,7 @@ public class CreateAndEditFourStickyNotesTest {
         assertEquals("sticky\n note \n created", stickyNoteRepository.findById(boardId,UUID.fromString(editDomainEventStickyNoteOutput.getId())).get().getContent());
         assertEquals("#f28500", stickyNoteRepository.findById(boardId,UUID.fromString(editDomainEventStickyNoteOutput.getId())).get().getStyle().getColor());
 
-        assertEquals("edit\n" +
+        assertEquals("getcontent\n" +
                 "\n" +
                 "sticky\n" +
                 "\n" +

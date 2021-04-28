@@ -39,5 +39,6 @@ public class DeleteStickyNoteUseCase {
         domainEventBus.postAll(stickyNote);
         output.setId(stickyNote.getId().toString());
         output.setExitCode(ExitCode.SUCCESS);
+        output.setMessage("Delete stickyNote success");
     }
 }

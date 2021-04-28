@@ -34,5 +34,6 @@ public class EditStickyNoteUseCase {
         domainEventBus.postAll(stickyNote);
         output.setId(stickyNote.getId().toString());
         output.setExitCode(ExitCode.SUCCESS);
+        output.setMessage("Edit stickyNote success");
     }
 }
