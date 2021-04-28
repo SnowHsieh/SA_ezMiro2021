@@ -8,8 +8,8 @@ public class NoteDto extends FigureDto {
 
     private int leftTopPositionX;
     private int leftTopPositionY;
-    private int rightBottomPositionX;
-    private int rightBottomPositionY;
+    private int height;
+    private int width;
     private String color;
     private String figureType;
 
@@ -21,12 +21,12 @@ public class NoteDto extends FigureDto {
         return leftTopPositionY;
     }
 
-    public int getRightBottomPositionX() {
-        return rightBottomPositionX;
+    public int getHeight() {
+        return height;
     }
 
-    public int getRightBottomPositionY() {
-        return rightBottomPositionY;
+    public int getWidth() {
+        return width;
     }
 
     public void setLeftTopPosition(Point leftTopPosition) {
@@ -34,9 +34,12 @@ public class NoteDto extends FigureDto {
         this.leftTopPositionY = leftTopPosition.y;
     }
 
-    public void setRightBottomPosition(Point rightBottomPosition) {
-        this.rightBottomPositionX = rightBottomPosition.x;
-        this.rightBottomPositionY = rightBottomPosition.y;
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
     }
 
     public String getColor() {

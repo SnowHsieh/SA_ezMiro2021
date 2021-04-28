@@ -30,7 +30,8 @@ public class PostNoteUseCaseImpl implements PostNoteUseCase {
         Note note = NoteBuilder.newInstance()
                 .boardId(input.getBoardId())
                 .leftTopPosition(input.getLeftTopPosition())
-                .rightBottomPosition(input.getRightBottomPosition())
+                .height(input.getHeight())
+                .width(input.getWidth())
                 .color(input.getColor())
                 .figureType(input.getFigureType())
                 .build();
@@ -46,7 +47,8 @@ public class PostNoteUseCaseImpl implements PostNoteUseCase {
 
         private String boardId;
         private Point leftTopPosition;
-        private Point rightBottomPosition;
+        private int height;
+        private int width;
         private Color color;
         private FigureType figureType;
 
@@ -71,13 +73,23 @@ public class PostNoteUseCaseImpl implements PostNoteUseCase {
         }
 
         @Override
-        public Point getRightBottomPosition() {
-            return rightBottomPosition;
+        public int getHeight() {
+            return height;
         }
 
         @Override
-        public void setRightBottomPosition(Point rightBottomPosition) {
-            this.rightBottomPosition = rightBottomPosition;
+        public void setHeight(int height) {
+            this.height = height;
+        }
+
+        @Override
+        public int getWidth() {
+            return width;
+        }
+
+        @Override
+        public void setWidth(int width) {
+            this.width = width;
         }
 
         @Override

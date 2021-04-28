@@ -15,9 +15,13 @@ public interface PostNoteInput extends Input {
 
     void setLeftTopPosition(Point leftTopPosition);
 
-    Point getRightBottomPosition();
+    int getHeight();
 
-    void setRightBottomPosition(Point rightBottomPosition);
+    void setHeight(int height);
+
+    int getWidth();
+
+    void setWidth(int width);
 
     Color getColor();
 

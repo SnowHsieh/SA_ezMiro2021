@@ -26,7 +26,8 @@ public class PostNoteUseCaseTest extends AbstractTest {
 
         postNoteInput.setBoardId(boardId);
         postNoteInput.setLeftTopPosition(defaultLeftTopPosition);
-        postNoteInput.setRightBottomPosition(defaultRightBottomPosition);
+        postNoteInput.setHeight(defaultHeight);
+        postNoteInput.setWidth(defaultWidth);
         postNoteInput.setColor(defaultColor);
         postNoteInput.setFigureType(FigureType.NOTE);
 
@@ -41,7 +42,8 @@ public class PostNoteUseCaseTest extends AbstractTest {
         assertEquals(postNoteOutput.getId(), note.getId());
         assertEquals(boardId, note.getBoardId());
         assertEquals(defaultLeftTopPosition, note.getLeftTopPosition());
-        assertEquals(defaultRightBottomPosition, note.getRightBottomPosition());
+        assertEquals(defaultHeight, note.getHeight());
+        assertEquals(defaultWidth, note.getWidth());
         assertEquals(defaultColor, note.getColor());
         assertEquals(FigureType.NOTE, note.getFigureType());
     }
@@ -51,7 +53,7 @@ public class PostNoteUseCaseTest extends AbstractTest {
         String boardId = createBoard(projectId, boardName);
         Board board = boardRepository.findById(boardId).get();
 
-        String firstNodeId = postNote(boardId, new Point(1,1), new Point(11,11), Color.RED);
+        String firstNodeId = postNote(boardId, new Point(1,1), 11, 11, Color.RED);
 
         board.commitFigure(firstNodeId);
         boardRepository.save(board);
@@ -60,7 +62,7 @@ public class PostNoteUseCaseTest extends AbstractTest {
         assertEquals(1, board.getCommittedFigures().size());
 
 
-        String secondNodeId = postNote(boardId, new Point(5,5), new Point(11,11), Color.BLUE);
+        String secondNodeId = postNote(boardId, new Point(5,5), 6, 6, Color.BLUE);
 
         board.commitFigure(secondNodeId);
         boardRepository.save(board);

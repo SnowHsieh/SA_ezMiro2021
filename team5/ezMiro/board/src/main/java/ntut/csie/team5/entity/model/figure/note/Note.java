@@ -11,11 +11,10 @@ public class Note extends ConnectableFigure {
 
     private Color color;
 
-    public Note(String noteId, String boardId, Point leftTopPosition, Point rightBottomPosition, Color color, FigureType figureType) {
-        super(noteId, boardId, leftTopPosition, rightBottomPosition, figureType);
+    public Note(String noteId, String boardId, Point leftTopPosition, int height, int width, Color color, FigureType figureType) {
+        super(noteId, boardId, leftTopPosition, height, width, figureType);
         this.color = color;
     }
-
 
     public Color getColor() {
         return color;
