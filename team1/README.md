@@ -12,3 +12,5 @@
 ### 共同開發時間：
 - 每週二 19:00-21:00
 - 每週四 19:00-21:00
+
+![image](./demoVideo/event storming scenario.gif)
