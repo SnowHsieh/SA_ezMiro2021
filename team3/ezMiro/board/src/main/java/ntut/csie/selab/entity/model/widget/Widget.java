@@ -1,5 +1,6 @@
 package ntut.csie.selab.entity.model.widget;
 
+import ntut.csie.selab.entity.model.widget.event.TextOfWidgetEdited;
 import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
 import ntut.csie.selab.model.AggregateRoot;
 
@@ -32,6 +33,8 @@ public abstract class Widget extends AggregateRoot<String> {
 
     public void setText(String text) {
         this.text = text;
+
+        addDomainEvent(new TextOfWidgetEdited(new Date()));
     }
 
     public String getText() {
