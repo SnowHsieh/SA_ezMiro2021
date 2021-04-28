@@ -1,4 +1,4 @@
-package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.board.create;
+package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.figure.sticker.changecontent;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
@@ -22,7 +22,7 @@ public class ChangeStickerContentController {
         this.changeStickerContentUseCase = changeStickerContentUseCase;
     }
 
-    @PutMapping(path = "${KANBAN_PREFIX}/board/sticker/changecontent", consumes = "application/json", produces = "application/json")
+    @PutMapping(path = "${MIRO_PREFIX}/board/sticker/changecontent", consumes = "application/json", produces = "application/json")
     public CqrsCommandViewModel changeStickerContent(@QueryParam("stickerId") String stickerId,
                                               @RequestBody String stickerInfo) {
 

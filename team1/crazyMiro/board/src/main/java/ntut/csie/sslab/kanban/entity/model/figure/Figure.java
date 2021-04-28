@@ -69,6 +69,4 @@ public abstract class Figure extends AggregateRoot<String> {
     }
 
     public abstract FigureType getType();
-
-    public abstract void move(Coordinate position);
 }

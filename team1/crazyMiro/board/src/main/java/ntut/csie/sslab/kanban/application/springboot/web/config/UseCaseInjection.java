@@ -4,6 +4,8 @@ import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.changecontent.ChangeStickerContentUseCase;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.changecontent.ChangeStickerContentUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.changesize.ChangeStickerSizeUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.changesize.ChangeStickerSizeUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCase;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.move.MoveStickerUseCase;
@@ -49,6 +51,11 @@ public class UseCaseInjection {
     @Bean(name="moveStickerUseCase")
     public MoveStickerUseCase moveStickerUseCase() {
         return new MoveStickerUseCaseImpl(figureRepository, eventBus);
+    }
+
+    @Bean(name="changeStickerSizeUseCase")
+    public ChangeStickerSizeUseCase changeStickerSizeUseCase() {
+        return new ChangeStickerSizeUseCaseImpl(figureRepository, eventBus);
     }
 //
 //

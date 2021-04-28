@@ -1,4 +1,4 @@
-package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.board.create;
+package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.figure.sticker.move;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
@@ -27,7 +27,7 @@ public class MoveStickerController {
         this.moveStickerUseCase = moveStickerUseCase;
     }
 
-    @PutMapping(path = "${KANBAN_PREFIX}/board/sticker/move", consumes = "application/json", produces = "application/json")
+    @PutMapping(path = "${MIRO_PREFIX}/board/sticker/move", consumes = "application/json", produces = "application/json")
     public CqrsCommandViewModel moveSticker(@QueryParam("stickerId") String stickerId,
                                                      @RequestBody String stickerInfo) {
 

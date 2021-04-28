@@ -4,6 +4,7 @@ import ntut.csie.sslab.kanban.entity.model.board.event.BoardCreated;
 import ntut.csie.sslab.kanban.entity.model.figure.event.StickerContentChanged;
 import ntut.csie.sslab.kanban.entity.model.figure.event.StickerCreated;
 import ntut.csie.sslab.kanban.entity.model.figure.event.StickerMoved;
+import ntut.csie.sslab.kanban.entity.model.figure.event.StickerSizeChanged;
 
 public class Sticker extends Figure {
     public Sticker(String boardId, String figureId, String content, int size, String color, Coordinate position) {
@@ -22,9 +23,13 @@ public class Sticker extends Figure {
         addDomainEvent(new StickerContentChanged(this.getFigureId(), content));
     }
 
-    @Override
     public void move(Coordinate position) {
         setPosition(position);
         addDomainEvent(new StickerMoved(this.getFigureId(), position));
+    }
+
+    public void changeSize(int size) {
+        setSize(size);
+        addDomainEvent(new StickerSizeChanged(this.getFigureId(), size));
     }
 }

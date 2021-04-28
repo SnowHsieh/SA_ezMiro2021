@@ -1,4 +1,4 @@
-package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.board.create;
+package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.figure.sticker;
 
 import ntut.csie.sslab.account.users.query.usecase.UserDto;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
@@ -39,7 +39,7 @@ public class GetStickersController {
         this.figureRepository = figureRepository;
     }
 
-    @GetMapping(path = "${KANBAN_PREFIX}/board/sticker/getall", produces = "application/json")
+    @GetMapping(path = "${MIRO_PREFIX}/board/sticker/getall", produces = "application/json")
     public List<FigureDto> getOnlineUsersInBoard(@QueryParam("boardId") String boardId) {
 
         List<Figure> stickers = figureRepository.getStickersByBoardId(boardId);

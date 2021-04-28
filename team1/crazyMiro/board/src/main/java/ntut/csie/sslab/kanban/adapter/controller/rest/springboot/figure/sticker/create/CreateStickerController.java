@@ -1,4 +1,4 @@
-package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.board.create;
+package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.figure.sticker.create;
 
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
@@ -30,7 +30,7 @@ public class CreateStickerController {
         this.createStickerUseCase = createStickerUseCase;
     }
 
-    @PostMapping(path = "${KANBAN_PREFIX}/board/sticker/create", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "${MIRO_PREFIX}/board/sticker/create", consumes = "application/json", produces = "application/json")
     public CqrsCommandViewModel createSticker(@QueryParam("boardId") String boardId,
                                             @RequestBody String stickerInfo) {
 
