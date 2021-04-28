@@ -12,7 +12,7 @@ public class WidgetMapper {
     public WidgetDto domainToDto(Widget widget) {
         Coordinate coordinate = widget.getCoordinate();
         int width = coordinate.getBottomRight().x - coordinate.getTopLeft().x;
-        int height = coordinate.getBottomRight().y - coordinate.getBottomRight().y;
+        int height = coordinate.getBottomRight().y - coordinate.getTopLeft().y;
         return new WidgetDto(coordinate.getTopLeft().x, coordinate.getTopLeft().y, width, height);
     }
 
