@@ -42,8 +42,7 @@ public class CreateStickerUseCaseTest extends AbstractSpringBootJpaTest {
         assertEquals(content, sticker.getContent());
         assertEquals(size, sticker.getSize());
         assertEquals(color, sticker.getColor());
-        assertEquals(x, sticker.getPosition().getX());
-        assertEquals(y, sticker.getPosition().getY());
+        assertTrue(position.equals(sticker.getPosition()));
         assertEquals(FigureType.Sticker, sticker.getType());
         assertEquals(1, eventListener.getEventCount());
     }

@@ -6,6 +6,8 @@ import ntut.csie.sslab.kanban.usecase.figure.sticker.changecontent.ChangeSticker
 import ntut.csie.sslab.kanban.usecase.figure.sticker.changecontent.ChangeStickerContentUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCase;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.move.MoveStickerUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.move.MoveStickerUseCaseImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,6 +44,11 @@ public class UseCaseInjection {
     @Bean(name="changeStickerContentUseCase")
     public ChangeStickerContentUseCase changeStickerContentUseCase() {
         return new ChangeStickerContentUseCaseImpl(figureRepository, eventBus);
+    }
+
+    @Bean(name="moveStickerUseCase")
+    public MoveStickerUseCase moveStickerUseCase() {
+        return new MoveStickerUseCaseImpl(figureRepository, eventBus);
     }
 //
 //
