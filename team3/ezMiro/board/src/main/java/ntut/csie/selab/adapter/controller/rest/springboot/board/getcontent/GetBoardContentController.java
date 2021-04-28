@@ -7,14 +7,21 @@ import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
+import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
+import ntut.csie.selab.usecase.board.create.CreateBoardInput;
+import ntut.csie.selab.usecase.board.create.CreateBoardOutput;
+import ntut.csie.selab.usecase.board.create.CreateBoardUseCase;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentInput;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentOutput;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
+import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.widget.WidgetDto;
 import ntut.csie.selab.usecase.widget.WidgetMapper;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import ntut.csie.selab.usecase.widget.create.CreateStickyNoteInput;
+import ntut.csie.selab.usecase.widget.create.CreateStickyNoteOutput;
+import ntut.csie.selab.usecase.widget.create.CreateStickyNoteUseCase;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,7 +39,7 @@ public class GetBoardContentController {
         BoardRepository boardRepository = new BoardRepositoryImpl();
         WidgetRepository widgetRepository = new WidgetRepositoryImpl();
         getBoardContentUseCase = new GetBoardContentUseCase(boardRepository, widgetRepository);
-        create_single_board_with_event_storming(boardRepository, widgetRepository);
+        boardId = createSingleBoardWithEventStorming(boardRepository, widgetRepository);
         input.setBoardId(boardId);
         WidgetMapper widgetMapper = new WidgetMapper();
         List<WidgetDto> widgetDtos = new ArrayList<>();
@@ -48,25 +55,53 @@ public class GetBoardContentController {
         return "Hi";
     }
 
-    private void create_single_board_with_event_storming(BoardRepository boardRepository, WidgetRepository widgetRepository) {
-        String boardId = "firstId";
-        Board board = new Board(boardId,"firstTeam", "firstBoard");
-        boardRepository.add(board);
+    private String createSingleBoardWithEventStorming(BoardRepository boardRepository, WidgetRepository widgetRepository) {
+        DomainEventBus domainEventBus = new DomainEventBus();
+        domainEventBus.register(new NotifyBoard(boardRepository, domainEventBus));
+        CreateBoardOutput createBoardOutput = createSingleBoard(boardRepository, domainEventBus);
+        String boardId = createBoardOutput.getBoardId();
 
-        Widget readModel = new StickyNote("readModelId", boardId, new Coordinate(0, 200, 100, 300));
-        widgetRepository.add(readModel);
-        board.commitWidgetCreation(boardId, "readModelId");
+        String stickyNoteId = createStickyNoteIn(boardId, new Coordinate(0, 200, 100, 300), widgetRepository, domainEventBus);
+        setColorOfWidgetIn(widgetRepository, stickyNoteId, "green");
 
-        Widget command = new StickyNote("commandId", boardId, new Coordinate(150, 200, 250, 300));
-        widgetRepository.add(command);
-        board.commitWidgetCreation(boardId, "commandId");
+        stickyNoteId = createStickyNoteIn(boardId, new Coordinate(150, 200, 250, 300), widgetRepository, domainEventBus);
+        setColorOfWidgetIn(widgetRepository, stickyNoteId, "blue");
 
-        Widget aggregate = new StickyNote("aggregateId", boardId, new Coordinate(200, 0, 300, 100));
-        widgetRepository.add(aggregate);
-        board.commitWidgetCreation(boardId, "aggregateId");
+        stickyNoteId = createStickyNoteIn(boardId, new Coordinate(200, 0, 300, 100), widgetRepository, domainEventBus);
+        setColorOfWidgetIn(widgetRepository, stickyNoteId, "yellow");
 
-        Widget domainEvent = new StickyNote("domainEventId", boardId, new Coordinate(300, 200, 400, 300));
-        widgetRepository.add(domainEvent);
-        board.commitWidgetCreation(boardId, "domainEventId");
+        stickyNoteId = createStickyNoteIn(boardId, new Coordinate(300, 200, 400, 300), widgetRepository, domainEventBus);
+        setColorOfWidgetIn(widgetRepository, stickyNoteId, "orange");
+
+        return boardId;
+    }
+
+    private void setColorOfWidgetIn (WidgetRepository widgetRepository, String stickyNoteId, String color) {
+        Widget widget = widgetRepository.findById(stickyNoteId).get();
+        widget.setColor(color);
+    }
+
+    private String createStickyNoteIn(String boardId, Coordinate coordinate, WidgetRepository widgetRepository, DomainEventBus domainEventBus) {
+        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(widgetRepository, domainEventBus);
+        CreateStickyNoteInput createStickyNoteInput = new CreateStickyNoteInput();
+        CreateStickyNoteOutput createStickyNoteOutput = new CreateStickyNoteOutput();
+
+        createStickyNoteInput.setBoardId(boardId);
+        createStickyNoteInput.setCoordinate(coordinate);
+
+        createStickyNoteUseCase.execute(createStickyNoteInput, createStickyNoteOutput);
+
+        return createStickyNoteOutput.getStickyNoteId();
+    }
+
+    private CreateBoardOutput createSingleBoard(BoardRepository boardRepository, DomainEventBus domainEventBus) {
+
+        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository, domainEventBus);
+        CreateBoardInput createBoardInput = new CreateBoardInput();
+        CreateBoardOutput createBoardOutput = new CreateBoardOutput();
+        createBoardInput.setTeamId("1");
+        createBoardInput.setBoardName("firstBoard");
+        createBoardUseCase.execute(createBoardInput, createBoardOutput);
+        return createBoardOutput;
     }
 }

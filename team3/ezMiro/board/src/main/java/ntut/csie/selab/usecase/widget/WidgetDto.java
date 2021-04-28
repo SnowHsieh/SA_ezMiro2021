@@ -6,11 +6,17 @@ public class WidgetDto {
     private int width;
     private int height;
 
-    public WidgetDto(int topLeftX, int topLeftY, int width, int height) {
+
+    private String color;
+    private String textColor;
+
+    public WidgetDto(int topLeftX, int topLeftY, int width, int height, String color, String textColor) {
         this.topLeftX = topLeftX;
         this.topLeftY = topLeftY;
         this.width = width;
         this.height = height;
+        this.color = color;
+        this.textColor = textColor;
     }
 
     public int getTopLeftX() {
@@ -29,4 +35,11 @@ public class WidgetDto {
         return height;
     }
 
+    public String getColor() {
+        return color;
+    }
+
+    public String getTextColor() {
+        return textColor;
+    }
 }
