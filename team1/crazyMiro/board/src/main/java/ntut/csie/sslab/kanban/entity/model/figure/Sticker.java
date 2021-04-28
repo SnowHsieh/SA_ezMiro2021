@@ -1,6 +1,7 @@
 package ntut.csie.sslab.kanban.entity.model.figure;
 
 import ntut.csie.sslab.kanban.entity.model.board.event.BoardCreated;
+import ntut.csie.sslab.kanban.entity.model.figure.event.StickerContentChanged;
 import ntut.csie.sslab.kanban.entity.model.figure.event.StickerCreated;
 
 public class Sticker extends Figure {
@@ -15,5 +16,9 @@ public class Sticker extends Figure {
         return FigureType.Sticker;
     }
 
+    public void changeContent(String content){
+        setContent(content);
+        addDomainEvent(new StickerContentChanged(this.getFigureId(), content));
+    }
 
 }

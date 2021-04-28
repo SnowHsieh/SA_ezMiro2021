@@ -4,8 +4,6 @@ package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.board.create;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
-import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardInput;
-import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardUseCase;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerInput;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCase;
 import org.json.JSONException;

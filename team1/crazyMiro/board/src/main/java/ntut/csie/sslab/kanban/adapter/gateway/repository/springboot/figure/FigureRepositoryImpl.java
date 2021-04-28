@@ -28,6 +28,7 @@ public class FigureRepositoryImpl implements FigureRepository {
 
     @Override
     public void save(Figure data) {
+        figures.removeIf(figure -> figure.getFigureId().equals(data.getFigureId()));
         figures.add(data);
     }
 
