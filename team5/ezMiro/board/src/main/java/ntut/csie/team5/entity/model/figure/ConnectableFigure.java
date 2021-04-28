@@ -5,12 +5,14 @@ import java.awt.*;
 public abstract class ConnectableFigure extends Figure {
 
     private Point leftTopPosition;
-    private Point rightBottomPosition;
+    private int height;
+    private int width;
 
-    public ConnectableFigure(String figureId, String boardId, Point leftTopPosition, Point rightBottomPosition, FigureType figureType) {
+    public ConnectableFigure(String figureId, String boardId, Point leftTopPosition, int height, int width, FigureType figureType) {
         super(figureId, boardId, figureType);
         this.leftTopPosition = leftTopPosition;
-        this.rightBottomPosition = rightBottomPosition;
+        this.height = height;
+        this.width = width;
     }
 
     public Point getLeftTopPosition() {
@@ -21,11 +23,19 @@ public abstract class ConnectableFigure extends Figure {
         this.leftTopPosition = leftTopPosition;
     }
 
-    public Point getRightBottomPosition() {
-        return rightBottomPosition;
+    public int getHeight() {
+        return height;
     }
 
-    public void setRightBottomPosition(Point rightBottomPosition) {
-        this.rightBottomPosition = rightBottomPosition;
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
     }
 }

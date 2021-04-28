@@ -4,6 +4,7 @@ import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
