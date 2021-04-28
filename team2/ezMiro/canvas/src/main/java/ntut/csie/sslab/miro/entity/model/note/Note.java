@@ -1,26 +1,18 @@
 package ntut.csie.sslab.miro.entity.model.note;
 
-import ntut.csie.sslab.ddd.model.AggregateRoot;
+import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.entity.model.note.event.NoteColorChanged;
 import ntut.csie.sslab.miro.entity.model.note.event.NoteCreated;
 import ntut.csie.sslab.miro.entity.model.note.event.NoteDescriptionChanged;
 
-public class Note extends AggregateRoot<String> {
-    private String boardId;
+public class Note extends Figure {
     private String description;
-    private String color;
 
-    public Note(String boardId, String noteId, String description, String color) {
-        super(noteId);
-        this.boardId = boardId;
+    public Note(String boardId, String noteId, String description, String color, Coordinate coordinate, double width, double height) {
+        super(noteId, boardId, coordinate, color, width, height);
         this.description = description;
-        this.color = color;
 
-        addDomainEvent(new NoteCreated(boardId, noteId, description, color));
-    }
-
-    public String getBoardId() {
-        return boardId;
+        addDomainEvent(new NoteCreated(boardId, noteId, description, color, coordinate, width, height));
     }
 
     public String getDescription() {
@@ -39,19 +31,11 @@ public class Note extends AggregateRoot<String> {
         this.description = description;
     }
 
-    public String getColor() {
-        return color;
-    }
-
     public void changeColor(String newColor) {
-        if(!color.equals(newColor)){
-            String originalColor = color;
+        if(!getColor().equals(newColor)){
+            String originalColor = getColor();
             this.setColor(newColor);
-            addDomainEvent(new NoteColorChanged(getId(), originalColor, newColor, boardId));
+            addDomainEvent(new NoteColorChanged(getId(), originalColor, newColor, getBoardId()));
         }
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 }
