@@ -147,7 +147,7 @@ From: 'Oracle Corporation' (http://www.oracle.com)
 From: 'Oracle Corporation' (http://www.oracle.com/)
   - istack common utility code runtime (http://java.net/istack-commons/istack-commons-runtime/) com.sun.istack:istack-commons-runtime:jar:3.0.7
     License: CDDL 1.1  (https://glassfish.java.net/public/CDDL+GPL_1_1.html)    License: GPL2 w/ CPE  (https://glassfish.java.net/public/CDDL+GPL_1_1.html)
-  - javax.ws.rs-api (http://jax-rs-spec.java.net) javax.ws.rs:javax.ws.rs-api:jar:2.1
+  - javax.ws.rs-api (http://jax-rs-spec.java.net) javax.ws.rs:javax.ws.rs-api:bundle:2.1
     License: CDDL 1.1  (https://oss.oracle.com/licenses/CDDL+GPL-1.1)    License: GPL2 w/ CPE  (https://oss.oracle.com/licenses/CDDL+GPL-1.1)
   - JAXB Runtime (http://jaxb.java.net/jaxb-runtime-parent/jaxb-runtime) org.glassfish.jaxb:jaxb-runtime:jar:2.3.1
     License: CDDL+GPL License  (http://glassfish.java.net/public/CDDL+GPL_1_1.html)
@@ -251,6 +251,10 @@ From: 'Spring IO' (https://spring.io/projects/spring-framework)
 From: 'Sun Microsystems' (http://java.sun.com/)
   - ROME, RSS and atOM utilitiEs for Java (https://rome.dev.java.net/) rome:rome:jar:1.0
 
+
+From: 'The Apache Software Foundation' (http://www.apache.org/)
+  - Commons IO (http://commons.apache.org/io/) commons-io:commons-io:jar:1.4
+    License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 From: 'The Apache Software Foundation' (https://www.apache.org/)
   - figure (https://www.apache.org/ezKanban/figure/) ntut.csie.islab:figure:jar:1.0.0-SNAPSHOT
