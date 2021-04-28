@@ -34,6 +34,7 @@ public class CreateStickyNoteController {
 //            @RequestBody String stickyNoteInfo) {
     @PostMapping(path = "/board/createStickyNote", consumes = "application/json", produces = "application/json")
     public CqrsCommandViewModel createBoard(
+
             @RequestBody String stickyNoteInfo) {
 
         String content = "";
@@ -56,7 +57,7 @@ public class CreateStickyNoteController {
         CreateStickyNoteInput input = createStickyNoteUseCase.newInput();
 
 //        input.setBoardId(boardId);
-        input.setBoardId(UUID.fromString("61e76b6c-d127-4949-a0b6-48557edc70e2"));
+        input.setBoardId(UUID.fromString("b0a0d2d2-625c-4c83-a537-fe822a9ff135"));
         input.setPosition(position);
         input.setContent(content);
         input.setStyle(style);

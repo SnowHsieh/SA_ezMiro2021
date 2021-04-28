@@ -1,4 +1,4 @@
-package ntut.csie.islab.miro.adapter.controller.rest.springboot.stickyNote.edit;
+package ntut.csie.islab.miro.adapter.controller.rest.springboot.board.getcontent;
 
 import ntut.csie.islab.miro.adapter.presenter.GetBoardContentPresenter;
 import ntut.csie.islab.miro.adapter.presenter.getContent.BoardContentViewModel;

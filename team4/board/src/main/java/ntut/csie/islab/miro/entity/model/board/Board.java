@@ -24,6 +24,15 @@ public class Board extends AggregateRoot<UUID> {
 
     }
 
+    public Board(UUID teamId,UUID boardId,String boardName){
+        super(boardId);
+        this.teamId = teamId;
+        this.boardName = boardName;
+        this.figureList = new ArrayList<CommittedFigure>();
+        addDomainEvent(new BoardCreatedDomainEvent(teamId, getBoardId()));
+
+    }
+
     public UUID getTeamId() {
         return teamId;
     }

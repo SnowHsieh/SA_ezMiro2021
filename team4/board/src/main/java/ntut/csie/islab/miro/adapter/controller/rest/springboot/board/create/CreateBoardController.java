@@ -1,4 +1,4 @@
-package ntut.csie.islab.miro.adapter.controller.rest.springboot.stickyNote.create;
+package ntut.csie.islab.miro.adapter.controller.rest.springboot.board.create;
 
 
 import ntut.csie.islab.miro.usecase.board.CreateBoardInput;
