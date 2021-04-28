@@ -2,28 +2,32 @@ package ntut.csie.sslab.miro.usecase.note.create;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
-import ntut.csie.sslab.miro.entity.model.note.Note;
+import ntut.csie.sslab.miro.entity.model.figure.Figure;
+import ntut.csie.sslab.miro.entity.model.note.Coordinate;
 import ntut.csie.sslab.miro.entity.model.note.NoteBuilder;
-import ntut.csie.sslab.miro.usecase.note.NoteRepository;
+import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 
 public class CreateNoteUseCaseImpl implements CreateNoteUseCase {
-    private NoteRepository noteRepository;
+    private FigureRepository figureRepository;
     private DomainEventBus domainEventBus;
 
-    public CreateNoteUseCaseImpl(NoteRepository noteRepository, DomainEventBus domainEventBus) {
-        this.noteRepository = noteRepository;
+    public CreateNoteUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
+        this.figureRepository = figureRepository;
         this.domainEventBus = domainEventBus;
     }
 
     @Override
     public void execute(CreateNoteInput input, CqrsCommandOutput output) {
-        Note note = NoteBuilder.newInstance()
+        Figure note = NoteBuilder.newInstance()
                 .boardId(input.getBoardId())
                 .description("")
                 .color("#6FB7B7")
+                .coordinate(input.getCoordinate())
+                .width(100)
+                .height(100)
                 .build();
 
-        noteRepository.save(note);
+        figureRepository.save(note);
         domainEventBus.postAll(note);
 
         output.setId(note.getId());
@@ -36,7 +40,7 @@ public class CreateNoteUseCaseImpl implements CreateNoteUseCase {
 
     private static class CreateNoteInputImpl implements CreateNoteInput {
         private String boardId;
-        private String description;
+        private Coordinate coordinate;
 
         @Override
         public String getBoardId() {
@@ -48,12 +52,10 @@ public class CreateNoteUseCaseImpl implements CreateNoteUseCase {
             this.boardId = boardId;
         }
 
-        public String getDescription() {
-            return description;
-        }
+        @Override
+        public void setCoordinate(Coordinate coordinate) { this.coordinate = coordinate; }
 
-        public void setDescription(String description) {
-            this.description = description;
-        }
+        @Override
+        public Coordinate getCoordinate() { return coordinate; }
     }
 }

@@ -1,10 +1,9 @@
 package ntut.csie.sslab.miro.usecase.note;
 
-import com.google.common.eventbus.Subscribe;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.note.NoteRepositoryImpl;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.note.FigureRepositoryImpl;
+import ntut.csie.sslab.miro.entity.model.note.Coordinate;
 import ntut.csie.sslab.miro.usecase.DomainEventListener;
 import ntut.csie.sslab.miro.usecase.note.create.CreateNoteInput;
 import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCase;
@@ -14,20 +13,18 @@ import ntut.csie.sslab.miro.usecase.note.edit.color.ChangeNoteColorUseCase;
 import ntut.csie.sslab.miro.usecase.note.edit.color.ChangeNoteColorUseCaseImpl;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.EventListener;
-
+import java.awt.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ChangeNoteColorUseCaseTest {
-    public NoteRepository noteRepository;
+    public FigureRepository figureRepository;
     public DomainEventBus domainEventBus;
     public DomainEventListener eventListener;
 
     @Before
     public void setUp() {
-        noteRepository = new NoteRepositoryImpl();
+        figureRepository = new FigureRepositoryImpl();
         domainEventBus = new DomainEventBus();
         eventListener = new DomainEventListener();
 
@@ -37,7 +34,7 @@ public class ChangeNoteColorUseCaseTest {
     @Test
     public void change_note_color(){
         String noteId = create_note();
-        ChangeNoteColorUseCase changeNoteColorUseCase = new ChangeNoteColorUseCaseImpl(noteRepository, domainEventBus);
+        ChangeNoteColorUseCase changeNoteColorUseCase = new ChangeNoteColorUseCaseImpl(figureRepository, domainEventBus);
         ChangeNoteColorInput input = changeNoteColorUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setNoteId(noteId);
@@ -46,16 +43,17 @@ public class ChangeNoteColorUseCaseTest {
         changeNoteColorUseCase.execute(input, output);
 
         assertNotNull(output.getId());
-        assertEquals("#000000", noteRepository.findById(output.getId()).get().getColor());
+        assertEquals("#000000", figureRepository.findById(output.getId()).get().getColor());
         assertEquals(2, eventListener.getEventCount());
     }
 
     private String create_note(){
-        CreateNoteUseCase createNoteUseCase = new CreateNoteUseCaseImpl(noteRepository, domainEventBus);
+        CreateNoteUseCase createNoteUseCase = new CreateNoteUseCaseImpl(figureRepository, domainEventBus);
         CreateNoteInput input = createNoteUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-
         input.setBoardId("boardId");
+        input.setCoordinate(new Coordinate(new Point(9,26)));
+
         createNoteUseCase.execute(input, output);
 
         return output.getId();

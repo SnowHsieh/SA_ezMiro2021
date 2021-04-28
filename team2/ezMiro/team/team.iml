@@ -12,6 +12,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: ntut.csie.sslab:board:1.0.0-SNAPSHOT" level="project" />
     <orderEntry type="module" module-name="dddcore" />
     <orderEntry type="module" module-name="account" />
     <orderEntry type="library" name="Maven: junit:junit:4.12" level="project" />

@@ -1,0 +1,18 @@
+body {
+    background-image: url("background.png");
+    background-repeat: repeat;
+  }
+
+.draggable-note {
+    position: absolute;
+    box-shadow: 3px 3px 12px gray;
+    text-align: center;
+    white-space: pre-line;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.draggable-note:active {
+    transform: scale(1.03);
+}
