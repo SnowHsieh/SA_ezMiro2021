@@ -13,4 +13,9 @@
 - 每週二 19:00-21:00
 - 每週四 19:00-21:00
 
+## Frontend
+- Angular (TypeScript)
 ![image](https://github.com/SnowHsieh/SA_ezMiro2021/blob/master/team1/demoVideo/event%20storming%20scenario.gif)
+
+## Backend
+- Java 8 (SpringBoot)
