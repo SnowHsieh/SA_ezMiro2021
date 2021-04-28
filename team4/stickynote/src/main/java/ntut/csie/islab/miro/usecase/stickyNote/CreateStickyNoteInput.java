@@ -2,8 +2,8 @@ package ntut.csie.islab.miro.usecase.stickyNote;
 
 import java.util.UUID;
 
-import ntut.csie.islab.miro.figure.entity.figure.Style;
-import ntut.csie.islab.miro.figure.entity.figure.Position;
+import ntut.csie.islab.miro.figure.entity.model.figure.Style;
+import ntut.csie.islab.miro.figure.entity.model.figure.Position;
 public class CreateStickyNoteInput {
     private UUID boardId;
     private Position position;
@@ -34,6 +34,9 @@ public class CreateStickyNoteInput {
         this.style = style;
     }
 
+    public void setPosition(Position position) {
+        this.position = position;
+    }
     public void setPosition(double x, double y) {
         this.position = new Position(x,y);
     }

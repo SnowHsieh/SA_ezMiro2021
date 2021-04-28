@@ -1,5 +1,8 @@
 **/.idea/**
+team4/.class
 team4/.DS_Store
 
 .DS_Store
 team3/**/target/
+
+*.class

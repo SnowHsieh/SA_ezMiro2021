@@ -1,0 +1,65 @@
+package ntut.csie.islab.miro.adapter.controller.rest.springboot.stickyNote.edit;
+
+import ntut.csie.islab.miro.figure.entity.model.figure.Position;
+import ntut.csie.islab.miro.figure.entity.model.figure.ShapeKindEnum;
+import ntut.csie.islab.miro.figure.entity.model.figure.Style;
+import ntut.csie.islab.miro.usecase.stickyNote.CreateStickyNoteInput;
+import ntut.csie.islab.miro.usecase.stickyNote.CreateStickyNoteUseCase;
+import ntut.csie.islab.miro.usecase.stickyNote.EditStickyNoteInput;
+import ntut.csie.islab.miro.usecase.stickyNote.EditStickyNoteUseCase;
+import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
+import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
+
+@RestController
+public class EditStickyNoteController {
+    private EditStickyNoteUseCase editStickyNoteUseCase;
+    @Autowired
+    public void setEditStickyNoteUseCase(EditStickyNoteUseCase editStickyNoteUseCase) {
+        this.editStickyNoteUseCase = editStickyNoteUseCase;
+    }
+
+    @PostMapping(path = "/board/editStickyNote", consumes = "application/json", produces = "application/json")
+    public CqrsCommandViewModel editStickyNote(
+            @RequestBody String stickyNoteInfo) {
+        UUID figureId = null;
+        String content = "";
+
+        Style style = null;
+        JSONObject styleJsonObject;
+        try {
+            JSONObject stickyNoteJSON = new JSONObject(stickyNoteInfo);
+            figureId = UUID.fromString(stickyNoteJSON.getString("figureId"));
+            content = stickyNoteJSON.getString("content");
+            styleJsonObject = stickyNoteJSON.getJSONObject("style");
+            style = new Style(styleJsonObject.getInt("fontSize"),
+                    ShapeKindEnum.RECTANGLE,//todo
+                    styleJsonObject.getDouble("figureSize"),
+                    styleJsonObject.getString("color"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        EditStickyNoteInput input = editStickyNoteUseCase.newInput();
+
+        input.setBoardId(UUID.fromString("61e76b6c-d127-4949-a0b6-48557edc70e2"));
+        input.setFigureId(figureId);
+        input.setContent(content);
+        input.setStyle(style);
+
+
+        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+
+        editStickyNoteUseCase.execute(input, presenter);
+        return presenter.buildViewModel();
+    }
+
+
+}

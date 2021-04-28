@@ -4,7 +4,7 @@ package ntut.csie.islab.miro.usecase.stickyNote;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
-import ntut.csie.islab.miro.figure.entity.figure.Figure;
+import ntut.csie.islab.miro.figure.entity.model.figure.Figure;
 import ntut.csie.islab.miro.figure.adapter.repository.figure.FigureRepository;
 
 public class EditStickyNoteUseCase {
@@ -21,18 +21,19 @@ public class EditStickyNoteUseCase {
     }
 
     public void execute(EditStickyNoteInput input, CqrsCommandPresenter output) {
-        Figure stickyNote = stickyNoteRepository.findById(input.getStickyNoteId()).orElse(null);
+        Figure stickyNote = stickyNoteRepository.findById(input.getBoardId(),input.getFigureId()).orElse(null);
 
         if (null == stickyNote){
-            output.setId(input.getStickyNoteId().toString())
+            output.setId(input.getFigureId().toString())
                     .setExitCode(ExitCode.FAILURE)
-                    .setMessage("Edit stickyNote failed: stickyNote not found, stickyNote id = " + input.getStickyNoteId());
+                    .setMessage("Edit stickyNote failed: stickyNote not found, stickyNote id = " + input.getFigureId());
             return;
         }
 
-        stickyNoteRepository.edit(stickyNote, input.getContent(), input.getStyle());
+        stickyNoteRepository.edit(input.getBoardId(),stickyNote, input.getContent(), input.getStyle());
         domainEventBus.postAll(stickyNote);
         output.setId(stickyNote.getId().toString());
         output.setExitCode(ExitCode.SUCCESS);
+        output.setMessage("Edit stickyNote success");
     }
 }

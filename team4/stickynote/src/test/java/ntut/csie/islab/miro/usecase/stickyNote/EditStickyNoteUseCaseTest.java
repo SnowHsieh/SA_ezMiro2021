@@ -13,8 +13,8 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import ntut.csie.islab.miro.figure.entity.figure.ShapeKindEnum;
-import ntut.csie.islab.miro.figure.entity.figure.Style;
+import ntut.csie.islab.miro.figure.entity.model.figure.ShapeKindEnum;
+import ntut.csie.islab.miro.figure.entity.model.figure.Style;
 
 
 public class EditStickyNoteUseCaseTest {
@@ -28,10 +28,12 @@ public class EditStickyNoteUseCaseTest {
 
     @Test
     public void test_edit_sticky_note(){
+
+        UUID boardId = UUID.randomUUID();
         CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         CreateStickyNoteInput createStickyNoteInput = createStickyNoteUseCase.newInput();
         CqrsCommandPresenter createStickyNoteOutput = CqrsCommandPresenter.newInstance();
-        createStickyNoteInput.setBoardId(UUID.randomUUID());
+        createStickyNoteInput.setBoardId(boardId);
         createStickyNoteInput.setPosition(1.0,1.0);
         createStickyNoteInput.setContent("Content");
         createStickyNoteInput.setStyle(new Style(12, ShapeKindEnum.CIRCLE, 87.87, "#948700"));
@@ -41,7 +43,8 @@ public class EditStickyNoteUseCaseTest {
         EditStickyNoteInput input = editStickyNoteUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
 
-        input.setStickyNoteId(UUID.fromString(createStickyNoteOutput.getId()));
+        input.setBoardId(boardId);
+        input.setFigureId(UUID.fromString(createStickyNoteOutput.getId()));
         input.setContent("new content");
         input.setStyle(new Style(10, ShapeKindEnum.TRIANGLE, 0.87, "#009487"));
         editStickyNoteUseCase.execute(input, output);
@@ -49,13 +52,15 @@ public class EditStickyNoteUseCaseTest {
         assertNotNull(output.getId());
         assertEquals(ExitCode.SUCCESS,output.getExitCode());
 
-        assertNotNull(stickyNoteRepository.findById(UUID.fromString(output.getId())).get());
 
-        assertEquals("new content", stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getContent());
-        assertEquals(10, stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getStyle().getFontSize());
-        assertEquals(ShapeKindEnum.TRIANGLE, stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getStyle().getShape());
-        assertEquals(0.87, stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getStyle().getFigureSize(), 0.001);
-        assertEquals("#009487", stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getStyle().getColor());
+        assertNotNull(stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get());
+
+        assertEquals(boardId,stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get().getBoardId());
+        assertEquals("new content", stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get().getContent());
+        assertEquals(10, stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get().getStyle().getFontSize());
+        assertEquals(ShapeKindEnum.TRIANGLE, stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get().getStyle().getShape());
+        assertEquals(0.87, stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get().getStyle().getFigureSize(), 0.001);
+        assertEquals("#009487", stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get().getStyle().getColor());
     }
 
 }

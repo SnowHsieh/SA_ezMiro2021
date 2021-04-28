@@ -29,15 +29,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="figure" />
+        <module name="board" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="account" target="1.8" />
-      <module name="board" target="1.8" />
-      <module name="canvastool" target="1.8" />
-      <module name="cavastool" target="8" />
-      <module name="monomain" target="1.8" />
-      <module name="team" target="1.8" />
+      <module name="board2" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
