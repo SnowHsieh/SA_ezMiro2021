@@ -1,11 +1,16 @@
 package ntut.csie.islab.miro.adapter.repository.board;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ntut.csie.islab.miro.entity.model.board.Board;
+import ntut.csie.islab.miro.figure.entity.model.figure.Figure;
+import org.apache.commons.io.FileUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.util.*;
+
 
 public class BoardRepository {
     private List<Board> boardList;
@@ -21,5 +26,6 @@ public class BoardRepository {
     public void save(Board board){
         this.boardList.add(board);
     }
+
 
 }

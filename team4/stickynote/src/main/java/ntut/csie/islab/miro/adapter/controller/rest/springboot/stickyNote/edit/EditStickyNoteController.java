@@ -12,6 +12,7 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,8 +27,9 @@ public class EditStickyNoteController {
         this.editStickyNoteUseCase = editStickyNoteUseCase;
     }
 
-    @PostMapping(path = "/board/editStickyNote", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/board/{boardId}/editStickyNote", consumes = "application/json", produces = "application/json")
     public CqrsCommandViewModel editStickyNote(
+            @PathVariable("boardId") UUID boardId,
             @RequestBody String stickyNoteInfo) {
         UUID figureId = null;
         String content = "";
@@ -49,7 +51,8 @@ public class EditStickyNoteController {
 
         EditStickyNoteInput input = editStickyNoteUseCase.newInput();
 
-        input.setBoardId(UUID.fromString("61e76b6c-d127-4949-a0b6-48557edc70e2"));
+//        input.setBoardId(UUID.fromString("61e76b6c-d127-4949-a0b6-48557edc70e2"));
+        input.setBoardId(boardId);
         input.setFigureId(figureId);
         input.setContent(content);
         input.setStyle(style);

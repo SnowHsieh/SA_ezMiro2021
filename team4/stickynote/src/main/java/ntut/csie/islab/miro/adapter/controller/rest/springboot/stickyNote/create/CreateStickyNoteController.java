@@ -32,9 +32,9 @@ public class CreateStickyNoteController {
 //    public CqrsCommandViewModel createBoard(
 //            @PathVariable("boardId") UUID boardId,
 //            @RequestBody String stickyNoteInfo) {
-    @PostMapping(path = "/board/createStickyNote", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/board/{boardId}/createStickyNote", consumes = "application/json", produces = "application/json")
     public CqrsCommandViewModel createBoard(
-
+            @PathVariable("boardId") UUID boardId,
             @RequestBody String stickyNoteInfo) {
 
         String content = "";
@@ -56,8 +56,8 @@ public class CreateStickyNoteController {
 
         CreateStickyNoteInput input = createStickyNoteUseCase.newInput();
 
-//        input.setBoardId(boardId);
-        input.setBoardId(UUID.fromString("b0a0d2d2-625c-4c83-a537-fe822a9ff135"));
+        input.setBoardId(boardId);
+//        input.setBoardId(UUID.fromString("b0a0d2d2-625c-4c83-a537-fe822a9ff135"));
         input.setPosition(position);
         input.setContent(content);
         input.setStyle(style);
