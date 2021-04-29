@@ -1,5 +1,0 @@
-ntut\csie\islab\miro\usecase\stickyNote\CreateStickyNoteUseCaseTest.class
-ntut\csie\islab\miro\usecase\stickyNote\DeleteStickyNoteUseCaseTest.class
-ntut\csie\islab\miro\adapter\gateway\repository\stickyNote\CreateAndEditFourStickyNotesTest.class
-ntut\csie\islab\miro\usecase\stickyNote\EditStickyNoteUseCaseTest.class
-ntut\csie\islab\miro\entity\model\stickyNote\StickNoteDomainEventTest.class

@@ -2,6 +2,12 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="board" />
+      </profile>
       <profile name="Annotation profile for ezKanban" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -22,18 +28,12 @@
           <entry name="$MAVEN_REPOSITORY$/joda-time/joda-time/2.9/joda-time-2.9.jar" />
         </processorPath>
         <module name="dddcore" />
-        <module name="stickynote" />
-      </profile>
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="figure" />
-        <module name="board" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="board2" target="8" />
+      <module name="figure" target="8" />
+      <module name="stickynote" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
