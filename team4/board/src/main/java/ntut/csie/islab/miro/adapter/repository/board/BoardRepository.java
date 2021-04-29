@@ -1,14 +1,8 @@
 package ntut.csie.islab.miro.adapter.repository.board;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ntut.csie.islab.miro.entity.model.board.Board;
-import ntut.csie.islab.miro.figure.entity.model.figure.Figure;
-import org.apache.commons.io.FileUtils;
 
 
-import java.io.File;
-import java.io.FileWriter;
 import java.util.*;
 
 
