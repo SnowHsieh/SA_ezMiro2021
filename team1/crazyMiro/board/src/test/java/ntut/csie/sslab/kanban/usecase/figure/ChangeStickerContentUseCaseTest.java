@@ -36,5 +36,8 @@ public class ChangeStickerContentUseCaseTest extends AbstractSpringBootJpaTest {
         Figure sticker = figureRepository.findById(output.getId()).get();
         assertEquals(newContent, sticker.getContent());
         assertEquals(2, eventListener.getEventCount());
+
+        changeStickerContentUseCase.execute(input, output);
+        assertEquals(2, eventListener.getEventCount());
     }
 }

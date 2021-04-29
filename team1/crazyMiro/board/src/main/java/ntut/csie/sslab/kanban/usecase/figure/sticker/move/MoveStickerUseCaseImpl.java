@@ -21,12 +21,14 @@ public class MoveStickerUseCaseImpl implements MoveStickerUseCase {
     public void execute(MoveStickerInput input, CqrsCommandOutput output) {
         try{
             Sticker sticker = (Sticker)figureRepository.findById(input.getFigureId()).get();
+            if(sticker.getPosition() == input.getPosition())
+                return;
+
             sticker.move(input.getPosition());
             figureRepository.save(sticker);
             domainEventBus.postAll(sticker);
-
-            output.setId(input.getFigureId());
-            output.setExitCode(ExitCode.SUCCESS);
+            output.setId(input.getFigureId())
+                .setExitCode(ExitCode.SUCCESS);
         } catch (Exception e){
             output.setExitCode(ExitCode.FAILURE)
                     .setMessage(e.getMessage());

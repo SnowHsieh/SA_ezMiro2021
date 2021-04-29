@@ -37,5 +37,8 @@ public class MoveStickerUseCaseTest extends AbstractSpringBootJpaTest {
         Figure sticker = figureRepository.findById(output.getId()).get();
         assertTrue(newPosition.equals(sticker.getPosition()));
         assertEquals(2, eventListener.getEventCount());
+
+        moveStickerUseCase.execute(input, output);
+        assertEquals(2, eventListener.getEventCount());
     }
 }

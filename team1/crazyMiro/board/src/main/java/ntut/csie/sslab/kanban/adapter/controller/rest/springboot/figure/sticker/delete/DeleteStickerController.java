@@ -22,9 +22,8 @@ public class DeleteStickerController {
         this.deleteStickerUseCase = deleteStickerUseCase;
     }
 
-    @PutMapping(path = "${MIRO_PREFIX}/board/sticker/delete", consumes = "application/json", produces = "application/json")
-    public CqrsCommandViewModel changeStickerContent(@QueryParam("stickerId") String stickerId,
-                                                     @RequestBody String stickerInfo) {
+    @PutMapping(path = "${MIRO_PREFIX}/board/sticker/delete")
+    public CqrsCommandViewModel changeStickerContent(@QueryParam("stickerId") String stickerId) {
 
         DeleteStickerInput input = deleteStickerUseCase.newInput();
         input.setFigureId(stickerId);

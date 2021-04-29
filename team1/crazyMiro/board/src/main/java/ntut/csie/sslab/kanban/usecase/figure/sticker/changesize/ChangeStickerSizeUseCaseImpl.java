@@ -19,10 +19,12 @@ public class ChangeStickerSizeUseCaseImpl implements ChangeStickerSizeUseCase {
     public void execute(ChangeStickerSizeInput input, CqrsCommandOutput output) {
         try{
             Sticker sticker = (Sticker)figureRepository.findById(input.getFigureId()).get();
+            if(sticker.getSize() == input.getSize())
+                return;
+
             sticker.changeSize(input.getSize());
             figureRepository.save(sticker);
             domainEventBus.postAll(sticker);
-
             output.setId(input.getFigureId());
             output.setExitCode(ExitCode.SUCCESS);
         } catch (Exception e){

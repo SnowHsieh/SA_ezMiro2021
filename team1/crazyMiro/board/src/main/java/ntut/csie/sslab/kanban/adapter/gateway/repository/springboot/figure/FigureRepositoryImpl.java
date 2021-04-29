@@ -40,7 +40,8 @@ public class FigureRepositoryImpl implements FigureRepository {
     public List<Figure> getStickersByBoardId(String boardId) {
         return figures.stream()
                 .filter(x -> x.getBoardId().equals(boardId) &&
-                                x.getType().equals(FigureType.Sticker))
+                                x.getType().equals(FigureType.Sticker) &&
+                                x.isDeleted()==false)
                 .collect(Collectors.toList());
     }
 }

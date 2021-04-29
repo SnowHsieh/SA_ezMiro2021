@@ -18,13 +18,16 @@ public class ChangeStickerColorUseCaseImpl implements ChangeStickerColorUseCase 
     @Override
     public void execute(ChangeStickerColorInput input, CqrsCommandOutput output) {
         try{
+
             Sticker sticker = (Sticker)figureRepository.findById(input.getFigureId()).get();
+            if(sticker.getColor() == input.getColor())
+                return;
+
             sticker.changeColor(input.getColor());
             figureRepository.save(sticker);
             domainEventBus.postAll(sticker);
-
-            output.setId(input.getFigureId());
-            output.setExitCode(ExitCode.SUCCESS);
+            output.setId(input.getFigureId())
+                    .setExitCode(ExitCode.SUCCESS);
         } catch (Exception e){
             output.setExitCode(ExitCode.FAILURE)
                     .setMessage(e.getMessage());

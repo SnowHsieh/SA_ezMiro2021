@@ -37,6 +37,9 @@ public class ChangeStickerColorUseCaseTest extends AbstractSpringBootJpaTest {
         Figure sticker = figureRepository.findById(output.getId()).get();
         assertEquals(newColor, sticker.getColor());
         assertEquals(2, eventListener.getEventCount());
+
+        changeStickerColorUseCase.execute(input, output);
+        assertEquals(2, eventListener.getEventCount());
     }
 
 }

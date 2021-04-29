@@ -20,10 +20,12 @@ public class ChangeStickerContentUseCaseImpl implements ChangeStickerContentUseC
     public void execute(ChangeStickerContentInput input, CqrsCommandOutput output) {
         try{
             Sticker sticker = (Sticker)figureRepository.findById(input.getFigureId()).get();
+            if(sticker.getContent() == input.getContent())
+                return;
+
             sticker.changeContent(input.getContent());
             figureRepository.save(sticker);
             domainEventBus.postAll(sticker);
-
             output.setId(input.getFigureId())
                     .setExitCode(ExitCode.SUCCESS);
         } catch (Exception e){
