@@ -21,8 +21,9 @@ public class MoveStickerUseCaseImpl implements MoveStickerUseCase {
     public void execute(MoveStickerInput input, CqrsCommandOutput output) {
         try{
             Sticker sticker = (Sticker)figureRepository.findById(input.getFigureId()).get();
-            if(sticker.getPosition() == input.getPosition())
+            if(sticker.getPosition().equals(input.getPosition()))
                 return;
+
 
             sticker.move(input.getPosition());
             figureRepository.save(sticker);
