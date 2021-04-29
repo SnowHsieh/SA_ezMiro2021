@@ -2,9 +2,10 @@ package ntut.csie.islab.miro.adapter.repository.board;
 
 import ntut.csie.islab.miro.entity.model.board.Board;
 
-
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public class BoardRepository {
     private List<Board> boardList;
@@ -20,6 +21,5 @@ public class BoardRepository {
     public void save(Board board){
         this.boardList.add(board);
     }
-
 
 }

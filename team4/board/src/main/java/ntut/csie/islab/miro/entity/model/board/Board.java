@@ -2,9 +2,11 @@ package ntut.csie.islab.miro.entity.model.board;
 
 import ntut.csie.islab.miro.entity.model.board.event.BoardCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.event.FigureCommittedDomainEvent;
+import ntut.csie.islab.miro.figure.entity.model.figure.Figure;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 

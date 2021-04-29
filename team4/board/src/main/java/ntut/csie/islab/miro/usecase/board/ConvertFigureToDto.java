@@ -1,7 +1,8 @@
 package ntut.csie.islab.miro.usecase.board;
 
-import ntut.csie.islab.miro.entity.model.figure.Figure;
-import ntut.csie.islab.miro.usecase.figure.FigureDto;
+import ntut.csie.islab.miro.figure.entity.model.figure.Figure;
+import ntut.csie.islab.miro.figure.entity.model.figure.Style;
+import ntut.csie.islab.miro.figure.usecase.figure.FigureDto;
 
 import java.util.ArrayList;
 import java.util.List;
