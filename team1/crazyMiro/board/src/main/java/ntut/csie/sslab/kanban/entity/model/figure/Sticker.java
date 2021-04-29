@@ -1,10 +1,6 @@
 package ntut.csie.sslab.kanban.entity.model.figure;
 
-import ntut.csie.sslab.kanban.entity.model.board.event.BoardCreated;
-import ntut.csie.sslab.kanban.entity.model.figure.event.StickerContentChanged;
-import ntut.csie.sslab.kanban.entity.model.figure.event.StickerCreated;
-import ntut.csie.sslab.kanban.entity.model.figure.event.StickerMoved;
-import ntut.csie.sslab.kanban.entity.model.figure.event.StickerSizeChanged;
+import ntut.csie.sslab.kanban.entity.model.figure.event.*;
 
 public class Sticker extends Figure {
     public Sticker(String boardId, String figureId, String content, int size, String color, Coordinate position) {
@@ -31,5 +27,15 @@ public class Sticker extends Figure {
     public void changeSize(int size) {
         setSize(size);
         addDomainEvent(new StickerSizeChanged(this.getFigureId(), size));
+    }
+
+    public void changeColor(String color) {
+        setColor(color);
+        addDomainEvent(new StickerColorChanged(this.getFigureId(), color));
+    }
+
+    public void deleteSticker() {
+        markAsDelete();
+        addDomainEvent(new StickerDeleted(this.getFigureId()));
     }
 }

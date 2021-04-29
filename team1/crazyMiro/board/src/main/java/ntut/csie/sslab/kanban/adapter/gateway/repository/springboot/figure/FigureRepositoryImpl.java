@@ -33,8 +33,7 @@ public class FigureRepositoryImpl implements FigureRepository {
     }
 
     @Override
-    public void deleteById(String s) {
-
+    public void deleteById(String id) {
     }
 
     @Override

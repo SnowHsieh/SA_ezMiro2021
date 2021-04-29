@@ -1,4 +1,4 @@
-package ntut.csie.sslab.kanban.usecase.figure.sticker.changecontent;
+package ntut.csie.sslab.kanban.usecase.figure.sticker.delete;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
@@ -7,20 +7,22 @@ import ntut.csie.sslab.kanban.entity.model.figure.Figure;
 import ntut.csie.sslab.kanban.entity.model.figure.Sticker;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
 
-public class ChangeStickerContentUseCaseImpl implements ChangeStickerContentUseCase {
+public class DeleteStickerUseCaseImpl implements DeleteStickerUseCase {
     private FigureRepository figureRepository;
     private DomainEventBus domainEventBus;
 
-    public ChangeStickerContentUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
+    public DeleteStickerUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
         this.figureRepository = figureRepository;
         this.domainEventBus = domainEventBus;
     }
 
     @Override
-    public void execute(ChangeStickerContentInput input, CqrsCommandOutput output) {
-        try{
+    public void execute(DeleteStickerInput input, CqrsCommandOutput output) {
+        try {
             Sticker sticker = (Sticker)figureRepository.findById(input.getFigureId()).get();
-            sticker.changeContent(input.getContent());
+
+            sticker.deleteSticker();
+
             figureRepository.save(sticker);
             domainEventBus.postAll(sticker);
 
@@ -33,30 +35,23 @@ public class ChangeStickerContentUseCaseImpl implements ChangeStickerContentUseC
     }
 
     @Override
-    public ChangeStickerContentInput newInput() {
-        return new ChangeStickerContentInputImpl();
+    public DeleteStickerInput newInput() {
+        return new DeleteStickerInputImpl();
     }
 
-    private class ChangeStickerContentInputImpl implements ChangeStickerContentInput {
-        private String figureId;
-        private String content;
 
+    private class DeleteStickerInputImpl implements DeleteStickerInput {
+        private String stickerId;
+        @Override
+        public void setFigureId(String stickerId) {
+            this.stickerId = stickerId;
+        }
+
+        @Override
         public String getFigureId() {
-            return figureId;
+            return stickerId;
         }
 
-        @Override
-        public void setFigureId(String figureId) {
-            this.figureId = figureId;
-        }
 
-        public String getContent() {
-            return content;
-        }
-
-        @Override
-        public void setContent(String content) {
-            this.content = content;
-        }
     }
 }

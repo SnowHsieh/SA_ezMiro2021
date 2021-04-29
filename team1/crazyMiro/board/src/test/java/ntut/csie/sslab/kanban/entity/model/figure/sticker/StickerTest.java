@@ -48,4 +48,22 @@ public class StickerTest {
 
         assertTrue(newPosition.equals(sticker.getPosition()));
     }
+
+    @Test
+    public void change_color() {
+        String boardId = UUID.randomUUID().toString();
+        String stickerId = UUID.randomUUID().toString();
+        String content = "stickerCreated";
+        int size = 10;
+        String color = "black";
+        long x = new Random().nextLong();
+        long y = new Random().nextLong();
+        Coordinate position = new Coordinate(x, y);
+        Sticker sticker = new Sticker(boardId, stickerId, content, size, color, position);
+        String newColor = "yellow";
+
+        sticker.setColor(newColor);
+
+        assertTrue(newColor.equals(sticker.getColor()));
+    }
 }

@@ -69,4 +69,6 @@ public abstract class Figure extends AggregateRoot<String> {
     }
 
     public abstract FigureType getType();
+
+    public Boolean isDeleted(){return this.isDeleted;}
 }

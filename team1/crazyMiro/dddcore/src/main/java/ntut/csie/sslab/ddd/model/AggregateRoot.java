@@ -12,6 +12,11 @@ public abstract class AggregateRoot<ID> extends Entity<ID> {
     public AggregateRoot(ID id) {
         super(id);
         this.domainEvents = new CopyOnWriteArrayList<>();
+        isDeleted = false;
+    }
+
+    public void markAsDelete(){
+        isDeleted = true;
     }
 
     public void addDomainEvent(DomainEvent domainEvent) {
