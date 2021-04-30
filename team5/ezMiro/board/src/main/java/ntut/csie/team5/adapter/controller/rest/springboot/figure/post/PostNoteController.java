@@ -3,8 +3,8 @@ package ntut.csie.team5.adapter.controller.rest.springboot.figure.post;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import ntut.csie.team5.entity.model.figure.FigureType;
-import ntut.csie.team5.usecase.figure.note.post.PostNoteInput;
-import ntut.csie.team5.usecase.figure.note.post.PostNoteUseCase;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteInput;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCase;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +31,14 @@ public class PostNoteController {
         int leftTopPositionY = 0;
         int height = 0;
         int width = 0;
-        Color color = Color.BLACK;
+        String color = "#000000";
         try {
             JSONObject noteJSON = new JSONObject(noteInfo);
             leftTopPositionX = noteJSON.getInt("leftTopPositionX");
             leftTopPositionY = noteJSON.getInt("leftTopPositionY");
             height = noteJSON.getInt("height");
             width = noteJSON.getInt("width");
-            color = Color.decode(noteJSON.getString("color"));
+            color = noteJSON.getString("color");
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ package ntut.csie.team5.entity.model.figure;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 import ntut.csie.team5.entity.model.figure.event.FigureCreated;
+import ntut.csie.team5.entity.model.figure.event.FigureDeleted;
 
 public abstract class Figure extends AggregateRoot<String> {
 
@@ -14,6 +15,10 @@ public abstract class Figure extends AggregateRoot<String> {
         this.figureType = figureType;
 
         addDomainEvent(new FigureCreated(figureId, boardId, figureType));
+    }
+
+    public void markAsRemoved() {
+        addDomainEvent(new FigureDeleted(getId(), boardId, figureType));
     }
 
     public String getBoardId() {

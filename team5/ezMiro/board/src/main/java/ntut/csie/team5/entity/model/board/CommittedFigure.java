@@ -6,10 +6,12 @@ public class CommittedFigure extends ValueObject {
 
     private String figureId;
     private String boardId;
+    private int order;
 
-    public CommittedFigure(String figureId, String boardId) {
+    public CommittedFigure(String figureId, String boardId, int order) {
         this.figureId = figureId;
         this.boardId = boardId;
+        this.order = order;
     }
 
     public String getFigureId() {
@@ -26,5 +28,13 @@ public class CommittedFigure extends ValueObject {
 
     public void setBoardId(String boardId) {
         this.boardId = boardId;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 }
