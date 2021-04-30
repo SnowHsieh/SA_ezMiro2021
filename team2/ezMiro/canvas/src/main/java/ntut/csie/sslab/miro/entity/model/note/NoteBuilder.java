@@ -7,6 +7,9 @@ public class NoteBuilder {
     private String noteId;
     private String description;
     private String color;
+    private Coordinate coordinate;
+    private double width;
+    private double height;
 
     public static NoteBuilder newInstance() { return new NoteBuilder(); }
 
@@ -30,9 +33,24 @@ public class NoteBuilder {
         return this;
     }
 
+    public NoteBuilder coordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
+        return this;
+    }
+
+    public NoteBuilder width(double width) {
+        this.width = width;
+        return this;
+    }
+
+    public NoteBuilder height(double height) {
+        this.height = height;
+        return this;
+    }
+
     public Note build() {
         noteId = UUID.randomUUID().toString();
-        Note note = new Note(boardId, noteId, description, color);
+        Note note = new Note(boardId, noteId, description, color, coordinate, width, height);
         return note;
     }
 }

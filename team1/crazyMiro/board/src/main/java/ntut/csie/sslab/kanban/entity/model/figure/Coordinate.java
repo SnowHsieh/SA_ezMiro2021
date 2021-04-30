@@ -28,4 +28,8 @@ public class Coordinate extends ValueObject {
     public void setY(long y) {
         this.y = y;
     }
+
+    public boolean equals(Coordinate coordinate){
+        return coordinate.getX() == getX() && coordinate.getY() == getY() ;
+    }
 }

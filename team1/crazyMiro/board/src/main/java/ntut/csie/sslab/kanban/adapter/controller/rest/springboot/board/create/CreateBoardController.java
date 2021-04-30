@@ -20,7 +20,7 @@
 //        this.createBoardUseCase = createBoardUseCase;
 //    }
 //
-//    @PostMapping(path = "${KANBAN_PREFIX}/teams/{teamId}/boards", consumes = "application/json", produces = "application/json")
+//    @PostMapping(path = "${MIRO_PREFIX}/teams/{teamId}/boards", consumes = "application/json", produces = "application/json")
 //    public CqrsCommandViewModel createBoard(@QueryParam("userId") String userId,
 //                                            @PathVariable("teamId") String teamId,
 //                                            @RequestBody String boardInfo) {

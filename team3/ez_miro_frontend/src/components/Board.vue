@@ -1,37 +1,48 @@
 <template>
     <div>
-        <button @click="drawARect">畫圖</button>
-        <canvas ref='board'></canvas>
+        <!-- <button @click="drawARect">畫圖</button> -->
+        <canvas id="canvas" ref='board'></canvas>
     </div>
 </template>
 
 <script>
+import { GetBoardContent } from '@/apis/Boards'
+// import { markRaw } from '@vue/reactivity'
+import { fabric } from 'fabric'
+
 export default {
   data () {
     return {
-      canvasContext: null
+      canvasContext: null,
+      boardContent: null,
+      canvas: null
     }
   },
-  mounted () {
+  async created () {
+    this.boardContent = await GetBoardContent('firstId')
     this.initCanvas()
-    this.drawARect()
+    this.createStickyNote()
   },
   methods: {
     initCanvas () {
-      const canvas = this.$refs.board
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight - 60
-      const ctx = canvas.getContext('2d')
-      ctx.lineCap = 'round'
-      ctx.lineJoin = 'round'
-      this.canvasContext = ctx
+      this.canvas = new fabric.Canvas('canvas', {
+        width: window.innerWidth,
+        height: window.innerHeight
+      })
     },
-    drawARect () {
-      const ctx = this.canvasContext
-      ctx.fillStyle = '#000000'
-      ctx.fillRect(10, 10, 100, 100)
-      ctx.fillStyle = 'red'
-      ctx.fillRect(20, 20, 30, 30)
+    createStickyNote () {
+      this.boardContent.widgetDtos.forEach(widget =>
+        this.canvas.add(
+          new fabric.Rect({
+            left: widget.topLeftX,
+            top: widget.topLeftY,
+            height: widget.height,
+            width: widget.width,
+            fill: widget.color
+          })
+        )
+      )
+      this.canvas.renderAll()
     }
   }
 }

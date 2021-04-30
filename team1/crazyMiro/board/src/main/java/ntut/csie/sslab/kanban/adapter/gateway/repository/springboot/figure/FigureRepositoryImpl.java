@@ -28,19 +28,20 @@ public class FigureRepositoryImpl implements FigureRepository {
 
     @Override
     public void save(Figure data) {
+        figures.removeIf(figure -> figure.getFigureId().equals(data.getFigureId()));
         figures.add(data);
     }
 
     @Override
-    public void deleteById(String s) {
-
+    public void deleteById(String id) {
     }
 
     @Override
     public List<Figure> getStickersByBoardId(String boardId) {
         return figures.stream()
                 .filter(x -> x.getBoardId().equals(boardId) &&
-                                x.getType().equals(FigureType.Sticker))
+                                x.getType().equals(FigureType.Sticker) &&
+                                x.isDeleted()==false)
                 .collect(Collectors.toList());
     }
 }

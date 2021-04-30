@@ -3,22 +3,23 @@ package ntut.csie.sslab.miro.usecase.note.edit.color;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.miro.entity.model.note.Note;
-import ntut.csie.sslab.miro.usecase.note.NoteRepository;
+import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 
 public class ChangeNoteColorUseCaseImpl implements ChangeNoteColorUseCase {
 
-    public NoteRepository noteRepository;
+    public FigureRepository figureRepository;
     public DomainEventBus domainEventBus;
 
-    public ChangeNoteColorUseCaseImpl(NoteRepository noteRepository, DomainEventBus domainEventBus) {
-        this.noteRepository = noteRepository;
+    public ChangeNoteColorUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
+        this.figureRepository = figureRepository;
         this.domainEventBus = domainEventBus;
     }
 
     @Override
     public void execute(ChangeNoteColorInput input, CqrsCommandOutput output) {
-        Note note = noteRepository.findById(input.getNoteId()).orElse(null);
-        if (note == null){
+        Note note = (Note)figureRepository.findById(input.getNoteId()).orElse(null);
+        // TODO: Type cast need to fix.
+         if (note == null){
             output.setId(input.getNoteId())
                     .setMessage("Change note color failed: note not found, note id = " + input.getNoteId());
 //           domainEventBus.post()
@@ -27,7 +28,7 @@ public class ChangeNoteColorUseCaseImpl implements ChangeNoteColorUseCase {
 
         note.changeColor(input.getNewColor());
 
-        noteRepository.save(note);
+        figureRepository.save(note);
         domainEventBus.postAll(note);
 
         output.setId(note.getId());

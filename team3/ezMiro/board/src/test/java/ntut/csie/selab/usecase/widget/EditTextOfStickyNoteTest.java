@@ -4,6 +4,7 @@ import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
+import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.widget.edit.EditTextOfStickyNoteInput;
 import ntut.csie.selab.usecase.widget.edit.EditTextOfStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.edit.EditTextOfStickyNoteUseCase;
@@ -22,7 +23,8 @@ public class EditTextOfStickyNoteTest {
         Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
         Widget stickyNote = new StickyNote(stickyNoteId, "0", stickyNoteCoordinate);
         widgetRepository.add(stickyNote);
-        EditTextOfStickyNoteUseCase editTextOfStickyNoteUseCase = new EditTextOfStickyNoteUseCase(widgetRepository);
+        DomainEventBus domainEventBus = new DomainEventBus();
+        EditTextOfStickyNoteUseCase editTextOfStickyNoteUseCase = new EditTextOfStickyNoteUseCase(widgetRepository, domainEventBus);
         EditTextOfStickyNoteInput input = new EditTextOfStickyNoteInput();
         EditTextOfStickyNoteOutput output = new EditTextOfStickyNoteOutput();
         input.setStickyNoteId("1");
@@ -33,5 +35,6 @@ public class EditTextOfStickyNoteTest {
 
         // Assert
         Assert.assertEquals("modified text", output.getModifiedText());
+        Assert.assertEquals(2, domainEventBus.getCount());
     }
 }

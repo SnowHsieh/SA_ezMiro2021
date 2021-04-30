@@ -72,12 +72,17 @@ package ntut.csie.sslab.kanban.usecase;
 
 import com.google.common.eventbus.Subscribe;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
+import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
+import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
 import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerInput;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCaseImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -131,6 +136,20 @@ public abstract class AbstractSpringBootJpaTest {
         public int getEventCount() {
             return eventCount;
         }
+    }
+    protected String createSticker(String boardId, String content, int size, String color, Coordinate position) {
+        CreateStickerUseCase createStickerUseCase = new CreateStickerUseCaseImpl(figureRepository, domainEventBus);
+        CreateStickerInput input = createStickerUseCase.newInput();
+        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
+        input.setBoardId(boardId);
+        input.setContent(content);
+        input.setSize(size);
+        input.setColor(color);
+        input.setPosition(position);
+
+        createStickerUseCase.execute(input, output);
+
+        return output.getId();
     }
 
 //

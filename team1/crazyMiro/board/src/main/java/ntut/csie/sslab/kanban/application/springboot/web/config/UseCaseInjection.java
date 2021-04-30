@@ -1,12 +1,19 @@
 package ntut.csie.sslab.kanban.application.springboot.web.config;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
-import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardUseCase;
-import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.changecolor.ChangeStickerColorUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.changecolor.ChangeStickerColorUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.changecontent.ChangeStickerContentUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.changecontent.ChangeStickerContentUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.changesize.ChangeStickerSizeUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.changesize.ChangeStickerSizeUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCase;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.delete.DeleteStickerUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.delete.DeleteStickerUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.move.MoveStickerUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.sticker.move.MoveStickerUseCaseImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +45,31 @@ public class UseCaseInjection {
     @Bean(name="createStickerUseCase")
     public CreateStickerUseCase createStickerUseCase() {
         return new CreateStickerUseCaseImpl(figureRepository, eventBus);
+    }
+
+    @Bean(name="changeStickerContentUseCase")
+    public ChangeStickerContentUseCase changeStickerContentUseCase() {
+        return new ChangeStickerContentUseCaseImpl(figureRepository, eventBus);
+    }
+
+    @Bean(name="moveStickerUseCase")
+    public MoveStickerUseCase moveStickerUseCase() {
+        return new MoveStickerUseCaseImpl(figureRepository, eventBus);
+    }
+
+    @Bean(name="changeStickerSizeUseCase")
+    public ChangeStickerSizeUseCase changeStickerSizeUseCase() {
+        return new ChangeStickerSizeUseCaseImpl(figureRepository, eventBus);
+    }
+
+    @Bean(name="changeStickerColorUseCase")
+    public ChangeStickerColorUseCase changeStickerColorUseCase() {
+        return new ChangeStickerColorUseCaseImpl(figureRepository, eventBus);
+    }
+
+    @Bean(name="deleteStickerUseCase")
+    public DeleteStickerUseCase deleteStickerUseCase() {
+        return new DeleteStickerUseCaseImpl(figureRepository, eventBus);
     }
 //
 //

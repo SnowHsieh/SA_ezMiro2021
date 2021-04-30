@@ -1,12 +1,8 @@
 package ntut.csie.sslab.kanban.usecase.figure;
 
-import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
 import ntut.csie.sslab.kanban.entity.model.figure.Figure;
 import ntut.csie.sslab.kanban.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerInput;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCase;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCaseImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -44,18 +40,5 @@ public class GetStickersUseCaseTest extends AbstractSpringBootJpaTest {
         assertEquals(stickerDto2.getPosition(), stickerDtos.get(1).getPosition());
     }
 
-    private String createSticker(String boardId, String content, int size, String color, Coordinate position) {
-        CreateStickerUseCase createStickerUseCase = new CreateStickerUseCaseImpl(figureRepository, domainEventBus);
-        CreateStickerInput input = createStickerUseCase.newInput();
-        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-        input.setBoardId(boardId);
-        input.setContent(content);
-        input.setSize(size);
-        input.setColor(color);
-        input.setPosition(position);
 
-        createStickerUseCase.execute(input, output);
-
-        return output.getId();
-    }
 }
