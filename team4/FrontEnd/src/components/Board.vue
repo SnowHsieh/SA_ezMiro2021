@@ -24,7 +24,7 @@ export default {
     this.boardContent = this.getBoardContent()
     this.initCanvas()
     this.canvas.renderAll()
-    this.timer = setInterval(this.refreshCanvas, 5000)
+    // this.timer = setInterval(this.refreshCanvas, 10000)
   },
 
   methods: {
@@ -48,19 +48,32 @@ export default {
 
     drawStickyNote (figureDtos) {
       var _this = this
-      console.log('figureDtos')
-      console.log(figureDtos)
-      figureDtos.forEach(figure =>
-        _this.canvas.add(
-          new fabric.Rect({
-            left: figure.position.x,
-            top: figure.position.y,
-            height: figure.style.figureSize,
-            width: figure.style.figureSize,
-            fill: figure.style.color
-          })
+      figureDtos.forEach(figure => {
+        var rect = new fabric.Rect({
+          originX: 'center',
+          originY: 'center',
+          height: figure.style.figureSize,
+          width: figure.style.figureSize,
+          fill: figure.style.color
+        })
+        var text = new fabric.IText(figure.content, {
+          originX: 'center',
+          originY: 'center'
+        }
         )
-      )
+        rect.extraData = {
+          figureId: figure.figureId
+        }
+
+        var group = new fabric.Group([rect, text], {
+          left: figure.position.x,
+          top: figure.position.y
+        })
+
+        console.log(rect.extraData.figureId)
+        _this.canvas.add(group)
+        // _this.canvas.add(text)
+      })
       this.canvas.renderAll()
     },
     refreshCanvas () {
