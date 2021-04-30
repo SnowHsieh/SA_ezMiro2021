@@ -6,3 +6,5 @@ team4/.DS_Store
 team3/**/target/
 
 *.class
+
+team4/FrontEnd/node_modules/
