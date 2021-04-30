@@ -6,10 +6,9 @@
 </template>
 
 <script>
-//import { GetBoardContent } from '@/apis/Boards'
 // import { markRaw } from '@vue/reactivity'
 import { fabric } from 'fabric'
-import { axios } from 'axios'
+import axios from 'axios'
 
 export default {
   data () {
@@ -20,24 +19,20 @@ export default {
     }
   },
   async created () {
-    this.boardContent = this.getBoardContent();
-    this.initCanvas();
+    this.getBoardContent()
+    this.initCanvas()
     // this.createStickyNote()
   },
-  
   methods: {
-
-    async getBoardContent(){
-    try {
-        const res = await axios.get("http://localhost:8081/boards/1e4c716f-b8ac-4d88-b7dc-4ea356528a95/content");
-        console.log("GetBoardContent");
-        console.log(res.data);
+    async getBoardContent () {
+      try {
+        const res = await axios.get('http://localhost:8081/boards/1e4c716f-b8ac-4d88-b7dc-4ea356528a95/content')
+        console.log(res.data)
         return res.data
-    } catch (err) {
+      } catch (err) {
         console.log(err)
-        }
-    }, 
-
+      }
+    },
     initCanvas () {
       this.canvas = new fabric.Canvas('canvas', {
         width: window.innerWidth,

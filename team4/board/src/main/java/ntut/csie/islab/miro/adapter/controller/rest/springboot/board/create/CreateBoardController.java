@@ -6,16 +6,14 @@ import ntut.csie.islab.miro.usecase.board.CreateBoardUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(value = "http://localhost:8080")
 public class CreateBoardController {
     private CreateBoardUseCase createBoardUseCase;
 
