@@ -1,12 +1,12 @@
 package ntut.csie.islab.miro.application.springboot.web.config;
 
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
-import ntut.csie.islab.miro.adapter.repository.figure.FigureRepository;
+import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.usecase.board.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.GetBoardContentUseCase;
-import ntut.csie.islab.miro.usecase.figure.stickyNote.CreateStickyNoteUseCase;
-import ntut.csie.islab.miro.usecase.figure.stickyNote.DeleteStickyNoteUseCase;
-import ntut.csie.islab.miro.usecase.figure.stickyNote.EditStickyNoteUseCase;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteUseCase;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.DeleteStickyNoteUseCase;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.EditStickyNoteUseCase;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration("EzMiroUserCaseInjection")
 public class UseCaseInjection {
     private BoardRepository boardRepository;
-    private FigureRepository figureRepository;
+    private TextFigureRepository textFigureRepository;
     private DomainEventBus eventBus;
 
     @Bean(name = "createBoardUseCase")
@@ -26,22 +26,22 @@ public class UseCaseInjection {
 
     @Bean(name = "getBoardContentUseCase")
     public GetBoardContentUseCase getBoardContentUseCase() {
-        return new GetBoardContentUseCase(eventBus,boardRepository, figureRepository);
+        return new GetBoardContentUseCase(eventBus,boardRepository, textFigureRepository);
     }
 
     @Bean(name = "createStickyNoteUseCase")
     public CreateStickyNoteUseCase createStickyNoteUseCase() {
-        return new CreateStickyNoteUseCase(figureRepository,eventBus);
+        return new CreateStickyNoteUseCase(textFigureRepository,eventBus);
     }
 
     @Bean(name = "editStickyNoteUseCase")
     public EditStickyNoteUseCase editStickyNoteUseCase() {
-        return new EditStickyNoteUseCase(figureRepository,eventBus);
+        return new EditStickyNoteUseCase(textFigureRepository,eventBus);
     }
 
     @Bean(name = "deleteStickyNoteUseCase")
     public DeleteStickyNoteUseCase deleteStickyNoteUseCase() {
-        return new DeleteStickyNoteUseCase(figureRepository,eventBus);
+        return new DeleteStickyNoteUseCase(textFigureRepository,eventBus);
     }
 
 
@@ -52,8 +52,8 @@ public class UseCaseInjection {
     }
 
     @Autowired
-    public void setFigureRepository(FigureRepository figureRepository) {
-        this.figureRepository = figureRepository;
+    public void setFigureRepository(TextFigureRepository textFigureRepository) {
+        this.textFigureRepository = textFigureRepository;
     }
 
     @Autowired

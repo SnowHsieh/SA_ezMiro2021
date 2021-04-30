@@ -1,6 +1,6 @@
-package ntut.csie.islab.miro.usecase.figure.stickyNote;
+package ntut.csie.islab.miro.usecase.textFigure.stickyNote;
 
-import ntut.csie.islab.miro.entity.model.figure.Style;
+import ntut.csie.islab.miro.entity.model.textFigure.Style;
 import java.util.UUID;
 
 public class EditStickyNoteInput {

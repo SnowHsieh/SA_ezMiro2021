@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.entity.model.board;
 
-import ntut.csie.islab.miro.entity.model.board.event.FigureCommittedDomainEvent;
+import ntut.csie.islab.miro.entity.model.board.event.TextFigureCommittedDomainEvent;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -24,9 +24,9 @@ public class BoardDomainEventTest {
         UUID figureId = UUID.randomUUID();
         board.commitFigure(figureId);
         assertEquals(1,board.getDomainEvents().size());
-        FigureCommittedDomainEvent figureCommittedDomainEvent = (FigureCommittedDomainEvent) board.getDomainEvents().get(0);
-        assertEquals(board.getBoardId(),figureCommittedDomainEvent.getBoardId());
-        assertEquals(figureId,figureCommittedDomainEvent.getFigureId());
+        TextFigureCommittedDomainEvent textFigureCommittedDomainEvent = (TextFigureCommittedDomainEvent) board.getDomainEvents().get(0);
+        assertEquals(board.getBoardId(), textFigureCommittedDomainEvent.getBoardId());
+        assertEquals(figureId, textFigureCommittedDomainEvent.getTextFigureId());
     }
 
 

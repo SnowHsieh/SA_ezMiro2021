@@ -5,21 +5,21 @@ import ntut.csie.sslab.ddd.model.common.DateProvider;
 
 import java.util.UUID;
 
-public class FigureCommittedDomainEvent extends DomainEvent {
+public class TextFigureCommittedDomainEvent extends DomainEvent {
     private final UUID boardId;
-    private final UUID figureId;
-    public FigureCommittedDomainEvent(UUID boardId, UUID figureId) {
+    private final UUID textFigureId;
+    public TextFigureCommittedDomainEvent(UUID boardId, UUID textFigureId) {
         super(DateProvider.now());
         this.boardId = boardId;
-        this.figureId = figureId;
+        this.textFigureId = textFigureId;
     }
 
     public UUID getBoardId() {
         return boardId;
     }
 
-    public UUID getFigureId() {
-        return figureId;
+    public UUID getTextFigureId() {
+        return textFigureId;
     }
 
 }

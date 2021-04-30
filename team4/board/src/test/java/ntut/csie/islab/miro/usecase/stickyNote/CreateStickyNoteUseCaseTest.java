@@ -1,11 +1,11 @@
 package ntut.csie.islab.miro.usecase.stickyNote;
 
 
-import ntut.csie.islab.miro.adapter.repository.figure.FigureRepository;
-import ntut.csie.islab.miro.entity.model.figure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.figure.Style;
-import ntut.csie.islab.miro.usecase.figure.stickyNote.CreateStickyNoteInput;
-import ntut.csie.islab.miro.usecase.figure.stickyNote.CreateStickyNoteUseCase;
+import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.textFigure.Style;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteInput;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteUseCase;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
@@ -18,11 +18,11 @@ import java.util.UUID;
 
 public class CreateStickyNoteUseCaseTest {
     public DomainEventBus domainEventBus;
-    public FigureRepository stickyNoteRepository;
+    public TextFigureRepository stickyNoteRepository;
     @BeforeEach
     public void setUp(){
         domainEventBus = new GoogleEventBus();
-        stickyNoteRepository = new FigureRepository();
+        stickyNoteRepository = new TextFigureRepository();
     }
 
     @Test

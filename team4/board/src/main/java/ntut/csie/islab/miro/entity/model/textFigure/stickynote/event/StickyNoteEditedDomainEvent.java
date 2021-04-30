@@ -1,4 +1,4 @@
-package ntut.csie.islab.miro.entity.model.figure.stickynote.event;
+package ntut.csie.islab.miro.entity.model.textFigure.stickynote.event;
 
 import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.common.DateProvider;

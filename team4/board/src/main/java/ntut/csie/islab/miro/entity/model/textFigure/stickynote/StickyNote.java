@@ -1,16 +1,16 @@
-package ntut.csie.islab.miro.entity.model.figure.stickynote;
+package ntut.csie.islab.miro.entity.model.textFigure.stickynote;
 
 
-import ntut.csie.islab.miro.entity.model.figure.Style;
-import ntut.csie.islab.miro.entity.model.figure.Position;
-import ntut.csie.islab.miro.entity.model.figure.Figure;
-import ntut.csie.islab.miro.entity.model.figure.stickynote.event.StickyNoteCreatedDomainEvent;
-import ntut.csie.islab.miro.entity.model.figure.stickynote.event.StickyNoteDeleteDomainEvent;
-import ntut.csie.islab.miro.entity.model.figure.stickynote.event.StickyNoteEditedDomainEvent;
+import ntut.csie.islab.miro.entity.model.textFigure.Style;
+import ntut.csie.islab.miro.entity.model.textFigure.Position;
+import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
+import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteCreatedDomainEvent;
+import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteDeleteDomainEvent;
+import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteEditedDomainEvent;
 
 import java.util.UUID;
 
-public class StickyNote extends Figure {
+public class StickyNote extends TextFigure {
     public StickyNote(UUID boardId, Position position, String content, Style style) {
         super(boardId,position,content,style);
 

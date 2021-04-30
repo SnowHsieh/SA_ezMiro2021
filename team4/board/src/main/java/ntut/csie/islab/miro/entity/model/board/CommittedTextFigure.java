@@ -4,11 +4,11 @@ import ntut.csie.sslab.ddd.model.ValueObject;
 
 import java.util.UUID;
 
-public class CommittedFigure extends ValueObject {
+public class CommittedTextFigure extends ValueObject {
     private UUID boardId;
     private UUID figureId;
 
-    public CommittedFigure(UUID boardId, UUID figureId) {
+    public CommittedTextFigure(UUID boardId, UUID figureId) {
         this.boardId = boardId;
         this.figureId = figureId;
     }

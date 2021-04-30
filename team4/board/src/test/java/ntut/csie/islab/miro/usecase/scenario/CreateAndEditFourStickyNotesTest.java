@@ -1,8 +1,8 @@
 package ntut.csie.islab.miro.usecase.scenario;
 
-import ntut.csie.islab.miro.adapter.repository.figure.FigureRepository;
-import ntut.csie.islab.miro.entity.model.figure.*;
-import ntut.csie.islab.miro.usecase.figure.stickyNote.*;
+import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.entity.model.textFigure.*;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.*;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
@@ -15,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CreateAndEditFourStickyNotesTest {
     public DomainEventBus domainEventBus;
-    public FigureRepository stickyNoteRepository;
+    public TextFigureRepository stickyNoteRepository;
 
     @BeforeEach
     public void setUp(){
             domainEventBus = new GoogleEventBus();
-            stickyNoteRepository = new FigureRepository();
+            stickyNoteRepository = new TextFigureRepository();
     }
 
     private CqrsCommandPresenter generateCreateStickyNoteUseCaseOutput(UUID id, Position position, String content, Style style){

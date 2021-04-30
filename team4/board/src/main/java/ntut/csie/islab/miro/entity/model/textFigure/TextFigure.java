@@ -1,23 +1,23 @@
-package ntut.csie.islab.miro.usecase.figure;
+package ntut.csie.islab.miro.entity.model.textFigure;
 
-import ntut.csie.islab.miro.entity.model.figure.Position;
-import ntut.csie.islab.miro.entity.model.figure.Style;
+
+import ntut.csie.sslab.ddd.model.AggregateRoot;
 
 import java.util.UUID;
 
-public class FigureDto {
-    private UUID figureId;
+public abstract class TextFigure extends AggregateRoot<UUID> {
     private UUID boardId;
     private Position position;
     private String content;
     private Style style;
 
-    public UUID getFigureId() {
-        return figureId;
-    }
 
-    public void setFigureId(UUID figureId) {
-        this.figureId = figureId;
+    public TextFigure(UUID boardId, Position position, String content, Style style) {
+        super(UUID.randomUUID());
+        this.boardId = boardId;
+        this.position = position;
+        this.content = content;
+        this.style = style;
     }
 
     public UUID getBoardId() {
@@ -51,4 +51,15 @@ public class FigureDto {
     public void setStyle(Style style) {
         this.style = style;
     }
+
+    public  UUID getFigureId(){
+        return this.getId();
+    }
+
+    public abstract void markAsRemoved(UUID boardId, UUID figureId);
+
+    public abstract void changeContent(String newContent);
+
+
+
 }

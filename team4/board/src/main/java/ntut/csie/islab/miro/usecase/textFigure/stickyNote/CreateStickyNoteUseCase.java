@@ -1,17 +1,17 @@
-package ntut.csie.islab.miro.usecase.figure.stickyNote;
+package ntut.csie.islab.miro.usecase.textFigure.stickyNote;
 
-import ntut.csie.islab.miro.adapter.repository.figure.FigureRepository;
-import ntut.csie.islab.miro.entity.model.figure.Figure;
-import ntut.csie.islab.miro.entity.model.figure.stickynote.StickyNote;
+import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
+import ntut.csie.islab.miro.entity.model.textFigure.stickynote.StickyNote;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.*;
 
 public class CreateStickyNoteUseCase {
 
-    private FigureRepository stickyNoteRepository;
+    private TextFigureRepository stickyNoteRepository;
     private DomainEventBus domainEventBus;
 
-    public CreateStickyNoteUseCase(FigureRepository stickyNoteRepository, DomainEventBus domainEventBus) {
+    public CreateStickyNoteUseCase(TextFigureRepository stickyNoteRepository, DomainEventBus domainEventBus) {
         this.stickyNoteRepository = stickyNoteRepository;
         this.domainEventBus = domainEventBus;
     }
@@ -20,7 +20,7 @@ public class CreateStickyNoteUseCase {
     }
 
     public void execute(CreateStickyNoteInput input, ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput output) {
-        Figure stickyNote = new StickyNote(input.getBoardId(), input.getPosition(), input.getContent(), input.getStyle());
+        TextFigure stickyNote = new StickyNote(input.getBoardId(), input.getPosition(), input.getContent(), input.getStyle());
 
         stickyNoteRepository.save(stickyNote);
         domainEventBus.postAll(stickyNote);

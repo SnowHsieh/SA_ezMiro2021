@@ -1,17 +1,17 @@
-package ntut.csie.islab.miro.usecase.figure.stickyNote;
+package ntut.csie.islab.miro.usecase.textFigure.stickyNote;
 
 
-import ntut.csie.islab.miro.entity.model.figure.Figure;
+import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
-import ntut.csie.islab.miro.adapter.repository.figure.FigureRepository;
+import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
 
 public class EditStickyNoteUseCase {
-    private FigureRepository stickyNoteRepository;
+    private TextFigureRepository stickyNoteRepository;
     private DomainEventBus domainEventBus;
 
-    public EditStickyNoteUseCase(FigureRepository stickyNoteRepository, DomainEventBus domainEventBus) {
+    public EditStickyNoteUseCase(TextFigureRepository stickyNoteRepository, DomainEventBus domainEventBus) {
         this.stickyNoteRepository = stickyNoteRepository;
         this.domainEventBus = domainEventBus;
     }
@@ -21,7 +21,7 @@ public class EditStickyNoteUseCase {
     }
 
     public void execute(EditStickyNoteInput input, CqrsCommandPresenter output) {
-        Figure stickyNote = stickyNoteRepository.findById(input.getBoardId(),input.getFigureId()).orElse(null);
+        TextFigure stickyNote = stickyNoteRepository.findById(input.getBoardId(),input.getFigureId()).orElse(null);
 
         if (null == stickyNote){
             output.setId(input.getFigureId().toString())

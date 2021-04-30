@@ -1,12 +1,12 @@
 package ntut.csie.islab.miro.usecase.stickyNote;
 
-import ntut.csie.islab.miro.adapter.repository.figure.FigureRepository;
-import ntut.csie.islab.miro.entity.model.figure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.figure.Style;
-import ntut.csie.islab.miro.usecase.figure.stickyNote.CreateStickyNoteInput;
-import ntut.csie.islab.miro.usecase.figure.stickyNote.CreateStickyNoteUseCase;
-import ntut.csie.islab.miro.usecase.figure.stickyNote.EditStickyNoteInput;
-import ntut.csie.islab.miro.usecase.figure.stickyNote.EditStickyNoteUseCase;
+import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.textFigure.Style;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteInput;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteUseCase;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.EditStickyNoteInput;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.EditStickyNoteUseCase;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
@@ -21,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class EditStickyNoteUseCaseTest {
     public DomainEventBus domainEventBus;
-    public FigureRepository stickyNoteRepository;
+    public TextFigureRepository stickyNoteRepository;
     @BeforeEach
     public void setUp(){
         domainEventBus = new GoogleEventBus();
-        stickyNoteRepository = new FigureRepository();
+        stickyNoteRepository = new TextFigureRepository();
     }
 
     @Test

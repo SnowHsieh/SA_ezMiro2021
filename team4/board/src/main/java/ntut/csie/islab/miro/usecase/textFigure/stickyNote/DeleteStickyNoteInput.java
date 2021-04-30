@@ -1,4 +1,4 @@
-package ntut.csie.islab.miro.usecase.figure.stickyNote;
+package ntut.csie.islab.miro.usecase.textFigure.stickyNote;
 
 import java.util.UUID;
 

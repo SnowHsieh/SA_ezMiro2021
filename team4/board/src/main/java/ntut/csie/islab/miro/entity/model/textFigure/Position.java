@@ -1,4 +1,4 @@
-package ntut.csie.islab.miro.entity.model.figure;
+package ntut.csie.islab.miro.entity.model.textFigure;
 
 public class Position {
     private double x;
