@@ -49,7 +49,7 @@ export default {
             top: figure.position.y,
             height: figure.style.figureSize,
             width: figure.style.figureSize,
-            fillColor: figure.style.color
+            fill: figure.style.color
           })
         )
       )
