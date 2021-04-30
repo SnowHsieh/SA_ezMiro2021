@@ -1,10 +1,11 @@
 **/.idea/**
 team4/.class
 team4/.DS_Store
+team4/**/target/
+team4/target/
+team4/FrontEnd/node_modules/
 
 .DS_Store
 team3/**/target/
 
 *.class
-
-team4/FrontEnd/node_modules/
