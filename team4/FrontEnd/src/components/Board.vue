@@ -1,6 +1,8 @@
 <template>
         <!-- <button @click="drawARect">畫圖</button> -->
-        <canvas id="canvas" ref='board'></canvas>
+        <div><button id="createStickyNoteButton">Add New StickyNote</button>
+          <canvas id="canvas" ref='board'></canvas></div>
+
 </template>
 
 <script>
@@ -11,6 +13,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
+      boardId: null,
       canvasContext: null,
       boardContent: null,
       canvas: null
@@ -24,10 +27,11 @@ export default {
   methods: {
     async getBoardContent () {
       try {
-        const res = await axios.get('http://localhost:8081/boards/65f835d9-33d7-41f0-a9a6-64d54df19450/content')
+        this.boardId = '65f835d9-33d7-41f0-a9a6-64d54df19450'
+        const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         console.log(res.data)
         // return res.data
-        this.createStickyNote(res.data.figureDtos)
+        this.drawStickyNote(res.data.figureDtos)
       } catch (err) {
         console.log(err)
       }
@@ -38,7 +42,8 @@ export default {
         height: window.innerHeight
       })
     },
-    createStickyNote (figureDtos) {
+
+    drawStickyNote (figureDtos) {
       var _this = this
       console.log('figureDtos')
       console.log(figureDtos)
@@ -54,6 +59,30 @@ export default {
         )
       )
       this.canvas.renderAll()
+    },
+    async createStickyNote () {
+      try {
+        const res = await axios.post('http://localhost:8081/boards/' + this.boardId + '/createStickyNote',
+          {
+            content: '',
+            position: {
+              x: 100,
+              y: 100
+            },
+            style :{
+              fontSize:12,
+              shape:2,
+              figureSize:100.0,
+              color:'#f28500'
+            }
+          }
+            )
+        console.log(res.data.message)
+        // return res.data
+
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }
