@@ -16,24 +16,15 @@ export default {
       canvas: null
     }
   },
-  async created () {
+  async mounted () {
     this.boardContent = this.getBoardContent()
     this.initCanvas()
-    this.canvas.add(
-      new fabric.Rect({
-        left: 50,
-        top: 50,
-        height: 500,
-        width: 500,
-        fill: '#948787'
-      })
-    )
     this.canvas.renderAll()
   },
   methods: {
     async getBoardContent () {
       try {
-        const res = await axios.get('http://localhost:8081/boards/35fa01ed-b68c-4c38-b620-9b6bd5e7d67e/content')
+        const res = await axios.get('http://localhost:8081/boards/65f835d9-33d7-41f0-a9a6-64d54df19450/content')
         console.log(res.data)
         // return res.data
         this.createStickyNote(res.data.figureDtos)
