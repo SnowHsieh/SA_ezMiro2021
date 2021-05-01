@@ -1,6 +1,13 @@
 <template>
         <!-- <button @click="drawARect">畫圖</button> -->
-        <div><button id="createStickyNoteButton" v-on:click="createStickyNote()">Add New StickyNote</button>
+        <div><button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
+
+<!--          <div>-->
+<!--            content: <input type="text" placeholder="" v-model="figurecontent"><br>-->
+
+<!--          </div>-->
+
+<!--        <div><button id="editStickyNoteButton" @click="editStickyNote('7d9813e1-6360-4b58-a333-b1935af350d2')">Edit StickyNote</button></div>-->
           <canvas id="canvas" ref='board' ></canvas></div>
 
 </template>
@@ -11,6 +18,7 @@ import { fabric } from 'fabric'
 import axios from 'axios'
 
 export default {
+
   data () {
     return {
       boardId: null,
@@ -24,13 +32,14 @@ export default {
     this.boardContent = this.getBoardContent()
     this.initCanvas()
     this.canvas.renderAll()
+    this.listenEventsOnCanvas()
     // this.timer = setInterval(this.refreshCanvas, 10000)
   },
-
   methods: {
+    // figurecontent: undefined,
     async getBoardContent () {
       try {
-        this.boardId = '81f749b2-9009-47f3-943c-0ade6e6a3a9b'
+        this.boardId = 'ee0d5bd6-1c0b-4a97-b5a4-da8e7d899d72'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         console.log(res.data)
         // return res.data
@@ -49,11 +58,13 @@ export default {
     drawStickyNote (figureDtos) {
       var _this = this
       figureDtos.forEach(figure => {
+        console.log(figure)
+        console.log(figure.style)
         var rect = new fabric.Rect({
           originX: 'center',
           originY: 'center',
-          height: figure.style.figureSize,
-          width: figure.style.figureSize,
+          width: figure.style.width,
+          height: figure.style.height,
           fill: figure.style.color
         })
         var text = new fabric.IText(figure.content, {
@@ -61,16 +72,16 @@ export default {
           originY: 'center'
         }
         )
-        rect.extraData = {
-          figureId: figure.figureId
-        }
 
         var group = new fabric.Group([rect, text], {
+          color: figure.style.color,
+          content: figure.content,
+          id: figure.figureId,
           left: figure.position.x,
           top: figure.position.y
         })
 
-        console.log(rect.extraData.figureId)
+        // console.log(rect.extraData.figureId)
         _this.canvas.add(group)
         // _this.canvas.add(text)
       })
@@ -92,8 +103,9 @@ export default {
             style: {
               fontSize: 12,
               shape: 2,
-              figureSize: 100.0,
-              color: '#f28500'
+              width: 100.0,
+              height: 100.0,
+              color: '#f9f900'
             }
           }
         )
@@ -102,7 +114,63 @@ export default {
       } catch (err) {
         console.log(err)
       }
+      // this.refreshCanvas()
+    },
+    async editStickyNote (figure) {
+      try {
+        console.log(figure)
+        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/editStickyNote',
+          {
+            figureId: figure.get('id'),
+            content: figure.get('content'),
+            style: {
+              fontSize: 50,
+              shape: 2,
+              width: parseFloat(figure.width) * parseFloat(figure.get('ScaleX')),
+              height: parseFloat(figure.height) * parseFloat(figure.get('ScaleY')),
+              color: figure.get('color')
+            }
+          }
+        )
+        console.log(res.data.message)
+      } catch (err) {
+        console.log(err)
+      }
+      // this.refreshCanvas()
+    },
+    listenEventsOnCanvas () {
+      var _this = this
+      var canvas = this.canvas
+      canvas.on(
+        {
+          'object:selected': function (e) {
+            console.log('object:selected')
+            e.target.opacity = 0.5
+            // console.log(e.target)
+            // console.log(e.target.get('type'))
+            // console.log(e.target.getSrc())
+          },
+          'object:scaled': function (e) {
+            console.log('object:scaled')
+            _this.editStickyNote(e.target)
+            console.log(e.target)
+            console.log(e.target.get('scaleX'))
+            console.log(e.target.get('scaleY'))
+          },
+          'object:moved': function (e) {
+            console.log('object:moved')
+            console.log(e.target)
+            console.log(e.target.get('scaleX'))
+            console.log(e.target.get('scaleY'))
+          },
+          'object:modified': function (e) {
+            console.log('object:modified')
+            // var ao = canvas.getActiveObject()
+          }
+
+        })
     }
   }
+
 }
 </script>
