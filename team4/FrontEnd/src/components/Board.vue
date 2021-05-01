@@ -39,7 +39,7 @@ export default {
     // figurecontent: undefined,
     async getBoardContent () {
       try {
-        this.boardId = 'ee0d5bd6-1c0b-4a97-b5a4-da8e7d899d72'
+        this.boardId = '7b7d5bdb-d6d5-41f1-b32a-93f694c03811'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         console.log(res.data)
         // return res.data
@@ -126,8 +126,8 @@ export default {
             style: {
               fontSize: 50,
               shape: 2,
-              width: parseFloat(figure.width) * parseFloat(figure.get('ScaleX')),
-              height: parseFloat(figure.height) * parseFloat(figure.get('ScaleY')),
+              width: parseFloat(figure.width) * parseFloat(figure.get('scaleX')),
+              height: parseFloat(figure.height) * parseFloat(figure.get('scaleY')),
               color: figure.get('color')
             }
           }
@@ -146,26 +146,16 @@ export default {
           'object:selected': function (e) {
             console.log('object:selected')
             e.target.opacity = 0.5
-            // console.log(e.target)
-            // console.log(e.target.get('type'))
-            // console.log(e.target.getSrc())
           },
           'object:scaled': function (e) {
             console.log('object:scaled')
             _this.editStickyNote(e.target)
-            console.log(e.target)
-            console.log(e.target.get('scaleX'))
-            console.log(e.target.get('scaleY'))
           },
           'object:moved': function (e) {
             console.log('object:moved')
-            console.log(e.target)
-            console.log(e.target.get('scaleX'))
-            console.log(e.target.get('scaleY'))
           },
           'object:modified': function (e) {
             console.log('object:modified')
-            // var ao = canvas.getActiveObject()
           }
 
         })
