@@ -143,6 +143,10 @@ export default {
       var canvas = this.canvas
       canvas.on(
         {
+          'mousedblclick': function (e) {
+            console.log('object:mousedblclick')
+            e.target.opacity = 0.5
+          },
           'object:selected': function (e) {
             console.log('object:selected')
             e.target.opacity = 0.5
@@ -153,10 +157,9 @@ export default {
           },
           'object:moved': function (e) {
             console.log('object:moved')
-          },
-          'object:modified': function (e) {
-            console.log('object:modified')
+            _this.moveStickyNote(e.target)
           }
+
 
         })
     }

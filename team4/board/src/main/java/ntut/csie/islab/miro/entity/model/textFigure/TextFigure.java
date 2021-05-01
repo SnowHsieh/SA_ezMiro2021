@@ -60,6 +60,7 @@ public abstract class TextFigure extends AggregateRoot<UUID> {
 
     public abstract void changeContent(String newContent);
 
+    public abstract void changePosition(Position newPosition);
 
 
 }

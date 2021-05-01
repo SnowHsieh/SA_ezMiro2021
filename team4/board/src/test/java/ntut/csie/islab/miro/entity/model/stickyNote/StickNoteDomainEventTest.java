@@ -6,6 +6,7 @@ import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
 import ntut.csie.islab.miro.entity.model.textFigure.Style;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.StickyNote;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteEditedDomainEvent;
+import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteMovedDomainEvent;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -52,6 +53,30 @@ public class StickNoteDomainEventTest {
         assertEquals(stickyNote.getFigureId(), stickyNoteEditedDomainEvent.getFigureId());
         assertEquals(newContent, stickyNoteEditedDomainEvent.getNewContent());
         assertEquals(oldContent, stickyNoteEditedDomainEvent.getOriginalContent());
+
+    }
+
+    @Test
+    public void move_a_stickyNote_then_publishes_a_stickyNote_moved_domain_event() {
+        TextFigure stickyNote = createStickyNote();
+        stickyNote.clearDomainEvents();
+        assertEquals(0, stickyNote.getDomainEvents().size());
+
+        Position newPosition = new Position(100,100);
+        Position oldPosition = stickyNote.getPosition();
+        stickyNote.changePosition(newPosition);
+
+        assertEquals(newPosition, stickyNote.getPosition());
+
+        assertEquals(1, stickyNote.getDomainEvents().size());
+        assertEquals(StickyNoteMovedDomainEvent.class, stickyNote.getDomainEvents().get(0).getClass());
+
+        StickyNoteMovedDomainEvent stickyNoteMovedDomainEvent = (StickyNoteMovedDomainEvent) stickyNote.getDomainEvents().get(0);
+
+        assertEquals(stickyNote.getBoardId(), stickyNoteMovedDomainEvent.getBoardId());
+        assertEquals(stickyNote.getFigureId(), stickyNoteMovedDomainEvent.getFigureId());
+        assertEquals(newPosition, stickyNoteMovedDomainEvent.getNewPosition());
+        assertEquals(oldPosition, stickyNoteMovedDomainEvent.getOriginalPosition());
 
     }
 }
