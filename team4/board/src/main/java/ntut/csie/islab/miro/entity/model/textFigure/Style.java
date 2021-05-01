@@ -3,13 +3,15 @@ package ntut.csie.islab.miro.entity.model.textFigure;
 public class Style {
     private int fontSize;
     private ShapeKindEnum shape;
-    private double figureSize;
+    private double width;
+    private double height;
     private String color;
 
-    public Style(int fontSize, ShapeKindEnum shape, double figureSize, String color) {
+    public Style(int fontSize, ShapeKindEnum shape, double width, double height, String color) {
         this.fontSize = fontSize;
         this.shape = shape;
-        this.figureSize = figureSize;
+        this.width = width;
+        this.height = height;
         this.color = color;
     }
 
@@ -29,12 +31,20 @@ public class Style {
         this.shape = shape;
     }
 
-    public double getFigureSize() {
-        return figureSize;
+    public double getWidth() {
+        return width;
     }
 
-    public void setFigureSize(double figureSize) {
-        this.figureSize = figureSize;
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
     }
 
     public String getColor() {

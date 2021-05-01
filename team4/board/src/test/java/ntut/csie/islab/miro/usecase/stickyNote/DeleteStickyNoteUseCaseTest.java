@@ -40,7 +40,7 @@ public class DeleteStickyNoteUseCaseTest {
         createStickyNoteInput.setBoardId(boardId);
         createStickyNoteInput.setPosition(1.0,1.0);
         createStickyNoteInput.setContent("Content");
-        createStickyNoteInput.setStyle(new Style(12, ShapeKindEnum.CIRCLE, 87.87, "#948700"));
+        createStickyNoteInput.setStyle(new Style(12, ShapeKindEnum.CIRCLE, 87.87,100, "#948700"));
         createStickyNoteUseCase.execute(createStickyNoteInput, createStickyNoteOutput);
         assertNotNull(stickyNoteRepository.findById(boardId, UUID.fromString(createStickyNoteOutput.getId())).get());
 

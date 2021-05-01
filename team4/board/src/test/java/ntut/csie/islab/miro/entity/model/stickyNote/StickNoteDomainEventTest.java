@@ -13,28 +13,30 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StickNoteDomainEventTest {
-    private TextFigure createStickyNote(){
-        return new StickyNote(UUID.randomUUID(), new Position(1.0,1.0) , "content", new Style(10, ShapeKindEnum.TRIANGLE,87.2,"#123456"));
-    }
-    @Test
-    public void create_a_stickyNote_then_publishes_a_stickyNote_created_domain_event(){
-        TextFigure stickyNote = createStickyNote();
-        assertEquals(1,stickyNote.getDomainEvents().size());
-    }
-    @Test
-    public void delete_a_stickyNote_then_publishes_a_stickyNote_deleted_domain_event(){
-        TextFigure stickyNote = createStickyNote();
-        assertEquals(1,stickyNote.getDomainEvents().size());
-
-        stickyNote.markAsRemoved(stickyNote.getBoardId(),stickyNote.getFigureId());
-        assertEquals(2,stickyNote.getDomainEvents().size());
+    private TextFigure createStickyNote() {
+        return new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
     }
 
     @Test
-    public void edit_a_stickyNote_then_publishes_a_stickyNote_edited_domain_event(){
+    public void create_a_stickyNote_then_publishes_a_stickyNote_created_domain_event() {
+        TextFigure stickyNote = createStickyNote();
+        assertEquals(1, stickyNote.getDomainEvents().size());
+    }
+
+    @Test
+    public void delete_a_stickyNote_then_publishes_a_stickyNote_deleted_domain_event() {
+        TextFigure stickyNote = createStickyNote();
+        assertEquals(1, stickyNote.getDomainEvents().size());
+
+        stickyNote.markAsRemoved(stickyNote.getBoardId(), stickyNote.getFigureId());
+        assertEquals(2, stickyNote.getDomainEvents().size());
+    }
+
+    @Test
+    public void edit_a_stickyNote_then_publishes_a_stickyNote_edited_domain_event() {
         TextFigure stickyNote = createStickyNote();
         stickyNote.clearDomainEvents();
-        assertEquals(0,stickyNote.getDomainEvents().size());
+        assertEquals(0, stickyNote.getDomainEvents().size());
 
         String newContent = "newDescription";
         String oldContent = stickyNote.getContent();
