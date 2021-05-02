@@ -6,7 +6,7 @@
             </canvas>
           </div>
 
-          <div class="container" oncontextmenu="return showContextMenu(event);">
+          <div class="container" oncontextmenu="return false">
             <div id="contextMenu" class="context-menu">
               <ul>
                 <li>Delete</li>
@@ -207,18 +207,16 @@ export default {
           },
           'mouse:down': function (e) {
             console.log('object:down')
-            e.target.on('mousedown', function (event) {
-              _this.hideContextMenu()
-              if (event.button === 3) {
-                console.log('right click')
-                _this.showContextMenu(event.e)
-              }
-            })
+            _this.hideContextMenu()
+            if (e.target != null) {
+              e.target.on('mousedown', function (event) {
+                if (event.button === 3) {
+                  console.log('right click')
+                  _this.showContextMenu(event.e)
+                }
+              })
+            }
           },
-          // 'mouse:click': function (e) {
-          //   console.log('object:click')
-          //   _this.hideContextMenu()
-          // },
           'object:scaled': function (e) {
             console.log('object:scaled')
             _this.editStickyNote(e.target)
@@ -241,11 +239,11 @@ export default {
     },
     showContextMenu (event) {
       console.log('showContextMenu')
+      console.log(event)
       this.contextMenu.style.display = 'block'
       this.contextMenu.style.left = event.clientX + 'px'
       this.contextMenu.style.top = event.clientY + 'px'
-      this.contextMenu.style.overoverflow = 'hidden auto'
-      return false
+      // this.contextMenu.style.overoverflow = 'hidden auto'
     },
     hideContextMenu () {
       this.contextMenu.style.display = 'none'
@@ -260,3 +258,52 @@ export default {
 
 }
 </script>
+  <style type="text/css">
+  *{
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body, .container{
+    height: 100%;
+  }
+
+  body{
+    font-family: verdana;
+    font-size: 10px;
+  }
+
+  .container{
+    background: #f6f6f6;
+  }
+
+  .context-menu{
+    width: 200px;
+    height: auto;
+    box-shadow: 0 0 20px 0 #ccc;
+    position: absolute;
+    display: none;
+  }
+
+  .context-menu ul{
+    list-style: none;
+    padding: 5px 0px 5px 0px;
+  }
+
+  .context-menu ul li:not(.separator){
+    padding: 10px 5px 10px 5px;
+    border-left: 4px solid transparent;
+    cursor: pointer;
+  }
+
+  .context-menu ul li:hover{
+    background: #eee;
+    border-left: 4px solid #666;
+  }
+
+  .separator{
+    height: 1px;
+    background: #dedede;
+    margin: 2px 0px 2px 0px;
+  }
+</style>
