@@ -1,7 +1,17 @@
 <template>
         <!-- <button @click="drawARect">畫圖</button> -->
         <div><button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
-          <canvas id="canvas" ref='board' ></canvas></div>
+          <canvas id="canvas" ref='board' >
+            <div class="container" oncontextmenu="return showContextMenu(event);">
+              <div id="contextMenu" class="context-menu">
+                <ul>
+                  <li>Delete</li>
+                </ul>
+              </div>
+            </div>
+
+          </canvas>
+        </div>
 
 </template>
 
@@ -18,7 +28,8 @@ export default {
       canvasContext: null,
       boardContent: null,
       canvas: null,
-      time: 0
+      time: 0,
+      contextMenu: null
     }
   },
   async mounted () {
@@ -26,12 +37,14 @@ export default {
     this.initCanvas()
     this.canvas.renderAll()
     this.listenEventsOnCanvas()
+    // this.contextMenu.$mount(contextMenu)
+    this.contextMenu = document.getElementById('contextMenu')
     // this.timer = setInterval(this.refreshCanvas, 10000)
   },
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = 'be024f7c-0c38-4d22-a9aa-a6a468b92ddb'
+        this.boardId = 'e0f185ac-aaff-417c-b5cf-ff45db28cc54'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         console.log(res.data)
         this.drawStickyNote(res.data.figureDtos)
@@ -99,10 +112,25 @@ export default {
       }
       this.refreshCanvas()
     },
+    // async deleteStickyNote (figure) {
+    //   try {
+    //     const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/deleteStickyNote',
+    //         {
+    //           figureId: figure.get('id')
+    //         }
+    //     )
+    //     console.log(res.data.message)
+    //   } catch (err) {
+    //     console.log(err)
+    //   }
+    //   this.refreshCanvas()
+    // },
     initCanvas () {
       this.canvas = new fabric.Canvas('canvas', {
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
+        fireRightClick: true, // <-- enable firing of right click events
+        stopContextMenu: true // <--  prevent context menu from showing
       })
       // this.canvas.setBackgroundColor('gray')
     },
@@ -176,8 +204,19 @@ export default {
               _this.editStickyNote(group)
             })
           },
-          'object:selected': function (e) {
+          'mouse:down': function (e) {
+            console.log('object:down')
+            e.target.on('mousedown', function (event) {
+              if (event.button === 3) {
+                console.log('right click')
+                _this.showContextMenu(e)
+              }
+            })
           },
+          // 'mouse:click': function (e) {
+          //   console.log('object:click')
+          //   _this.hideContextMenu()
+          // },
           'object:scaled': function (e) {
             console.log('object:scaled')
             _this.editStickyNote(e.target)
@@ -197,7 +236,23 @@ export default {
         _this.canvas.add(items[i])
       }
       _this.canvas.renderAll()
+    },
+    showContextMenu (event) {
+      console.log('showContextMenu')
+      this.contextMenu.style.display = 'block'
+      this.contextMenu.style.left = event.clientX + 'px'
+      this.contextMenu.style.top = event.clientY + 'px'
+      return false
     }
+    // hideContextMenu () {
+    //   this.contextMenu.style.display = 'none';
+    // },
+    // listenKeys (event) {
+    //   var keyCode = event.which || event.keyCode;
+    //   if(keyCode == 27){
+    //     this.hideContextMenu();
+    //   }
+    // }
   }
 
 }
