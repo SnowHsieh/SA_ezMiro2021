@@ -1,18 +1,19 @@
 <template>
         <!-- <button @click="drawARect">畫圖</button> -->
-        <div><button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
-          <canvas id="canvas" ref='board' >
-            <div class="container" oncontextmenu="return showContextMenu(event);">
-              <div id="contextMenu" class="context-menu">
-                <ul>
-                  <li>Delete</li>
-                </ul>
-              </div>
+        <div>
+          <div><button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
+            <canvas id="canvas" ref='board' >
+            </canvas>
+          </div>
+
+          <div class="container" oncontextmenu="return showContextMenu(event);">
+            <div id="contextMenu" class="context-menu">
+              <ul>
+                <li>Delete</li>
+              </ul>
             </div>
-
-          </canvas>
+          </div>
         </div>
-
 </template>
 
 <script>
@@ -44,7 +45,7 @@ export default {
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = 'e0f185ac-aaff-417c-b5cf-ff45db28cc54'
+        this.boardId = 'dc079b71-1cc2-43a0-8002-4dd233b63a1c'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         console.log(res.data)
         this.drawStickyNote(res.data.figureDtos)
@@ -207,9 +208,10 @@ export default {
           'mouse:down': function (e) {
             console.log('object:down')
             e.target.on('mousedown', function (event) {
+              _this.hideContextMenu()
               if (event.button === 3) {
                 console.log('right click')
-                _this.showContextMenu(e)
+                _this.showContextMenu(event.e)
               }
             })
           },
@@ -242,11 +244,12 @@ export default {
       this.contextMenu.style.display = 'block'
       this.contextMenu.style.left = event.clientX + 'px'
       this.contextMenu.style.top = event.clientY + 'px'
+      this.contextMenu.style.overoverflow = 'hidden auto'
       return false
+    },
+    hideContextMenu () {
+      this.contextMenu.style.display = 'none'
     }
-    // hideContextMenu () {
-    //   this.contextMenu.style.display = 'none';
-    // },
     // listenKeys (event) {
     //   var keyCode = event.which || event.keyCode;
     //   if(keyCode == 27){
