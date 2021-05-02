@@ -9,7 +9,7 @@
           <div class="container" oncontextmenu="return false">
             <div id="contextMenu" class="context-menu">
               <ul>
-                <li>Delete</li>
+                <li id="delButton">Delete</li>
               </ul>
             </div>
           </div>
@@ -30,7 +30,8 @@ export default {
       boardContent: null,
       canvas: null,
       time: 0,
-      contextMenu: null
+      contextMenu: null,
+      delButton: null
     }
   },
   async mounted () {
@@ -40,6 +41,7 @@ export default {
     this.listenEventsOnCanvas()
     // this.contextMenu.$mount(contextMenu)
     this.contextMenu = document.getElementById('contextMenu')
+    this.delButton = document.getElementById('delButton')
     // this.timer = setInterval(this.refreshCanvas, 10000)
   },
   methods: {
@@ -113,19 +115,19 @@ export default {
       }
       this.refreshCanvas()
     },
-    // async deleteStickyNote (figure) {
-    //   try {
-    //     const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/deleteStickyNote',
-    //         {
-    //           figureId: figure.get('id')
-    //         }
-    //     )
-    //     console.log(res.data.message)
-    //   } catch (err) {
-    //     console.log(err)
-    //   }
-    //   this.refreshCanvas()
-    // },
+    async deleteStickyNote (figure) {
+      try {
+        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/deleteStickyNote',
+          {
+            figureId: figure.get('id')
+          }
+        )
+        console.log(res.data.message)
+      } catch (err) {
+        console.log(err)
+      }
+      this.refreshCanvas()
+    },
     initCanvas () {
       this.canvas = new fabric.Canvas('canvas', {
         width: window.innerWidth,
@@ -213,6 +215,11 @@ export default {
                 if (event.button === 3) {
                   console.log('right click')
                   _this.showContextMenu(event.e)
+                  _this.delButton.addEventListener('click', function handler (event) {
+                    _this.deleteStickyNote(e.target)
+                    _this.hideContextMenu()
+                    this.removeEventListener('click', handler)
+                  }, false)
                 }
               })
             }
@@ -239,7 +246,6 @@ export default {
     },
     showContextMenu (event) {
       console.log('showContextMenu')
-      console.log(event)
       this.contextMenu.style.display = 'block'
       this.contextMenu.style.left = event.clientX + 'px'
       this.contextMenu.style.top = event.clientY + 'px'
