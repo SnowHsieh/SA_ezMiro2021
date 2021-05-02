@@ -31,7 +31,7 @@ export default {
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = 'bd92c152-07a0-49bf-ab0a-42ec35314d2d'
+        this.boardId = 'be024f7c-0c38-4d22-a9aa-a6a468b92ddb'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         console.log(res.data)
         this.drawStickyNote(res.data.figureDtos)
@@ -85,18 +85,19 @@ export default {
       this.refreshCanvas()
     },
     async moveStickyNote (figure) {
-      // try {
-      //   const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/editStickyNote',
-      //       {
-      //         figureId: figure.get('id'),
-      //         position: figure
-      //       }
-      //   )
-      //   console.log(res.data.message)
-      // } catch (err) {
-      //   console.log(err)
-      // }
-      // this.refreshCanvas()
+      try {
+        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/moveStickyNote',
+          {
+            figureId: figure.get('id'),
+            top: figure.get('top'),
+            left: figure.get('left')
+          }
+        )
+        console.log(res.data.message)
+      } catch (err) {
+        console.log(err)
+      }
+      this.refreshCanvas()
     },
     initCanvas () {
       this.canvas = new fabric.Canvas('canvas', {

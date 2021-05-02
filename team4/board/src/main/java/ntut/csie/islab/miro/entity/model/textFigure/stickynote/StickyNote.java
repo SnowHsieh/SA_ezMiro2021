@@ -28,8 +28,6 @@ public class StickyNote extends TextFigure {
             this.setContent(newContent);
             addDomainEvent(new StickyNoteEditedDomainEvent(this.getBoardId(), this.getFigureId(), originalContent, newContent));
         }
-
-
     }
     @Override
     public void changePosition(Position newPosition) {

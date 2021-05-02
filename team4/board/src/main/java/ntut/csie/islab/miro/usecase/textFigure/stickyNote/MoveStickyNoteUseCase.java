@@ -1,14 +1,11 @@
 package ntut.csie.islab.miro.usecase.textFigure.stickyNote;
 
 
-import ntut.csie.islab.miro.entity.model.textFigure.Position;
 import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
-
-import java.util.UUID;
 
 public class MoveStickyNoteUseCase {
     private TextFigureRepository stickyNoteRepository;
@@ -37,6 +34,6 @@ public class MoveStickyNoteUseCase {
         domainEventBus.postAll(stickyNote);
         output.setId(stickyNote.getId().toString());
         output.setExitCode(ExitCode.SUCCESS);
-        output.setMessage("Edit stickyNote success");
+        output.setMessage("Move stickyNote success");
     }
 }

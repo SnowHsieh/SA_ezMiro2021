@@ -6,6 +6,7 @@ import ntut.csie.islab.miro.usecase.board.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.GetBoardContentUseCase;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteUseCase;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.DeleteStickyNoteUseCase;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.EditStickyNoteUseCase;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.MoveStickyNoteUseCase;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +36,17 @@ public class UseCaseInjection {
     }
 
     @Bean(name = "editStickyNoteUseCase")
-    public MoveStickyNoteUseCase editStickyNoteUseCase() {
-        return new MoveStickyNoteUseCase(textFigureRepository,eventBus);
+    public EditStickyNoteUseCase editStickyNoteUseCase() {
+        return new EditStickyNoteUseCase(textFigureRepository,eventBus);
     }
 
     @Bean(name = "deleteStickyNoteUseCase")
     public DeleteStickyNoteUseCase deleteStickyNoteUseCase() {
         return new DeleteStickyNoteUseCase(textFigureRepository,eventBus);
+    }
+    @Bean(name = "moveStickyNoteUseCase")
+    public MoveStickyNoteUseCase moveStickyNoteUseCase() {
+        return new MoveStickyNoteUseCase(textFigureRepository,eventBus);
     }
 
 
