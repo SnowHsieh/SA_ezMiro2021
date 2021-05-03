@@ -37,7 +37,7 @@ public class CreateStickyNoteController {
         try {
             JSONObject stickyNoteJSON = new JSONObject(stickyNoteInfo);
             content = stickyNoteJSON.getString("content");
-            position = new Position(stickyNoteJSON.getJSONObject("position").getDouble("x"), stickyNoteJSON.getJSONObject("position").getDouble("y"),stickyNoteJSON.getJSONObject("position").getDouble("z"));
+            position = new Position(stickyNoteJSON.getJSONObject("position").getDouble("x"), stickyNoteJSON.getJSONObject("position").getDouble("y"));
             styleJsonObject = stickyNoteJSON.getJSONObject("style");
             style = new Style(styleJsonObject.getInt("fontSize"),
                     ShapeKindEnum.CIRCLE,//todo

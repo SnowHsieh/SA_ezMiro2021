@@ -34,7 +34,7 @@ public class MoveStickyNoteUseCaseTest {
         boardId = UUID.randomUUID();
         preGeneratedStickyNote = generateCreateStickyNoteUseCaseOutput(
                 boardId,
-                new Position(0,0,0),
+                new Position(0,0),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100,100, "#f9f900"));
 
@@ -44,7 +44,7 @@ public class MoveStickyNoteUseCaseTest {
         CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         CreateStickyNoteInput input = createStickyNoteUseCase.newInput();
         input.setBoardId(id);
-        input.setPosition(position.getX(),position.getY(),position.getZ());
+        input.setPosition(position.getX(),position.getY());
         input.setContent(content);
         input.setStyle(style);
 
@@ -62,7 +62,7 @@ public class MoveStickyNoteUseCaseTest {
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);
         input.setFigureId(UUID.fromString(preGeneratedStickyNote.getId()));
-        input.setNewPosition(new Position(100,100,0));
+        input.setNewPosition(new Position(100,100));
         moveStickyNoteUseCase.execute(input, output);
 
 

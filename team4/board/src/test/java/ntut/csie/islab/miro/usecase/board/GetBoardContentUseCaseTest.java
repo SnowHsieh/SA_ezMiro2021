@@ -79,7 +79,7 @@ public class GetBoardContentUseCaseTest {
         //Create a domainEventStickyNote
         CqrsCommandPresenter domainEventStickyNote = generateCreateStickyNoteUseCaseOutput(
                 boardId,
-                new Position(20, 10,0),
+                new Position(20, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
         assertNotNull(domainEventStickyNote.getId());
@@ -88,7 +88,6 @@ public class GetBoardContentUseCaseTest {
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getBoardId());
         assertEquals(20, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getX());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getY());
-        assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getZ());
         assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getContent());
         assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getFontSize());
         assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getShape());
@@ -108,13 +107,12 @@ public class GetBoardContentUseCaseTest {
         //Create a commandStickyNote in SameBoard
         CqrsCommandPresenter commandStickyNote = generateCreateStickyNoteUseCaseOutput(
                 boardId,
-                new Position(10, 10,0),
+                new Position(10, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getBoardId());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getPosition().getX());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getPosition().getY());
-        assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getPosition().getZ());
         assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getContent());
         assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getStyle().getFontSize());
         assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getStyle().getShape());
@@ -134,14 +132,13 @@ public class GetBoardContentUseCaseTest {
         //Create a readModelStickyNote in same board
         CqrsCommandPresenter readModelStickyNote = generateCreateStickyNoteUseCaseOutput(
                 boardId,
-                new Position(0, 10,0),
+                new Position(0, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
 
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getBoardId());
         assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getPosition().getX());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getPosition().getY());
-        assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getPosition().getZ());
         assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getContent());
         assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getStyle().getFontSize());
         assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getStyle().getShape());
@@ -160,14 +157,13 @@ public class GetBoardContentUseCaseTest {
         //Create a aggregateStickyNote in same board
         CqrsCommandPresenter aggregateStickyNote = generateCreateStickyNoteUseCaseOutput(
                 boardId,
-                new Position(15, 0,0),
+                new Position(15, 0),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
 
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getBoardId());
         assertEquals(15, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getX());
         assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getY());
-        assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getZ());
         assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getContent());
         assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getFontSize());
         assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getShape());
@@ -205,7 +201,7 @@ public class GetBoardContentUseCaseTest {
         //Create a domainEventStickyNote
         CqrsCommandPresenter domainEventStickyNote = generateCreateStickyNoteUseCaseOutput(
                 boardId,
-                new Position(20, 10,0),
+                new Position(20, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
         assertNotNull(domainEventStickyNote.getId());
@@ -214,7 +210,6 @@ public class GetBoardContentUseCaseTest {
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getBoardId());
         assertEquals(20, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getX());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getY());
-        assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getZ());
         assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getContent());
         assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getFontSize());
         assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getShape());
@@ -277,7 +272,7 @@ public class GetBoardContentUseCaseTest {
         //Create a domainEventStickyNote
         CqrsCommandPresenter domainEventStickyNote = generateCreateStickyNoteUseCaseOutput(
                 boardId,
-                new Position(20, 10,0),
+                new Position(20, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
         assertNotNull(domainEventStickyNote.getId());
@@ -286,7 +281,6 @@ public class GetBoardContentUseCaseTest {
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getBoardId());
         assertEquals(20, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getX());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getY());
-        assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getZ());
         assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getContent());
         assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getFontSize());
         assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getShape());
@@ -305,13 +299,12 @@ public class GetBoardContentUseCaseTest {
         //Create a commandStickyNote in SameBoard
         CqrsCommandPresenter commandStickyNote = generateCreateStickyNoteUseCaseOutput(
                 boardId,
-                new Position(10, 10,0),
+                new Position(10, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getBoardId());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getPosition().getX());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getPosition().getY());
-        assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getPosition().getZ());
         assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getContent());
         assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getStyle().getFontSize());
         assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getStyle().getShape());
@@ -331,14 +324,13 @@ public class GetBoardContentUseCaseTest {
         //Create a readModelStickyNote in same board
         CqrsCommandPresenter readModelStickyNote = generateCreateStickyNoteUseCaseOutput(
                 boardId,
-                new Position(0, 10,0),
+                new Position(0, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
 
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getBoardId());
         assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getPosition().getX());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getPosition().getY());
-        assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getPosition().getZ());
         assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getContent());
         assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getStyle().getFontSize());
         assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getStyle().getShape());
@@ -357,14 +349,13 @@ public class GetBoardContentUseCaseTest {
         //Create a aggregateStickyNote in same board
         CqrsCommandPresenter aggregateStickyNote = generateCreateStickyNoteUseCaseOutput(
                 boardId,
-                new Position(15, 0,0),
+                new Position(15, 0),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
 
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getBoardId());
         assertEquals(15, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getX());
         assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getY());
-        assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getZ());
         assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getContent());
         assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getFontSize());
         assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getShape());
@@ -522,7 +513,7 @@ public class GetBoardContentUseCaseTest {
         CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(textFigureRepository, domainEventBus);
         CreateStickyNoteInput input = createStickyNoteUseCase.newInput();
         input.setBoardId(id);
-        input.setPosition(position.getX(), position.getY(),position.getZ());
+        input.setPosition(position.getX(), position.getY());
         input.setContent(content);
         input.setStyle(style);
 

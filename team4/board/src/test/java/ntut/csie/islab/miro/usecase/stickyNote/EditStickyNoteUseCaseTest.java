@@ -36,7 +36,7 @@ public class EditStickyNoteUseCaseTest {
         CreateStickyNoteInput createStickyNoteInput = createStickyNoteUseCase.newInput();
         CqrsCommandPresenter createStickyNoteOutput = CqrsCommandPresenter.newInstance();
         createStickyNoteInput.setBoardId(boardId);
-        createStickyNoteInput.setPosition(1.0,1.0,0);
+        createStickyNoteInput.setPosition(1.0,1.0);
         createStickyNoteInput.setContent("Content");
         createStickyNoteInput.setStyle(new Style(12, ShapeKindEnum.CIRCLE, 87.87,100, "#948700"));
         createStickyNoteUseCase.execute(createStickyNoteInput, createStickyNoteOutput);

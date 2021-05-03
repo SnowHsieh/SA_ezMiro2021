@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StickNoteDomainEventTest {
     private TextFigure createStickyNote() {
-        return new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0,0.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
+        return new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class StickNoteDomainEventTest {
         stickyNote.clearDomainEvents();
         assertEquals(0, stickyNote.getDomainEvents().size());
 
-        Position newPosition = new Position(100,100,0);
+        Position newPosition = new Position(100,100);
         Position oldPosition = stickyNote.getPosition();
         stickyNote.changePosition(newPosition);
 
