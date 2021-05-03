@@ -38,8 +38,8 @@ public class CreateStickyNoteInput {
     public void setPosition(Position position) {
         this.position = position;
     }
-    public void setPosition(double x, double y) {
-        this.position = new Position(x,y);
+    public void setPosition(double x, double y, double z) {
+        this.position = new Position(x,y,z);
     }
     public Position getPosition() {
         return this.position;

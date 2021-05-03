@@ -31,7 +31,8 @@ public class MoveStickyNoteController {
         try {
             JSONObject stickyNoteJSON = new JSONObject(stickyNoteInfo);
             figureId = UUID.fromString(stickyNoteJSON.getString("figureId"));
-            newPosition = new Position(stickyNoteJSON.getDouble("left"),stickyNoteJSON.getDouble("top"));
+            newPosition = new Position(stickyNoteJSON.getDouble("left"),stickyNoteJSON.getDouble("top"),stickyNoteJSON.getDouble("dummy"));
+            // todo : revise dummy
         } catch (JSONException e) {
             e.printStackTrace();
         }

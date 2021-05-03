@@ -1,12 +1,14 @@
 package ntut.csie.islab.miro.entity.model.textFigure;
 
 public class Position {
-    private double x;
+    private double x ;
     private double y ;
+    private double z ;
 
-    public Position(double x, double y) {
+    public Position(double x, double y, double z) {
         this.x = x;
         this.y = y;
+        this.z = z;
     }
 
     public double getX() {
@@ -17,9 +19,7 @@ public class Position {
         return y;
     }
 
-//    public void setPosition(double x,double y) {
-//        this.x = x;
-//        this.y = y;
-//    }
-
+    public double getZ() {
+        return z;
+    }
 }

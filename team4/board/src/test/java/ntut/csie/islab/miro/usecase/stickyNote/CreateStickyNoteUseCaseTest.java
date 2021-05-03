@@ -32,7 +32,7 @@ public class CreateStickyNoteUseCaseTest {
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         UUID boardId = UUID.randomUUID();
         input.setBoardId(boardId);
-        input.setPosition(1.0,1.0);
+        input.setPosition(1.0,1.0,0);
         input.setContent("");
         input.setStyle(new Style(12, ShapeKindEnum.CIRCLE, 87.87,100, "#948700"));
         createStickyNoteUseCase.execute(input, output);
