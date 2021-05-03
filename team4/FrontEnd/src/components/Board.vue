@@ -216,19 +216,8 @@ export default {
             if (e.target != null) {
               if (e.button === 3) { // right click
                 _this.showContextMenu(e)
-                // exteact to multi listener
-                _this.favcolor.value = e.target.item(0).get('fill')
-                _this.favcolor.addEventListener('change', function handler () {
-                  e.target.item(0).set('fill', _this.favcolor.value) // rect fill
-                  _this.editStickyNote(e.target)
-                  _this.hideContextMenu()
-                  this.removeEventListener('change', handler)
-                })
-                _this.delButton.addEventListener('click', function handler () {
-                  _this.deleteStickyNote(e.target)
-                  _this.hideContextMenu()
-                  this.removeEventListener('click', handler)
-                }, false)
+                _this.addListenerOfChangeTextFigureColor(e)
+                _this.addListenerOfDeleteTextFigure(e)
               }
             }
           },
@@ -258,7 +247,26 @@ export default {
     },
     hideContextMenu () {
       this.contextMenu.style.display = 'none'
+    },
+    addListenerOfChangeTextFigureColor (e) {
+      var _this = this
+      _this.favcolor.value = e.target.item(0).get('fill')
+      _this.favcolor.addEventListener('change', function handler () {
+        e.target.item(0).set('fill', _this.favcolor.value) // rect fill
+        _this.editStickyNote(e.target)
+        _this.hideContextMenu()
+        this.removeEventListener('change', handler)
+      })
+    },
+    addListenerOfDeleteTextFigure (e) {
+      var _this = this
+      _this.delButton.addEventListener('click', function handler () {
+        _this.deleteStickyNote(e.target)
+        _this.hideContextMenu()
+        this.removeEventListener('click', handler)
+      }, false)
     }
+
   }
 
 }
