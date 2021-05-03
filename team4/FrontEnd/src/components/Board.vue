@@ -1,4 +1,4 @@
-<script src="../assets/js/jquery.colorPicker.js"></script>
+<!--<script src="../assets/js/jquery.colorPicker.js"></script>-->
 <template>
         <!-- <button @click="drawARect">畫圖</button> -->
         <div>
@@ -10,7 +10,11 @@
           <div class="container" oncontextmenu="return false">
             <div id="contextMenu" class="context-menu">
               <ul>
-                <li id="changeColorButton">Change Color</li>
+                <label>
+                  <li>ColorPicker
+                    <input type="color" id="favcolor" name="favcolor" style="margin-left: 4rem" >
+                  </li>
+                </label>
                 <li id="delButton">Delete</li>
               </ul>
             </div>
@@ -21,7 +25,6 @@
 <script>
 import { fabric } from 'fabric'
 import axios from 'axios'
-
 export default {
 
   data () {
@@ -32,7 +35,8 @@ export default {
       canvas: null,
       time: 0,
       contextMenu: null,
-      delButton: null
+      delButton: null,
+      favcolor: null
     }
   },
   async mounted () {
@@ -42,6 +46,7 @@ export default {
     this.listenEventsOnCanvas()
     this.contextMenu = document.getElementById('contextMenu')
     this.delButton = document.getElementById('delButton')
+    this.favcolor = document.getElementById('favcolor')
     // this.timer = setInterval(this.refreshCanvas, 10000)
   },
   methods: {
@@ -90,7 +95,7 @@ export default {
               shape: 2,
               width: parseFloat(figure.width) * parseFloat(figure.get('scaleX')),
               height: parseFloat(figure.height) * parseFloat(figure.get('scaleY')),
-              color: figure.get('color')
+              color: figure.item(0).get('fill')
             }
           }
         )
@@ -162,7 +167,6 @@ export default {
         var group = new fabric.Group([rect, text], {
           id: figure.figureId,
           content: figure.content,
-          color: figure.style.color,
           top: figure.position.y,
           left: figure.position.x,
           subTargetCheck: true
@@ -194,7 +198,6 @@ export default {
               dimensionText.selectAll()
               dimensionText.on('editing:exited', function () {
                 var group = new fabric.Group([rect, dimensionText], {
-                  color: rect.fill,
                   content: dimensionText.text,
                   id: rect.id,
                   left: oldleft,
@@ -211,20 +214,22 @@ export default {
           'mouse:down': function (e) {
             _this.hideContextMenu()
             if (e.target != null) {
-              e.target.on('mousedown', function (event) {
-                console.log('event3:', event.subTargets)
-                if (event.button === 3) { // right click
-
-                  _this.showContextMenu(event)
-
-                  // exteact to multi listener
-                  _this.delButton.addEventListener('click', function handler (event) {
-                    _this.deleteStickyNote(e.target)
-                    _this.hideContextMenu()
-                    this.removeEventListener('click', handler)
-                  }, false)
-                }
-              })
+              if (e.button === 3) { // right click
+                _this.showContextMenu(e)
+                // exteact to multi listener
+                _this.favcolor.value = e.target.item(0).get('fill')
+                _this.favcolor.addEventListener('change', function handler () {
+                  e.target.item(0).set('fill', _this.favcolor.value) // rect fill
+                  _this.editStickyNote(e.target)
+                  _this.hideContextMenu()
+                  this.removeEventListener('change', handler)
+                })
+                _this.delButton.addEventListener('click', function handler () {
+                  _this.deleteStickyNote(e.target)
+                  _this.hideContextMenu()
+                  this.removeEventListener('click', handler)
+                }, false)
+              }
             }
           },
           'object:scaled': function (e) {
