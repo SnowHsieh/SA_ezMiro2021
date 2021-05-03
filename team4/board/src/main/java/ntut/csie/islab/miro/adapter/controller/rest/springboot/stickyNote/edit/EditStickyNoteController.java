@@ -39,7 +39,7 @@ public class EditStickyNoteController {
             styleJsonObject = stickyNoteJSON.getJSONObject("style");
             System.out.println("styleJsonObject" + styleJsonObject);
             style = new Style(styleJsonObject.getInt("fontSize"),
-                    ShapeKindEnum.RECTANGLE,//todo
+                    ShapeKindEnum.values()[styleJsonObject.getInt("shape")],
                     styleJsonObject.getDouble("width"),
                     styleJsonObject.getDouble("height"),
                     styleJsonObject.getString("color"));

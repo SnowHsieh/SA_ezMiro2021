@@ -15,12 +15,7 @@
                     <input type="color" id="favcolor" name="favcolor" style="margin-left: 4rem" />
                   </li>
                 </label>
-                <li>Font Size <input id="fontSize" type="text" /></li>
-                <li id="delButton" >Delete</li>
-                <li ref="bringForwardBtn">bringForward</li>
-                <li ref="bringToFrontBtn">bringToFront</li>
-                <li ref="sendBackwardsBtn">sendBackwards</li>
-                <li ref="sendToBackBtn">sendToBack</li>
+                <li id="delButton">Delete</li>
               </ul>
             </div>
           </div>
@@ -42,10 +37,6 @@ export default {
       contextMenu: null,
       delButton: null,
       favcolor: null
-      // bringForwardBtn: null,
-      // bringToFrontBtn: null,
-      // sendBackwardsBtn: null,
-      // sendToBackBtn: null
     }
   },
   async mounted () {
@@ -63,6 +54,7 @@ export default {
       try {
         this.boardId = '8a479b03-22e8-4b9c-b489-74d4caf6d6ab'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
+        console.log(res.data)
         this.drawStickyNote(res.data.figureDtos)
       } catch (err) {
         console.log(err)
@@ -78,7 +70,7 @@ export default {
               y: 100
             },
             style: {
-              fontSize: 12,
+              fontSize: 20,
               shape: 2,
               width: 150.0,
               height: 150.0,
@@ -136,7 +128,6 @@ export default {
           }
         )
         console.log(res.data.message)
-        // this.canvas.remove(figure)
       } catch (err) {
         console.log(err)
       }
@@ -178,8 +169,7 @@ export default {
           content: figure.content,
           top: figure.position.y,
           left: figure.position.x,
-          subTargetCheck: true,
-          XZIndex: 2
+          subTargetCheck: true
         })
         _this.canvas.add(group)
       })
@@ -211,8 +201,7 @@ export default {
                   content: dimensionText.text,
                   id: rect.id,
                   left: oldleft,
-                  top: oldtop,
-                  XZIndex: 1
+                  top: oldtop
                 })
                 canvas.remove(rect)
                 canvas.remove(dimensionText)
@@ -226,12 +215,9 @@ export default {
             _this.hideContextMenu()
             if (e.target != null) {
               if (e.button === 3) { // right click
-                console.log(e.target.item(0))
-                _this.getZindex(e)
                 _this.showContextMenu(e)
                 _this.addListenerOfChangeTextFigureColor(e)
                 _this.addListenerOfDeleteTextFigure(e)
-                _this.addListenerOfBringFigureForward(e)
               }
             }
           },
@@ -279,21 +265,8 @@ export default {
         _this.hideContextMenu()
         this.removeEventListener('click', handler)
       }, false)
-    },
-    addListenerOfBringFigureForward (e) {
-      var _this = this
-      _this.$refs.bringForwardBtn.addEventListener('click', function handler () {
-        _this.getZindex(e)
-        e.target.bringForward()
-        console.log('bringForward')
-        _this.getZindex(e)
-        _this.hideContextMenu()
-        this.removeEventListener('click', handler)
-      }, false)
-    },
-    getZindex (e) {
-      console.log(this.canvas.getObjects().indexOf(e.target))
     }
+
   }
 
 }
