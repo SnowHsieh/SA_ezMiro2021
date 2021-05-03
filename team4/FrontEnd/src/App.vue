@@ -11,8 +11,8 @@ export default {
   }
 }
 </script>
-
 <style>
+@import './assets/styles/contextMenuStyle.css';
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

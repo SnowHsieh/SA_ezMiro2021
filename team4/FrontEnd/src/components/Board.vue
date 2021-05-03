@@ -1,3 +1,4 @@
+<script src="../assets/js/jquery.colorPicker.js"></script>
 <template>
         <!-- <button @click="drawARect">畫圖</button> -->
         <div>
@@ -9,6 +10,7 @@
           <div class="container" oncontextmenu="return false">
             <div id="contextMenu" class="context-menu">
               <ul>
+                <li id="changeColorButton">Change Color</li>
                 <li id="delButton">Delete</li>
               </ul>
             </div>
@@ -17,7 +19,6 @@
 </template>
 
 <script>
-// import { markRaw } from '@vue/reactivity'
 import { fabric } from 'fabric'
 import axios from 'axios'
 
@@ -39,7 +40,6 @@ export default {
     this.initCanvas()
     this.canvas.renderAll()
     this.listenEventsOnCanvas()
-    // this.contextMenu.$mount(contextMenu)
     this.contextMenu = document.getElementById('contextMenu')
     this.delButton = document.getElementById('delButton')
     // this.timer = setInterval(this.refreshCanvas, 10000)
@@ -47,7 +47,7 @@ export default {
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = 'dc079b71-1cc2-43a0-8002-4dd233b63a1c'
+        this.boardId = '8a479b03-22e8-4b9c-b489-74d4caf6d6ab'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         console.log(res.data)
         this.drawStickyNote(res.data.figureDtos)
@@ -173,7 +173,6 @@ export default {
     },
     refreshCanvas () {
       this.canvas.clear()
-      // this.canvas.setBackgroundColor('gray')
       this.getBoardContent()
     },
     listenEventsOnCanvas () {
@@ -183,38 +182,42 @@ export default {
         {
           'mouse:dblclick': function (e) {
             console.log('object:dblclick')
-            var oldleft = e.target.left
-            var oldtop = e.target.top
-            var rect = e.target.item(0)
-            var dimensionText = e.target.item(1)
-            console.log('rect:', rect)
-            _this.ungroup(e.target)
-            canvas.setActiveObject(dimensionText)
-            dimensionText.enterEditing()
-            dimensionText.selectAll()
-            dimensionText.on('editing:exited', function () {
-              var group = new fabric.Group([rect, dimensionText], {
-                color: rect.fill,
-                content: dimensionText.text,
-                id: rect.id,
-                left: oldleft,
-                top: oldtop
+            if (e.target != null) {
+              var oldleft = e.target.left
+              var oldtop = e.target.top
+              var rect = e.target.item(0)
+              var dimensionText = e.target.item(1)
+              console.log('rect:', rect)
+              _this.ungroup(e.target)
+              canvas.setActiveObject(dimensionText)
+              dimensionText.enterEditing()
+              dimensionText.selectAll()
+              dimensionText.on('editing:exited', function () {
+                var group = new fabric.Group([rect, dimensionText], {
+                  color: rect.fill,
+                  content: dimensionText.text,
+                  id: rect.id,
+                  left: oldleft,
+                  top: oldtop
+                })
+                canvas.remove(rect)
+                canvas.remove(dimensionText)
+                console.log('current:', canvas.getObjects())
+                canvas.add(group)
+                _this.editStickyNote(group)
               })
-              canvas.remove(rect)
-              canvas.remove(dimensionText)
-              console.log('current:', canvas.getObjects())
-              canvas.add(group)
-              _this.editStickyNote(group)
-            })
+            }
           },
           'mouse:down': function (e) {
-            console.log('object:down')
             _this.hideContextMenu()
             if (e.target != null) {
               e.target.on('mousedown', function (event) {
-                if (event.button === 3) {
-                  console.log('right click')
-                  _this.showContextMenu(event.e)
+                console.log('event3:', event.subTargets)
+                if (event.button === 3) { // right click
+
+                  _this.showContextMenu(event)
+
+                  // exteact to multi listener
                   _this.delButton.addEventListener('click', function handler (event) {
                     _this.deleteStickyNote(e.target)
                     _this.hideContextMenu()
@@ -234,7 +237,6 @@ export default {
         })
     },
     ungroup (group) {
-      console.log('ungroup flow')
       var _this = this
       var items = group._objects
       group._restoreObjectsState()
@@ -245,71 +247,14 @@ export default {
       _this.canvas.renderAll()
     },
     showContextMenu (event) {
-      console.log('showContextMenu')
       this.contextMenu.style.display = 'block'
-      this.contextMenu.style.left = event.clientX + 'px'
-      this.contextMenu.style.top = event.clientY + 'px'
-      // this.contextMenu.style.overoverflow = 'hidden auto'
+      this.contextMenu.style.left = event.e.clientX + 'px'
+      this.contextMenu.style.top = event.e.clientY + 'px'
     },
     hideContextMenu () {
       this.contextMenu.style.display = 'none'
     }
-    // listenKeys (event) {
-    //   var keyCode = event.which || event.keyCode;
-    //   if(keyCode == 27){
-    //     this.hideContextMenu();
-    //   }
-    // }
   }
 
 }
 </script>
-  <style type="text/css">
-  *{
-    margin: 0;
-    padding: 0;
-  }
-
-  html, body, .container{
-    height: 100%;
-  }
-
-  body{
-    font-family: verdana;
-    font-size: 10px;
-  }
-
-  .container{
-    background: #f6f6f6;
-  }
-
-  .context-menu{
-    width: 200px;
-    height: auto;
-    box-shadow: 0 0 20px 0 #ccc;
-    position: absolute;
-    display: none;
-  }
-
-  .context-menu ul{
-    list-style: none;
-    padding: 5px 0px 5px 0px;
-  }
-
-  .context-menu ul li:not(.separator){
-    padding: 10px 5px 10px 5px;
-    border-left: 4px solid transparent;
-    cursor: pointer;
-  }
-
-  .context-menu ul li:hover{
-    background: #eee;
-    border-left: 4px solid #666;
-  }
-
-  .separator{
-    height: 1px;
-    background: #dedede;
-    margin: 2px 0px 2px 0px;
-  }
-</style>
