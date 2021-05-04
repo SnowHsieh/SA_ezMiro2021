@@ -14,7 +14,7 @@ export default {
     async createBoardAndEnter () {
       const boardId = await CreateBoard()
       this.$router.push({
-        name: 'board',
+        name: 'Board',
         params: {
           boardId: boardId
         }

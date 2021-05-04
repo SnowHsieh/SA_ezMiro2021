@@ -1,5 +1,6 @@
 <template>
     <div>
+        <button @click='createStickyNote()'>Create Sticky Note</button>
         <!-- <button @click="drawARect">畫圖</button> -->
         <canvas id="canvas" ref='board'></canvas>
     </div>
@@ -15,13 +16,14 @@ export default {
     return {
       canvasContext: null,
       boardContent: null,
-      canvas: null
+      canvas: null,
+      boardId: this.$route.params.boardId
     }
   },
   async created () {
-    this.boardContent = await GetBoardContent('firstId')
+    console.log(this.boardId)
+    this.boardContent = await GetBoardContent(this.boardId)
     this.initCanvas()
-    this.createStickyNote()
   },
   methods: {
     initCanvas () {
