@@ -13,7 +13,14 @@ public class WidgetMapper {
         Coordinate coordinate = widget.getCoordinate();
         int width = coordinate.getBottomRight().x - coordinate.getTopLeft().x;
         int height = coordinate.getBottomRight().y - coordinate.getTopLeft().y;
-        return new WidgetDto(coordinate.getTopLeft().x, coordinate.getTopLeft().y, width, height, widget.getColor(), widget.getTextColor());
+        return new WidgetDto(
+                widget.getId(),
+                coordinate.getTopLeft().x,
+                coordinate.getTopLeft().y,
+                width,
+                height,
+                widget.getColor(),
+                widget.getTextColor());
     }
 
     public List<WidgetDto> domainToDto(List<Widget> widgets) {

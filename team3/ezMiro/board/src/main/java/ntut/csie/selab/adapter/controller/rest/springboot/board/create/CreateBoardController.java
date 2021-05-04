@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "${CORS_URLS}")
 public class CreateBoardController {
     private CreateBoardUseCase createBoardUseCase;
 
@@ -18,7 +18,7 @@ public class CreateBoardController {
         this.createBoardUseCase = createBoardUseCase;
     }
 
-    @PostMapping(path = "/ez-miro/boards/", produces = "application/json")
+    @PostMapping(path = "/${EZ_MIRO_PREFIX}/boards/", produces = "application/json")
     public String createBoard() {
         CreateBoardInput input = new CreateBoardInput();
         CreateBoardOutput output = new CreateBoardOutput();

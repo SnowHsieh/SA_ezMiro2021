@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "${CORS_URLS}")
 public class GetBoardContentController {
     private GetBoardContentUseCase getBoardContentUseCase;
 
@@ -38,7 +38,7 @@ public class GetBoardContentController {
         this.getBoardContentUseCase = getBoardContentUseCase;
     }
 
-    @GetMapping(path = "/ez-miro/boards/{boardId}/content", produces = "application/json")
+    @GetMapping(path = "/${EZ_MIRO_PREFIX}/boards/{boardId}/content", produces = "application/json")
     public BoardContentViewModel getBoardContent(@PathVariable("boardId") String boardId) {
         GetBoardContentInput input = new GetBoardContentInput();
         GetBoardContentOutput output = new GetBoardContentOutput();
@@ -50,60 +50,5 @@ public class GetBoardContentController {
         widgetDtos = widgetMapper.domainToDto(output.getWidgets());
         BoardContentViewModel boardContentViewModel = new BoardContentViewModel(output.getBoardId(), widgetDtos);
         return boardContentViewModel;
-    }
-
-    @GetMapping(path = "/")
-    public String home(){
-        return "Hi";
-    }
-
-    private String createSingleBoardWithEventStorming(BoardRepository boardRepository, WidgetRepository widgetRepository) {
-        DomainEventBus domainEventBus = new DomainEventBus();
-        domainEventBus.register(new NotifyBoard(boardRepository, domainEventBus));
-        CreateBoardOutput createBoardOutput = createSingleBoard(boardRepository, domainEventBus);
-        String boardId = createBoardOutput.getBoardId();
-
-        String stickyNoteId = createStickyNoteIn(boardId, new Coordinate(0, 200, 100, 300), widgetRepository, domainEventBus);
-        setColorOfWidgetIn(widgetRepository, stickyNoteId, "green");
-
-        stickyNoteId = createStickyNoteIn(boardId, new Coordinate(150, 200, 250, 300), widgetRepository, domainEventBus);
-        setColorOfWidgetIn(widgetRepository, stickyNoteId, "blue");
-
-        stickyNoteId = createStickyNoteIn(boardId, new Coordinate(200, 0, 300, 100), widgetRepository, domainEventBus);
-        setColorOfWidgetIn(widgetRepository, stickyNoteId, "yellow");
-
-        stickyNoteId = createStickyNoteIn(boardId, new Coordinate(300, 200, 400, 300), widgetRepository, domainEventBus);
-        setColorOfWidgetIn(widgetRepository, stickyNoteId, "orange");
-
-        return boardId;
-    }
-
-    private void setColorOfWidgetIn (WidgetRepository widgetRepository, String stickyNoteId, String color) {
-        Widget widget = widgetRepository.findById(stickyNoteId).get();
-        widget.setColor(color);
-    }
-
-    private String createStickyNoteIn(String boardId, Coordinate coordinate, WidgetRepository widgetRepository, DomainEventBus domainEventBus) {
-        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(widgetRepository, domainEventBus);
-        CreateStickyNoteInput createStickyNoteInput = new CreateStickyNoteInput();
-        CreateStickyNoteOutput createStickyNoteOutput = new CreateStickyNoteOutput();
-
-        createStickyNoteInput.setBoardId(boardId);
-        createStickyNoteInput.setCoordinate(coordinate);
-
-        createStickyNoteUseCase.execute(createStickyNoteInput, createStickyNoteOutput);
-
-        return createStickyNoteOutput.getStickyNoteId();
-    }
-
-    private CreateBoardOutput createSingleBoard(BoardRepository boardRepository, DomainEventBus domainEventBus) {
-
-        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(boardRepository, domainEventBus);
-        CreateBoardInput createBoardInput = new CreateBoardInput();
-        CreateBoardOutput createBoardOutput = new CreateBoardOutput();
-        createBoardInput.setTeamId("1");
-        createBoardInput.setBoardName("firstBoard");
-        createBoardUseCase.execute(createBoardInput, createBoardOutput);
-        return createBoardOutput;
     }
 }
