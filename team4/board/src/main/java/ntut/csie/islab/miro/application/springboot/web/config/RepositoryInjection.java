@@ -1,7 +1,7 @@
 package ntut.csie.islab.miro.application.springboot.web.config;
 
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
-import ntut.csie.islab.miro.adapter.repository.figure.FigureRepository;
+import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import org.springframework.context.annotation.Bean;
@@ -17,9 +17,9 @@ public class RepositoryInjection {
         return new BoardRepository();
     }
 
-    @Bean(name = "figureRepository")
-    public FigureRepository figureRepository() {
-        return new FigureRepository();
+    @Bean(name = "textFigureRepository")
+    public TextFigureRepository textFigureRepository() {
+        return new TextFigureRepository();
     }
 
     @Bean(name = "ezMiroEventBus")

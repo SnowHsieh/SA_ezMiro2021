@@ -1,7 +1,7 @@
 package ntut.csie.team5.adapter.gateway.repository.springboot.figure;
 
 import ntut.csie.team5.entity.model.figure.Figure;
-import ntut.csie.team5.usecase.figure.note.FigureRepository;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,16 +27,19 @@ public class FigureRepositoryImpl implements FigureRepository {
     }
 
     @Override
-    public void save(Figure note) {
-        figures.add(note);
+    public void save(Figure figure) {
+        if(figures.contains(figure))
+            return;
+
+        figures.add(figure);
     }
 
     @Override
     public void deleteById(String id) {
-        Optional<Figure> note = findById(id);
+        Optional<Figure> figure = findById(id);
 
-        if(note.isPresent())
-            figures.remove(note.get());
+        if(figure.isPresent())
+            figures.remove(figure.get());
     }
 
     @Override

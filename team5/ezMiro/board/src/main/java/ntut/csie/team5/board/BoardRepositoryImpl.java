@@ -32,6 +32,9 @@ public class BoardRepositoryImpl implements BoardRepository {
 
     @Override
     public void save(Board board) {
+        if(boards.contains(board))
+            return;
+
         boards.add(board);
     }
 

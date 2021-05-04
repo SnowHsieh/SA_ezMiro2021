@@ -1,30 +1,30 @@
 package ntut.csie.islab.miro.usecase.board;
 
-import ntut.csie.islab.miro.entity.model.figure.Figure;
-import ntut.csie.islab.miro.usecase.figure.FigureDto;
+import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
+import ntut.csie.islab.miro.usecase.textFigure.TextFigureDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ConvertFigureToDto {
 
-    public static FigureDto transform(Figure figure) {
-        FigureDto dto = new FigureDto();
+    public static TextFigureDto transform(TextFigure textFigure) {
+        TextFigureDto dto = new TextFigureDto();
 
-        dto.setFigureId(figure.getFigureId());
-        dto.setBoardId(figure.getBoardId());
-        dto.setContent(figure.getContent());
-        dto.setPosition(figure.getPosition());
-        dto.setStyle(figure.getStyle());
+        dto.setFigureId(textFigure.getFigureId());
+        dto.setBoardId(textFigure.getBoardId());
+        dto.setContent(textFigure.getContent());
+        dto.setPosition(textFigure.getPosition());
+        dto.setStyle(textFigure.getStyle());
         return dto;
     }
 
-    public static List<FigureDto> transform(List<Figure> figureList) {
-        List<FigureDto> figureDtos = new ArrayList<>();
-        for(Figure figure : figureList) {
-            figureDtos.add(transform(figure));
+    public static List<TextFigureDto> transform(List<TextFigure> textFigureList) {
+        List<TextFigureDto> textFigureDtos = new ArrayList<>();
+        for(TextFigure textFigure : textFigureList) {
+            textFigureDtos.add(transform(textFigure));
         }
 
-        return figureDtos;
+        return textFigureDtos;
     }
 }

@@ -2,6 +2,7 @@ package ntut.csie.selab.adapter.board;
 
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.usecase.board.BoardRepository;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,9 +4,9 @@ import ntut.csie.islab.miro.adapter.presenter.GetBoardContentPresenter;
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.event.BoardContentMightExpire;
-import ntut.csie.islab.miro.adapter.repository.figure.FigureRepository;
-import ntut.csie.islab.miro.entity.model.figure.Figure;
-import ntut.csie.islab.miro.usecase.figure.FigureDto;
+import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
+import ntut.csie.islab.miro.usecase.textFigure.TextFigureDto;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 
@@ -16,12 +16,12 @@ public class GetBoardContentUseCase {
 
     private DomainEventBus domainEventBus;
     private BoardRepository boardRepository;
-    private FigureRepository figureRepository;
+    private TextFigureRepository textFigureRepository;
 
-    public GetBoardContentUseCase(DomainEventBus domainEventBus, BoardRepository boardRepository ,FigureRepository figureRepository) {
+    public GetBoardContentUseCase(DomainEventBus domainEventBus, BoardRepository boardRepository , TextFigureRepository textFigureRepository) {
         this.domainEventBus = domainEventBus;
         this.boardRepository = boardRepository;
-        this.figureRepository = figureRepository;
+        this.textFigureRepository = textFigureRepository;
     }
 
     public GetBoardContentInput newInput() {
@@ -40,10 +40,10 @@ public class GetBoardContentUseCase {
         }
 
 
-        List<Figure> figureList  = this.figureRepository.findFiguresByBoardId(board.getBoardId());
-        List<FigureDto> figureDtos = ConvertFigureToDto.transform(figureList);
+        List<TextFigure> textFigureList = this.textFigureRepository.findFiguresByBoardId(board.getBoardId());
+        List<TextFigureDto> textFigureDtos = ConvertFigureToDto.transform(textFigureList);
 
 
-        presenter.setBoardId(board.getBoardId()).setFigures(figureDtos);
+        presenter.setBoardId(board.getBoardId()).setFigures(textFigureDtos);
     }
 }

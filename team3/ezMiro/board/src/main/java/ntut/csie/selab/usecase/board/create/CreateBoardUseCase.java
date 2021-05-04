@@ -3,6 +3,7 @@ package ntut.csie.selab.usecase.board.create;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 
@@ -11,6 +12,7 @@ public class CreateBoardUseCase {
     private BoardRepository boardRepository;
     private DomainEventBus domainEventBus;
 
+    @Autowired
     public CreateBoardUseCase(BoardRepository boardRepository, DomainEventBus domainEventBus) {
         this.boardRepository = boardRepository;
         this.domainEventBus = domainEventBus;

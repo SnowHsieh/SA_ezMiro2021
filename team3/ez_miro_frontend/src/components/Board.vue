@@ -1,5 +1,6 @@
 <template>
     <div>
+        <button @click='createStickyNote()'>Create Sticky Note</button>
         <!-- <button @click="drawARect">畫圖</button> -->
         <canvas id="canvas" ref='board'></canvas>
     </div>
@@ -7,7 +8,7 @@
 
 <script>
 import { GetBoardContent } from '@/apis/Boards'
-// import { markRaw } from '@vue/reactivity'
+import '@/models/StickyNote'
 import { fabric } from 'fabric'
 
 export default {
@@ -15,13 +16,28 @@ export default {
     return {
       canvasContext: null,
       boardContent: null,
-      canvas: null
+      canvas: null,
+      boardId: this.$route.params.boardId
     }
   },
   async created () {
-    this.boardContent = await GetBoardContent('firstId')
+    console.log(this.boardId)
+    this.boardContent = await GetBoardContent(this.boardId)
     this.initCanvas()
-    this.createStickyNote()
+
+    const stickyNote = new fabric.StickyNote({
+      id: '123123-1242343252345',
+      left: 20,
+      top: 20,
+      height: 100,
+      width: 100,
+      fill: '#124345'
+    })
+    this.canvas.add(
+      stickyNote
+    )
+    this.canvas.renderAll()
+    console.log(stickyNote)
   },
   methods: {
     initCanvas () {
@@ -33,7 +49,7 @@ export default {
     createStickyNote () {
       this.boardContent.widgetDtos.forEach(widget =>
         this.canvas.add(
-          new fabric.Rect({
+          new fabric.StickyNote({
             left: widget.topLeftX,
             top: widget.topLeftY,
             height: widget.height,

@@ -6,7 +6,7 @@ import { far } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import router from './router'
 import fabric from 'fabric'
-import api from './apis'
+import api from './utils/apis'
 
 
 library.add([

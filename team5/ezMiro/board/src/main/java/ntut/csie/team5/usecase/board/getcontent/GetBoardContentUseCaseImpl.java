@@ -1,15 +1,13 @@
 package ntut.csie.team5.usecase.board.getcontent;
 
-import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.entity.model.board.Board;
-import ntut.csie.team5.entity.model.figure.Figure;
 import ntut.csie.team5.usecase.ClientBoardContentMightExpire;
 import ntut.csie.team5.usecase.board.BoardRepository;
 import ntut.csie.team5.usecase.figure.ConvertFiguresToDto;
 import ntut.csie.team5.usecase.figure.FigureDto;
-import ntut.csie.team5.usecase.figure.note.FigureRepository;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
 
 import java.util.List;
 

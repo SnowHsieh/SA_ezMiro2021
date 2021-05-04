@@ -11,10 +11,10 @@ import ntut.csie.team5.usecase.board.create.CreateBoardInput;
 import ntut.csie.team5.usecase.board.create.CreateBoardUseCase;
 import ntut.csie.team5.usecase.board.create.CreateBoardUseCaseImpl;
 import ntut.csie.team5.usecase.eventhandler.NotifyBoard;
-import ntut.csie.team5.usecase.figure.note.FigureRepository;
-import ntut.csie.team5.usecase.figure.note.post.PostNoteInput;
-import ntut.csie.team5.usecase.figure.note.post.PostNoteUseCase;
-import ntut.csie.team5.usecase.figure.note.post.PostNoteUseCaseImpl;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteInput;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCase;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCaseImpl;
 import ntut.csie.team5.usecase.project.ProjectRepository;
 import ntut.csie.team5.usecase.project.create.CreateProjectInput;
 import ntut.csie.team5.usecase.project.create.CreateProjectUseCase;
@@ -41,7 +41,7 @@ public abstract class AbstractTest {
     public Point defaultLeftTopPosition;
     public int defaultHeight;
     public int defaultWidth;
-    public Color defaultColor;
+    public String defaultColor;
 
     @Before
     public void setUp() throws Exception {
@@ -60,7 +60,7 @@ public abstract class AbstractTest {
         defaultLeftTopPosition = new Point(0,0);
         defaultHeight = 10;
         defaultWidth = 10;
-        defaultColor = Color.BLACK;
+        defaultColor = "#000000";
     }
 
     public String createProject(String teamId, String projectName) {
@@ -88,7 +88,7 @@ public abstract class AbstractTest {
         return createBoardOutput.getId();
     }
 
-    public String postNote(String boardId, Point leftTopPosition, int height, int width, Color color) {
+    public String postNote(String boardId, Point leftTopPosition, int height, int width, String color) {
         PostNoteUseCase postNoteUseCase = new PostNoteUseCaseImpl(figureRepository, domainEventBus);
         PostNoteInput postNoteInput = postNoteUseCase.newInput();
         CqrsCommandPresenter postNoteOutput = CqrsCommandPresenter.newInstance();

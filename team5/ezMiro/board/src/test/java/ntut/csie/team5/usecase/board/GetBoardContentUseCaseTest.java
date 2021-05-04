@@ -2,7 +2,6 @@ package ntut.csie.team5.usecase.board;
 
 import ntut.csie.team5.adapter.presenter.board.getcontent.BoardContentViewModel;
 import ntut.csie.team5.adapter.presenter.board.getcontent.GetBoardContentPresenter;
-import ntut.csie.team5.entity.model.figure.Figure;
 import ntut.csie.team5.usecase.AbstractTest;
 import ntut.csie.team5.usecase.board.getcontent.GetBoardContentInput;
 import ntut.csie.team5.usecase.board.getcontent.GetBoardContentUseCase;
@@ -10,8 +9,6 @@ import ntut.csie.team5.usecase.board.getcontent.GetBoardContentUseCaseImpl;
 import ntut.csie.team5.usecase.figure.FigureDto;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.awt.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -29,7 +26,7 @@ public class GetBoardContentUseCaseTest extends AbstractTest {
 
         String boardId = createBoard(projectName, boardName);
 
-        String firstNoteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, Color.RED);
+        String firstNoteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, "#ff0000");
 
         GetBoardContentUseCase useCase = new GetBoardContentUseCaseImpl(boardRepository,figureRepository, domainEventBus);
         GetBoardContentInput input = (GetBoardContentInput) useCase;

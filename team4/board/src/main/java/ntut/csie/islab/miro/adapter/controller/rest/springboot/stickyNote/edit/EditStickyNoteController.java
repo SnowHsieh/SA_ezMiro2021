@@ -1,22 +1,20 @@
 package ntut.csie.islab.miro.adapter.controller.rest.springboot.stickyNote.edit;
 
-import ntut.csie.islab.miro.entity.model.figure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.figure.Style;
-import ntut.csie.islab.miro.usecase.figure.stickyNote.EditStickyNoteInput;
-import ntut.csie.islab.miro.usecase.figure.stickyNote.EditStickyNoteUseCase;
+import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.textFigure.Style;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.EditStickyNoteInput;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.EditStickyNoteUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(value = "http://localhost:8080")
 public class EditStickyNoteController {
     private EditStickyNoteUseCase editStickyNoteUseCase;
     @Autowired

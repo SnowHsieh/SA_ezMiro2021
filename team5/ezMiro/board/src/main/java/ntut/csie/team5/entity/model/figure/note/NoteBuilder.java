@@ -12,7 +12,7 @@ public class NoteBuilder {
     private Point leftTopPosition;
     private int height;
     private int width;
-    private Color color;
+    private String color;
     private FigureType figureType;
 
     public static NoteBuilder newInstance() {
@@ -39,7 +39,7 @@ public class NoteBuilder {
         return this;
     }
 
-    public NoteBuilder color(Color color) {
+    public NoteBuilder color(String color) {
         this.color = color;
         return this;
     }

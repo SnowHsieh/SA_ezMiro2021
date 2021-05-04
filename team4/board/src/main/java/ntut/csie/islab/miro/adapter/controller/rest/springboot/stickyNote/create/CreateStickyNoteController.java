@@ -1,23 +1,21 @@
 package ntut.csie.islab.miro.adapter.controller.rest.springboot.stickyNote.create;
 
-import ntut.csie.islab.miro.entity.model.figure.Position;
-import ntut.csie.islab.miro.entity.model.figure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.figure.Style;
-import ntut.csie.islab.miro.usecase.figure.stickyNote.CreateStickyNoteInput;
-import ntut.csie.islab.miro.usecase.figure.stickyNote.CreateStickyNoteUseCase;
+import ntut.csie.islab.miro.entity.model.textFigure.Position;
+import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.textFigure.Style;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteInput;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(value = "http://localhost:8080")
 public class CreateStickyNoteController {
     private CreateStickyNoteUseCase createStickyNoteUseCase;
 

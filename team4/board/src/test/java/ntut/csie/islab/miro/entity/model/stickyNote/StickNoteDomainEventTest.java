@@ -1,11 +1,11 @@
 package ntut.csie.islab.miro.entity.model.stickyNote;
 
-import ntut.csie.islab.miro.entity.model.figure.Figure;
-import ntut.csie.islab.miro.entity.model.figure.Position;
-import ntut.csie.islab.miro.entity.model.figure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.figure.Style;
-import ntut.csie.islab.miro.entity.model.figure.stickynote.StickyNote;
-import ntut.csie.islab.miro.entity.model.figure.stickynote.event.StickyNoteEditedDomainEvent;
+import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
+import ntut.csie.islab.miro.entity.model.textFigure.Position;
+import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.textFigure.Style;
+import ntut.csie.islab.miro.entity.model.textFigure.stickynote.StickyNote;
+import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteEditedDomainEvent;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -13,17 +13,17 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StickNoteDomainEventTest {
-    private Figure createStickyNote(){
+    private TextFigure createStickyNote(){
         return new StickyNote(UUID.randomUUID(), new Position(1.0,1.0) , "content", new Style(10, ShapeKindEnum.TRIANGLE,87.2,"#123456"));
     }
     @Test
     public void create_a_stickyNote_then_publishes_a_stickyNote_created_domain_event(){
-        Figure stickyNote = createStickyNote();
+        TextFigure stickyNote = createStickyNote();
         assertEquals(1,stickyNote.getDomainEvents().size());
     }
     @Test
     public void delete_a_stickyNote_then_publishes_a_stickyNote_deleted_domain_event(){
-        Figure stickyNote = createStickyNote();
+        TextFigure stickyNote = createStickyNote();
         assertEquals(1,stickyNote.getDomainEvents().size());
 
         stickyNote.markAsRemoved(stickyNote.getBoardId(),stickyNote.getFigureId());
@@ -32,7 +32,7 @@ public class StickNoteDomainEventTest {
 
     @Test
     public void edit_a_stickyNote_then_publishes_a_stickyNote_edited_domain_event(){
-        Figure stickyNote = createStickyNote();
+        TextFigure stickyNote = createStickyNote();
         stickyNote.clearDomainEvents();
         assertEquals(0,stickyNote.getDomainEvents().size());
 
