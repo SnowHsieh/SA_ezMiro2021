@@ -25,6 +25,7 @@ public class CreateStickerUseCaseTest extends AbstractSpringBootJpaTest {
         long x = new Random().nextLong();
         long y = new Random().nextLong();
         Coordinate position = new Coordinate(x, y);
+        int expectedOrder = 0;
         CreateStickerUseCase createStickerUseCase = new CreateStickerUseCaseImpl(figureRepository, domainEventBus);
         CreateStickerInput input = createStickerUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
@@ -33,7 +34,6 @@ public class CreateStickerUseCaseTest extends AbstractSpringBootJpaTest {
         input.setSize(size);
         input.setColor(color);
         input.setPosition(position);
-
 
         createStickerUseCase.execute(input, output);
 
@@ -45,6 +45,7 @@ public class CreateStickerUseCaseTest extends AbstractSpringBootJpaTest {
         assertEquals(color, sticker.getColor());
         assertTrue(position.equals(sticker.getPosition()));
         assertEquals(FigureType.Sticker, sticker.getType());
+        assertEquals(expectedOrder, sticker.getOrder());
         assertEquals(1, eventListener.getEventCount());
     }
 }

@@ -13,8 +13,9 @@ public abstract class Figure extends AggregateRoot<String> {
     private int size;
     private String color;
     private Coordinate position;
+    private int order;
 
-    public Figure(String boardId, String figureId, String content, int size, String color, Coordinate position) {
+    public Figure(String boardId, String figureId, String content, int size, String color, Coordinate position, int order) {
         super(figureId);
         this.boardId = boardId;
         this.figureId = figureId;
@@ -22,6 +23,7 @@ public abstract class Figure extends AggregateRoot<String> {
         this.size = size;
         this.color = color;
         this.position = position;
+        this.order = order;
     }
 
     public String getFigureId() {
@@ -71,4 +73,12 @@ public abstract class Figure extends AggregateRoot<String> {
     public abstract FigureType getType();
 
     public Boolean isDeleted(){return this.isDeleted;}
+
+    public int getOrder() {
+        return this.order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
 }

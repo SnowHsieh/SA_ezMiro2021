@@ -23,4 +23,8 @@ public interface CreateStickerInput extends Input {
     void setPosition(Coordinate position);
 
     Coordinate getPosition();
+
+    void setOrder(int order);
+
+    int getOrder();
 }
