@@ -62,6 +62,7 @@ public class Board extends AggregateRoot<UUID> {
     private void addFigure(UUID figureId) {
         CommittedTextFigure committedTextFigure = new CommittedTextFigure(getBoardId(), figureId);
         this.figureList.add(committedTextFigure);
+        this.figureOrderList.add(committedTextFigure.getFigureId());
     }
 
     public List<CommittedTextFigure> getCommittedFigures() {

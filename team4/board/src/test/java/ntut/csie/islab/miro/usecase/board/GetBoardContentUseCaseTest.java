@@ -90,7 +90,6 @@ public class GetBoardContentUseCaseTest {
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
 
-        board.getFigureOrderList().add(UUID.fromString(domainEventStickyNote.getId()));
         assertNotNull(domainEventStickyNote.getId());
         assertEquals(ExitCode.SUCCESS, domainEventStickyNote.getExitCode());
 
@@ -119,7 +118,6 @@ public class GetBoardContentUseCaseTest {
                 new Position(10, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-        board.getFigureOrderList().add(UUID.fromString(commandStickyNote.getId()));
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getBoardId());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getPosition().getX());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getPosition().getY());
@@ -145,7 +143,6 @@ public class GetBoardContentUseCaseTest {
                 new Position(0, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-        board.getFigureOrderList().add(UUID.fromString(readModelStickyNote.getId()));
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getBoardId());
         assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getPosition().getX());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getPosition().getY());
@@ -170,7 +167,6 @@ public class GetBoardContentUseCaseTest {
                 new Position(15, 0),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-        board.getFigureOrderList().add(UUID.fromString(aggregateStickyNote.getId()));
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getBoardId());
         assertEquals(15, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getX());
         assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getY());
@@ -215,7 +211,6 @@ public class GetBoardContentUseCaseTest {
                 new Position(20, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-        board.getFigureOrderList().add(UUID.fromString(domainEventStickyNote.getId()));
 
         assertNotNull(domainEventStickyNote.getId());
         assertEquals(ExitCode.SUCCESS, domainEventStickyNote.getExitCode());
@@ -289,7 +284,6 @@ public class GetBoardContentUseCaseTest {
                 new Position(20, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-        board.getFigureOrderList().add(UUID.fromString(domainEventStickyNote.getId()));
 
         assertNotNull(domainEventStickyNote.getId());
         assertEquals(ExitCode.SUCCESS, domainEventStickyNote.getExitCode());
@@ -318,7 +312,6 @@ public class GetBoardContentUseCaseTest {
                 new Position(10, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-        board.getFigureOrderList().add(UUID.fromString(commandStickyNote.getId()));
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getBoardId());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getPosition().getX());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getPosition().getY());
@@ -344,7 +337,6 @@ public class GetBoardContentUseCaseTest {
                 new Position(0, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-        board.getFigureOrderList().add(UUID.fromString(readModelStickyNote.getId()));
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getBoardId());
         assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getPosition().getX());
         assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getPosition().getY());
@@ -369,7 +361,6 @@ public class GetBoardContentUseCaseTest {
                 new Position(15, 0),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-        board.getFigureOrderList().add(UUID.fromString(aggregateStickyNote.getId()));
         assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getBoardId());
         assertEquals(15, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getX());
         assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getY());
