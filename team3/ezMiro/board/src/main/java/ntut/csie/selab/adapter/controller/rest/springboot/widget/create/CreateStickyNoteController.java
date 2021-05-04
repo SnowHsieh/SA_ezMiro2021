@@ -2,8 +2,6 @@ package ntut.csie.selab.adapter.controller.rest.springboot.widget.create;
 
 
 import ntut.csie.selab.entity.model.widget.Coordinate;
-import ntut.csie.selab.usecase.board.create.CreateBoardUseCase;
-import ntut.csie.selab.usecase.widget.WidgetDto;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteInput;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteUseCase;
