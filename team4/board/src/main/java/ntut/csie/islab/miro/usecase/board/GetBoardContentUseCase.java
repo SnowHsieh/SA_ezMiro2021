@@ -21,7 +21,7 @@ public class GetBoardContentUseCase {
     private BoardRepository boardRepository;
     private TextFigureRepository textFigureRepository;
 
-    public GetBoardContentUseCase(DomainEventBus domainEventBus, BoardRepository boardRepository , TextFigureRepository textFigureRepository) {
+    public GetBoardContentUseCase(DomainEventBus domainEventBus, BoardRepository boardRepository, TextFigureRepository textFigureRepository) {
         this.domainEventBus = domainEventBus;
         this.boardRepository = boardRepository;
         this.textFigureRepository = textFigureRepository;
@@ -34,7 +34,7 @@ public class GetBoardContentUseCase {
 
     public void execute(GetBoardContentInput input, GetBoardContentPresenter presenter) {
         Board board = this.boardRepository.findById(input.getBoardId()).orElse(null);
-        if (null == board){
+        if (null == board) {
             presenter.setBoardId(input.getBoardId())
                     .setExitCode(ExitCode.FAILURE)
                     .setMessage("Get board failed: board not found, board id = " + input.getBoardId());
@@ -42,11 +42,20 @@ public class GetBoardContentUseCase {
             return;
         }
 
-        List<CommittedTextFigure> CommitedFigureList =board.getCommittedFigures();
+        List<CommittedTextFigure> CommitedFigureList = board.getCommittedFigures();
         List<TextFigure> textFigureList = new ArrayList<TextFigure>();
-        for(CommittedTextFigure f :CommitedFigureList ){
-            textFigureList.add(this.textFigureRepository.findById(board.getBoardId(),f.getFigureId()).get());
+        List<UUID> figureOrderList = board.getFigureOrderList();
+
+//        for(CommittedTextFigure f :CommitedFigureList ){
+//            textFigureList.add(this.textFigureRepository.findById(board.getBoardId(),f.getFigureId()).get());
+//        }
+
+        for (UUID figureId : figureOrderList) {
+            if (CommitedFigureList.stream().filter(s -> s.getFigureId().equals(figureId)).findFirst().isPresent()) {
+                textFigureList.add(this.textFigureRepository.findById(board.getBoardId(), figureId).get());
+            }
         }
+
 
         List<TextFigureDto> textFigureDtos = ConvertFigureToDto.transform(textFigureList);
 

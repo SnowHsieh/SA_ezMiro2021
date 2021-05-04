@@ -1,6 +1,7 @@
 package ntut.csie.islab.miro.entity.model.board;
 
 import ntut.csie.islab.miro.entity.model.board.event.BoardCreatedDomainEvent;
+import ntut.csie.islab.miro.entity.model.board.event.FigureChangedDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.event.TextFigureCommittedDomainEvent;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 
@@ -12,13 +13,14 @@ public class Board extends AggregateRoot<UUID> {
     private UUID teamId;
     private String boardName;
     private List<CommittedTextFigure> figureList;
-
+    private List<UUID> figureOrderList;
 
     public Board(UUID teamId,String boardName){
         super(UUID.randomUUID());
         this.teamId = teamId;
         this.boardName = boardName;
         this.figureList = new ArrayList<CommittedTextFigure>();
+        this.figureOrderList = new ArrayList<UUID>();
         addDomainEvent(new BoardCreatedDomainEvent(teamId, getBoardId()));
 
     }
@@ -64,5 +66,15 @@ public class Board extends AggregateRoot<UUID> {
 
     public List<CommittedTextFigure> getCommittedFigures() {
         return this.figureList;
+    }
+
+    public List<UUID> getFigureOrderList() {
+        return figureOrderList;
+    }
+
+    public void setFigureOrderList(List<UUID> figureOrderList) {
+        this.figureOrderList = figureOrderList;
+        addDomainEvent(new FigureChangedDomainEvent(this.getBoardId(), this.figureOrderList));
+
     }
 }

@@ -52,7 +52,7 @@ export default {
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = '260069ab-7ee7-451a-a142-af39249c7980'
+        this.boardId = 'f2902f52-1a2a-4ee7-a1a1-4eb5636a6c26'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         // console.log(res.data)
         this.drawStickyNote(res.data.figureDtos)
@@ -89,7 +89,7 @@ export default {
         const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/editStickyNote',
           {
             figureId: figure.get('id'),
-            content: figure.get('content'),// todo : combine position
+            content: figure.get('content'), // todo : combine position
             style: {
               fontSize: figure.item(1).get('fontSize'),
               shape: 2,
