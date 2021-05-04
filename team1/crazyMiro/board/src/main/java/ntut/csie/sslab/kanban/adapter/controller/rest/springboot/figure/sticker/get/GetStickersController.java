@@ -1,4 +1,4 @@
-package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.figure.sticker;
+package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.figure.sticker.get;
 
 import ntut.csie.sslab.account.users.query.usecase.UserDto;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;

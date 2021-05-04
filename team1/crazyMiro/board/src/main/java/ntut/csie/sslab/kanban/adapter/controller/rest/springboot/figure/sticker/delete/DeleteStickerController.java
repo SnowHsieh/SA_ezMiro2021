@@ -18,12 +18,12 @@ public class DeleteStickerController {
     private DeleteStickerUseCase deleteStickerUseCase;
 
     @Autowired
-    public void deleteAStickerUseCase(DeleteStickerUseCase deleteStickerUseCase) {
+    public void setDeleteStickerUseCase(DeleteStickerUseCase deleteStickerUseCase) {
         this.deleteStickerUseCase = deleteStickerUseCase;
     }
 
     @PutMapping(path = "${MIRO_PREFIX}/board/sticker/delete")
-    public CqrsCommandViewModel changeStickerContent(@QueryParam("stickerId") String stickerId) {
+    public CqrsCommandViewModel deleteSticker(@QueryParam("stickerId") String stickerId) {
 
         DeleteStickerInput input = deleteStickerUseCase.newInput();
         input.setFigureId(stickerId);

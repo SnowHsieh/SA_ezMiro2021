@@ -22,7 +22,7 @@ public class ChangeStickerSizeController {
     private ChangeStickerSizeUseCase changeStickerSizeUseCase;
 
     @Autowired
-    public void setChangeStickerContentUseCase(ChangeStickerSizeUseCase changeStickerSizeUseCase) {
+    public void setChangeStickerSizeUseCase(ChangeStickerSizeUseCase changeStickerSizeUseCase) {
         this.changeStickerSizeUseCase = changeStickerSizeUseCase;
     }
 

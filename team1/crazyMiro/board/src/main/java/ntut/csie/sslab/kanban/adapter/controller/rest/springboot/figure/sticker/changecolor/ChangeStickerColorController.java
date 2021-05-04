@@ -25,7 +25,7 @@ public class ChangeStickerColorController {
     }
 
     @PutMapping(path = "${MIRO_PREFIX}/board/sticker/changecolor", consumes = "application/json", produces = "application/json")
-    public CqrsCommandViewModel changeStickerContent(@QueryParam("stickerId") String stickerId,
+    public CqrsCommandViewModel changeStickerColor(@QueryParam("stickerId") String stickerId,
                                                      @RequestBody String stickerInfo) {
 
         String color = "";

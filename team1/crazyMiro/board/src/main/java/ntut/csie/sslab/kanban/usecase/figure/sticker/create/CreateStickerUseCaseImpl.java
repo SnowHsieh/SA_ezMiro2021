@@ -23,14 +23,14 @@ public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
     public void execute(CreateStickerInput input, CqrsCommandOutput output) {
         try{
             String stickerId = UUID.randomUUID().toString();
-            int order = figureRepository.getStickersByBoardId(stickerId).size();
+            int order = figureRepository.getStickersByBoardId(input.getBoardId()).size();
             Figure sticker = new Sticker(input.getBoardId(),
                     stickerId,
                     input.getContent(),
                     input.getSize(),
                     input.getColor(),
                     input.getPosition(),
-                    input.getOrder());
+                    order);
 
             figureRepository.save(sticker);
             domainEventBus.postAll(sticker);
@@ -55,7 +55,6 @@ public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
         private int size;
         private String color;
         private Coordinate position;
-        private int order;
 
         @Override
         public String getBoardId() {
@@ -107,14 +106,5 @@ public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
             this.position = position;
         }
 
-        @Override
-        public int getOrder() {
-            return order;
-        }
-
-        @Override
-        public void setOrder(int order) {
-            this.order = order;
-        }
     }
 }
