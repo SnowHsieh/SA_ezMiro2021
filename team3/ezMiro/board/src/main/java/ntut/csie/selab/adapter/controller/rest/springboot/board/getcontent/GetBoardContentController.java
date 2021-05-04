@@ -22,6 +22,7 @@ import ntut.csie.selab.usecase.widget.WidgetRepository;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteInput;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteUseCase;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,17 +33,18 @@ import java.util.List;
 public class GetBoardContentController {
     private GetBoardContentUseCase getBoardContentUseCase;
 
+    @Autowired
+    public GetBoardContentController(GetBoardContentUseCase getBoardContentUseCase) {
+        this.getBoardContentUseCase = getBoardContentUseCase;
+    }
+
     @GetMapping(path = "/ez-miro/boards/{boardId}/content", produces = "application/json")
     public BoardContentViewModel getBoardContent(@PathVariable("boardId") String boardId) {
         GetBoardContentInput input = new GetBoardContentInput();
         GetBoardContentOutput output = new GetBoardContentOutput();
-        BoardRepository boardRepository = new BoardRepositoryImpl();
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl();
-        getBoardContentUseCase = new GetBoardContentUseCase(boardRepository, widgetRepository);
-        boardId = createSingleBoardWithEventStorming(boardRepository, widgetRepository);
-        input.setBoardId(boardId);
-        WidgetMapper widgetMapper = new WidgetMapper();
         List<WidgetDto> widgetDtos = new ArrayList<>();
+        WidgetMapper widgetMapper = new WidgetMapper();
+        input.setBoardId(boardId);
 
         getBoardContentUseCase.execute(input, output);
         widgetDtos = widgetMapper.domainToDto(output.getWidgets());

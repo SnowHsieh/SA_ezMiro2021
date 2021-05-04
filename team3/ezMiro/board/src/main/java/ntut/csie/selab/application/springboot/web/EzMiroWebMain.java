@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 @SpringBootApplication
-@ComponentScan(basePackageClasses = GetBoardContentController.class)
+@ComponentScan(basePackages = {"ntut.csie.selab"} )
 public class EzMiroWebMain {
     public static void main(String[] args) {
         SpringApplication.run(EzMiroWebMain.class, args);

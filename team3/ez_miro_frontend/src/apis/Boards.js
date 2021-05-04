@@ -9,3 +9,12 @@ export const GetBoardContent = async (boardId) => {
     console.log(err)
   }
 }
+
+export const CreateBoard = async () => {
+  try {
+    const res = await axios.post(`${host}/ez-miro/boards/`)
+    return res.data
+  } catch (err) {
+    console.log(err)
+  }
+}

@@ -1,19 +1,25 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <router-link to='/board'>board</router-link>
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <button @click='createBoardAndEnter()'>Create Board And Enter</button>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import { CreateBoard } from '@/apis/Boards'
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+  },
+  methods: {
+    async createBoardAndEnter () {
+      const boardId = await CreateBoard()
+      this.$router.push({
+        name: 'board',
+        params: {
+          boardId: boardId
+        }
+      })
+    }
   }
 }
 </script>
