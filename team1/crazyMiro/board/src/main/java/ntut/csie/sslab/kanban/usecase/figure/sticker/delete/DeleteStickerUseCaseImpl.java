@@ -23,7 +23,7 @@ public class DeleteStickerUseCaseImpl implements DeleteStickerUseCase {
 
             sticker.deleteSticker();
 
-            figureRepository.save(sticker);
+            figureRepository.deleteById(sticker.getFigureId());
             domainEventBus.postAll(sticker);
 
             output.setId(input.getFigureId())

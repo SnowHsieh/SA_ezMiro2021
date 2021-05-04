@@ -34,6 +34,7 @@ public class FigureRepositoryImpl implements FigureRepository {
 
     @Override
     public void deleteById(String id) {
+        figures.removeIf(figure -> figure.getFigureId().equals(id));
     }
 
     @Override
