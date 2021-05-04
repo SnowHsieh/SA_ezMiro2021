@@ -16,6 +16,7 @@
                   </li>
                 </label>
                 <li id="delButton">Delete</li>
+                <li id = "bringToFrontButton">bringToFront</li>
               </ul>
             </div>
           </div>
@@ -36,7 +37,8 @@ export default {
       time: 0,
       contextMenu: null,
       delButton: null,
-      favcolor: null
+      favcolor: null,
+      bringToFrontButton: null
     }
   },
   async mounted () {
@@ -46,13 +48,14 @@ export default {
     this.contextMenu = document.getElementById('contextMenu')
     this.delButton = document.getElementById('delButton')
     this.favcolor = document.getElementById('favcolor')
+    this.bringToFrontButton = document.getElementById('bringToFrontButton')
     this.listenEventsOnCanvas()
     // this.timer = setInterval(this.refreshCanvas, 10000)
   },
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = 'f2902f52-1a2a-4ee7-a1a1-4eb5636a6c26'
+        this.boardId = 'd560a87a-8863-43ac-b735-fe60c1bf2355'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         // console.log(res.data)
         this.drawStickyNote(res.data.figureDtos)
@@ -125,6 +128,25 @@ export default {
         const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/deleteStickyNote',
           {
             figureId: figure.get('id')
+          }
+        )
+        console.log(res.data.message)
+      } catch (err) {
+        console.log(err)
+      }
+      this.refreshCanvas()
+    },
+    async changeFigureOrder () {
+      try {
+        var objects = this.canvas.getObjects()
+        var flist = []
+        for (var i = 0; i < objects.length; i++) {
+          flist.push(objects[i].get('id'))
+        }
+        console.log(flist)
+        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/changeFigureOrder',
+          {
+            figureOrderList: flist
           }
         )
         console.log(res.data.message)
@@ -213,13 +235,14 @@ export default {
               })
             }
           },
-          'mouse:down': function (e) {
+          'mouse:up': function (e) {
             _this.hideContextMenu()
             if (e.target != null) {
               if (e.button === 3) { // right click
                 _this.showContextMenu(e)
                 _this.addListenerOfChangeTextFigureColor(e)
                 _this.addListenerOfDeleteTextFigure(e)
+                _this.addListenerOfBringToFront(e)
               }
             }
           },
@@ -269,9 +292,23 @@ export default {
         console.log('del in id:', e.target.get('id'))
         _this.deleteStickyNote(e.target)
         _this.hideContextMenu()
-        _this.delButton.removeEventListener('click', newHandler)
+        _this.delButton.removeEventListener('mouseup', newHandler)
       }
-      _this.delButton.addEventListener('click', newHandler, true)
+      _this.delButton.addEventListener('mouseup', newHandler, true)
+    },
+    addListenerOfBringToFront (e) {
+      var _this = this
+      console.log('addListenerOfBringToFront')
+      var newHandler = function () {
+        e.target.bringToFront()
+        _this.changeFigureOrder()
+        _this.hideContextMenu()
+        _this.bringToFrontButton.removeEventListener('mouseup', newHandler)
+      }
+      _this.bringToFrontButton.addEventListener('mouseup', newHandler)
+    },
+    getZindex (e) {
+      console.log(this.canvas.getObjects().indexOf(e))
     }
 
   }

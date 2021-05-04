@@ -26,7 +26,7 @@ public class ChangeFigureOrderListController {
     public void setChangeFigureOrderListOnBoardUseCase(ChangeFigureOrderListOnBoardUseCase changeFigureOrderListOnBoardUseCase){
         this.changeFigureOrderListOnBoardUseCase = changeFigureOrderListOnBoardUseCase;
     }
-    @PostMapping(path = "/boards/{boardId}/changeFigureOrder", produces = "application/json")
+    @PostMapping(path = "/boards/{boardId}/changeFigureOrder", consumes = "application/json", produces = "application/json")
     public CqrsCommandViewModel changeFigureOrder(
             @PathVariable("boardId") UUID boardId,
             @RequestBody String figureOrderListInfo ){
