@@ -43,18 +43,18 @@ export default {
     this.boardContent = this.getBoardContent()
     this.initCanvas()
     this.canvas.renderAll()
-    this.listenEventsOnCanvas()
     this.contextMenu = document.getElementById('contextMenu')
     this.delButton = document.getElementById('delButton')
     this.favcolor = document.getElementById('favcolor')
+    this.listenEventsOnCanvas()
     // this.timer = setInterval(this.refreshCanvas, 10000)
   },
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = '8a479b03-22e8-4b9c-b489-74d4caf6d6ab'
+        this.boardId = '260069ab-7ee7-451a-a142-af39249c7980'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
-        console.log(res.data)
+        // console.log(res.data)
         this.drawStickyNote(res.data.figureDtos)
       } catch (err) {
         console.log(err)
@@ -89,7 +89,7 @@ export default {
         const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/editStickyNote',
           {
             figureId: figure.get('id'),
-            content: figure.get('content'),
+            content: figure.get('content'),// todo : combine position
             style: {
               fontSize: figure.item(1).get('fontSize'),
               shape: 2,
@@ -192,6 +192,7 @@ export default {
               var rect = e.target.item(0)
               var dimensionText = e.target.item(1)
               console.log('rect:', rect)
+              console.log('before group:', e.target)
               _this.ungroup(e.target)
               canvas.setActiveObject(dimensionText)
               dimensionText.enterEditing()
@@ -203,6 +204,7 @@ export default {
                   left: oldleft,
                   top: oldtop
                 })
+                console.log('after group:', group)
                 canvas.remove(rect)
                 canvas.remove(dimensionText)
                 console.log('current:', canvas.getObjects())
@@ -250,21 +252,26 @@ export default {
     },
     addListenerOfChangeTextFigureColor (e) {
       var _this = this
+      console.log('current Color etarget:', e.target.get('id'))
       _this.favcolor.value = e.target.item(0).get('fill')
-      _this.favcolor.addEventListener('change', function handler () {
+      _this.favcolor.addEventListener('change', function handler (e) {
         e.target.item(0).set('fill', _this.favcolor.value) // rect fill
+        console.log('color in id:', e.target.get('id'))
         _this.editStickyNote(e.target)
         _this.hideContextMenu()
-        this.removeEventListener('change', handler)
-      })
+        _this.favcolor.removeEventListener('change', handler)
+      }, true)
     },
     addListenerOfDeleteTextFigure (e) {
       var _this = this
-      _this.delButton.addEventListener('click', function handler () {
+      console.log('current Delete etarget:', e.target.get('id'))
+      var newHandler = function () {
+        console.log('del in id:', e.target.get('id'))
         _this.deleteStickyNote(e.target)
         _this.hideContextMenu()
-        this.removeEventListener('click', handler)
-      }, false)
+        _this.delButton.removeEventListener('click', newHandler)
+      }
+      _this.delButton.addEventListener('click', newHandler, true)
     }
 
   }

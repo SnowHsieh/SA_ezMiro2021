@@ -29,7 +29,6 @@ public class TextFigureRepository {
         return stickyNoteList.stream()
                 .filter(s -> s.getBoardId().equals(boardId))
                 .collect(toList());
-
     }
 
     public void delete(TextFigure stickyNote) {

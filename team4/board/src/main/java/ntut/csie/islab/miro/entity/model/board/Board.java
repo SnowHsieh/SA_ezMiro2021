@@ -13,6 +13,7 @@ public class Board extends AggregateRoot<UUID> {
     private String boardName;
     private List<CommittedTextFigure> figureList;
 
+
     public Board(UUID teamId,String boardName){
         super(UUID.randomUUID());
         this.teamId = teamId;

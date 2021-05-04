@@ -3,6 +3,7 @@ package ntut.csie.islab.miro.usecase.board;
 import ntut.csie.islab.miro.adapter.presenter.GetBoardContentPresenter;
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
+import ntut.csie.islab.miro.entity.model.board.CommittedTextFigure;
 import ntut.csie.islab.miro.entity.model.board.event.BoardContentMightExpire;
 import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
@@ -10,7 +11,9 @@ import ntut.csie.islab.miro.usecase.textFigure.TextFigureDto;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class GetBoardContentUseCase {
 
@@ -39,8 +42,12 @@ public class GetBoardContentUseCase {
             return;
         }
 
+        List<CommittedTextFigure> CommitedFigureList =board.getCommittedFigures();
+        List<TextFigure> textFigureList = new ArrayList<TextFigure>();
+        for(CommittedTextFigure f :CommitedFigureList ){
+            textFigureList.add(this.textFigureRepository.findById(board.getBoardId(),f.getFigureId()).get());
+        }
 
-        List<TextFigure> textFigureList = this.textFigureRepository.findFiguresByBoardId(board.getBoardId());
         List<TextFigureDto> textFigureDtos = ConvertFigureToDto.transform(textFigureList);
 
 
