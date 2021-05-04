@@ -1,4 +1,4 @@
-package ntut.csie.team5.usecase.board.order;
+package ntut.csie.team5.usecase.board.change_order;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
@@ -7,7 +7,6 @@ import ntut.csie.team5.entity.model.board.Board;
 import ntut.csie.team5.entity.model.board.OrderType;
 import ntut.csie.team5.usecase.ClientBoardContentMightExpire;
 import ntut.csie.team5.usecase.board.BoardRepository;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
 
 public class ChangeFigureOrderUseCaseImpl implements ChangeFigureOrderUseCase {
 
@@ -49,6 +48,12 @@ public class ChangeFigureOrderUseCaseImpl implements ChangeFigureOrderUseCase {
                 board.moveFigureOrderBackEnd(input.getFigureId());
                 break;
         }
+
+        boardRepository.save(board);
+        domainEventBus.postAll(board);
+
+        output.setId(board.getBoardId());
+        output.setExitCode(ExitCode.SUCCESS);
     }
 
     private class ChangeFigureOrderInputImpl implements ChangeFigureOrderInput {

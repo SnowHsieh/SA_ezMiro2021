@@ -6,8 +6,6 @@ import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.entity.model.figure.Figure;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
 
-import java.awt.*;
-
 public class DeleteNoteUseCaseImpl implements DeleteNoteUseCase {
 
     private FigureRepository figureRepository;
@@ -25,13 +23,13 @@ public class DeleteNoteUseCaseImpl implements DeleteNoteUseCase {
 
     @Override
     public void execute(DeleteNoteInput input, CqrsCommandOutput output) {
-        Figure note = figureRepository.findById(input.getNoteId()).orElse(null);
+        Figure note = figureRepository.findById(input.getFigureId()).orElse(null);
 
         if(null == note)
         {
-            output.setId(input.getNoteId())
+            output.setId(input.getFigureId())
                     .setExitCode(ExitCode.FAILURE)
-                    .setMessage("Delete note failed: note not found, note id = " + input.getNoteId());
+                    .setMessage("Delete note failed: note not found, note id = " + input.getFigureId());
             return;
         }
 
@@ -47,8 +45,6 @@ public class DeleteNoteUseCaseImpl implements DeleteNoteUseCase {
     private class DeleteNoteInputImpl implements DeleteNoteInput {
         private String noteId;
         private String boardId;
-        private Point position;
-        private String color;
 
         @Override
         public String getBoardId() {
@@ -61,32 +57,13 @@ public class DeleteNoteUseCaseImpl implements DeleteNoteUseCase {
         }
 
         @Override
-        public Point getPosition() {
-            return position;
-        }
-
-        public void setPosition(Point position) {
-            this.position = position;
-        }
-
-        @Override
-        public String getColor() {
-            return color;
-        }
-
-        @Override
-        public void setColor(String color) {
-            this.color = color;
-        }
-
-        @Override
-        public String getNoteId() {
+        public String getFigureId() {
             return noteId;
         }
 
         @Override
-        public void setNoteId(String noteId) {
-            this.noteId = noteId;
+        public void setFigureId(String figureId) {
+            this.noteId = figureId;
         }
     }
 }

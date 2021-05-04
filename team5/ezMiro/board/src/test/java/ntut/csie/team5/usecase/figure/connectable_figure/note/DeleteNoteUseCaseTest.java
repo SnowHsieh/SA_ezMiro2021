@@ -30,16 +30,14 @@ public class DeleteNoteUseCaseTest extends AbstractTest {
 
         postNoteUseCase.execute(postNoteInput, postNoteOutput);
 
-        String noteId = postNoteOutput.getId();
+        String figureId = postNoteOutput.getId();
 
         DeleteNoteUseCase deleteNoteUseCase = new DeleteNoteUseCaseImpl(figureRepository, domainEventBus);
         DeleteNoteInput deleteNoteInput = deleteNoteUseCase.newInput();
         CqrsCommandPresenter deleteNoteOutput = CqrsCommandPresenter.newInstance();
 
         deleteNoteInput.setBoardId(boardId);
-        deleteNoteInput.setPosition(defaultLeftTopPosition);
-        deleteNoteInput.setColor(defaultColor);
-        deleteNoteInput.setNoteId(noteId);
+        deleteNoteInput.setFigureId(figureId);
 
         deleteNoteUseCase.execute(deleteNoteInput, deleteNoteOutput);
 

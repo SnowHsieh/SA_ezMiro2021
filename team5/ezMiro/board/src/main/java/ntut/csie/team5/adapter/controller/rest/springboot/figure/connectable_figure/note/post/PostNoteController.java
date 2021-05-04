@@ -1,4 +1,4 @@
-package ntut.csie.team5.adapter.controller.rest.springboot.figure.post;
+package ntut.csie.team5.adapter.controller.rest.springboot.figure.connectable_figure.note.post;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;

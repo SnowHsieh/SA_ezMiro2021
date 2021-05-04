@@ -19,6 +19,7 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 public class EditNoteTextUseCaseTest extends AbstractTest {
+
     @Test
     public void should_success_when_note_text_edited() {
         EditNoteTextUseCase editNoteTextUseCase = new EditNoteTextUseCaseImpl(figureRepository, domainEventBus);

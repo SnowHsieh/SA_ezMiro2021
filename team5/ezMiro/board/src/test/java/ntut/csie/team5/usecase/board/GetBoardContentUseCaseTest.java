@@ -2,7 +2,6 @@ package ntut.csie.team5.usecase.board;
 
 import ntut.csie.team5.adapter.presenter.board.getcontent.BoardContentViewModel;
 import ntut.csie.team5.adapter.presenter.board.getcontent.GetBoardContentPresenter;
-import ntut.csie.team5.entity.model.figure.Figure;
 import ntut.csie.team5.usecase.AbstractTest;
 import ntut.csie.team5.usecase.board.getcontent.GetBoardContentInput;
 import ntut.csie.team5.usecase.board.getcontent.GetBoardContentUseCase;
@@ -10,8 +9,6 @@ import ntut.csie.team5.usecase.board.getcontent.GetBoardContentUseCaseImpl;
 import ntut.csie.team5.usecase.figure.FigureDto;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.awt.*;
 
 import static org.junit.Assert.assertEquals;
 

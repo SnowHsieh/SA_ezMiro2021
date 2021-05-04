@@ -9,15 +9,7 @@ public interface DeleteNoteInput extends Input {
 
     void setBoardId(String boardId);
 
-    Point getPosition();
+    String getFigureId();
 
-    void setPosition(Point position);
-
-    String getColor();
-
-    void setColor(String color);
-
-    String getNoteId();
-
-    void setNoteId(String noteId);
+    void setFigureId(String figureId);
 }
