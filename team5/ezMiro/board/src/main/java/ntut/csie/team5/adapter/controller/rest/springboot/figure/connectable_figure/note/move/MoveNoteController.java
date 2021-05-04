@@ -7,12 +7,15 @@ import ntut.csie.team5.usecase.figure.connectable_figure.note.move.MoveNoteUseCa
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.QueryParam;
 import java.awt.*;
 
+@RestController
 public class MoveNoteController {
 
     private MoveNoteUseCase moveNoteUseCase;
@@ -23,11 +26,13 @@ public class MoveNoteController {
     }
 
     @PostMapping(path = "/move-note", consumes = "application/json", produces = "application/json")
-    public CqrsCommandViewModel moveNote(@QueryParam("figureId") String figureId, @RequestBody String noteInfo) {
+    public CqrsCommandViewModel moveNote(@RequestBody String noteInfo) {
+        String figureId = "";
         int leftTopPositionX = 0;
         int leftTopPositionY = 0;
         try {
             JSONObject noteJSON = new JSONObject(noteInfo);
+            figureId = noteJSON.getString("figureId");
             leftTopPositionX = noteJSON.getInt("leftTopPositionX");
             leftTopPositionY = noteJSON.getInt("leftTopPositionY");
         } catch (JSONException e) {

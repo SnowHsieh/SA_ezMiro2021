@@ -28,7 +28,6 @@ public class NotifyBoard {
 
         board.get().commitFigure(figureCreated.figureId());
         boardRepository.save(board.get());
-
         domainEventBus.postAll(board.get());
     }
 
@@ -39,9 +38,8 @@ public class NotifyBoard {
             throw new RuntimeException("Board not found, board id = " + figureDeleted.boardId());
         }
 
-        board.get().commitFigure(figureDeleted.figureId());
+        board.get().uncommitFigure(figureDeleted.figureId());
         boardRepository.save(board.get());
-
         domainEventBus.postAll(board.get());
     }
 }

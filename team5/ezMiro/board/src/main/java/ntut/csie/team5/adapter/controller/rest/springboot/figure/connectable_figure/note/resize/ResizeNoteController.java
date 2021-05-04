@@ -7,11 +7,14 @@ import ntut.csie.team5.usecase.figure.connectable_figure.note.resize.ResizeNoteU
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.QueryParam;
 
+@RestController
 public class ResizeNoteController {
 
     private ResizeNoteUseCase resizeNoteUseCase;
@@ -22,11 +25,13 @@ public class ResizeNoteController {
     }
 
     @PostMapping(path = "/resize-note", consumes = "application/json", produces = "application/json")
-    public CqrsCommandViewModel resizeNote(@QueryParam("figureId") String figureId, @RequestBody String noteInfo) {
+    public CqrsCommandViewModel resizeNote(@RequestBody String noteInfo) {
+        String figureId = "";
         int height = 0;
         int width = 0;
         try {
             JSONObject noteJSON = new JSONObject(noteInfo);
+            figureId = noteJSON.getString("figureId");
             height = noteJSON.getInt("height");
             width = noteJSON.getInt("width");
         } catch (JSONException e) {

@@ -7,11 +7,14 @@ import ntut.csie.team5.usecase.figure.connectable_figure.note.change_color.Chang
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.QueryParam;
 
+@RestController
 public class ChangeNoteColorController {
 
     private ChangeNoteColorUseCase changeNoteColorUseCase;
@@ -22,10 +25,12 @@ public class ChangeNoteColorController {
     }
 
     @PostMapping(path = "/change-note-color", consumes = "application/json", produces = "application/json")
-    public CqrsCommandViewModel changeNoteColor(@QueryParam("figureId") String figureId, @RequestBody String noteInfo) {
+    public CqrsCommandViewModel changeNoteColor(@RequestBody String noteInfo) {
+        String figureId = "";
         String color = "#000000";
         try {
             JSONObject noteJSON = new JSONObject(noteInfo);
+            figureId = noteJSON.getString("figureId");
             color = noteJSON.getString("color");
         } catch (JSONException e) {
             e.printStackTrace();

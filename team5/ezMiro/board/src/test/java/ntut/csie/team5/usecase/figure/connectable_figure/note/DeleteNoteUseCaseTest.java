@@ -36,7 +36,6 @@ public class DeleteNoteUseCaseTest extends AbstractTest {
         DeleteNoteInput deleteNoteInput = deleteNoteUseCase.newInput();
         CqrsCommandPresenter deleteNoteOutput = CqrsCommandPresenter.newInstance();
 
-        deleteNoteInput.setBoardId(boardId);
         deleteNoteInput.setFigureId(figureId);
 
         deleteNoteUseCase.execute(deleteNoteInput, deleteNoteOutput);

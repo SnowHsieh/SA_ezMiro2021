@@ -14,6 +14,7 @@ public class ConvertNoteToDto {
         noteDto.setWidth(note.getWidth());
         noteDto.setColor(note.getColor());
         noteDto.setFigureType(note.getFigureType().toString());
+        noteDto.setText(note.getText());
         return noteDto;
     }
 }

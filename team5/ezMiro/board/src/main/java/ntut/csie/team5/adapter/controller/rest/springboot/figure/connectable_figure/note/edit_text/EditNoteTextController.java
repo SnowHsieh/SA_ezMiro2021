@@ -4,17 +4,17 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.edit_text.EditNoteTextInput;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.edit_text.EditNoteTextUseCase;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.move.MoveNoteInput;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.move.MoveNoteUseCase;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.QueryParam;
-import java.awt.*;
 
+@RestController
 public class EditNoteTextController {
 
     private EditNoteTextUseCase editNoteTextUseCase;
@@ -25,10 +25,12 @@ public class EditNoteTextController {
     }
 
     @PostMapping(path = "/edit-note-text", consumes = "application/json", produces = "application/json")
-    public CqrsCommandViewModel editNoteText(@QueryParam("figureId") String figureId, @RequestBody String noteInfo) {
+    public CqrsCommandViewModel editNoteText(@RequestBody String noteInfo) {
+        String figureId = "";
         String text = "";
         try {
             JSONObject noteJSON = new JSONObject(noteInfo);
+            figureId = noteJSON.getString("figureId");
             text = noteJSON.getString("text");
         } catch (JSONException e) {
             e.printStackTrace();

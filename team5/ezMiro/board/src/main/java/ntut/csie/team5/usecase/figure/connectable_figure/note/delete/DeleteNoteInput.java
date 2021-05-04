@@ -5,9 +5,6 @@ import ntut.csie.sslab.ddd.usecase.Input;
 import java.awt.*;
 
 public interface DeleteNoteInput extends Input {
-    String getBoardId();
-
-    void setBoardId(String boardId);
 
     String getFigureId();
 

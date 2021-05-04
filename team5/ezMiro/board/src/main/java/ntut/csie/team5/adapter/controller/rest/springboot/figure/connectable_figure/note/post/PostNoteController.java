@@ -25,8 +25,9 @@ public class PostNoteController {
         this.postNoteUseCase = postNoteUseCase;
     }
 
-    @PostMapping(path = "/notes", consumes = "application/json", produces = "application/json")
-    public CqrsCommandViewModel postNote(@QueryParam("boardId") String boardId, @RequestBody String noteInfo) {
+    @PostMapping(path = "/post-note", consumes = "application/json", produces = "application/json")
+    public CqrsCommandViewModel postNote(@RequestBody String noteInfo) {
+        String boardId = "";
         int leftTopPositionX = 0;
         int leftTopPositionY = 0;
         int height = 0;
@@ -34,6 +35,7 @@ public class PostNoteController {
         String color = "#000000";
         try {
             JSONObject noteJSON = new JSONObject(noteInfo);
+            boardId = noteJSON.getString("boardId");
             leftTopPositionX = noteJSON.getInt("leftTopPositionX");
             leftTopPositionY = noteJSON.getInt("leftTopPositionY");
             height = noteJSON.getInt("height");
@@ -56,5 +58,4 @@ public class PostNoteController {
         postNoteUseCase.execute(input, presenter);
         return presenter.buildViewModel();
     }
-
 }

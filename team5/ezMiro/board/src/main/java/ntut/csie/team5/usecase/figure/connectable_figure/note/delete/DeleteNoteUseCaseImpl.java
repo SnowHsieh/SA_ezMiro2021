@@ -43,18 +43,8 @@ public class DeleteNoteUseCaseImpl implements DeleteNoteUseCase {
     }
 
     private class DeleteNoteInputImpl implements DeleteNoteInput {
+        
         private String noteId;
-        private String boardId;
-
-        @Override
-        public String getBoardId() {
-            return boardId;
-        }
-
-        @Override
-        public void setBoardId(String boardId) {
-            this.boardId = boardId;
-        }
 
         @Override
         public String getFigureId() {
