@@ -18,18 +18,25 @@ public class DeleteStickerUseCaseTest extends AbstractSpringBootJpaTest {
     @Test
     public void delete_a_sticker() {
         String boardId = UUID.randomUUID().toString();
-        Coordinate stickerPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
-        FigureDto stickerDto = new FigureDto(null, "sticker1", 10, "black", stickerPosition);
-        String stickerId = createSticker(boardId, stickerDto.getContent(), stickerDto.getSize(), stickerDto.getColor(), stickerDto.getPosition());
+        Coordinate sticker1Position = new Coordinate(new Random().nextLong(), new Random().nextLong());
+        Coordinate sticker2Position = new Coordinate(new Random().nextLong(), new Random().nextLong());
+        FigureDto stickerDto1 = new FigureDto(null, "sticker1", 10, "black", sticker1Position);
+        FigureDto stickerDto2 = new FigureDto(null, "sticker2", 20, "blue", sticker2Position);
+        String stickerId1 = createSticker(boardId, stickerDto1.getContent(), stickerDto1.getSize(), stickerDto1.getColor(), stickerDto1.getPosition());
+        String stickerId2 = createSticker(boardId, stickerDto2.getContent(), stickerDto2.getSize(), stickerDto2.getColor(), stickerDto2.getPosition());
+        int order = 0;
         DeleteStickerUseCase deleteStickerUseCase = new DeleteStickerUseCaseImpl(figureRepository, domainEventBus);
         DeleteStickerInput input = deleteStickerUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-        input.setFigureId(stickerId);
+        input.setFigureId(stickerId1);
 
         deleteStickerUseCase.execute(input, output);
 
         assertFalse(figureRepository.findById(output.getId()).isPresent());
-        assertEquals(stickerId, output.getId());
-        assertEquals(2, eventListener.getEventCount());
+        assertTrue(figureRepository.findById(stickerId2).isPresent());
+        assertEquals(stickerId1, output.getId());
+        assertEquals(3, eventListener.getEventCount());
+        Figure sticker = figureRepository.findById(stickerId2).get();
+        assertEquals(order, sticker.getOrder());
     }
 }
