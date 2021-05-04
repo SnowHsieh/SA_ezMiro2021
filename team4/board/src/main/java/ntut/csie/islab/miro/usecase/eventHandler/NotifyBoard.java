@@ -6,9 +6,10 @@ import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.event.TextFigureCommittedDomainEvent;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteCreatedDomainEvent;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
-
+@Component
 public class NotifyBoard {
     private BoardRepository boardRepository;
     private DomainEventBus domainEventBus;
@@ -18,7 +19,7 @@ public class NotifyBoard {
         this.domainEventBus = domainEventBus;
     }
 
-    @Subscribe
+
     public void whenTextFigureCreated(StickyNoteCreatedDomainEvent stickyNoteCreatedDomainEvent) {
         Optional<Board> board = boardRepository.findById(stickyNoteCreatedDomainEvent.getBoardId());
 

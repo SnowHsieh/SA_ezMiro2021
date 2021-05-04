@@ -23,11 +23,7 @@ public class EZMiroWebMain extends SpringBootServletInitializer implements Comma
     private NotifyBoardAdapter notifyBoardAdapter;
     private DomainEventBus domainEventBus;
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(EZMiroWebMain.class);
 
-    }
     @Autowired
     public void setDomainEventBus(DomainEventBus domainEventBus) {
         this.domainEventBus = domainEventBus;
@@ -36,7 +32,11 @@ public class EZMiroWebMain extends SpringBootServletInitializer implements Comma
     @Autowired
     public void setNotifyBoardAdapter(NotifyBoardAdapter notifyBoardAdapter) { this.notifyBoardAdapter = notifyBoardAdapter; }
 
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return builder.sources(EZMiroWebMain.class);
 
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(EZMiroWebMain.class, args);
