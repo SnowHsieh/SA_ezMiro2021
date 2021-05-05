@@ -47,4 +47,13 @@ public class FigureRepositoryImpl implements FigureRepository {
         result.sort(Comparator.comparing(Figure::getOrder));
         return result;
     }
+
+    @Override
+    public List<Figure> getFiguresByBoardId(String boardId) {
+        List<Figure> result = figures.stream()
+                .filter(x -> x.getBoardId().equals(boardId))
+                .collect(Collectors.toList());
+        result.sort(Comparator.comparing(Figure::getOrder));
+        return result;
+    }
 }

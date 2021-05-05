@@ -1,8 +1,8 @@
 package ntut.csie.sslab.kanban.entity.model.figure;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
-import ntut.csie.sslab.kanban.entity.model.figure.event.StickerSentToBack;
-import ntut.csie.sslab.kanban.entity.model.figure.event.StickerBroughtToFront;
+import ntut.csie.sslab.kanban.entity.model.figure.event.FigureSentToBack;
+import ntut.csie.sslab.kanban.entity.model.figure.event.FigureBroughtToFront;
 
 
 public abstract class Figure extends AggregateRoot<String> {
@@ -84,11 +84,11 @@ public abstract class Figure extends AggregateRoot<String> {
 
     public void bringToFront(int frontIndex) {
         setOrder(frontIndex);
-        addDomainEvent(new StickerBroughtToFront(boardId, figureId));
+        addDomainEvent(new FigureBroughtToFront(boardId, figureId));
     }
 
     public void sendToBack() {
         setOrder(0);
-        addDomainEvent(new StickerSentToBack(boardId, figureId));
+        addDomainEvent(new FigureSentToBack(boardId, figureId));
     }
 }

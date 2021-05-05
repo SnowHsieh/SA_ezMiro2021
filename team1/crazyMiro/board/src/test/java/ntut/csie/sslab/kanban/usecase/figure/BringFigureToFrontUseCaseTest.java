@@ -4,9 +4,9 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
 import ntut.csie.sslab.kanban.entity.model.figure.Figure;
 import ntut.csie.sslab.kanban.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.bringtofront.BringStickerToFrontInput;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.bringtofront.BringStickerToFrontUseCase;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.bringtofront.BringStickerToFrontUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.figure.bringtofront.BringFigureToFrontInput;
+import ntut.csie.sslab.kanban.usecase.figure.bringtofront.BringFigureToFrontUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.bringtofront.BringFigureToFrontUseCaseImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BringStickerToFrontUseCaseTest extends AbstractSpringBootJpaTest {
+public class BringFigureToFrontUseCaseTest extends AbstractSpringBootJpaTest {
     @Test
     public void bring_a_sticker_to_front(){
         String boardId1 = UUID.randomUUID().toString();
@@ -35,13 +35,13 @@ public class BringStickerToFrontUseCaseTest extends AbstractSpringBootJpaTest {
         String stickerId3 = createSticker(boardId1, stickerDto3.getContent(), stickerDto3.getSize(), stickerDto3.getColor(), stickerDto3.getPosition());
         String stickerId4 = createSticker(boardId2, stickerDto4.getContent(), stickerDto4.getSize(), stickerDto4.getColor(), stickerDto4.getPosition());
         String stickerId5 = createSticker(boardId2, stickerDto5.getContent(), stickerDto5.getSize(), stickerDto5.getColor(), stickerDto5.getPosition());
-        BringStickerToFrontUseCase bringStickerToFrontUseCase = new BringStickerToFrontUseCaseImpl(figureRepository, domainEventBus);
-        BringStickerToFrontInput input = bringStickerToFrontUseCase.newInput();
+        BringFigureToFrontUseCase bringFigureToFrontUseCase = new BringFigureToFrontUseCaseImpl(figureRepository, domainEventBus);
+        BringFigureToFrontInput input = bringFigureToFrontUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId1);
         input.setFigureId(stickerId1);
 
-        bringStickerToFrontUseCase.execute(input, output);
+        bringFigureToFrontUseCase.execute(input, output);
 
         List<Figure> board1Stickers = figureRepository.getStickersByBoardId(boardId1);
         List<Figure> board2Stickers = figureRepository.getStickersByBoardId(boardId2);

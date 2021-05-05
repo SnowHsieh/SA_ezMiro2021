@@ -2,8 +2,8 @@ package ntut.csie.sslab.kanban.application.springboot.web.config;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.bringtofront.BringStickerToFrontUseCase;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.bringtofront.BringStickerToFrontUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.figure.bringtofront.BringFigureToFrontUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.bringtofront.BringFigureToFrontUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.changecolor.ChangeStickerColorUseCase;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.changecolor.ChangeStickerColorUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.changecontent.ChangeStickerContentUseCase;
@@ -16,8 +16,8 @@ import ntut.csie.sslab.kanban.usecase.figure.sticker.delete.DeleteStickerUseCase
 import ntut.csie.sslab.kanban.usecase.figure.sticker.delete.DeleteStickerUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.move.MoveStickerUseCase;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.move.MoveStickerUseCaseImpl;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.sendtoback.SendStickerToBackUseCase;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.sendtoback.SendStickerToBackUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.figure.sendtoback.SendFigureToBackUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.sendtoback.SendFigureToBackUseCaseImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -76,14 +76,14 @@ public class UseCaseInjection {
         return new DeleteStickerUseCaseImpl(figureRepository, eventBus);
     }
 
-    @Bean(name="bringStickerToFrontUseCase")
-    public BringStickerToFrontUseCase bringStickerToFrontUseCase() {
-        return new BringStickerToFrontUseCaseImpl(figureRepository, eventBus);
+    @Bean(name="bringFigureToFrontUseCase")
+    public BringFigureToFrontUseCase bringFigureToFrontUseCase() {
+        return new BringFigureToFrontUseCaseImpl(figureRepository, eventBus);
     }
 
-    @Bean(name="sendStickerToBackUseCase")
-    public SendStickerToBackUseCase sendStickerToBackUseCase() {
-        return new SendStickerToBackUseCaseImpl(figureRepository, eventBus);
+    @Bean(name="sendFigureToBackUseCase")
+    public SendFigureToBackUseCase sendFigureToBackUseCase() {
+        return new SendFigureToBackUseCaseImpl(figureRepository, eventBus);
     }
 
 
