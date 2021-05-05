@@ -18,12 +18,3 @@ export const CreateBoard = async () => {
     console.log(err)
   }
 }
-
-export const DeleteStickyNoteBy = async (id, boardId) => {
-  try {
-    const res = await axios.post(`${host}/ez-miro/boards/${boardId}/widgets/${id}`)
-    return res.data
-  } catch (err) {
-    console.log(err)
-  }
-}

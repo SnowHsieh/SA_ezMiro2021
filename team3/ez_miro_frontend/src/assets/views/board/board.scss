@@ -1,0 +1,17 @@
+$red: "red";
+
+.right-click-menu {
+    display: none;
+}
+
+.right-click-menu-display {
+    font-family: Arial;
+    text-align: center;
+    font-size: 10px;
+    display: block;
+    position: absolute;
+    border: 5px;
+    border-radius: 10px;
+    background-color:coral;
+    list-style: none;
+}

@@ -27,6 +27,6 @@ public class DeleteStickyNoteController {
         input.setStickyNoteId(stickyNoteId);
 
         deleteStickyNoteUseCase.execute(input, output);
-        return "ok";
+        return output.getStickyNoteId();
     }
 }

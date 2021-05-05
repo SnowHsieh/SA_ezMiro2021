@@ -1,12 +1,19 @@
 <template>
-    <div>
-        <canvas id="canvas" ref='board'></canvas>
-    </div>
+  <div class="board" oncontextmenu="return false">
+    <canvas id="canvas" ref='board'></canvas>
+    <li class="right-click-menu" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
+      <ul>
+        <button @click="deleteWidget()">Delete</button>
+      </ul>
+      <ul>123</ul>
+      <ul>123</ul>
+    </li>
+  </div>
 </template>
 
 <script>
 import { GetBoardContent } from '@/apis/Boards'
-import { CreateStickyNote, ReadStickyNoteBy } from '@/apis/Widget'
+import { CreateStickyNote, ReadStickyNoteBy, DeleteStickyNoteBy } from '@/apis/Widget'
 import '@/models/StickyNote'
 import { fabric } from 'fabric'
 
@@ -16,7 +23,13 @@ export default {
       canvasContext: null,
       boardContent: null,
       canvas: null,
-      boardId: this.$route.params.boardId
+      boardId: this.$route.params.boardId,
+      isDisplayRightClickMenu: false,
+      rightClickMenuStyle: {
+        top: '-1px',
+        left: '-1px'
+      },
+      selectedStickyNote: null
     }
   },
   async created () {
@@ -36,13 +49,43 @@ export default {
 
       await me.loadStickyNoteBy(stickyNoteId)
     })
+
+    this.canvas.on('mouse:up', async function (e) {
+      // 臭到不行
+      if (e.button === 3) {
+        me.isDisplayRightClickMenu = true
+        const point = e.absolutePointer
+        me.rightClickMenuStyle.top = point.y + 'px'
+        me.rightClickMenuStyle.left = point.x + 'px'
+        me.setTargetId(e.target)
+      } else {
+        me.isDisplayRightClickMenu = false
+        me.setTargetId(null)
+      }
+    })
   },
   methods: {
     initCanvas () {
       this.canvas = new fabric.Canvas('canvas', {
+        fireRightClick: true,
         width: window.innerWidth,
         height: window.innerHeight
       })
+      this.canvas.add(new fabric.IText('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ', {
+        left: 10,
+        top: 10,
+        fill: '#00ff00'
+      }))
+      this.canvas.renderAll()
+    },
+    async deleteWidget () {
+      const res = await DeleteStickyNoteBy(this.selectedStickyNote.id, this.boardId)
+      if (res !== null) {
+        this.canvas.remove(this.selectedStickyNote)
+        this.canvas.renderAll()
+        this.isDisplayRightClickMenu = false
+        this.selectedStickyNote = null
+      }
     },
     async loadAllStickyNote (widgets) {
       await widgets.forEach(widget => {
@@ -57,6 +100,7 @@ export default {
           })
         )
       })
+
       this.canvas.renderAll()
     },
     async loadStickyNoteBy (id) {
@@ -68,10 +112,18 @@ export default {
           top: stickyNote.widgetDto.topLeftY,
           height: stickyNote.widgetDto.height,
           width: stickyNote.widgetDto.width,
-          fill: stickyNote.widgetDto.color
+          fill: stickyNote.widgetDto.color,
+          Text: 'owo'
         })
       )
       this.canvas.renderAll()
+    },
+    setTargetId (target) {
+      if (target !== null) {
+        this.selectedStickyNote = target
+      } else {
+        this.selectedStickyNote = null
+      }
     }
   }
 }
