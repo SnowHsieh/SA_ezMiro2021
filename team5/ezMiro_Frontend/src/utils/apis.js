@@ -42,41 +42,31 @@ const note = {
             figureId: figureId,
             leftTopPositionX: leftTopPositionX,
             leftTopPositionY: leftTopPositionY
-        }).then((response) => {
-            console.log(response.data)
-        })
+        }).then()
     },
     resizeNote (figureId, height, width) {
         api.note.resizeNote({
             figureId: figureId,
             height: height,
             width: width
-        }).then((response) => {
-            console.log(response.data)
-        })
+        }).then()
     },
     editNoteText (figureId, text) {
         api.note.editNoteText({
             figureId: figureId,
             text: text
-        }).then((response) => {
-            console.log(response.data)
-        })
+        }).then()
     },
     deleteNote (figureId) {
         api.note.deleteNote({
             figureId: figureId
-        }).then((response) => {
-            console.log(response.data)
-        })
+        }).then()
     },
     changeNoteColor (figureId, color) {
         api.note.changeNoteColor({
             figureId: figureId,
             color: color
-        }).then((response) => {
-            console.log(response.data)
-        })
+        }).then()
     }
 }
 

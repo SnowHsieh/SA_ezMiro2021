@@ -1,6 +1,7 @@
 import Home from '../views/Home.vue'
 import Board from '../views/Board.vue'
 import DemoBoard from '../views/DemoBoard.vue'
+import DemoProject from '../views/DemoProject.vue'
 
 export const routes = [
   {
@@ -14,8 +15,13 @@ export const routes = [
     component: Board
   },
   {
-    path: '/demoboard',
+    path: '/demoboard/:id',
     name: 'demoboard',
     component: DemoBoard
+  },
+  {
+    path: '/demoproject',
+    name: 'demoproject',
+    component: DemoProject
   }
 ]
