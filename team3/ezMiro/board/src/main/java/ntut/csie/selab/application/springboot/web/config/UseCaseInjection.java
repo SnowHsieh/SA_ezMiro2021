@@ -13,6 +13,7 @@ import ntut.csie.selab.usecase.widget.delete.DeleteStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.edit.text.EditTextOfStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.move.MoveStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetUseCase;
+import ntut.csie.selab.usecase.widget.resize.ResizeStickyNoteUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,6 +49,9 @@ public class UseCaseInjection {
 
     @Bean(name="ChangeColorOfStickyNoteUseCase")
     public ChangeColorOfStickyNoteUseCase changeColorOfStickyNoteUseCase() { return new ChangeColorOfStickyNoteUseCase(widgetRepository, eventBus); }
+
+    @Bean(name="ResizeStickyNoteUseCase")
+    public ResizeStickyNoteUseCase resizeStickyNoteUseCase() { return new ResizeStickyNoteUseCase(widgetRepository, eventBus); }
 
     @Bean(name="GetWidgetUseCase")
     public GetWidgetUseCase getWidgetUseCase() {

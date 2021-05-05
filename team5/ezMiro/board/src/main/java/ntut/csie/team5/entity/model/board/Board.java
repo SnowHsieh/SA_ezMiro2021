@@ -89,7 +89,8 @@ public class Board extends AggregateRoot<String> {
 
         committedFigure.setOrder(order + 1);
         nextCommittedFigure.setOrder(order);
-
+        committedFigures.set(order, nextCommittedFigure);
+        committedFigures.set(order + 1, committedFigure);
     }
 
     public void moveFigureOrderBack(String figureId) {
@@ -107,6 +108,8 @@ public class Board extends AggregateRoot<String> {
 
         committedFigure.setOrder(order - 1);
         previousCommittedFigure.setOrder(order);
+        committedFigures.set(order, previousCommittedFigure);
+        committedFigures.set(order - 1, committedFigure);
     }
 
     public void moveFigureOrderFrontEnd(String figureId) {
@@ -124,10 +127,12 @@ public class Board extends AggregateRoot<String> {
 
             if(nextCommittedFigure == null) {
                 committedFigure.setOrder(committedFigures.size() - 1);
+                committedFigures.set(committedFigures.size() - 1, committedFigure);
                 return;
             }
 
             nextCommittedFigure.setOrder(nextOrder);
+            committedFigures.set(nextOrder, nextCommittedFigure);
         }
     }
 
@@ -141,15 +146,17 @@ public class Board extends AggregateRoot<String> {
 
         for (int i = order; i >= 0; i--)
         {
-            int nextOrder = i;
-            CommittedFigure nextCommittedFigure = committedFigures.stream().filter(cf ->  cf.getOrder() == (nextOrder - 1)).findAny().orElse(null);
+            int previousOrder = i;
+            CommittedFigure previousCommittedFigure = committedFigures.stream().filter(cf ->  cf.getOrder() == (previousOrder - 1)).findAny().orElse(null);
 
-            if(nextCommittedFigure == null) {
+            if(previousCommittedFigure == null) {
                 committedFigure.setOrder(0);
+                committedFigures.set(0, committedFigure);
                 return;
             }
 
-            nextCommittedFigure.setOrder(nextOrder);
+            previousCommittedFigure.setOrder(previousOrder);
+            committedFigures.set(previousOrder, previousCommittedFigure);
         }
     }
 }

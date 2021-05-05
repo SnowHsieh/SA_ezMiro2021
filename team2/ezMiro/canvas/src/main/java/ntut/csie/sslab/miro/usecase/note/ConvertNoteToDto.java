@@ -14,6 +14,7 @@ public class ConvertNoteToDto {
         dto.setHeight(note.getHeight());
         dto.setColor(note.getColor());
         dto.setCoordinate(note.getCoordinate());
+        dto.setDisplayOrder(note.getDisplayOrder());
         return dto;
     }
 

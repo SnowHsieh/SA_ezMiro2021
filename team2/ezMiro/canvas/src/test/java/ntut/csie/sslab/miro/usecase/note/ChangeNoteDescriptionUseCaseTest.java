@@ -14,14 +14,13 @@ import ntut.csie.sslab.miro.usecase.note.edit.description.ChangeNoteDescriptionU
 import ntut.csie.sslab.miro.usecase.note.edit.description.ChangeNoteDescriptionUseCaseImpl;
 import org.junit.Before;
 import org.junit.Test;
-import java.awt.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ChangeNoteDescriptionUseCaseTest {
-    public FigureRepository figureRepository;
-    public DomainEventBus domainEventBus;
-    public DomainEventListener eventListener;
+    private FigureRepository figureRepository;
+    private DomainEventBus domainEventBus;
+    private DomainEventListener eventListener;
 
     @Before
     public void setUp() {
@@ -39,7 +38,7 @@ public class ChangeNoteDescriptionUseCaseTest {
         ChangeNoteDescriptionInput input = changeNoteDescriptionUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setNoteId(noteId);
-        input.setNewDescription("test");
+        input.setDescription("test");
 
         changeNoteDescriptionUseCase.execute(input, output);
 
@@ -55,7 +54,7 @@ public class ChangeNoteDescriptionUseCaseTest {
         CreateNoteInput input = createNoteUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId("boardId");
-        input.setCoordinate(new Coordinate(new Point(9,26)));
+        input.setCoordinate(new Coordinate(9,26));
 
         createNoteUseCase.execute(input, output);
 

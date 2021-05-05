@@ -9,14 +9,16 @@ public abstract class Figure extends AggregateRoot<String> {
     private String color;
     private double width;
     private double height;
+    private int displayOrder;
 
-    public Figure(String figureId, String boardId, Coordinate coordinate, String color, double width, double height) {
+    public Figure(String figureId, String boardId, Coordinate coordinate, String color, double width, double height, int displayOrder) {
         super(figureId);
         this.boardId = boardId;
         this.coordinate = coordinate;
         this.color = color;
         this.width = width;
         this.height = height;
+        this.displayOrder = displayOrder;
     }
 
     public String getBoardId() {
@@ -57,5 +59,13 @@ public abstract class Figure extends AggregateRoot<String> {
 
     public void setHeight(double height) {
         this.height = height;
+    }
+
+    public int getDisplayOrder() {
+        return displayOrder;
+    }
+
+    public void setDisplayOrder(int displayOrder) {
+        this.displayOrder = displayOrder;
     }
 }

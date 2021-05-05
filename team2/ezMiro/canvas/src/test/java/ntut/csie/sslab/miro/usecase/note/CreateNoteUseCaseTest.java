@@ -10,16 +10,13 @@ import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCase;
 import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCaseImpl;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.awt.*;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CreateNoteUseCaseTest {
-    public FigureRepository figureRepository;
-    public DomainEventBus domainEventBus;
-    public DomainEventListener eventListener;
+    private FigureRepository figureRepository;
+    private DomainEventBus domainEventBus;
+    private DomainEventListener eventListener;
 
     @Before
     public void setUp() {
@@ -36,14 +33,14 @@ public class CreateNoteUseCaseTest {
         CreateNoteInput input = createNoteUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId("boardId");
-        input.setCoordinate(new Coordinate(new Point(9,26)));
+        input.setCoordinate(new Coordinate(9,26));
 
         createNoteUseCase.execute(input, output);
 
         assertNotNull(output.getId());
         assertNotNull(figureRepository.findById(output.getId()).get());
-        assertEquals(9, figureRepository.findById(output.getId()).get().getCoordinate().getPosition().getX());
-        assertEquals(26, figureRepository.findById(output.getId()).get().getCoordinate().getPosition().getY());
+        assertEquals(9, figureRepository.findById(output.getId()).get().getCoordinate().getX());
+        assertEquals(26, figureRepository.findById(output.getId()).get().getCoordinate().getY());
         assertEquals(100, figureRepository.findById(output.getId()).get().getWidth());
         assertEquals(100, figureRepository.findById(output.getId()).get().getHeight());
         assertEquals(1, eventListener.getEventCount());

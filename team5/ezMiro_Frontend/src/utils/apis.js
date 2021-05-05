@@ -16,9 +16,34 @@ const board = {
         await api.board.getBoardContent({
             boardId: boardId
         }).then((response) => {
+            console.log(response.data)
             figures = response.data.figureDtos
         })
         return figures
+    },
+    bringFigureToFront (boardId, figureId) {
+        api.board.bringFigureToFront({
+            boardId: boardId,
+            figureId: figureId
+        })
+    },
+    bringFigureToFrontEnd (boardId, figureId) {
+        api.board.bringFigureToFrontEnd({
+            boardId: boardId,
+            figureId: figureId
+        })
+    },
+    sendFigureToBack (boardId, figureId) {
+        api.board.sendFigureToBack({
+            boardId: boardId,
+            figureId: figureId
+        })
+    },
+    sendFigureToBackEnd (boardId, figureId) {
+        api.board.sendFigureToBackEnd({
+            boardId: boardId,
+            figureId: figureId
+        })
     }
 }
 
@@ -34,6 +59,7 @@ const note = {
             color: color
         }).then((response) => {
             id = response.data.id
+            console.log(response.data)
         })
         return id
     },

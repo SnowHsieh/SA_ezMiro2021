@@ -10,9 +10,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CreateBoardUseCaseTest {
-    public BoardRepository boardRepository;
-    public DomainEventBus domainEventBus;
-    public DomainEventListener eventListener;
+    private BoardRepository boardRepository;
+    private DomainEventBus domainEventBus;
+    private DomainEventListener eventListener;
 
     @Before
     public void setUp() {
