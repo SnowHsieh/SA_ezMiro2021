@@ -23,6 +23,7 @@ public class MoveStickyNoteUseCase {
             selectedStickyNote.setCoordinate(input.getCoordinate());
 
             domainEventBus.postAll(selectedStickyNote);
+            output.setStickyNoteId(selectedStickyNote.getId());
             output.setCoordinate(selectedStickyNote.getCoordinate());
         } else {
             throw new RuntimeException("Sticky note not found, sticky note id = " + input.getStickyNoteId());
