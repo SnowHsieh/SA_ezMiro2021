@@ -1,13 +1,11 @@
 <template>
   <div class="board" oncontextmenu="return false">
     <canvas id="canvas" ref='board'></canvas>
-    <li class="right-click-menu" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
-      <ul>
-        <button @click="deleteWidget()">Delete</button>
-      </ul>
-      <ul>123</ul>
-      <ul>123</ul>
-    </li>
+    <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
+      <li @click="deleteWidget()" class="list-group-item">Delete</li>
+      <li class="list-group-item">123</li>
+      <li class="list-group-item">123</li>
+    </ul>
   </div>
 </template>
 
@@ -52,6 +50,7 @@ export default {
 
     this.canvas.on('mouse:up', async function (e) {
       // 臭到不行
+      console.log(e)
       if (e.button === 3) {
         me.isDisplayRightClickMenu = true
         const point = e.absolutePointer
@@ -90,30 +89,32 @@ export default {
     async loadAllStickyNote (widgets) {
       await widgets.forEach(widget => {
         this.canvas.add(
-          new fabric.StickyNote({
+          new fabric.StickyNoteNew({
             id: widget.widgetId,
             left: widget.topLeftX,
             top: widget.topLeftY,
             height: widget.height,
             width: widget.width,
-            fill: widget.color
+            fill: widget.color,
+            text: '123123',
+            textColor: widget.textColor
           })
         )
       })
-
       this.canvas.renderAll()
     },
     async loadStickyNoteBy (id) {
       const stickyNote = await ReadStickyNoteBy(id, this.boardId)
       await this.canvas.add(
-        new fabric.StickyNote({
+        new fabric.StickyNoteNew({
           id: id,
           left: stickyNote.widgetDto.topLeftX,
           top: stickyNote.widgetDto.topLeftY,
           height: stickyNote.widgetDto.height,
           width: stickyNote.widgetDto.width,
           fill: stickyNote.widgetDto.color,
-          Text: 'owo'
+          text: '123123',
+          textColor: stickyNote.widgetDto.textColor
         })
       )
       this.canvas.renderAll()
