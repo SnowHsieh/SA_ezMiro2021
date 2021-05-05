@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import java.awt.*;
 
-public class EditTextOfStickyNoteTest {
+public class EditTextOfStickyNoteUseCaseTest {
 
     @Test
     public void edit_text_of_sticky_note_should_succeed() {

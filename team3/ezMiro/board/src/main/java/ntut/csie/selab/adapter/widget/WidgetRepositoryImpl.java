@@ -11,13 +11,16 @@ public class WidgetRepositoryImpl implements WidgetRepository {
     List<Widget> widgets;
 
     public WidgetRepositoryImpl() {
-        this.widgets = new ArrayList<>();
+        widgets = new ArrayList<>();
     }
 
     @Override
     public void add(Widget widget) {
-        this.widgets.add(widget);
+        widgets.add(widget);
     }
+
+    @Override
+    public void delete(Widget widget) { widgets.remove(widget); }
 
     @Override
     public Optional<Widget> findById(final String widgetId) {
