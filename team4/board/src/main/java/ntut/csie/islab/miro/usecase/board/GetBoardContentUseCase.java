@@ -3,7 +3,7 @@ package ntut.csie.islab.miro.usecase.board;
 import ntut.csie.islab.miro.adapter.presenter.GetBoardContentPresenter;
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
-import ntut.csie.islab.miro.entity.model.board.CommittedTextFigure;
+import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
 import ntut.csie.islab.miro.entity.model.board.event.BoardContentMightExpire;
 import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
@@ -42,7 +42,7 @@ public class GetBoardContentUseCase {
             return;
         }
 
-        List<CommittedTextFigure> CommitedFigureList = board.getCommittedFigures();
+        List<CommittedFigure> CommitedFigureList = board.getCommittedFigures();
         List<TextFigure> textFigureList = new ArrayList<TextFigure>();
         List<UUID> figureOrderList = board.getFigureOrderList();
 

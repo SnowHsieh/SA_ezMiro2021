@@ -2,24 +2,29 @@ package ntut.csie.islab.miro.entity.model.board;
 
 import ntut.csie.islab.miro.entity.model.board.event.BoardCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.event.FigureChangedDomainEvent;
-import ntut.csie.islab.miro.entity.model.board.event.TextFigureCommittedDomainEvent;
+import ntut.csie.islab.miro.entity.model.board.event.FigureCommittedDomainEvent;
+import ntut.csie.islab.miro.entity.model.board.event.FigureUncommittedDomainEvent;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static java.lang.String.format;
+import static ntut.csie.sslab.ddd.model.common.Contract.ensure;
+import static ntut.csie.sslab.ddd.model.common.Contract.requireNotNull;
+
 public class Board extends AggregateRoot<UUID> {
     private UUID teamId;
     private String boardName;
-    private List<CommittedTextFigure> figureList;
+    private List<CommittedFigure> figureList;
     private List<UUID> figureOrderList;
 
     public Board(UUID teamId,String boardName){
         super(UUID.randomUUID());
         this.teamId = teamId;
         this.boardName = boardName;
-        this.figureList = new ArrayList<CommittedTextFigure>();
+        this.figureList = new ArrayList<CommittedFigure>();
         this.figureOrderList = new ArrayList<UUID>();
         addDomainEvent(new BoardCreatedDomainEvent(teamId, getBoardId()));
 
@@ -29,7 +34,7 @@ public class Board extends AggregateRoot<UUID> {
         super(boardId);
         this.teamId = teamId;
         this.boardName = boardName;
-        this.figureList = new ArrayList<CommittedTextFigure>();
+        this.figureList = new ArrayList<CommittedFigure>();
         addDomainEvent(new BoardCreatedDomainEvent(teamId, getBoardId()));
 
     }
@@ -56,16 +61,34 @@ public class Board extends AggregateRoot<UUID> {
 
     public void commitFigure(UUID figureId) {
         addFigure(figureId);
-        addDomainEvent(new TextFigureCommittedDomainEvent(getBoardId(), figureId));
+        addDomainEvent(new FigureCommittedDomainEvent(getBoardId(), figureId));
 
     }
+    public void uncommitFigure(UUID figureId) {
+        requireNotNull("figureId id", figureId);
+
+        removeFigure(figureId);
+        addDomainEvent(new FigureUncommittedDomainEvent(getBoardId(), figureId));
+
+    }
+
     private void addFigure(UUID figureId) {
-        CommittedTextFigure committedTextFigure = new CommittedTextFigure(getBoardId(), figureId);
-        this.figureList.add(committedTextFigure);
-        this.figureOrderList.add(committedTextFigure.getFigureId());
+        CommittedFigure committedFigure = new CommittedFigure(getBoardId(), figureId);
+        this.figureList.add(committedFigure);
+        this.figureOrderList.add(committedFigure.getFigureId());
     }
 
-    public List<CommittedTextFigure> getCommittedFigures() {
+    private void removeFigure(UUID figureId) {
+        for(int i = 0; i < figureList.size(); i++){
+            if(figureList.get(i).getFigureId().equals(figureId)) {
+                figureList.remove(i);
+                figureOrderList.remove(i);
+            }
+        }
+    }
+
+
+    public List<CommittedFigure> getCommittedFigures() {
         return this.figureList;
     }
 

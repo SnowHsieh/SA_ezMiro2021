@@ -1,8 +1,5 @@
 package ntut.csie.islab.miro.adapter.controller.rest.springboot.board.changefigureorderlist;
 
-import ntut.csie.islab.miro.entity.model.textFigure.Position;
-import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.textFigure.Style;
 import ntut.csie.islab.miro.usecase.board.ChangeFigureOrderListOnBoardInput;
 import ntut.csie.islab.miro.usecase.board.ChangeFigureOrderListOnBoardUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;

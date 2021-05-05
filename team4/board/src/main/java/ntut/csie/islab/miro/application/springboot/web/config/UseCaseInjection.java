@@ -5,6 +5,7 @@ import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.usecase.board.ChangeFigureOrderListOnBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.GetBoardContentUseCase;
+import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteUseCase;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.DeleteStickyNoteUseCase;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.EditStickyNoteUseCase;
@@ -20,6 +21,12 @@ public class UseCaseInjection {
     private BoardRepository boardRepository;
     private TextFigureRepository textFigureRepository;
     private DomainEventBus eventBus;
+
+
+    @Bean(name="createNotifyBoard")
+    public NotifyBoard createNotifyBoard() {
+        return new NotifyBoard(boardRepository, eventBus);
+    }
 
     @Bean(name = "createBoardUseCase")
     public CreateBoardUseCase createBoardUseCase() {

@@ -55,7 +55,7 @@ export default {
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = 'd560a87a-8863-43ac-b735-fe60c1bf2355'
+        this.boardId = 'aeb7b191-cbea-46ee-82d3-4b3cf4a9eb09'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         // console.log(res.data)
         this.drawStickyNote(res.data.figureDtos)
@@ -106,7 +106,7 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      this.refreshCanvas()
+      // this.refreshCanvas()
     },
     async moveStickyNote (figure) {
       try {
@@ -121,7 +121,7 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      this.refreshCanvas()
+      // this.refreshCanvas()
     },
     async deleteStickyNote (figure) {
       try {
@@ -131,10 +131,10 @@ export default {
           }
         )
         console.log(res.data.message)
+        this.canvas.remove(figure)
       } catch (err) {
         console.log(err)
       }
-      this.refreshCanvas()
     },
     async changeFigureOrder () {
       try {
@@ -156,9 +156,11 @@ export default {
       this.refreshCanvas()
     },
     initCanvas () {
+      var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+      var height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
       this.canvas = new fabric.Canvas('canvas', {
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: width,
+        height: height,
         fireRightClick: true, // <-- enable firing of right click events
         stopContextMenu: true // <--  prevent context menu from showing
       })
@@ -213,8 +215,6 @@ export default {
               var oldtop = e.target.top
               var rect = e.target.item(0)
               var dimensionText = e.target.item(1)
-              console.log('rect:', rect)
-              console.log('before group:', e.target)
               _this.ungroup(e.target)
               canvas.setActiveObject(dimensionText)
               dimensionText.enterEditing()
@@ -226,16 +226,14 @@ export default {
                   left: oldleft,
                   top: oldtop
                 })
-                console.log('after group:', group)
                 canvas.remove(rect)
                 canvas.remove(dimensionText)
-                console.log('current:', canvas.getObjects())
                 canvas.add(group)
                 _this.editStickyNote(group)
               })
             }
           },
-          'mouse:up': function (e) {
+          'mouse:down': function (e) {
             _this.hideContextMenu()
             if (e.target != null) {
               if (e.button === 3) { // right click
@@ -276,13 +274,17 @@ export default {
     addListenerOfChangeTextFigureColor (e) {
       var _this = this
       console.log('current Color etarget:', e.target.get('id'))
+      // console.log('current Color type:', e.target.type)
+      // console.log('current Color (0)type:', e.target.item(0).type)
       _this.favcolor.value = e.target.item(0).get('fill')
-      _this.favcolor.addEventListener('change', function handler (e) {
+      console.log('be color:', _this.favcolor.value)
+      _this.favcolor.addEventListener('change', function handler () {
+        console.log('aft color:', _this.favcolor.value)
         e.target.item(0).set('fill', _this.favcolor.value) // rect fill
         console.log('color in id:', e.target.get('id'))
         _this.editStickyNote(e.target)
         _this.hideContextMenu()
-        _this.favcolor.removeEventListener('change', handler)
+        _this.favcolor.removeEventListener('change', handler, true)
       }, true)
     },
     addListenerOfDeleteTextFigure (e) {
@@ -292,7 +294,7 @@ export default {
         console.log('del in id:', e.target.get('id'))
         _this.deleteStickyNote(e.target)
         _this.hideContextMenu()
-        _this.delButton.removeEventListener('mouseup', newHandler)
+        _this.delButton.removeEventListener('mouseup', newHandler, true)
       }
       _this.delButton.addEventListener('mouseup', newHandler, true)
     },
@@ -303,7 +305,7 @@ export default {
         e.target.bringToFront()
         _this.changeFigureOrder()
         _this.hideContextMenu()
-        _this.bringToFrontButton.removeEventListener('mouseup', newHandler)
+        _this.bringToFrontButton.removeEventListener('mouseup', newHandler, true)
       }
       _this.bringToFrontButton.addEventListener('mouseup', newHandler)
     },
