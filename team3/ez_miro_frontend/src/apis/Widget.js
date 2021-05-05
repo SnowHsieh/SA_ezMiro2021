@@ -64,3 +64,13 @@ export const ResizeStickyNoteBy = async (id, boardId, coordinate) => {
     return err
   }
 }
+
+export const ChangeColorOfStickyNoteBy = async (id, boardId, color) => {
+  try {
+    const res = await axios.put(`${host}/ez-miro/boards/${boardId}/widgets/sticky-notes/${id}/color`, { color })
+    return res.data
+  } catch (err) {
+    console.log(err)
+    return err
+  }
+}
