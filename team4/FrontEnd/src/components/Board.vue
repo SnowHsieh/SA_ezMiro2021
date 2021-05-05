@@ -45,7 +45,7 @@ export default {
       bringForwardButton: null,
       sendBackwardButton: null,
       sendToBackButton: null,
-      activeObject: null
+      activeObjects: null
     }
   },
   async mounted () {
@@ -66,9 +66,8 @@ export default {
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = '161343a0-7dfa-45ea-b0b5-eca914a28c03'
+        this.boardId = '4f00c2a3-2028-4b93-ad44-c4a523821fd8'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
-        // console.log(res.data)
         this.drawStickyNote(res.data.figureDtos)
       } catch (err) {
         console.log(err)
@@ -132,7 +131,7 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      this.refreshCanvas()
+      // this.refreshCanvas()
     },
     async deleteStickyNote (figure) {
       try {
@@ -141,11 +140,12 @@ export default {
             figureId: figure.get('id')
           }
         )
+        this.canvas.remove(figure)
         console.log(res.data.message)
       } catch (err) {
         console.log(err)
       }
-      this.refreshCanvas()
+      // this.refreshCanvas()
     },
     async changeFigureOrder () {
       try {
@@ -154,7 +154,7 @@ export default {
         for (var i = 0; i < objects.length; i++) {
           flist.push(objects[i].get('id'))
         }
-        console.log(flist)
+        // console.log(flist)
         const res = await axios.post('http://localhost:8081/boards/' + this.boardId + '/changeFigureOrder',
           {
             figureOrderList: flist
@@ -164,7 +164,7 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      this.refreshCanvas()
+      // this.refreshCanvas()
     },
     initCanvas () {
       var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
@@ -216,11 +216,17 @@ export default {
     },
     listenEventsOnCanvas () {
       var _this = this
+      _this.addListenerOfChangeTextFigureColor()
+      _this.addListenerOfDeleteTextFigure()
+      _this.addListenerOfBringToFront()
+      _this.addListenerOfBringForward()
+      _this.addListenerOfSendBackward()
+      _this.addListenerOfSendToBack()
       var canvas = this.canvas
       canvas.on(
         {
           'mouse:dblclick': function (e) {
-            console.log('object:dblclick')
+            // console.log('object:dblclick')
             if (e.target != null) {
               var oldleft = e.target.left
               var oldtop = e.target.top
@@ -245,26 +251,40 @@ export default {
             }
           },
           'mouse:down': function (e) {
-            _this.hideContextMenu()
-            if (e.target != null) {
-              if (e.button === 3) { // right click
-                _this.showContextMenu(e)
-                _this.addListenerOfChangeTextFigureColor(e)
-                _this.addListenerOfDeleteTextFigure(e)
-                _this.addListenerOfBringToFront(e)
-                _this.addListenerOfBringForward(e)
-                _this.addListenerOfSendBackward(e)
-                _this.addListenerOfSendToBack(e)
-              }
+            if (e.target != null && e.button === 3) {
+              canvas.setActiveObject(e.target) // right click
+              _this.activeObjects = canvas.getActiveObjects()
+              _this.showContextMenu(e)
+            } else {
+              _this.hideContextMenu()
             }
           },
           'object:scaled': function (e) {
-            console.log('object:scaled')
-            _this.editStickyNote(e.target)
-            _this.moveStickyNote(e.target)
+            // console.log('object:scaled')
+            if (e.target.type === 'group') {
+              _this.editStickyNote(e.target)
+              _this.moveStickyNote(e.target)
+            }
+            // else {
+            //   e.target._objects.forEach((target) => {
+            //     console.log(target.)
+            //     _this.editStickyNote(target)
+            //     // _this.moveStickyNote(target)
+            //   })
+            // }
           },
           'object:moved': function (e) {
-            _this.moveStickyNote(e.target)
+            if (e.target.type === 'group') {
+              // _this.editStickyNote(e.target)
+              _this.moveStickyNote(e.target)
+            } else {
+              e.target._objects.forEach((target) => {
+                _this.moveStickyNote(target)
+              })
+            }
+            // canvas.getActiveObjects().forEach((target) => {
+            //   _this.moveStickyNote(target)
+            // })
           }
         })
     },
@@ -282,84 +302,83 @@ export default {
       this.contextMenu.style.display = 'block'
       this.contextMenu.style.left = event.e.clientX + 'px'
       this.contextMenu.style.top = event.e.clientY + 'px'
+      this.favcolor.value = this.canvas.getActiveObject().item(0).get('fill')
     },
     hideContextMenu () {
       this.contextMenu.style.display = 'none'
     },
-    addListenerOfChangeTextFigureColor (e) {
+    addListenerOfChangeTextFigureColor () {
       var _this = this
-      console.log('current Color etarget:', e.target.get('id'))
-      this.activeObject = this.canvas.getActiveObject()
-      _this.favcolor.value = e.target.item(0).get('fill')
-      console.log('be color:', _this.favcolor.value)
       var newHandler = function () {
-        e.target.item(0).set('fill', _this.favcolor.value) // rect fill
-        _this.editStickyNote(e.target)
+        // console.log('changeColor')
+        _this.activeObjects.forEach((target) => {
+          target.item(0).set('fill', _this.favcolor.value) // rect fill
+          _this.editStickyNote(target)
+        })
         _this.hideContextMenu()
-        _this.favcolor.removeEventListener('change', newHandler)
       }
       _this.favcolor.addEventListener('change', newHandler)
     },
-    addListenerOfDeleteTextFigure (e) {
+    addListenerOfDeleteTextFigure () {
       var _this = this
       var newHandler = function () {
-        console.log('del in id:', e.target.get('id'))
-        _this.deleteStickyNote(e.target)
+        _this.activeObjects.forEach((target) => {
+          if (target.selectable) {
+            _this.deleteStickyNote(target)
+          }
+        })
         _this.hideContextMenu()
-        _this.delButton.removeEventListener('mouseup', newHandler)
       }
-      this.delButton.removeEventListener('mouseup', newHandler)
-      console.log('current Delete etarget:', e.target.get('id'))
       _this.delButton.addEventListener('mouseup', newHandler)
     },
-    addListenerOfBringToFront (e) {
+    addListenerOfBringToFront () {
       var _this = this
-      console.log('addListenerOfBringToFront')
       var newHandler = function () {
-        e.target.bringToFront()
-        _this.changeFigureOrder()
+        _this.activeObjects.forEach((target) => {
+          target.bringToFront()
+          _this.changeFigureOrder()
+        })
         _this.hideContextMenu()
-        _this.bringToFrontButton.removeEventListener('mouseup', newHandler)
       }
       _this.bringToFrontButton.addEventListener('mouseup', newHandler)
     },
-    addListenerOfBringForward (e) {
+    addListenerOfBringForward () {
       var _this = this
-      console.log('addListenerOfBringForward')
+      // console.log('addListenerOfBringForward')
       var newHandler = function () {
-        e.target.bringForward()
-        _this.changeFigureOrder()
+        _this.activeObjects.forEach((target) => {
+          if (target.selectable) {
+            target.bringForward()
+            _this.changeFigureOrder()
+          }
+        })
         _this.hideContextMenu()
-        _this.bringForwardButton.removeEventListener('mouseup', newHandler)
       }
       _this.bringForwardButton.addEventListener('mouseup', newHandler)
     },
-    addListenerOfSendBackward (e) {
+    addListenerOfSendBackward () {
       var _this = this
-      console.log('addListenerOfSendBackward')
       var newHandler = function () {
-        e.target.sendBackwards()
-        _this.changeFigureOrder()
+        _this.activeObjects.forEach((target) => {
+          target.sendBackwards()
+          _this.changeFigureOrder()
+        })
         _this.hideContextMenu()
-        _this.sendBackwardButton.removeEventListener('mouseup', newHandler)
       }
       _this.sendBackwardButton.addEventListener('mouseup', newHandler)
     },
-    addListenerOfSendToBack (e) {
+    addListenerOfSendToBack () {
       var _this = this
-      console.log('addListenerOfSendToBack')
+      // console.log('addListenerOfSendToBack')
       var newHandler = function () {
-        e.target.sendToBack()
-        _this.changeFigureOrder()
+        _this.activeObjects.forEach((target) => {
+          target.sendToBack()
+          _this.changeFigureOrder()
+        })
         _this.hideContextMenu()
-        _this.sendToBackButton.removeEventListener('mouseup', newHandler)
       }
       _this.sendToBackButton.addEventListener('mouseup', newHandler)
-    },
-    getZindex (e) {
-      console.log(this.canvas.getObjects().indexOf(e))
     }
-
   }
 
 }
