@@ -5,9 +5,9 @@ import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
-import ntut.csie.selab.usecase.widget.edit.EditTextOfStickyNoteInput;
-import ntut.csie.selab.usecase.widget.edit.EditTextOfStickyNoteOutput;
-import ntut.csie.selab.usecase.widget.edit.EditTextOfStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.edit.text.EditTextOfStickyNoteInput;
+import ntut.csie.selab.usecase.widget.edit.text.EditTextOfStickyNoteOutput;
+import ntut.csie.selab.usecase.widget.edit.text.EditTextOfStickyNoteUseCase;
 import org.junit.Assert;
 import org.junit.Test;
 
