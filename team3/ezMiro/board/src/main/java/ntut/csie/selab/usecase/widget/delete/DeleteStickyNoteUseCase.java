@@ -18,7 +18,7 @@ public class DeleteStickyNoteUseCase {
 
         if (null == widget) {
             output.setStickyNoteId(input.getStickyNoteId());
-            throw new RuntimeException("Widget not found, widget id = " + input.getStickyNoteId());
+            throw new RuntimeException("Sticky note found, widget id = " + input.getStickyNoteId());
         }
 
         widget.delete();

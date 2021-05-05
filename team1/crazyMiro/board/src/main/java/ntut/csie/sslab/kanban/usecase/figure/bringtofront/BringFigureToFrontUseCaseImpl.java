@@ -1,4 +1,4 @@
-package ntut.csie.sslab.kanban.usecase.figure.sticker.sendtoback;
+package ntut.csie.sslab.kanban.usecase.figure.bringtofront;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
@@ -8,30 +8,29 @@ import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
 
 import java.util.List;
 
-public class SendStickerToBackUseCaseImpl implements SendStickerToBackUseCase {
-
+public class BringFigureToFrontUseCaseImpl implements BringFigureToFrontUseCase {
     private FigureRepository figureRepository;
     private DomainEventBus domainEventBus;
 
-    public SendStickerToBackUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
+    public BringFigureToFrontUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
         this.figureRepository = figureRepository;
         this.domainEventBus = domainEventBus;
     }
 
     @Override
-    public void execute(SendStickerToBackInput input, CqrsCommandOutput output) {
+    public void execute(BringFigureToFrontInput input, CqrsCommandOutput output) {
         try {
-            List<Figure> stickers = figureRepository.getStickersByBoardId(input.getBoardId());
-            Figure sticker = stickers.stream().filter(x -> x.getFigureId().equals(input.getFigureId())).findAny().get();
-            int oldIndex = sticker.getOrder();
-            sticker.sendToBack();
-                figureRepository.save(sticker);
+            List<Figure> figures = figureRepository.getFiguresByBoardId(input.getBoardId());
+            Figure figure = figures.stream().filter(x -> x.getFigureId().equals(input.getFigureId())).findAny().get();
+            int oldIndex = figure.getOrder();
+            figure.bringToFront(figures.size()-1);
+            figureRepository.save(figure);
 
-            for (int i = 0; i < oldIndex; i++) {
-                stickers.get(i).setOrder(i + 1);
-                figureRepository.save(stickers.get(i));
+            for (int i = oldIndex + 1; i < figures.size(); i++) {
+                figures.get(i).setOrder(i - 1);
+                figureRepository.save(figures.get(i));
             }
-            domainEventBus.postAll(sticker);
+            domainEventBus.postAll(figure);
 
             output.setId(input.getFigureId())
                     .setExitCode(ExitCode.SUCCESS);
@@ -39,14 +38,16 @@ public class SendStickerToBackUseCaseImpl implements SendStickerToBackUseCase {
             output.setExitCode(ExitCode.FAILURE)
                     .setMessage(e.getMessage());
         }
+
     }
 
     @Override
-    public SendStickerToBackInput newInput() {
-        return new SendStickerToBackInputImpl() ;
+    public BringFigureToFrontInput newInput() {
+        return new BringFigureToFrontInputImpl();
     }
 
-    private class SendStickerToBackInputImpl implements SendStickerToBackInput {
+
+    private class BringFigureToFrontInputImpl implements BringFigureToFrontInput {
         private String boardId;
         private String figureId;
 

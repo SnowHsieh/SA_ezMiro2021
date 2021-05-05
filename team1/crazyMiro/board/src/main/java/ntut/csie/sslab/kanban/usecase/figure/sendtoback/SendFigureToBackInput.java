@@ -1,8 +1,8 @@
-package ntut.csie.sslab.kanban.usecase.figure.sticker.sendtoback;
+package ntut.csie.sslab.kanban.usecase.figure.sendtoback;
 
 import ntut.csie.sslab.ddd.usecase.Input;
 
-public interface SendStickerToBackInput extends Input {
+public interface SendFigureToBackInput extends Input {
     void setFigureId(String stickerId1);
 
     void setBoardId(String boardId1);

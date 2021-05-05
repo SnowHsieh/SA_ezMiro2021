@@ -11,7 +11,7 @@
 
 <script>
 import { GetBoardContent } from '@/apis/Boards'
-import { CreateStickyNote, ReadStickyNoteBy, DeleteStickyNoteBy } from '@/apis/Widget'
+import { CreateStickyNote, ReadStickyNoteBy, DeleteStickyNoteBy, MoveStickyNoteBy, ResizeStickyNoteBy } from '@/apis/Widget'
 import '@/models/StickyNote'
 import { fabric } from 'fabric'
 
@@ -44,7 +44,6 @@ export default {
       info.bottomRightX = info.topLeftX + width
       info.bottomRightY = info.topLeftY + width
       const stickyNoteId = await CreateStickyNote(me.boardId, info)
-
       await me.loadStickyNoteBy(stickyNoteId)
     })
 
@@ -61,6 +60,44 @@ export default {
         me.isDisplayRightClickMenu = false
         me.setTargetId(null)
       }
+    })
+
+    this.canvas.on('object:moved', async function (e) {
+      const target = e.target
+      const stickyNoteId = target.id
+      const point = target.lineCoords
+      console.log(point)
+      const topLeftX = point.tl.x
+      const topLeftY = point.tl.y
+      const bottomRightX = point.br.x
+      const bottomRightY = point.br.y
+      await MoveStickyNoteBy(me.boardId, {
+        [stickyNoteId]: {
+          topLeftX: topLeftX,
+          topLeftY: topLeftY,
+          bottomRightX: bottomRightX,
+          bottomRightY: bottomRightY
+        }
+      })
+      console.log(e)
+    })
+
+    this.canvas.on('object:scaled', async function (e) {
+      const target = e.target
+      const stickyNoteId = target.id
+      const point = target.lineCoords
+      console.log(point)
+      const topLeftX = point.tl.x
+      const topLeftY = point.tl.y
+      const bottomRightX = point.br.x
+      const bottomRightY = point.br.y
+      await ResizeStickyNoteBy(stickyNoteId, me.boardId, {
+        topLeftX: topLeftX,
+        topLeftY: topLeftY,
+        bottomRightX: bottomRightX,
+        bottomRightY: bottomRightY
+      })
+      console.log(e)
     })
   },
   methods: {

@@ -4,9 +4,9 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
 import ntut.csie.sslab.kanban.entity.model.figure.Figure;
 import ntut.csie.sslab.kanban.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.sendtoback.SendStickerToBackInput;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.sendtoback.SendStickerToBackUseCase;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.sendtoback.SendStickerToBackUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.figure.sendtoback.SendFigureToBackInput;
+import ntut.csie.sslab.kanban.usecase.figure.sendtoback.SendFigureToBackUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.sendtoback.SendFigureToBackUseCaseImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SendStickerToBackUseCaseTest extends AbstractSpringBootJpaTest {
+public class SendFigureToBackUseCaseTest extends AbstractSpringBootJpaTest {
     @Test
     public void send_a_sticker_to_back(){
         String boardId1 = UUID.randomUUID().toString();
@@ -35,13 +35,13 @@ public class SendStickerToBackUseCaseTest extends AbstractSpringBootJpaTest {
         String stickerId3 = createSticker(boardId1, stickerDto3.getContent(), stickerDto3.getSize(), stickerDto3.getColor(), stickerDto3.getPosition());
         String stickerId4 = createSticker(boardId2, stickerDto4.getContent(), stickerDto4.getSize(), stickerDto4.getColor(), stickerDto4.getPosition());
         String stickerId5 = createSticker(boardId2, stickerDto5.getContent(), stickerDto5.getSize(), stickerDto5.getColor(), stickerDto5.getPosition());
-        SendStickerToBackUseCase sendStickerToBackUseCase = new SendStickerToBackUseCaseImpl(figureRepository, domainEventBus);
-        SendStickerToBackInput input = sendStickerToBackUseCase.newInput();
+        SendFigureToBackUseCase sendFigureToBackUseCase = new SendFigureToBackUseCaseImpl(figureRepository, domainEventBus);
+        SendFigureToBackInput input = sendFigureToBackUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId1);
         input.setFigureId(stickerId2);
 
-        sendStickerToBackUseCase.execute(input, output);
+        sendFigureToBackUseCase.execute(input, output);
 
         List<Figure> board1Stickers = figureRepository.getStickersByBoardId(boardId1);
         List<Figure> board2Stickers = figureRepository.getStickersByBoardId(boardId2);

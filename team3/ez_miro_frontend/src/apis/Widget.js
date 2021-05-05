@@ -28,3 +28,48 @@ export const DeleteStickyNoteBy = async (id, boardId) => {
     return err
   }
 }
+
+export const EditTextOfStickyNoteBy = async (id, boardId, newText) => {
+  try {
+    const res = await axios.put(`${host}/ez-miro/boards/${boardId}/widgets/sticky-notes/${id}/edit-text`, { newText })
+    return res.data
+  } catch (err) {
+    console.log(err)
+    return err
+  }
+}
+
+export const MoveStickyNoteBy = async (boardId, widgets) => {
+  try {
+    const res = await axios.put(`${host}/ez-miro/boards/${boardId}/widgets/sticky-notes/move`, widgets)
+    return res.data
+  } catch (err) {
+    console.log(err)
+    return err
+  }
+}
+
+export const ResizeStickyNoteBy = async (id, boardId, coordinate) => {
+  try {
+    const res = await axios.put(`${host}/ez-miro/boards/${boardId}/widgets/sticky-notes/${id}/resize`, {
+      topLeftX: coordinate.topLeftX,
+      topLeftY: coordinate.topLeftY,
+      bottomRightX: coordinate.bottomRightX,
+      bottomRightY: coordinate.bottomRightY
+    })
+    return res.data
+  } catch (err) {
+    console.log(err)
+    return err
+  }
+}
+
+export const ChangeColorOfStickyNoteBy = async (id, boardId, color) => {
+  try {
+    const res = await axios.put(`${host}/ez-miro/boards/${boardId}/widgets/sticky-notes/${id}/color`, { color })
+    return res.data
+  } catch (err) {
+    console.log(err)
+    return err
+  }
+}
