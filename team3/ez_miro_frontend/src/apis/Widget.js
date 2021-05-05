@@ -50,3 +50,17 @@ export const MoveStickyNoteBy = async (id, boardId, widgets) => {
   }
 }
 
+export const ResizeStickyNoteBy = async (id, boardId, coordinate) => {
+  try {
+    const res = await axios.put(`${host}/ez-miro/boards/${boardId}/widgets/sticky-notes/${id}/resize`, {
+      topLeftX: coordinate.topLeftX,
+      topLeftY: coordinate.topLeftY,
+      bottomRightX: coordinate.bottomRightX,
+      bottomRightY: coordinate.bottomRightY
+    })
+    return res.data
+  } catch (err) {
+    console.log(err)
+    return err
+  }
+}
