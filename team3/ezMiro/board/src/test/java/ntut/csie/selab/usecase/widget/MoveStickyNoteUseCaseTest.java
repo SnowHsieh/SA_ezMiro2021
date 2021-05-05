@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import java.awt.*;
 
-public class MoveStickyNoteTest {
+public class MoveStickyNoteUseCaseTest {
 
     @Test
     public void move_sticky_note_should_succeed() {

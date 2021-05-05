@@ -1,4 +1,4 @@
-package ntut.csie.selab.usecase.widget.edit;
+package ntut.csie.selab.usecase.widget.edit.text;
 
 public class EditTextOfStickyNoteInput {
 
