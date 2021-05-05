@@ -5,7 +5,8 @@
       <li @click="deleteWidget()" class="list-group-item">Delete</li>
       <li class="list-group-item">
         <input type="color" id="favcolor" name="favcolor" v-model="selectedStickyNoteColor" @change="changeColorOfStickyNote">Color</li>
-      <li class="list-group-item">123</li>
+      <li class="list-group-item" @click="bringToFront">bring to front</li>
+      <li class="list-group-item" @click="sendToback">send to back</li>
     </ul>
   </div>
 </template>
@@ -19,7 +20,8 @@ import {
   MoveStickyNoteBy,
   ResizeStickyNoteBy,
   EditTextOfStickyNoteBy,
-  ChangeColorOfStickyNoteBy
+  ChangeColorOfStickyNoteBy,
+  EditZIndexOfStickyNoteBy
 } from '@/apis/Widget'
 import '@/models/StickyNote'
 import { fabric } from 'fabric'
@@ -38,13 +40,16 @@ export default {
       },
       selectedStickyNote: null,
       ungroupTarget: {},
-      selectedStickyNoteColor: ''
+      selectedStickyNoteColor: '',
+      indexMax: 0, // TODO: 邏輯待改善
+      indexMin: 0 // TODO: 邏輯待改善
     }
   },
   async created () {
     this.boardId = this.$route.params.boardId
     this.boardContent = await GetBoardContent(this.boardId)
     this.initCanvas()
+    this.boardContent.widgetDtos.sort((a, b) => a.zIndex - b.zIndex)
     this.loadAllStickyNote(this.boardContent.widgetDtos)
     const me = this
     this.canvas.on('mouse:dblclick', async function (e) {
@@ -67,7 +72,6 @@ export default {
     })
 
     this.canvas.on('mouse:up', async function (e) {
-      console.log(e.target)
       // 臭到不行
       if (e.button === 3) {
         me.isDisplayRightClickMenu = true
@@ -213,6 +217,19 @@ export default {
         this.selectedStickyNote.rectObject.set('fill', this.selectedStickyNoteColor)
         this.canvas.renderAll()
       }
+    },
+    async bringToFront () { // TODO: 邏輯待改善
+      this.indexMax += 1
+      await EditZIndexOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, this.indexMax)
+      this.canvas.bringToFront(this.selectedStickyNote)
+    },
+    async sendToback () { // TODO: 邏輯待改善
+      this.indexMin -= 1
+      await EditZIndexOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, this.indexMin)
+      this.canvas.sendToBack(this.selectedStickyNote)
+    },
+    sortStickyNotesByZIndex (widgets) {
+      widgets.sort((a, b) => a.zIndex > b.zIndex)
     }
   }
 }

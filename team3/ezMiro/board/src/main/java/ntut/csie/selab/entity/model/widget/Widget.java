@@ -20,7 +20,7 @@ public abstract class Widget extends AggregateRoot<String> {
         super(id);
         this.boardId = boardId;
         this.coordinate = coordinate;
-        this.color = "#123123";
+        this.color = "#FFFAAD";
         this.textColor = "#ffffff";
         this.zIndex = 1;
         this.text = "";

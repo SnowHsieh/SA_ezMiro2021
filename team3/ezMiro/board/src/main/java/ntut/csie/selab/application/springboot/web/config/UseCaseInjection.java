@@ -1,6 +1,5 @@
 package ntut.csie.selab.application.springboot.web.config;
 
-import ntut.csie.selab.adapter.controller.rest.springboot.widget.movewidget.MoveStickyNoteController;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.board.create.CreateBoardUseCase;
@@ -8,8 +7,9 @@ import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteUseCase;
-import ntut.csie.selab.usecase.widget.edit.color.ChangeColorOfStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.delete.DeleteStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.edit.color.ChangeColorOfStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.edit.layer.EditZIndexOfStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.edit.text.EditTextOfStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.move.MoveStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetUseCase;
@@ -66,6 +66,11 @@ public class UseCaseInjection {
     @Bean(name="DeleteStickyNoteUseCase")
     public DeleteStickyNoteUseCase deleteStickyNoteUseCase() {
         return new DeleteStickyNoteUseCase(widgetRepository, eventBus);
+    }
+
+    @Bean(name="EditZIndexOfStickyNoteUseCase")
+    public EditZIndexOfStickyNoteUseCase editZIndexOfStickyNoteUseCase() {
+        return new EditZIndexOfStickyNoteUseCase(widgetRepository, eventBus);
     }
 
     @Autowired
