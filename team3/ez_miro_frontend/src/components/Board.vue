@@ -27,7 +27,8 @@ export default {
         top: '-1px',
         left: '-1px'
       },
-      selectedStickyNote: null
+      selectedStickyNote: null,
+      ungroupTarget: {}
     }
   },
   async created () {
@@ -39,17 +40,24 @@ export default {
     this.canvas.on('mouse:dblclick', async function (e) {
       const info = {}
       const width = 100
-      info.topLeftX = e.absolutePointer.x - width / 2
-      info.topLeftY = e.absolutePointer.y - width / 2
-      info.bottomRightX = info.topLeftX + width
-      info.bottomRightY = info.topLeftY + width
-      const stickyNoteId = await CreateStickyNote(me.boardId, info)
-      await me.loadStickyNoteBy(stickyNoteId)
+      if (e.target !== null) {
+        me.ungroup(e.target)
+        const textObject = e.target.textObject
+        me.canvas.setActiveObject(textObject)
+        textObject.enterEditing()
+        textObject.selectAll()
+      } else {
+        info.topLeftX = e.absolutePointer.x - width / 2
+        info.topLeftY = e.absolutePointer.y - width / 2
+        info.bottomRightX = info.topLeftX + width
+        info.bottomRightY = info.topLeftY + width
+        const stickyNoteId = await CreateStickyNote(me.boardId, info)
+        await me.loadStickyNoteBy(stickyNoteId)
+      }
     })
 
     this.canvas.on('mouse:up', async function (e) {
       // 臭到不行
-      console.log(e)
       if (e.button === 3) {
         me.isDisplayRightClickMenu = true
         const point = e.absolutePointer
@@ -66,7 +74,6 @@ export default {
       const target = e.target
       const stickyNoteId = target.id
       const point = target.lineCoords
-      console.log(point)
       const topLeftX = point.tl.x
       const topLeftY = point.tl.y
       const bottomRightX = point.br.x
@@ -79,14 +86,12 @@ export default {
           bottomRightY: bottomRightY
         }
       })
-      console.log(e)
     })
 
     this.canvas.on('object:scaled', async function (e) {
       const target = e.target
       const stickyNoteId = target.id
       const point = target.lineCoords
-      console.log(point)
       const topLeftX = point.tl.x
       const topLeftY = point.tl.y
       const bottomRightX = point.br.x
@@ -97,7 +102,6 @@ export default {
         bottomRightX: bottomRightX,
         bottomRightY: bottomRightY
       })
-      console.log(e)
     })
   },
   methods: {
@@ -107,12 +111,6 @@ export default {
         width: window.innerWidth,
         height: window.innerHeight
       })
-      this.canvas.add(new fabric.IText('QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ', {
-        left: 10,
-        top: 10,
-        fill: '#00ff00'
-      }))
-      this.canvas.renderAll()
     },
     async deleteWidget () {
       const res = await DeleteStickyNoteBy(this.selectedStickyNote.id, this.boardId)
@@ -162,6 +160,41 @@ export default {
       } else {
         this.selectedStickyNote = null
       }
+    },
+    ungroup (group) {
+      this.ungroupTarget = group
+      const items = group._objects
+      group._restoreObjectsState()
+      this.canvas.remove(group)
+      this.canvas.renderAll()
+      for (var i = 0; i < items.length; i++) {
+        this.canvas.add(items[i])
+      }
+      this.canvas.renderAll()
+      this.listenEndTextEditing(group.textObject)
+    },
+    listenEndTextEditing (textObject) {
+      const canvas = this.canvas
+      const group = this.ungroupTarget
+      console.log(group)
+      textObject.on('editing:exited', function (e) {
+        console.log('end editing')
+        const objects = group._objects
+        objects.forEach(item => {
+          canvas.remove(item)
+        })
+        canvas.add(new fabric.StickyNoteNew({
+          id: group.id,
+          left: objects[0].left,
+          top: objects[0].top,
+          height: objects[0].height,
+          width: objects[0].width,
+          fill: objects[0].fill,
+          text: objects[1].text,
+          textColor: objects[1].fill
+        }))
+        canvas.renderAll()
+      })
     }
   }
 }

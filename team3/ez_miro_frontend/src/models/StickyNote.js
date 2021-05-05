@@ -24,22 +24,27 @@ fabric.StickyNote = fabric.util.createClass(fabric.Rect, {
 })
 
 fabric.StickyNoteNew = fabric.util.createClass(fabric.Group, {
-  type: 'stickynote',
+  type: 'stickynotenew',
   id: null,
   textObject: null,
   rectObject: null,
   initialize: function (element, options) {
     options = options || {}
-    this.callSuper('initialize', element, options)
     this.id = element.id
     this.rectObject = this._initailizeRect(element)
     this.textObject = this._initailizeText(element)
     this._setRectControlsVisibility(this.rectObject)
     this._objects = [this.rectObject, this.textObject]
+    this.callSuper('initialize', this._objects, {
+      subTargetCheck: true
+    })
+    this.on('mousedblclick', function (e) {
+      // e.target.textObject.enterEditing()
+      // e.target.textObject.selectAll()
+    })
   },
   _initailizeRect (element) {
     return new fabric.Rect({
-      id: element.id,
       left: element.left,
       top: element.top,
       height: element.height,
@@ -66,5 +71,9 @@ fabric.StickyNoteNew = fabric.util.createClass(fabric.Group, {
       tr: true, // 上右
       mtr: true // 旋轉控制鍵
     })
+  },
+  _ungroup () {
+    // this._objects._restoreObjectsState()
+    console.log(this.canvas)
   }
 })
