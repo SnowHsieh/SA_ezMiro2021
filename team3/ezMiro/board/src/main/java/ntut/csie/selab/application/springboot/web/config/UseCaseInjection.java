@@ -8,6 +8,7 @@ import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.delete.DeleteStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.edit.text.EditTextOfStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.move.MoveStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetUseCase;
@@ -49,9 +50,14 @@ public class UseCaseInjection {
         return new GetWidgetUseCase(widgetRepository);
     }
 
-    @Bean(name="EditTextOfStickyNoteController")
+    @Bean(name="EditTextOfStickyNoteUseCase")
     public EditTextOfStickyNoteUseCase editTextOfStickyNoteUseCase() {
         return new EditTextOfStickyNoteUseCase(widgetRepository, eventBus);
+    }
+
+    @Bean(name="DeleteStickyNoteUseCase")
+    public DeleteStickyNoteUseCase deleteStickyNoteUseCase() {
+        return new DeleteStickyNoteUseCase(widgetRepository, eventBus);
     }
 
     @Autowired
