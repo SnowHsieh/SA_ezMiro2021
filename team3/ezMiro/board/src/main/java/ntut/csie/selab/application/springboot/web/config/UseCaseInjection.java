@@ -1,5 +1,6 @@
 package ntut.csie.selab.application.springboot.web.config;
 
+import ntut.csie.selab.adapter.controller.rest.springboot.widget.movewidget.MoveStickyNoteController;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.board.create.CreateBoardUseCase;
@@ -7,6 +8,7 @@ import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.move.MoveStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +37,11 @@ public class UseCaseInjection {
 
     @Bean(name="CreateStickyNoteUseCase")
     public CreateStickyNoteUseCase createStickyNoteUseCase() { return new CreateStickyNoteUseCase(widgetRepository, eventBus); }
+
+    @Bean(name="MoveStickyNoteUseCase")
+    public MoveStickyNoteUseCase moveStickyNoteUseCase() {
+        return new MoveStickyNoteUseCase(widgetRepository, eventBus);
+    }
 
     @Bean(name="GetWidgetUseCase")
     public GetWidgetUseCase getWidgetUseCase() {
