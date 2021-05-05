@@ -23,6 +23,7 @@ public class ChangeColorOfStickyNoteUseCase {
             selectedStickyNote.setColor(input.getStickyNoteColor());
 
             domainEventBus.postAll(selectedStickyNote);
+            output.setStickyNoteId(selectedStickyNote.getId());
             output.setStickyNoteColor(selectedStickyNote.getColor());
         } else {
             throw new RuntimeException("Sticky note not found, sticky note id = " + input.getStickyNoteId());

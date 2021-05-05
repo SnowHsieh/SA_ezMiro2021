@@ -1,6 +1,7 @@
 package ntut.csie.selab.usecase.widget.edit.color;
 
 public class ChangeColorOfStickyNoteOutput {
+    private String stickyNoteId;
     private String stickyNoteColor;
 
     public String getStickyNoteColor() {
@@ -9,5 +10,13 @@ public class ChangeColorOfStickyNoteOutput {
 
     public void setStickyNoteColor(String stickyNoteColor) {
         this.stickyNoteColor = stickyNoteColor;
+    }
+
+    public String getStickyNoteId() {
+        return stickyNoteId;
+    }
+
+    public void setStickyNoteId(String stickyNoteId) {
+        this.stickyNoteId = stickyNoteId;
     }
 }
