@@ -14,6 +14,11 @@
             <button @click="createNotes('#C08AC9')" style="width:100px;background-color:#C08AC9">Policy</button>
             <button @click="createNotes('#FFF9B2')" style="width:100px;background-color:#FFF9B2">Aggregate</button>
         </div>
+        <br>
+        <button @click="bringFigureToFront()" style="width:100px;">Bring Figure To Front</button>
+        <button @click="bringFigureToFrontEnd()" style="width:100px;">Bring Figure To Front End</button>
+        <button @click="sendFigureToBack()" style="width:100px;">Send Figure To Back</button>
+        <button @click="sendFigureToBackEnd()" style="width:100px;">Send Figure To Back End</button>
         <canvas id="canvas"></canvas>
     </div>
 </template>
@@ -45,7 +50,6 @@ export default {
         this.canvas.on('object:moving', (event) => {
             var target = event.target
             this.$api.note.moveNote(target.figureId, target.top, target.left)
-
         })
         this.canvas.on('object:scaling', (event) => {
             var target = event.target
@@ -74,7 +78,6 @@ export default {
             this.activeObject = event.target
         })
 
-        // const boardId = await this.$api.board.createBoard('projectId', 'BoardName')
         const boardId = this.$route.params.id
         this.boardId = boardId
         var figures = await this.$api.board.getBoardContent(boardId)
@@ -131,6 +134,7 @@ export default {
         async createNotes (color) {
             await this.$api.note.postNote(this.boardId, 200, 200, 100, 100, color)
             var figures = await this.$api.board.getBoardContent(this.boardId)
+            console.log(figures)
             this.drawNotes(figures)
         },
         changeColor (color) {
@@ -226,6 +230,26 @@ export default {
         resetData () {
             this.groupObject = null
             this.textBox = null
+        },
+        bringFigureToFront () {
+            this.canvas.bringForward(this.activeObject)
+            this.$api.board.bringFigureToFront(this.boardId, this.activeObject.figureId)
+            this.canvas.renderAll()
+        },
+        bringFigureToFrontEnd () {
+            this.canvas.bringToFront(this.activeObject)
+            this.$api.board.bringFigureToFrontEnd(this.boardId, this.activeObject.figureId)
+            this.canvas.renderAll()
+        },
+        sendFigureToBack () {
+            this.canvas.sendBackwards(this.activeObject)
+            this.$api.board.sendFigureToBack(this.boardId, this.activeObject.figureId)
+            this.canvas.renderAll()
+        },
+        sendFigureToBackEnd () {
+            this.canvas.sendToBack(this.activeObject)
+            this.$api.board.sendFigureToBackEnd(this.boardId, this.activeObject.figureId)
+            this.canvas.renderAll()
         }
     }
 }

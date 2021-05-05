@@ -1,5 +1,9 @@
 package ntut.csie.team5.application.springboot.web;
 
+import ntut.csie.sslab.ddd.model.DomainEvent;
+import ntut.csie.sslab.ddd.model.DomainEventBus;
+import ntut.csie.team5.usecase.eventhandler.NotifyBoard;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +21,19 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 public class EzMiroWebMain extends SpringBootServletInitializer implements CommandLineRunner {
 
 
+    private DomainEventBus domainEventBus;
+    private NotifyBoard notifyBoard;
+
+    @Autowired
+    public void setDomainEventBus(DomainEventBus domainEventBus) {
+        this.domainEventBus = domainEventBus;
+    }
+
+    @Autowired
+    public void setNotifyBoard(NotifyBoard notifyBoard) {
+        this.notifyBoard = notifyBoard;
+    }
+
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(EzMiroWebMain.class);
@@ -29,5 +46,6 @@ public class EzMiroWebMain extends SpringBootServletInitializer implements Comma
     @Override
     public void run(String... args) throws Exception {
         System.out.println("EzMiroWebMain run");
+        domainEventBus.register(notifyBoard);
     }
 }
