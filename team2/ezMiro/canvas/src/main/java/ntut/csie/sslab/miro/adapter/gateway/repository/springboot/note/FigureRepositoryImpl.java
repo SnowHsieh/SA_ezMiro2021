@@ -5,17 +5,16 @@ import ntut.csie.sslab.miro.entity.model.note.Coordinate;
 import ntut.csie.sslab.miro.entity.model.note.Note;
 import ntut.csie.sslab.miro.entity.model.note.NoteBuilder;
 import ntut.csie.sslab.miro.usecase.note.FigureRepository;
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class FigureRepositoryImpl implements FigureRepository {
-    private Map<String, Figure> figures = new HashMap<>();
+    private Map<String, Figure> figures = new LinkedHashMap<>();
 
     public FigureRepositoryImpl() {
         Note note1 = NoteBuilder.newInstance()
-                .coordinate(new Coordinate(new Point(100, 100)))
+                .coordinate(new Coordinate(100, 100))
                 .boardId("boardId")
                 .color("#C9DF56")
                 .description("BoardId\nCoordinate")
@@ -23,7 +22,7 @@ public class FigureRepositoryImpl implements FigureRepository {
                 .height(100)
                 .build();
         Note note2 = NoteBuilder.newInstance()
-                .coordinate(new Coordinate(new Point(220, 100)))
+                .coordinate(new Coordinate(220, 100))
                 .boardId("boardId")
                 .color("#6CD8FA")
                 .description("Create\nNote")
@@ -31,7 +30,7 @@ public class FigureRepositoryImpl implements FigureRepository {
                 .height(100)
                 .build();
         Note note3 = NoteBuilder.newInstance()
-                .coordinate(new Coordinate(new Point(340, 100)))
+                .coordinate(new Coordinate(340, 100))
                 .boardId("boardId")
                 .color("#FF9D48")
                 .description("Note\nCreated")
@@ -39,7 +38,7 @@ public class FigureRepositoryImpl implements FigureRepository {
                 .height(100)
                 .build();
         Note note4 = NoteBuilder.newInstance()
-                .coordinate(new Coordinate(new Point(280, 20)))
+                .coordinate(new Coordinate(280, 20))
                 .boardId("boardId")
                 .color("#FFF9B1")
                 .description("Figure")
@@ -47,7 +46,7 @@ public class FigureRepositoryImpl implements FigureRepository {
                 .height(100)
                 .build();
         Note note5 = NoteBuilder.newInstance()
-                .coordinate(new Coordinate(new Point(150, 180)))
+                .coordinate(new Coordinate(150, 180))
                 .boardId("boardId")
                 .color("#FEF445")
                 .description("User")
@@ -68,7 +67,7 @@ public class FigureRepositoryImpl implements FigureRepository {
 
     @Override
     public Optional<Figure> findById(String figureId) {
-        return Optional.of(figures.get(figureId));
+        return Optional.ofNullable(figures.get(figureId));
     }
 
     @Override

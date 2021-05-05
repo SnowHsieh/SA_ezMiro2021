@@ -1,21 +1,30 @@
 package ntut.csie.sslab.miro.entity.model.note;
 
-import java.awt.*;
 import java.util.Objects;
 
 public class Coordinate {
-    private Point position;
+    private double x;
+    private double y;
 
-    public Coordinate(Point position) {
-        this.position = position;
+    public Coordinate(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public Point getPosition() {
-        return position;
+    public double getX() {
+        return x;
     }
 
-    public void setPosition(Point position) {
-        this.position = position;
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
     }
 
     @Override
@@ -23,11 +32,11 @@ public class Coordinate {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Coordinate that = (Coordinate) o;
-        return this.position.getX() == that.getPosition().getX() && this.position.getY() == that.getPosition().getY();
+        return Double.compare(that.x, x) == 0 && Double.compare(that.y, y) == 0;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(position);
+        return Objects.hash(x, y);
     }
 }

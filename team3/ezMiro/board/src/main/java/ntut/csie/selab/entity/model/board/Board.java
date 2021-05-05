@@ -42,4 +42,10 @@ public class Board extends AggregateRoot<String> {
             widgetIds.add(widgetId);
         }
     }
+
+    public void commitWidgetDeletion(String boardId, String widgetId) {
+        if (id.equals(boardId)) {
+            widgetIds.remove(widgetId);
+        }
+    }
 }

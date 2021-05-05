@@ -1,29 +1,26 @@
 package ntut.csie.sslab.miro.entity.model.note;
 
 import ntut.csie.sslab.miro.entity.model.figure.Figure;
-import ntut.csie.sslab.miro.entity.model.note.event.NoteColorChanged;
-import ntut.csie.sslab.miro.entity.model.note.event.NoteCreated;
-import ntut.csie.sslab.miro.entity.model.note.event.NoteDescriptionChanged;
+import ntut.csie.sslab.miro.entity.model.note.event.*;
 
 public class Note extends Figure {
     private String description;
 
-    public Note(String boardId, String noteId, String description, String color, Coordinate coordinate, double width, double height) {
-        super(noteId, boardId, coordinate, color, width, height);
+    public Note(String boardId, String noteId, String description, String color, Coordinate coordinate, double width, double height, int displayOrder) {
+        super(noteId, boardId, coordinate, color, width, height, displayOrder);
         this.description = description;
 
-        addDomainEvent(new NoteCreated(boardId, noteId, description, color, coordinate, width, height));
+        addDomainEvent(new NoteCreated(boardId, noteId, description, color, coordinate, width, height, displayOrder));
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void changeDescription(String newDescription, String boardId) {
-        if(!description.equals(newDescription)){
-            String originalDescription = description;
-            this.setDescription(newDescription);
-            addDomainEvent(new NoteDescriptionChanged(getId(), originalDescription, newDescription, boardId));
+    public void changeDescription(String description) {
+        if(!this.description.equals(description)){
+            this.setDescription(description);
+            addDomainEvent(new NoteDescriptionChanged(getId(), description, getBoardId()));
         }
     }
 
@@ -31,11 +28,36 @@ public class Note extends Figure {
         this.description = description;
     }
 
-    public void changeColor(String newColor) {
-        if(!getColor().equals(newColor)){
-            String originalColor = getColor();
-            this.setColor(newColor);
-            addDomainEvent(new NoteColorChanged(getId(), originalColor, newColor, getBoardId()));
+    public void changeColor(String color) {
+        if(!getColor().equals(color)){
+            this.setColor(color);
+            addDomainEvent(new NoteColorChanged(getId(), color, getBoardId()));
         }
+    }
+
+    public void changeSize(double height, double width) {
+        if(getHeight() != height || getWidth() != width) {
+            this.setHeight(height);
+            this.setWidth(width);
+            addDomainEvent(new NoteSizeChanged(getId(), height, width, getBoardId()));
+        }
+    }
+
+    public void changeDisplayOrder(int displayOrder) {
+        if(getDisplayOrder() != displayOrder) {
+            this.setDisplayOrder(displayOrder);
+            addDomainEvent(new NoteDisplayOrderChanged(getId(), displayOrder, getBoardId()));
+        }
+    }
+
+    public void move(Coordinate coordinate) {
+        if(!getCoordinate().equals(coordinate)) {
+            this.setCoordinate(coordinate);
+            addDomainEvent(new NoteMoved(getId(), coordinate, getBoardId()));
+        }
+    }
+
+    public void markAsRemoved(String boardId) {
+        addDomainEvent(new NoteDeleted(boardId));
     }
 }

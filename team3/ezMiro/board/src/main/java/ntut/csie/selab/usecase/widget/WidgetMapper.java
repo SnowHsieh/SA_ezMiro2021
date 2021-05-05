@@ -2,7 +2,6 @@ package ntut.csie.selab.usecase.widget;
 
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.entity.model.widget.Widget;
-import ntut.csie.selab.usecase.widget.WidgetDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,9 @@ public class WidgetMapper {
                 width,
                 height,
                 widget.getColor(),
-                widget.getTextColor());
+                widget.getTextColor(),
+                widget.getText(),
+                widget.getzIndex());
     }
 
     public List<WidgetDto> domainToDto(List<Widget> widgets) {

@@ -2,6 +2,8 @@ package ntut.csie.selab.entity.model.widget;
 
 import ntut.csie.selab.entity.model.widget.event.TextOfWidgetEdited;
 import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
+import ntut.csie.selab.entity.model.widget.event.WidgetDeleted;
+import ntut.csie.selab.entity.model.widget.event.WidgetMoved;
 import ntut.csie.selab.model.AggregateRoot;
 
 import java.util.Date;
@@ -12,6 +14,7 @@ public abstract class Widget extends AggregateRoot<String> {
     protected String text;
     protected String color;
     protected String textColor;
+    protected int zIndex;
 
     public Widget(String id, String boardId, Coordinate coordinate) {
         super(id);
@@ -19,8 +22,17 @@ public abstract class Widget extends AggregateRoot<String> {
         this.coordinate = coordinate;
         this.color = "#123123";
         this.textColor = "#456456";
+        this.zIndex = 1;
 
         addDomainEvent(new WidgetCreated(new Date(), boardId, id));
+    }
+
+    public void delete() {
+        addDomainEvent((new WidgetDeleted(
+                new Date(),
+                this.boardId,
+                getId()
+        )));
     }
 
     public String getBoardId() {
@@ -29,6 +41,12 @@ public abstract class Widget extends AggregateRoot<String> {
 
     public Coordinate getCoordinate() {
         return coordinate;
+    }
+
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
+
+        addDomainEvent(new WidgetMoved(new Date(), id));
     }
 
     public void setText(String text) {
@@ -55,5 +73,13 @@ public abstract class Widget extends AggregateRoot<String> {
 
     public void setTextColor(String textColor) {
         this.textColor = textColor;
+    }
+
+    public int getzIndex() {
+        return zIndex;
+    }
+
+    public void setzIndex(int zIndex) {
+        this.zIndex = zIndex;
     }
 }

@@ -28,7 +28,7 @@ public class GetWidgetController {
         this.getWidgetUseCase = getWidgetUseCase;
     }
 
-    @GetMapping(path = "/${EZ_MIRO_PREFIX}/boards/{boardId}/widgets/{widgetId}", produces = "application/json")
+    @GetMapping(path = "/${EZ_MIRO_PREFIX}/boards/{boardId}/widgets/sticky-notes/{widgetId}", produces = "application/json")
     public WidgetViewModel getWidget(@PathVariable("widgetId") String widgetId) {
         GetWidgetInput input = new GetWidgetInput();
         GetWidgetOutput output = new GetWidgetOutput();

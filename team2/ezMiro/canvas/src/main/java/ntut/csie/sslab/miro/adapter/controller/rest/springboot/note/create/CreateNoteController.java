@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.ws.rs.QueryParam;
-import java.awt.*;
 
 @RestController
 public class CreateNoteController {
@@ -27,22 +25,20 @@ public class CreateNoteController {
     @PostMapping(path = "${MIRO_PREFIX}/figures/notes", consumes = "application/json", produces = "application/json")
     public CqrsCommandViewModel createNote(@QueryParam("boardId") String boardId,
                                             @RequestBody String noteInfo) {
-
-        String coordinate = "";
+        double coordinateX = 0;
+        double coordinateY = 0;
 
         try {
             JSONObject boardJSON = new JSONObject(noteInfo);
-            coordinate = boardJSON.getString("coordinate");
+            coordinateX = boardJSON.getJSONObject("coordinate").getDouble("x");
+            coordinateY = boardJSON.getJSONObject("coordinate").getDouble("y");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        // TODO: parse string to coordinate
-
-        String[] point = coordinate.split(",");
 
         CreateNoteInput input = createNoteUseCase.newInput();
         input.setBoardId(boardId);
-        input.setCoordinate(new Coordinate(new Point(Integer.valueOf(point[0]), Integer.valueOf(point[1]))));
+        input.setCoordinate(new Coordinate(coordinateX, coordinateY));
 
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
@@ -51,5 +47,3 @@ public class CreateNoteController {
         return presenter.buildViewModel();
     }
 }
-
-

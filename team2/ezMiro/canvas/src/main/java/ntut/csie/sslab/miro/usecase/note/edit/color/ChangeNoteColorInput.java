@@ -7,11 +7,7 @@ public interface ChangeNoteColorInput extends Input {
 
     String getNoteId();
 
-    void setBoardId(String boardId);
+    void setColor(String color);
 
-    String getBoardId();
-
-    void setNewColor(String color);
-
-    String getNewColor();
+    String getColor();
 }

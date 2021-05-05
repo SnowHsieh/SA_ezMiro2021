@@ -13,14 +13,13 @@ import ntut.csie.sslab.miro.usecase.note.edit.color.ChangeNoteColorUseCase;
 import ntut.csie.sslab.miro.usecase.note.edit.color.ChangeNoteColorUseCaseImpl;
 import org.junit.Before;
 import org.junit.Test;
-import java.awt.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ChangeNoteColorUseCaseTest {
-    public FigureRepository figureRepository;
-    public DomainEventBus domainEventBus;
-    public DomainEventListener eventListener;
+    private FigureRepository figureRepository;
+    private DomainEventBus domainEventBus;
+    private DomainEventListener eventListener;
 
     @Before
     public void setUp() {
@@ -38,7 +37,7 @@ public class ChangeNoteColorUseCaseTest {
         ChangeNoteColorInput input = changeNoteColorUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setNoteId(noteId);
-        input.setNewColor("#000000");
+        input.setColor("#000000");
 
         changeNoteColorUseCase.execute(input, output);
 
@@ -52,7 +51,7 @@ public class ChangeNoteColorUseCaseTest {
         CreateNoteInput input = createNoteUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId("boardId");
-        input.setCoordinate(new Coordinate(new Point(9,26)));
+        input.setCoordinate(new Coordinate(9,26));
 
         createNoteUseCase.execute(input, output);
 

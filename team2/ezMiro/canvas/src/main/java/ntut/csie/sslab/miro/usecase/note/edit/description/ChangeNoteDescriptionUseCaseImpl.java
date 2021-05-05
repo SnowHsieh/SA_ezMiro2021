@@ -7,8 +7,8 @@ import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 
 public class ChangeNoteDescriptionUseCaseImpl implements ChangeNoteDescriptionUseCase{
 
-    public FigureRepository figureRepository;
-    public DomainEventBus domainEventBus;
+    private FigureRepository figureRepository;
+    private DomainEventBus domainEventBus;
 
     public ChangeNoteDescriptionUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
         this.figureRepository = figureRepository;
@@ -19,14 +19,14 @@ public class ChangeNoteDescriptionUseCaseImpl implements ChangeNoteDescriptionUs
     public void execute(ChangeNoteDescriptionInput input, CqrsCommandOutput output) {
         Note note = (Note)figureRepository.findById(input.getNoteId()).orElse(null);
         // TODO: Type cast need to fix.
-        if (note == null){
+        if (note == null) {
            output.setId(input.getNoteId())
                    .setMessage("Change note description failed: note not found, note id = " + input.getNoteId());
 //           domainEventBus.post()
-            return;
+           return;
         }
 
-        note.changeDescription(input.getNewDescription(), input.getBoardId());
+        note.changeDescription(input.getDescription());
 
         figureRepository.save(note);
         domainEventBus.postAll(note);
@@ -42,7 +42,6 @@ public class ChangeNoteDescriptionUseCaseImpl implements ChangeNoteDescriptionUs
     private static class ChangeNoteDescriptionInputImpl implements ChangeNoteDescriptionInput {
         private String noteId;
         private String description;
-        private String boardId;
 
         @Override
         public void setNoteId(String noteId) {
@@ -55,22 +54,12 @@ public class ChangeNoteDescriptionUseCaseImpl implements ChangeNoteDescriptionUs
         }
 
         @Override
-        public void setBoardId(String boardId) {
-            this.boardId = boardId;
-        }
-
-        @Override
-        public String getBoardId() {
-            return boardId;
-        }
-
-        @Override
-        public void setNewDescription(String description) {
+        public void setDescription(String description) {
             this.description = description;
         }
 
         @Override
-        public String getNewDescription() {
+        public String getDescription() {
             return description;
         }
     }

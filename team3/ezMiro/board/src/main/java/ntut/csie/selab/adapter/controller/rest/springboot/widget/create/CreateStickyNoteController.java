@@ -2,8 +2,6 @@ package ntut.csie.selab.adapter.controller.rest.springboot.widget.create;
 
 
 import ntut.csie.selab.entity.model.widget.Coordinate;
-import ntut.csie.selab.usecase.board.create.CreateBoardUseCase;
-import ntut.csie.selab.usecase.widget.WidgetDto;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteInput;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteUseCase;
@@ -36,10 +34,10 @@ public class CreateStickyNoteController {
 
         try {
             JSONObject widgetJSON = new JSONObject(widgetInfo);
-            topLeftX = Integer.parseInt(widgetJSON.getString("topLeftX"));
-            topLeftY = Integer.parseInt(widgetJSON.getString("topLeftY"));
-            bottomRightX = Integer.parseInt(widgetJSON.getString("bottomRightX"));
-            bottomRightY = Integer.parseInt(widgetJSON.getString("bottomRightY"));
+            topLeftX = widgetJSON.getInt("topLeftX");
+            topLeftY = widgetJSON.getInt("topLeftY");
+            bottomRightX = widgetJSON.getInt("bottomRightX");
+            bottomRightY = widgetJSON.getInt("bottomRightY");
         } catch (JSONException e) {
             e.printStackTrace();
         }

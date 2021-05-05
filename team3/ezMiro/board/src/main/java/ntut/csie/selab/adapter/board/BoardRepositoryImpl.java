@@ -18,11 +18,9 @@ public class BoardRepositoryImpl implements BoardRepository {
 
     @Override
     public void add(Board board) {
-        if (boards.contains(board)) {
-            boards.remove(board);
+        if (!boards.contains(board)) {
+            boards.add(board);
         }
-
-        boards.add(board);
     }
 
     @Override

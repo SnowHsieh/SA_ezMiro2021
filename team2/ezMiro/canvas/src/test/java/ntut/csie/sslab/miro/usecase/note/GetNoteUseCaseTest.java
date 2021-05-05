@@ -14,13 +14,12 @@ import ntut.csie.sslab.miro.usecase.note.get.GetNoteUseCase;
 import ntut.csie.sslab.miro.usecase.note.get.GetNoteUseCaseImpl;
 import org.junit.Before;
 import org.junit.Test;
-import java.awt.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class GetNoteUseCaseTest {
-    public FigureRepository figureRepository;
-    public DomainEventBus domainEventBus;
+    private FigureRepository figureRepository;
+    private DomainEventBus domainEventBus;
 
     @Before
     public void setUp() {
@@ -35,7 +34,7 @@ public class GetNoteUseCaseTest {
 
     @Test
     public void get_note_by_note_id() {
-        Coordinate coordinate = new Coordinate(new Point(5,6));
+        Coordinate coordinate = new Coordinate(5,6);
         String noteId = create_note(coordinate);
         GetNoteUseCase getNoteUseCase = new GetNoteUseCaseImpl(figureRepository);
         GetNoteInput input = (GetNoteInput) getNoteUseCase;
@@ -48,14 +47,14 @@ public class GetNoteUseCaseTest {
         assertEquals("#6FB7B7", output.getNote().getColor());
         assertEquals(100, output.getNote().getWidth());
         assertEquals(100, output.getNote().getHeight());
-        assertEquals(5, output.getNote().getCoordinate().getPosition().getX());
-        assertEquals(6, output.getNote().getCoordinate().getPosition().getY());
+        assertEquals(5, output.getNote().getCoordinate().getX());
+        assertEquals(6, output.getNote().getCoordinate().getY());
     }
 
     @Test
     public void get_notes_by_board_id() {
-        Coordinate coordinate1 = new Coordinate(new Point(5,6));
-        Coordinate coordinate2 = new Coordinate(new Point(10,8));
+        Coordinate coordinate1 = new Coordinate(5,6);
+        Coordinate coordinate2 = new Coordinate(10,8);
         String note1Id = create_note(coordinate1);
         String note2Id = create_note(coordinate2);
         GetNoteUseCase getNoteUseCase = new GetNoteUseCaseImpl(figureRepository);
@@ -71,21 +70,21 @@ public class GetNoteUseCaseTest {
         assertEquals("#6FB7B7", note1Dto.getColor());
         assertEquals(100, note1Dto.getWidth());
         assertEquals(100, note1Dto.getHeight());
-        assertEquals(5, note1Dto.getCoordinate().getPosition().getX());
-        assertEquals(6, note1Dto.getCoordinate().getPosition().getY());
+        assertEquals(5, note1Dto.getCoordinate().getX());
+        assertEquals(6, note1Dto.getCoordinate().getY());
         NoteDto note2Dto = output.getNotes().stream().filter(x -> x.getNoteId().equals(note2Id)).findFirst().get();
         assertEquals("", note2Dto.getDescription());
         assertEquals("#6FB7B7", note2Dto.getColor());
         assertEquals(100, note2Dto.getWidth());
         assertEquals(100, note2Dto.getHeight());
-        assertEquals(10, note2Dto.getCoordinate().getPosition().getX());
-        assertEquals(8, note2Dto.getCoordinate().getPosition().getY());
+        assertEquals(10, note2Dto.getCoordinate().getX());
+        assertEquals(8, note2Dto.getCoordinate().getY());
     }
 
     @Test
     public void get_notes_by_board_id_and_note_id() {
-        Coordinate coordinate1 = new Coordinate(new Point(5,6));
-        Coordinate coordinate2 = new Coordinate(new Point(10,8));
+        Coordinate coordinate1 = new Coordinate(5,6);
+        Coordinate coordinate2 = new Coordinate(10,8);
         String note1Id = create_note(coordinate1);
         create_note(coordinate2);
         GetNoteUseCase getNoteUseCase = new GetNoteUseCaseImpl(figureRepository);
@@ -100,14 +99,14 @@ public class GetNoteUseCaseTest {
         assertEquals("#6FB7B7", output.getNote().getColor());
         assertEquals(100, output.getNote().getWidth());
         assertEquals(100, output.getNote().getHeight());
-        assertEquals(5, output.getNote().getCoordinate().getPosition().getX());
-        assertEquals(6, output.getNote().getCoordinate().getPosition().getY());
+        assertEquals(5, output.getNote().getCoordinate().getX());
+        assertEquals(6, output.getNote().getCoordinate().getY());
     }
 
     @Test
     public void get_notes_without_board_id_and_note_id() {
-        Coordinate coordinate1 = new Coordinate(new Point(5,6));
-        Coordinate coordinate2 = new Coordinate(new Point(10,8));
+        Coordinate coordinate1 = new Coordinate(5,6);
+        Coordinate coordinate2 = new Coordinate(10,8);
         create_note(coordinate1);
         create_note(coordinate2);
         GetNoteUseCase getNoteUseCase = new GetNoteUseCaseImpl(figureRepository);

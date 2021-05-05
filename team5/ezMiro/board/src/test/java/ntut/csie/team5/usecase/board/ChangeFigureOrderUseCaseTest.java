@@ -46,8 +46,8 @@ public class ChangeFigureOrderUseCaseTest extends AbstractTest {
         assertEquals(ExitCode.SUCCESS, changeFigureOrderOutput.getExitCode());
 
         board = boardRepository.findById(changeFigureOrderOutput.getId()).get();
-        assertEquals(1, board.getCommittedFigures().get(0).getOrder());
-        assertEquals(0, board.getCommittedFigures().get(1).getOrder());
+        assertEquals(0, board.getCommittedFigures().get(0).getOrder());
+        assertEquals(1, board.getCommittedFigures().get(1).getOrder());
     }
 
     @Test
@@ -73,8 +73,8 @@ public class ChangeFigureOrderUseCaseTest extends AbstractTest {
         assertEquals(ExitCode.SUCCESS, changeFigureOrderOutput.getExitCode());
 
         board = boardRepository.findById(changeFigureOrderOutput.getId()).get();
-        assertEquals(1, board.getCommittedFigures().get(0).getOrder());
-        assertEquals(0, board.getCommittedFigures().get(1).getOrder());
+        assertEquals(0, board.getCommittedFigures().get(0).getOrder());
+        assertEquals(1, board.getCommittedFigures().get(1).getOrder());
     }
 
     @Test
@@ -102,9 +102,9 @@ public class ChangeFigureOrderUseCaseTest extends AbstractTest {
         assertEquals(ExitCode.SUCCESS, changeFigureOrderOutput.getExitCode());
 
         board = boardRepository.findById(changeFigureOrderOutput.getId()).get();
-        assertEquals(2, board.getCommittedFigures().get(0).getOrder());
-        assertEquals(0, board.getCommittedFigures().get(1).getOrder());
-        assertEquals(1, board.getCommittedFigures().get(2).getOrder());
+        assertEquals(0, board.getCommittedFigures().get(0).getOrder());
+        assertEquals(1, board.getCommittedFigures().get(1).getOrder());
+        assertEquals(2, board.getCommittedFigures().get(2).getOrder());
     }
 
     @Test
@@ -132,8 +132,8 @@ public class ChangeFigureOrderUseCaseTest extends AbstractTest {
         assertEquals(ExitCode.SUCCESS, changeFigureOrderOutput.getExitCode());
 
         board = boardRepository.findById(changeFigureOrderOutput.getId()).get();
-        assertEquals(1, board.getCommittedFigures().get(0).getOrder());
-        assertEquals(2, board.getCommittedFigures().get(1).getOrder());
-        assertEquals(0, board.getCommittedFigures().get(2).getOrder());
+        assertEquals(0, board.getCommittedFigures().get(0).getOrder());
+        assertEquals(1, board.getCommittedFigures().get(1).getOrder());
+        assertEquals(2, board.getCommittedFigures().get(2).getOrder());
     }
 }

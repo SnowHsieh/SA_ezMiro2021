@@ -12,10 +12,20 @@ export const CreateStickyNote = async (boardId, info) => {
 
 export const ReadStickyNoteBy = async (id, boardId) => {
   try {
-    const res = await axios.get(`${host}/ez-miro/boards/${boardId}/widgets/${id}`)
+    const res = await axios.get(`${host}/ez-miro/boards/${boardId}/widgets/sticky-notes/${id}`)
     console.log(res.data)
     return res.data
   } catch (err) {
     console.log(err)
+  }
+}
+
+export const DeleteStickyNoteBy = async (id, boardId) => {
+  try {
+    const res = await axios.delete(`${host}/ez-miro/boards/${boardId}/widgets/sticky-notes/${id}`)
+    return res.data
+  } catch (err) {
+    console.log(err)
+    return err
   }
 }
