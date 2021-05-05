@@ -31,7 +31,7 @@ export const DeleteStickyNoteBy = async (id, boardId) => {
 
 export const EditTextOfStickyNoteBy = async (id, boardId, newText) => {
   try {
-    const res = await axios.put(`${host}/ez-miro/boards/${boardId}/widgets/sticky-notes/${id}/edit-text`, { newText })
+    const res = await axios.put(`${host}/ez-miro/boards/${boardId}/widgets/sticky-notes/${id}/text`, { newText })
     return res.data
   } catch (err) {
     console.log(err)

@@ -1,11 +1,8 @@
 package ntut.csie.selab.adapter.controller.rest.springboot.widget.editTextOfStickyNote;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.usecase.widget.edit.text.EditTextOfStickyNoteInput;
 import ntut.csie.selab.usecase.widget.edit.text.EditTextOfStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.edit.text.EditTextOfStickyNoteUseCase;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +17,7 @@ public class EditTextOfStickyNoteController {
         this.editTextOfStickyNoteUseCase = editTextOfStickyNoteUseCase;
     }
 
-    @ResponseStatus
-    @PutMapping(path = "/${EZ_MIRO_PREFIX}/boards/{boardId}/widgets/sticky-notes/{stickyNoteId}/edit-text", consumes = "application/json", produces = "application/json")
+    @PutMapping(path = "/${EZ_MIRO_PREFIX}/boards/{boardId}/widgets/sticky-notes/{stickyNoteId}/text", consumes = "application/json", produces = "application/json")
     public String editTextOfSticky(@PathVariable("boardId") String boardId,
                                    @PathVariable("stickyNoteId") String stickyNoteId,
                                    @RequestBody String widgetInfo) {

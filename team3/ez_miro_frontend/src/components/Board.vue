@@ -3,7 +3,8 @@
     <canvas id="canvas" ref='board'></canvas>
     <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
       <li @click="deleteWidget()" class="list-group-item">Delete</li>
-      <li class="list-group-item">123</li>
+      <li class="list-group-item">
+        <input type="color" id="favcolor" name="favcolor" v-model="selectedStickyNoteColor" @change="changeColorOfStickyNote">Color</li>
       <li class="list-group-item">123</li>
     </ul>
   </div>
@@ -11,7 +12,15 @@
 
 <script>
 import { GetBoardContent } from '@/apis/Boards'
-import { CreateStickyNote, ReadStickyNoteBy, DeleteStickyNoteBy, MoveStickyNoteBy, ResizeStickyNoteBy } from '@/apis/Widget'
+import {
+  CreateStickyNote,
+  ReadStickyNoteBy,
+  DeleteStickyNoteBy,
+  MoveStickyNoteBy,
+  ResizeStickyNoteBy,
+  EditTextOfStickyNoteBy,
+  ChangeColorOfStickyNoteBy
+} from '@/apis/Widget'
 import '@/models/StickyNote'
 import { fabric } from 'fabric'
 
@@ -28,7 +37,8 @@ export default {
         left: '-1px'
       },
       selectedStickyNote: null,
-      ungroupTarget: {}
+      ungroupTarget: {},
+      selectedStickyNoteColor: ''
     }
   },
   async created () {
@@ -57,6 +67,7 @@ export default {
     })
 
     this.canvas.on('mouse:up', async function (e) {
+      console.log(e.target)
       // 臭到不行
       if (e.button === 3) {
         me.isDisplayRightClickMenu = true
@@ -131,7 +142,7 @@ export default {
             height: widget.height,
             width: widget.width,
             fill: widget.color,
-            text: '123123',
+            text: widget.text,
             textColor: widget.textColor
           })
         )
@@ -148,7 +159,7 @@ export default {
           height: stickyNote.widgetDto.height,
           width: stickyNote.widgetDto.width,
           fill: stickyNote.widgetDto.color,
-          text: '123123',
+          text: stickyNote.widgetDto.text,
           textColor: stickyNote.widgetDto.textColor
         })
       )
@@ -176,9 +187,8 @@ export default {
     listenEndTextEditing (textObject) {
       const canvas = this.canvas
       const group = this.ungroupTarget
-      console.log(group)
-      textObject.on('editing:exited', function (e) {
-        console.log('end editing')
+      const me = this
+      textObject.on('editing:exited', async function (e) {
         const objects = group._objects
         objects.forEach(item => {
           canvas.remove(item)
@@ -194,7 +204,15 @@ export default {
           textColor: objects[1].fill
         }))
         canvas.renderAll()
+        await EditTextOfStickyNoteBy(group.id, me.boardId, objects[1].text)
       })
+    },
+    async changeColorOfStickyNote () {
+      const res = await ChangeColorOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, this.selectedStickyNoteColor)
+      if (res !== null) {
+        this.selectedStickyNote.rectObject.set('fill', this.selectedStickyNoteColor)
+        this.canvas.renderAll()
+      }
     }
   }
 }

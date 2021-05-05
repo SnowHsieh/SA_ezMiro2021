@@ -21,8 +21,9 @@ public abstract class Widget extends AggregateRoot<String> {
         this.boardId = boardId;
         this.coordinate = coordinate;
         this.color = "#123123";
-        this.textColor = "#456456";
+        this.textColor = "#ffffff";
         this.zIndex = 1;
+        this.text = "";
 
         addDomainEvent(new WidgetCreated(new Date(), boardId, id));
     }
