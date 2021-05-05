@@ -24,6 +24,7 @@ public class ResizeStickyNoteUseCase {
             stickyNote.setCoordinate(input.getCoordinate());
 
             eventBus.postAll(stickyNote);
+            output.setStickyNoteId(input.getStickyNoteId());
             output.setCoordinate(input.getCoordinate());
         } else {
             throw new RuntimeException("Sticky note not found, sticky note id = " + input.getStickyNoteId());
