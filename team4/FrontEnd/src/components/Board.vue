@@ -15,7 +15,7 @@
                     <input type="color" id="favcolor" name="favcolor" style="margin-left: 4rem" />
                   </li>
                 </label>
-                <li id="delButton">Delete</li>
+                <li id="delButton" name="delButton">Delete</li>
                 <li id = "bringToFrontButton">bringToFront</li>
               </ul>
             </div>
@@ -55,7 +55,7 @@ export default {
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = 'aeb7b191-cbea-46ee-82d3-4b3cf4a9eb09'
+        this.boardId = '161343a0-7dfa-45ea-b0b5-eca914a28c03'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         // console.log(res.data)
         this.drawStickyNote(res.data.figureDtos)
@@ -106,7 +106,7 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      // this.refreshCanvas()
+      this.refreshCanvas()
     },
     async moveStickyNote (figure) {
       try {
@@ -121,7 +121,7 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      // this.refreshCanvas()
+      this.refreshCanvas()
     },
     async deleteStickyNote (figure) {
       try {
@@ -131,10 +131,10 @@ export default {
           }
         )
         console.log(res.data.message)
-        this.canvas.remove(figure)
       } catch (err) {
         console.log(err)
       }
+      this.refreshCanvas()
     },
     async changeFigureOrder () {
       try {
@@ -144,7 +144,7 @@ export default {
           flist.push(objects[i].get('id'))
         }
         console.log(flist)
-        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/changeFigureOrder',
+        const res = await axios.post('http://localhost:8081/boards/' + this.boardId + '/changeFigureOrder',
           {
             figureOrderList: flist
           }
@@ -202,6 +202,7 @@ export default {
     refreshCanvas () {
       this.canvas.clear()
       this.getBoardContent()
+      // location.reload()
     },
     listenEventsOnCanvas () {
       var _this = this
@@ -274,18 +275,15 @@ export default {
     addListenerOfChangeTextFigureColor (e) {
       var _this = this
       console.log('current Color etarget:', e.target.get('id'))
-      // console.log('current Color type:', e.target.type)
-      // console.log('current Color (0)type:', e.target.item(0).type)
       _this.favcolor.value = e.target.item(0).get('fill')
       console.log('be color:', _this.favcolor.value)
-      _this.favcolor.addEventListener('change', function handler () {
-        console.log('aft color:', _this.favcolor.value)
+      var newHandler = function () {
         e.target.item(0).set('fill', _this.favcolor.value) // rect fill
-        console.log('color in id:', e.target.get('id'))
         _this.editStickyNote(e.target)
         _this.hideContextMenu()
-        _this.favcolor.removeEventListener('change', handler, true)
-      }, true)
+        _this.favcolor.removeEventListener('change', newHandler)
+      }
+      _this.favcolor.addEventListener('change', newHandler)
     },
     addListenerOfDeleteTextFigure (e) {
       var _this = this
@@ -294,9 +292,9 @@ export default {
         console.log('del in id:', e.target.get('id'))
         _this.deleteStickyNote(e.target)
         _this.hideContextMenu()
-        _this.delButton.removeEventListener('mouseup', newHandler, true)
+        _this.delButton.removeEventListener('mouseup', newHandler)
       }
-      _this.delButton.addEventListener('mouseup', newHandler, true)
+      _this.delButton.addEventListener('mouseup', newHandler)
     },
     addListenerOfBringToFront (e) {
       var _this = this
@@ -305,7 +303,7 @@ export default {
         e.target.bringToFront()
         _this.changeFigureOrder()
         _this.hideContextMenu()
-        _this.bringToFrontButton.removeEventListener('mouseup', newHandler, true)
+        _this.bringToFrontButton.removeEventListener('mouseup', newHandler)
       }
       _this.bringToFrontButton.addEventListener('mouseup', newHandler)
     },
