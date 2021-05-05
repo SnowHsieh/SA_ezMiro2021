@@ -7,6 +7,7 @@ import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.edit.text.EditTextOfStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +40,11 @@ public class UseCaseInjection {
     @Bean(name="GetWidgetUseCase")
     public GetWidgetUseCase getWidgetUseCase() {
         return new GetWidgetUseCase(widgetRepository);
+    }
+
+    @Bean(name="EditTextOfStickyNoteController")
+    public EditTextOfStickyNoteUseCase editTextOfStickyNoteUseCase() {
+        return new EditTextOfStickyNoteUseCase(widgetRepository, eventBus);
     }
 
     @Autowired
