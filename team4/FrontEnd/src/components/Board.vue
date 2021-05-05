@@ -44,7 +44,8 @@ export default {
       bringToFrontButton: null,
       bringForwardButton: null,
       sendBackwardButton: null,
-      sendToBackButton: null
+      sendToBackButton: null,
+      activeObject: null
     }
   },
   async mounted () {
@@ -54,7 +55,6 @@ export default {
     this.contextMenu = document.getElementById('contextMenu')
     this.delButton = document.getElementById('delButton')
     this.favcolor = document.getElementById('favcolor')
-
     this.bringToFrontButton = document.getElementById('bringToFrontButton')
     this.bringForwardButton = document.getElementById('bringForwardButton')
     this.sendBackwardButton = document.getElementById('sendBackwardButton')
@@ -261,6 +261,7 @@ export default {
           'object:scaled': function (e) {
             console.log('object:scaled')
             _this.editStickyNote(e.target)
+            _this.moveStickyNote(e.target)
           },
           'object:moved': function (e) {
             _this.moveStickyNote(e.target)
@@ -288,6 +289,7 @@ export default {
     addListenerOfChangeTextFigureColor (e) {
       var _this = this
       console.log('current Color etarget:', e.target.get('id'))
+      this.activeObject = this.canvas.getActiveObject()
       _this.favcolor.value = e.target.item(0).get('fill')
       console.log('be color:', _this.favcolor.value)
       var newHandler = function () {
@@ -300,13 +302,14 @@ export default {
     },
     addListenerOfDeleteTextFigure (e) {
       var _this = this
-      console.log('current Delete etarget:', e.target.get('id'))
       var newHandler = function () {
         console.log('del in id:', e.target.get('id'))
         _this.deleteStickyNote(e.target)
         _this.hideContextMenu()
         _this.delButton.removeEventListener('mouseup', newHandler)
       }
+      this.delButton.removeEventListener('mouseup', newHandler)
+      console.log('current Delete etarget:', e.target.get('id'))
       _this.delButton.addEventListener('mouseup', newHandler)
     },
     addListenerOfBringToFront (e) {
