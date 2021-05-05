@@ -40,7 +40,7 @@ export default {
       },
       selectedStickyNote: null,
       ungroupTarget: {},
-      selectedStickyNoteColor: '',
+      selectedStickyNoteColor: '#000000',
       indexMax: 0, // TODO: 邏輯待改善
       indexMin: 0 // TODO: 邏輯待改善
     }
@@ -217,16 +217,19 @@ export default {
         this.selectedStickyNote.rectObject.set('fill', this.selectedStickyNoteColor)
         this.canvas.renderAll()
       }
+      this.isDisplayRightClickMenu = false
     },
     async bringToFront () { // TODO: 邏輯待改善
       this.indexMax += 1
       await EditZIndexOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, this.indexMax)
-      this.canvas.bringToFront(this.selectedStickyNote)
+      await this.canvas.bringToFront(this.selectedStickyNote)
+      this.isDisplayRightClickMenu = false
     },
     async sendToback () { // TODO: 邏輯待改善
       this.indexMin -= 1
       await EditZIndexOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, this.indexMin)
-      this.canvas.sendToBack(this.selectedStickyNote)
+      await this.canvas.sendToBack(this.selectedStickyNote)
+      this.isDisplayRightClickMenu = false
     },
     sortStickyNotesByZIndex (widgets) {
       widgets.sort((a, b) => a.zIndex > b.zIndex)
