@@ -13,7 +13,7 @@
 
 <script>
 import { GetBoardContent } from '@/apis/Boards'
-import { CreateStickyNote, ReadStickyNoteBy, DeleteStickyNoteBy, MoveStickyNoteBy } from '@/apis/Widget'
+import { CreateStickyNote, ReadStickyNoteBy, DeleteStickyNoteBy, MoveStickyNoteBy, ResizeStickyNoteBy } from '@/apis/Widget'
 import '@/models/StickyNote'
 import { fabric } from 'fabric'
 
@@ -79,6 +79,24 @@ export default {
           bottomRightX: bottomRightX,
           bottomRightY: bottomRightY
         }
+      })
+      console.log(e)
+    })
+
+    this.canvas.on('object:scaled', async function (e) {
+      const target = e.target
+      const stickyNoteId = target.id
+      const point = target.lineCoords
+      console.log(point)
+      const topLeftX = point.tl.x
+      const topLeftY = point.tl.y
+      const bottomRightX = point.br.x
+      const bottomRightY = point.br.y
+      await ResizeStickyNoteBy(stickyNoteId, me.boardId, {
+        topLeftX: topLeftX,
+        topLeftY: topLeftY,
+        bottomRightX: bottomRightX,
+        bottomRightY: bottomRightY
       })
       console.log(e)
     })
