@@ -16,7 +16,10 @@
                   </li>
                 </label>
                 <li id="delButton" name="delButton">Delete</li>
-                <li id = "bringToFrontButton">bringToFront</li>
+                <li id = "bringToFrontButton">BringToFront</li>
+                <li id = "bringForwardButton">BringForward</li>
+                <li id = "sendBackwardButton">SendBackward</li>
+                <li id = "sendToBackButton">SendToBack</li>
               </ul>
             </div>
           </div>
@@ -38,7 +41,10 @@ export default {
       contextMenu: null,
       delButton: null,
       favcolor: null,
-      bringToFrontButton: null
+      bringToFrontButton: null,
+      bringForwardButton: null,
+      sendBackwardButton: null,
+      sendToBackButton: null
     }
   },
   async mounted () {
@@ -48,7 +54,12 @@ export default {
     this.contextMenu = document.getElementById('contextMenu')
     this.delButton = document.getElementById('delButton')
     this.favcolor = document.getElementById('favcolor')
+
     this.bringToFrontButton = document.getElementById('bringToFrontButton')
+    this.bringForwardButton = document.getElementById('bringForwardButton')
+    this.sendBackwardButton = document.getElementById('sendBackwardButton')
+    this.sendToBackButton = document.getElementById('sendToBackButton')
+
     this.listenEventsOnCanvas()
     // this.timer = setInterval(this.refreshCanvas, 10000)
   },
@@ -202,7 +213,6 @@ export default {
     refreshCanvas () {
       this.canvas.clear()
       this.getBoardContent()
-      // location.reload()
     },
     listenEventsOnCanvas () {
       var _this = this
@@ -242,6 +252,9 @@ export default {
                 _this.addListenerOfChangeTextFigureColor(e)
                 _this.addListenerOfDeleteTextFigure(e)
                 _this.addListenerOfBringToFront(e)
+                _this.addListenerOfBringForward(e)
+                _this.addListenerOfSendBackward(e)
+                _this.addListenerOfSendToBack(e)
               }
             }
           },
@@ -306,6 +319,39 @@ export default {
         _this.bringToFrontButton.removeEventListener('mouseup', newHandler)
       }
       _this.bringToFrontButton.addEventListener('mouseup', newHandler)
+    },
+    addListenerOfBringForward (e) {
+      var _this = this
+      console.log('addListenerOfBringForward')
+      var newHandler = function () {
+        e.target.bringForward()
+        _this.changeFigureOrder()
+        _this.hideContextMenu()
+        _this.bringForwardButton.removeEventListener('mouseup', newHandler)
+      }
+      _this.bringForwardButton.addEventListener('mouseup', newHandler)
+    },
+    addListenerOfSendBackward (e) {
+      var _this = this
+      console.log('addListenerOfSendBackward')
+      var newHandler = function () {
+        e.target.sendBackwards()
+        _this.changeFigureOrder()
+        _this.hideContextMenu()
+        _this.sendBackwardButton.removeEventListener('mouseup', newHandler)
+      }
+      _this.sendBackwardButton.addEventListener('mouseup', newHandler)
+    },
+    addListenerOfSendToBack (e) {
+      var _this = this
+      console.log('addListenerOfSendToBack')
+      var newHandler = function () {
+        e.target.sendToBack()
+        _this.changeFigureOrder()
+        _this.hideContextMenu()
+        _this.sendToBackButton.removeEventListener('mouseup', newHandler)
+      }
+      _this.sendToBackButton.addEventListener('mouseup', newHandler)
     },
     getZindex (e) {
       console.log(this.canvas.getObjects().indexOf(e))
