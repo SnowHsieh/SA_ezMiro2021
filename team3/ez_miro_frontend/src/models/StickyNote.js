@@ -17,7 +17,7 @@ fabric.StickyNote = fabric.util.createClass(fabric.Rect, {
       mt: false, // 上中
       tl: true, // 上左
       tr: true, // 上右
-      mtr: true // 旋轉控制鍵
+      mtr: false // 旋轉控制鍵
     })
     this.text = element.text
   }
