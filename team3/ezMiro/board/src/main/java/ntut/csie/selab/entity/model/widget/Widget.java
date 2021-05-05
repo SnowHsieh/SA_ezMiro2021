@@ -2,6 +2,7 @@ package ntut.csie.selab.entity.model.widget;
 
 import ntut.csie.selab.entity.model.widget.event.TextOfWidgetEdited;
 import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
+import ntut.csie.selab.entity.model.widget.event.WidgetDeleted;
 import ntut.csie.selab.entity.model.widget.event.WidgetMoved;
 import ntut.csie.selab.model.AggregateRoot;
 
@@ -22,6 +23,14 @@ public abstract class Widget extends AggregateRoot<String> {
         this.textColor = "#456456";
 
         addDomainEvent(new WidgetCreated(new Date(), boardId, id));
+    }
+
+    public void delete() {
+        addDomainEvent((new WidgetDeleted(
+                new Date(),
+                this.boardId,
+                getId()
+        )));
     }
 
     public String getBoardId() {
