@@ -7,11 +7,7 @@ public interface ChangeNoteDescriptionInput extends Input {
 
     String getNoteId();
 
-    void setBoardId(String boardId);
+    void setDescription(String description);
 
-    String getBoardId();
-
-    void setNewDescription(String description);
-
-    String getNewDescription();
+    String getDescription();
 }

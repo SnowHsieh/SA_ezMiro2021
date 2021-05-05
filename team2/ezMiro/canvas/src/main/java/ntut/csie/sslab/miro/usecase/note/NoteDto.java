@@ -11,6 +11,7 @@ public class NoteDto {
     private double width;
     private double height;
     private Coordinate coordinate;
+    private int displayOrder;
 
     public String getBoardId() {
         return boardId;
@@ -66,5 +67,13 @@ public class NoteDto {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public int getDisplayOrder() {
+        return displayOrder;
+    }
+
+    public void setDisplayOrder(int displayOrder) {
+        this.displayOrder = displayOrder;
     }
 }

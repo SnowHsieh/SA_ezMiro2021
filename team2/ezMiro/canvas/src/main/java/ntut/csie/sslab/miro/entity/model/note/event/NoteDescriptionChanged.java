@@ -5,15 +5,13 @@ import ntut.csie.sslab.ddd.model.DomainEvent;
 
 public class NoteDescriptionChanged extends DomainEvent {
     private final String noteId;
-    private final String originalDescription;
-    private final String newDescription;
+    private final String description;
     private final String boardId;
 
-    public NoteDescriptionChanged(String noteId, String originalDescription, String newDescription, String boardId) {
+    public NoteDescriptionChanged(String noteId, String description, String boardId) {
         super(DateProvider.now());
         this.noteId = noteId;
-        this.originalDescription = originalDescription;
-        this.newDescription = newDescription;
+        this.description = description;
         this.boardId = boardId;
     }
 
@@ -21,12 +19,8 @@ public class NoteDescriptionChanged extends DomainEvent {
         return noteId;
     }
 
-    public String originalDescription() {
-        return originalDescription;
-    }
-
-    public String newDescription() {
-        return newDescription;
+    public String description() {
+        return description;
     }
 
     public String boardId() {

@@ -19,12 +19,11 @@ import ntut.csie.sslab.miro.usecase.note.edit.description.ChangeNoteDescriptionU
 import org.junit.Before;
 import org.junit.Test;
 import java.util.List;
-import java.awt.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CreateEventStormingNotesScenarioTest {
-    public FigureRepository figureRepository;
-    public DomainEventBus domainEventBus;
+    private FigureRepository figureRepository;
+    private DomainEventBus domainEventBus;
 
     @Before
     public void setUp() {
@@ -39,27 +38,27 @@ public class CreateEventStormingNotesScenarioTest {
 
     @Test
     public void create_event_storming_notes() {
-        Coordinate readModelPosition = new Coordinate(new Point(100, 100));
+        Coordinate readModelPosition = new Coordinate(100, 100);
         String readModelId = create_note("boardId", readModelPosition);
         change_color(readModelId, "#C9DF56");
         change_description(readModelId, "BoardId\nCoordinate");
 
-        Coordinate commandPosition = new Coordinate(new Point(220, 100));
+        Coordinate commandPosition = new Coordinate(220, 100);
         String commandId = create_note("boardId", commandPosition);
         change_color(commandId, "#6CD8FA");
         change_description(commandId, "CreateNote");
 
-        Coordinate domainEventPosition = new Coordinate(new Point(340, 100));
+        Coordinate domainEventPosition = new Coordinate(340, 100);
         String domainEventId = create_note("boardId", domainEventPosition);
         change_color(domainEventId, "#FF9D48");
         change_description(domainEventId, "NoteCreated");
 
-        Coordinate aggregatePosition = new Coordinate(new Point(280, 20));
+        Coordinate aggregatePosition = new Coordinate(280, 20);
         String aggregateId = create_note("boardId", aggregatePosition);
         change_color(aggregateId, "#FFF9B1");
         change_description(aggregateId, "Figure");
 
-        Coordinate actorPosition = new Coordinate(new Point(150, 180));
+        Coordinate actorPosition = new Coordinate(150, 180);
         String actorId = create_note("boardId", actorPosition);
         change_color(actorId, "#FEF445");
         change_description(actorId, "User");
@@ -103,7 +102,7 @@ public class CreateEventStormingNotesScenarioTest {
         ChangeNoteDescriptionInput input = changeNoteDescriptionUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setNoteId(noteId);
-        input.setNewDescription(description);
+        input.setDescription(description);
 
         changeNoteDescriptionUseCase.execute(input, output);
 
@@ -129,7 +128,7 @@ public class CreateEventStormingNotesScenarioTest {
         ChangeNoteColorInput input = changeNoteColorUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setNoteId(noteId);
-        input.setNewColor(color);
+        input.setColor(color);
 
         changeNoteColorUseCase.execute(input, output);
 

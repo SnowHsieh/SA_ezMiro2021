@@ -7,8 +7,8 @@ import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 
 public class ChangeNoteColorUseCaseImpl implements ChangeNoteColorUseCase {
 
-    public FigureRepository figureRepository;
-    public DomainEventBus domainEventBus;
+    private FigureRepository figureRepository;
+    private DomainEventBus domainEventBus;
 
     public ChangeNoteColorUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
         this.figureRepository = figureRepository;
@@ -26,7 +26,7 @@ public class ChangeNoteColorUseCaseImpl implements ChangeNoteColorUseCase {
             return;
         }
 
-        note.changeColor(input.getNewColor());
+        note.changeColor(input.getColor());
 
         figureRepository.save(note);
         domainEventBus.postAll(note);
@@ -40,7 +40,6 @@ public class ChangeNoteColorUseCaseImpl implements ChangeNoteColorUseCase {
     private static class ChangeNoteColorInputImpl implements ChangeNoteColorInput {
         private String noteId;
         private String color;
-        private String boardId;
 
         @Override
         public String getNoteId() {
@@ -52,22 +51,13 @@ public class ChangeNoteColorUseCaseImpl implements ChangeNoteColorUseCase {
             this.noteId = noteId;
         }
 
-        public String getNewColor() {
+        public String getColor() {
             return color;
         }
 
-        public void setNewColor(String color) {
+        public void setColor(String color) {
             this.color = color;
         }
 
-        @Override
-        public String getBoardId() {
-            return boardId;
-        }
-
-        @Override
-        public void setBoardId(String boardId) {
-            this.boardId = boardId;
-        }
     }
 }

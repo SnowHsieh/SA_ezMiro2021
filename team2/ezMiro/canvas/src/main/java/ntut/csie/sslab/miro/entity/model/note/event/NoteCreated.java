@@ -13,8 +13,9 @@ public class NoteCreated extends DomainEvent {
     private final Coordinate coordinate;
     private final double width;
     private final double height;
+    private final int displayOrder;
 
-    public NoteCreated(String boardId, String noteId, String description, String color, Coordinate coordinate, double width, double height) {
+    public NoteCreated(String boardId, String noteId, String description, String color, Coordinate coordinate, double width, double height, int displayOrder) {
         super(DateProvider.now());
         this.boardId = boardId;
         this.noteId = noteId;
@@ -23,6 +24,7 @@ public class NoteCreated extends DomainEvent {
         this.coordinate = coordinate;
         this.width = width;
         this.height = height;
+        this.displayOrder = displayOrder;
     }
 
     public String boardId() { return boardId; }
@@ -38,4 +40,8 @@ public class NoteCreated extends DomainEvent {
     public double width() { return width; }
 
     public double height() { return height; }
+
+    public int displayOrder() {
+        return displayOrder;
+    }
 }
