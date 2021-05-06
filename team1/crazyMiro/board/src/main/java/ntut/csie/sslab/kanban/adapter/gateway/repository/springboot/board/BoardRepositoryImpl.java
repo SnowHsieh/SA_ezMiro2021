@@ -18,19 +18,13 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
-    public Optional<Board> getBoardById(String boardId) {
-        return boards.stream().filter(x-> x.getBoardId() == boardId).findFirst();
-    }
-
-
-    @Override
     public List<Board> findAll() {
         return Collections.unmodifiableList(boards);
     }
 
     @Override
-    public Optional<Board> findById(String s) {
-        return Optional.empty();
+    public Optional<Board> findById(String boardId) {
+        return boards.stream().filter(x-> x.getBoardId().equals(boardId)).findFirst();
     }
 
     @Override

@@ -6,7 +6,6 @@ import ntut.csie.sslab.kanban.entity.model.board.Board;
 import java.util.Optional;
 
 public interface BoardRepository extends AbstractRepository<Board, String> {
-    Optional<Board> getBoardById(String boardId);
 
 
 }

@@ -1,6 +1,8 @@
 package ntut.csie.sslab.kanban.application.springboot.web.config;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
+import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
+import ntut.csie.sslab.kanban.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.changecolor.ChangeStickerColorUseCase;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.changecolor.ChangeStickerColorUseCaseImpl;
@@ -25,16 +27,19 @@ public class UseCaseInjection {
 
     @Autowired
     private FigureRepository figureRepository;
+
+    @Autowired
+    private BoardRepository boardRepository;
 //    private WorkflowRepository workflowRepository;
 //    private CardRepository cardRepository;
     private DomainEventBus eventBus;
 //    private ExecutorService executor;
 //
 //
-//    @Bean(name="createNotifyBoard")
-//    public NotifyBoard createNotifyBoard() {
-//        return new NotifyBoard(boardRepository, eventBus);
-//    }
+    @Bean(name="createNotifyBoard")
+    public NotifyBoard createNotifyBoard() {
+        return new NotifyBoard(boardRepository, eventBus);
+    }
 //
 //    @Bean(name="createNotifyWorkflow")
 //    public NotifyWorkflow createNotifyWorkflow() {

@@ -4,8 +4,6 @@ import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.common.DateProvider;
 import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
 
-import java.util.Date;
-
 public class StickerCreated extends DomainEvent {
     private final String boardId;
     private final String figureId;

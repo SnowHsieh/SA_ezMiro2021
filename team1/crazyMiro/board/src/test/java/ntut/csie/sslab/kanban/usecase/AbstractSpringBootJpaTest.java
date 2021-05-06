@@ -75,10 +75,15 @@ import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
+import ntut.csie.sslab.kanban.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
 import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
 import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
+import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardInput;
+import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardUseCase;
+import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerInput;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCase;
@@ -93,6 +98,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @ExtendWith(SpringExtension.class)
@@ -106,12 +114,16 @@ public abstract class AbstractSpringBootJpaTest {
     protected DomainEventBus domainEventBus;
     protected EventListener eventListener;
 
+    public NotifyBoardAdapter notifyBoardAdapter;
+
     @BeforeEach
     public void setUp() {
         boardRepository = new BoardRepositoryImpl();
         figureRepository = new FigureRepositoryImpl();
         domainEventBus = new GoogleEventBus();
         eventListener = new EventListener();
+        notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
+        domainEventBus.register(notifyBoardAdapter);
         domainEventBus.register(eventListener);
     }
 
@@ -127,14 +139,27 @@ public abstract class AbstractSpringBootJpaTest {
 
     protected class EventListener {
         private int eventCount;
+        private List<DomainEvent> domainEvents;
+
+        public EventListener() {
+            this.domainEvents = new ArrayList<>();
+        }
 
         @Subscribe
         public void eventHandler(DomainEvent domainEvent){
-            eventCount++;
+            domainEvents.add(domainEvent);
         }
 
         public int getEventCount() {
-            return eventCount;
+            return domainEvents.size();
+        }
+
+        public DomainEvent getEvent(int n){
+            return domainEvents.get(n);
+        }
+
+        public void clearEventCount() {
+            domainEvents.clear();
         }
     }
     protected String createSticker(String boardId, String content, int width, int length, String color, Coordinate position) {
@@ -153,6 +178,17 @@ public abstract class AbstractSpringBootJpaTest {
         return output.getId();
     }
 
+    protected String createBoard(String boardId, String boardName) {
+        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCaseImpl(boardRepository, domainEventBus);
+        CreateBoardInput input = createBoardUseCase.newInput();
+        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
+        input.setBoardId(boardId);
+        input.setBoardName(boardName);
+
+        createBoardUseCase.execute(input, output);
+
+        return output.getId();
+    }
 //
 //
 //    public CreateBoardUseCase newCreateBoardUseCase (){

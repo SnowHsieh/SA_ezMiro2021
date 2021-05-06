@@ -40,7 +40,13 @@ public class RepositoryInjection {
   public FigureRepository figureRepository() {
     return new FigureRepositoryImpl();
   }
-//
+
+  @Bean(name="boardRepository")
+  public BoardRepository boardRepository() {
+    return new BoardRepositoryImpl();
+  }
+
+  //
 //  @Bean(name="workflowRepository")
 //  public WorkflowRepository workflowRepository() {
 //    return new WorkflowRepositoryImpl(workflowRepositoryPeer);
