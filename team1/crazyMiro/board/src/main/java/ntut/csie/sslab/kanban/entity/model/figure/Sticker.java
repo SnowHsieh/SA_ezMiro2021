@@ -3,8 +3,8 @@ package ntut.csie.sslab.kanban.entity.model.figure;
 import ntut.csie.sslab.kanban.entity.model.figure.event.*;
 
 public class Sticker extends Figure {
-    public Sticker(String boardId, String figureId, String content, int width, int length, String color, Coordinate position, int order) {
-        super(boardId, figureId, content, width, length, color, position, order);
+    public Sticker(String boardId, String figureId, String content, int width, int length, String color, Coordinate position) {
+        super(boardId, figureId, content, width, length, color, position);
         addDomainEvent(new StickerCreated(boardId, figureId, content, width, length, color, position));
     }
 

@@ -26,7 +26,7 @@ public class StickerTest {
         long y = new Random().nextLong();
         Coordinate position = new Coordinate(x, y);
         int order = 0;
-        Sticker sticker = new Sticker(boardId, stickerId, content, width, length, color, position, order);
+        Sticker sticker = new Sticker(boardId, stickerId, content, width, length, color, position);
 
         sticker.changeContent(newContent);
 
@@ -45,7 +45,7 @@ public class StickerTest {
         long y = new Random().nextLong();
         Coordinate position = new Coordinate(x, y);
         int order = 0;
-        Sticker sticker = new Sticker(boardId, stickerId, content, width, length, color, position, order);
+        Sticker sticker = new Sticker(boardId, stickerId, content, width, length, color, position);
         Coordinate newPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
 
         sticker.move(newPosition);
@@ -65,7 +65,7 @@ public class StickerTest {
         long y = new Random().nextLong();
         Coordinate position = new Coordinate(x, y);
         int order = 0;
-        Sticker sticker = new Sticker(boardId, stickerId, content, width, length, color, position, order);
+        Sticker sticker = new Sticker(boardId, stickerId, content, width, length, color, position);
         String newColor = "yellow";
 
         sticker.setColor(newColor);

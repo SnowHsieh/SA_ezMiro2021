@@ -23,15 +23,14 @@ public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
     public void execute(CreateStickerInput input, CqrsCommandOutput output) {
         try{
             String stickerId = UUID.randomUUID().toString();
-            int order = figureRepository.getStickersByBoardId(input.getBoardId()).size();
             Figure sticker = new Sticker(input.getBoardId(),
                     stickerId,
                     input.getContent(),
                     input.getWidth(),
                     input.getLength(),
                     input.getColor(),
-                    input.getPosition(),
-                    order);
+                    input.getPosition()
+            );
 
             figureRepository.save(sticker);
             domainEventBus.postAll(sticker);

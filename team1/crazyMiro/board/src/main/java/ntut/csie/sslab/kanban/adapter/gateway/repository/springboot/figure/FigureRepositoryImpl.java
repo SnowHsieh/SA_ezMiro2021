@@ -44,7 +44,6 @@ public class FigureRepositoryImpl implements FigureRepository {
                 .filter(x -> x.getBoardId().equals(boardId) &&
                         x.getType().equals(FigureType.Sticker))
                 .collect(Collectors.toList());
-        result.sort(Comparator.comparing(Figure::getOrder));
         return result;
     }
 
@@ -53,7 +52,6 @@ public class FigureRepositoryImpl implements FigureRepository {
         List<Figure> result = figures.stream()
                 .filter(x -> x.getBoardId().equals(boardId))
                 .collect(Collectors.toList());
-        result.sort(Comparator.comparing(Figure::getOrder));
         return result;
     }
 }

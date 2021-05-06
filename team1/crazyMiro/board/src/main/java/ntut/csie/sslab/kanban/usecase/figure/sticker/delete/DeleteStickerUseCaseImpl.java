@@ -22,17 +22,8 @@ public class DeleteStickerUseCaseImpl implements DeleteStickerUseCase {
     public void execute(DeleteStickerInput input, CqrsCommandOutput output) {
         try {
             Sticker sticker = (Sticker)figureRepository.findById(input.getFigureId()).get();
-            String boardId = sticker.getBoardId();
-            int order = sticker.getOrder();
             sticker.deleteSticker();
-
             figureRepository.deleteById(sticker.getFigureId());
-            List<Figure> stickers = figureRepository.getStickersByBoardId(boardId);
-            for(int i = order; i < stickers.size(); i++){
-                stickers.get(i).setOrder(i);
-                figureRepository.save(stickers.get(i));
-            }
-
             domainEventBus.postAll(sticker);
 
             output.setId(input.getFigureId())

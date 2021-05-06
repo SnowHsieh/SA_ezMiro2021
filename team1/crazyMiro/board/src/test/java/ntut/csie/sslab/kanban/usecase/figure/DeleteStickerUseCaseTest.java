@@ -37,6 +37,5 @@ public class DeleteStickerUseCaseTest extends AbstractSpringBootJpaTest {
         assertEquals(stickerId1, output.getId());
         assertEquals(3, eventListener.getEventCount());
         Figure sticker = figureRepository.findById(stickerId2).get();
-        assertEquals(order, sticker.getOrder());
     }
 }

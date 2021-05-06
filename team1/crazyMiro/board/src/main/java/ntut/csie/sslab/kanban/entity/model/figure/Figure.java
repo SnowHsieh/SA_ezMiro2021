@@ -1,8 +1,6 @@
 package ntut.csie.sslab.kanban.entity.model.figure;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
-import ntut.csie.sslab.kanban.entity.model.figure.event.FigureSentToBack;
-import ntut.csie.sslab.kanban.entity.model.figure.event.FigureBroughtToFront;
 
 
 public abstract class Figure extends AggregateRoot<String> {
@@ -14,9 +12,8 @@ public abstract class Figure extends AggregateRoot<String> {
     private int length;
     private String color;
     private Coordinate position;
-    private int order;
 
-    public Figure(String boardId, String figureId, String content, int width, int length, String color, Coordinate position, int order) {
+    public Figure(String boardId, String figureId, String content, int width, int length, String color, Coordinate position) {
         super(figureId);
         this.boardId = boardId;
         this.figureId = figureId;
@@ -25,7 +22,6 @@ public abstract class Figure extends AggregateRoot<String> {
         this.length = length;
         this.color = color;
         this.position = position;
-        this.order = order;
     }
 
     public String getFigureId() {
@@ -83,22 +79,4 @@ public abstract class Figure extends AggregateRoot<String> {
     public abstract FigureType getType();
 
     public Boolean isDeleted(){return this.isDeleted;}
-
-    public int getOrder() {
-        return this.order;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
-    }
-
-    public void bringToFront(int frontIndex) {
-        setOrder(frontIndex);
-        addDomainEvent(new FigureBroughtToFront(boardId, figureId));
-    }
-
-    public void sendToBack() {
-        setOrder(0);
-        addDomainEvent(new FigureSentToBack(boardId, figureId));
-    }
 }
