@@ -19,10 +19,10 @@ public class ChangeStickerSizeUseCaseImpl implements ChangeStickerSizeUseCase {
     public void execute(ChangeStickerSizeInput input, CqrsCommandOutput output) {
         try{
             Sticker sticker = (Sticker)figureRepository.findById(input.getFigureId()).get();
-            if(sticker.getSize() == input.getSize())
+            if(sticker.getWidth() == input.getWidth() && sticker.getLength() == input.getLength())
                 return;
 
-            sticker.changeSize(input.getSize());
+            sticker.changeSize(input.getWidth(), input.getLength());
             figureRepository.save(sticker);
             domainEventBus.postAll(sticker);
             output.setId(input.getFigureId());
@@ -40,7 +40,8 @@ public class ChangeStickerSizeUseCaseImpl implements ChangeStickerSizeUseCase {
 
     private class ChangeStickerSizeInputImpl implements ChangeStickerSizeInput {
         private String figureId;
-        private int size;
+        private int width;
+        private int length;
 
         @Override
         public String getFigureId() {
@@ -52,13 +53,22 @@ public class ChangeStickerSizeUseCaseImpl implements ChangeStickerSizeUseCase {
             this.figureId = figureId;
         }
 
-        public int getSize() {
-            return size;
+        @Override
+        public int getWidth() {
+            return width;
         }
 
         @Override
-        public void setSize(int size) {
-            this.size = size;
+        public void setWidth(int size) {
+            this.width = size;
+        }
+
+        public int getLength() {
+            return length;
+        }
+
+        public void setLength(int length) {
+            this.length = length;
         }
     }
 }

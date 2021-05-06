@@ -2,8 +2,6 @@ package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.figure.sticker
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.changecontent.ChangeStickerContentInput;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.changecontent.ChangeStickerContentUseCase;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.changesize.ChangeStickerSizeInput;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.changesize.ChangeStickerSizeUseCase;
 import org.json.JSONException;
@@ -30,17 +28,20 @@ public class ChangeStickerSizeController {
     public CqrsCommandViewModel changeStickerSize(@QueryParam("stickerId") String stickerId,
                                                      @RequestBody String stickerInfo) {
 
-        int size = 0;
+        int width = 0;
+        int length = 0;
         try {
             JSONObject stickerJSON = new JSONObject(stickerInfo);
-            size = stickerJSON.getInt("size");
+            width = stickerJSON.getInt("width");
+            length = stickerJSON.getInt("length");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         ChangeStickerSizeInput input = changeStickerSizeUseCase.newInput();
         input.setFigureId(stickerId);
-        input.setSize(size);
+        input.setWidth(width);
+        input.setLength(length);
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
         changeStickerSizeUseCase.execute(input, presenter);
         return presenter.buildViewModel();

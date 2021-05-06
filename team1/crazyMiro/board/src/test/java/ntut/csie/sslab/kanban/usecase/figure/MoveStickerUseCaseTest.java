@@ -21,8 +21,8 @@ public class MoveStickerUseCaseTest extends AbstractSpringBootJpaTest {
     public void move_a_sticker() {
         String boardId = UUID.randomUUID().toString();
         Coordinate stickerPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
-        FigureDto stickerDto = new FigureDto(null, "sticker1", 10, "black", stickerPosition);
-        String stickerId = createSticker(boardId, stickerDto.getContent(), stickerDto.getSize(), stickerDto.getColor(), stickerDto.getPosition());
+        FigureDto stickerDto = new FigureDto(null, "sticker1", 10, 10, "black", stickerPosition);
+        String stickerId = createSticker(boardId, stickerDto.getContent(), stickerDto.getWidth(), stickerDto.getLength(), stickerDto.getColor(), stickerDto.getPosition());
         Coordinate newPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
         MoveStickerUseCase moveStickerUseCase = new MoveStickerUseCaseImpl(figureRepository, domainEventBus);
         MoveStickerInput input = moveStickerUseCase.newInput();

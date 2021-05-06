@@ -20,8 +20,8 @@ public class ChangeStickerContentUseCaseTest extends AbstractSpringBootJpaTest {
     public void change_sticker_content () {
         String boardId = UUID.randomUUID().toString();
         Coordinate stickerPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
-        FigureDto stickerDto = new FigureDto(null, "sticker1", 10, "black", stickerPosition);
-        String stickerId = createSticker(boardId, stickerDto.getContent(), stickerDto.getSize(), stickerDto.getColor(), stickerDto.getPosition());
+        FigureDto stickerDto = new FigureDto(null, "sticker1", 10, 10, "black", stickerPosition);
+        String stickerId = createSticker(boardId, stickerDto.getContent(), stickerDto.getWidth(), stickerDto.getLength(), stickerDto.getColor(), stickerDto.getPosition());
         String newContent = "newContent";
         ChangeStickerContentUseCase changeStickerContentUseCase = new ChangeStickerContentUseCaseImpl(figureRepository, domainEventBus);
         ChangeStickerContentInput input = changeStickerContentUseCase.newInput();

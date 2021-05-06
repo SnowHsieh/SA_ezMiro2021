@@ -20,7 +20,8 @@ public class CreateStickerUseCaseTest extends AbstractSpringBootJpaTest {
     public void create_a_sticker(){
         String boardId = UUID.randomUUID().toString();
         String content = "stickerIsCreated";
-        int size = 10;
+        int length = 10;
+        int width = 10;
         String color = "black";
         long x = new Random().nextLong();
         long y = new Random().nextLong();
@@ -31,7 +32,8 @@ public class CreateStickerUseCaseTest extends AbstractSpringBootJpaTest {
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);
         input.setContent(content);
-        input.setSize(size);
+        input.setLength(length);
+        input.setWidth(width);
         input.setColor(color);
         input.setPosition(position);
 
@@ -41,7 +43,8 @@ public class CreateStickerUseCaseTest extends AbstractSpringBootJpaTest {
         assertNotNull(output.getId());
         Figure sticker = figureRepository.findById(output.getId()).get();
         assertEquals(content, sticker.getContent());
-        assertEquals(size, sticker.getSize());
+        assertEquals(length, sticker.getLength());
+        assertEquals(width, sticker.getWidth());
         assertEquals(color, sticker.getColor());
         assertTrue(position.equals(sticker.getPosition()));
         assertEquals(FigureType.Sticker, sticker.getType());

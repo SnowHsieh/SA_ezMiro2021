@@ -27,7 +27,8 @@ public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
             Figure sticker = new Sticker(input.getBoardId(),
                     stickerId,
                     input.getContent(),
-                    input.getSize(),
+                    input.getWidth(),
+                    input.getLength(),
                     input.getColor(),
                     input.getPosition(),
                     order);
@@ -52,9 +53,10 @@ public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
     private class CreateStickerInputImpl implements CreateStickerInput {
         private String boardId;
         private String content;
-        private int size;
+        private int width;
         private String color;
         private Coordinate position;
+        private int length;
 
         @Override
         public String getBoardId() {
@@ -77,13 +79,13 @@ public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
         }
 
         @Override
-        public int getSize() {
-            return size;
+        public int getWidth() {
+            return width;
         }
 
         @Override
-        public void setSize(int size) {
-            this.size = size;
+        public void setWidth(int width) {
+            this.width = width;
         }
 
         @Override
@@ -106,5 +108,12 @@ public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
             this.position = position;
         }
 
+        @Override
+        public void setLength(int length){
+            this.length = length;
+        }
+
+        @Override
+        public int getLength(){return length;}
     }
 }

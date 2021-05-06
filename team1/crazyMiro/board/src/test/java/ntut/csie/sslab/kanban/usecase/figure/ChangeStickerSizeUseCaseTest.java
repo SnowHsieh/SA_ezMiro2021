@@ -21,21 +21,24 @@ public class ChangeStickerSizeUseCaseTest extends AbstractSpringBootJpaTest {
     public void change_sticker_size() {
         String boardId = UUID.randomUUID().toString();
         Coordinate stickerPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
-        FigureDto stickerDto = new FigureDto(null, "sticker1", 10, "black", stickerPosition);
-        String stickerId = createSticker(boardId, stickerDto.getContent(), stickerDto.getSize(), stickerDto.getColor(), stickerDto.getPosition());
-        int newSize = new Random().nextInt();
+        FigureDto stickerDto = new FigureDto(null, "sticker1", 10, 10, "black", stickerPosition);
+        String stickerId = createSticker(boardId, stickerDto.getContent(), stickerDto.getWidth(), stickerDto.getLength(), stickerDto.getColor(), stickerDto.getPosition());
+        int newWidth = new Random().nextInt();
+        int newLength = new Random().nextInt();
         ChangeStickerSizeUseCase changeStickerSizeUseCase = new ChangeStickerSizeUseCaseImpl(figureRepository, domainEventBus);
         ChangeStickerSizeInput input = changeStickerSizeUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setFigureId(stickerId);
-        input.setSize(newSize);
+        input.setWidth(newWidth);
+        input.setLength(newLength);
 
         changeStickerSizeUseCase.execute(input, output);
 
         assertTrue(figureRepository.findById(output.getId()).isPresent());
         assertEquals(input.getFigureId(), output.getId());
         Figure sticker = figureRepository.findById(output.getId()).get();
-        assertEquals(newSize, sticker.getSize());
+        assertEquals(newWidth, sticker.getWidth());
+        assertEquals(newLength, sticker.getLength());
         assertEquals(2, eventListener.getEventCount());
 
         changeStickerSizeUseCase.execute(input, output);

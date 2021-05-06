@@ -12,9 +12,9 @@ public interface CreateStickerInput extends Input {
 
     String getContent();
 
-    void setSize(int size);
+    void setWidth(int width);
 
-    int getSize();
+    int getWidth();
 
     void setColor(String color);
 
@@ -23,4 +23,8 @@ public interface CreateStickerInput extends Input {
     void setPosition(Coordinate position);
 
     Coordinate getPosition();
+
+    void setLength(int length);
+
+    int getLength();
 }

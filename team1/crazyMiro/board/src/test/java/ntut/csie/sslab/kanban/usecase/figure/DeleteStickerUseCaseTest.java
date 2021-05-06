@@ -20,10 +20,10 @@ public class DeleteStickerUseCaseTest extends AbstractSpringBootJpaTest {
         String boardId = UUID.randomUUID().toString();
         Coordinate sticker1Position = new Coordinate(new Random().nextLong(), new Random().nextLong());
         Coordinate sticker2Position = new Coordinate(new Random().nextLong(), new Random().nextLong());
-        FigureDto stickerDto1 = new FigureDto(null, "sticker1", 10, "black", sticker1Position);
-        FigureDto stickerDto2 = new FigureDto(null, "sticker2", 20, "blue", sticker2Position);
-        String stickerId1 = createSticker(boardId, stickerDto1.getContent(), stickerDto1.getSize(), stickerDto1.getColor(), stickerDto1.getPosition());
-        String stickerId2 = createSticker(boardId, stickerDto2.getContent(), stickerDto2.getSize(), stickerDto2.getColor(), stickerDto2.getPosition());
+        FigureDto stickerDto1 = new FigureDto(null, "sticker1", 10, 10, "black", sticker1Position);
+        FigureDto stickerDto2 = new FigureDto(null, "sticker2", 20, 10, "blue", sticker2Position);
+        String stickerId1 = createSticker(boardId, stickerDto1.getContent(), stickerDto1.getWidth(), stickerDto1.getLength(), stickerDto1.getColor(), stickerDto1.getPosition());
+        String stickerId2 = createSticker(boardId, stickerDto2.getContent(), stickerDto2.getWidth(), stickerDto2.getLength(), stickerDto2.getColor(), stickerDto2.getPosition());
         int order = 0;
         DeleteStickerUseCase deleteStickerUseCase = new DeleteStickerUseCaseImpl(figureRepository, domainEventBus);
         DeleteStickerInput input = deleteStickerUseCase.newInput();

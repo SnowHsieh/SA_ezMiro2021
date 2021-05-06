@@ -7,11 +7,12 @@ import java.util.List;
 
 public class ConvertStickerToDto {
     public static List<FigureDto> transform(List<Figure> stickers) {
-        List<FigureDto> figureDtos = new ArrayList<FigureDto>();
+        List<FigureDto> figureDtos = new ArrayList<>();
         for (Figure each : stickers) {
             figureDtos.add(new FigureDto(each.getFigureId(),
                     each.getContent(),
-                    each.getSize(),
+                    each.getWidth(),
+                    each.getLength(),
                     each.getColor(),
                     each.getPosition()));
         }

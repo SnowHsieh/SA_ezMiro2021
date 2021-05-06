@@ -137,13 +137,14 @@ public abstract class AbstractSpringBootJpaTest {
             return eventCount;
         }
     }
-    protected String createSticker(String boardId, String content, int size, String color, Coordinate position) {
+    protected String createSticker(String boardId, String content, int width, int length, String color, Coordinate position) {
         CreateStickerUseCase createStickerUseCase = new CreateStickerUseCaseImpl(figureRepository, domainEventBus);
         CreateStickerInput input = createStickerUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);
         input.setContent(content);
-        input.setSize(size);
+        input.setWidth(width);
+        input.setLength(length);
         input.setColor(color);
         input.setPosition(position);
 

@@ -35,13 +35,15 @@ public class CreateStickerController {
                                             @RequestBody String stickerInfo) {
 
         String content = "";
-        int size = 0;
+        int width = 0;
+        int length = 0;
         String color = "";
         Coordinate position = null;
         try {
             JSONObject stickerJSON = new JSONObject(stickerInfo);
             content = stickerJSON.getString("content");
-            size = stickerJSON.getInt("size");
+            width = stickerJSON.getInt("width");
+            length = stickerJSON.getInt("length");
             color = stickerJSON.getString("color");
             position = new Coordinate(stickerJSON.getLong("x"), stickerJSON.getLong("y"));
         } catch (JSONException e) {
@@ -52,7 +54,8 @@ public class CreateStickerController {
         CreateStickerInput input = createStickerUseCase.newInput();
         input.setBoardId(boardId);
         input.setContent(content);
-        input.setSize(size);
+        input.setWidth(width);
+        input.setLength(length);
         input.setColor(color);
         input.setPosition(position);
 

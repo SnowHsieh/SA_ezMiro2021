@@ -7,19 +7,25 @@ import java.util.Date;
 
 public class StickerSizeChanged extends DomainEvent {
     private String figureId;
-    private int size;
+    private int width;
+    private int length;
 
-    public StickerSizeChanged(String figureId, int size) {
+    public StickerSizeChanged(String figureId, int width, int length) {
         super(DateProvider.now());
         this.figureId = figureId;
-        this.size = size;
+        this.width = width;
+        this.length = length;
     }
 
     public String getFigureId() {
         return figureId;
     }
 
-    public int getSize() {
-        return size;
+    public int getWidth() {
+        return width;
+    }
+
+    public int getLength() {
+        return length;
     }
 }
