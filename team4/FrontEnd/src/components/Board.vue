@@ -66,7 +66,7 @@ export default {
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = '4f00c2a3-2028-4b93-ad44-c4a523821fd8'
+        this.boardId = '9c4a5bf9-de26-4666-a173-ef81a55ddcdb'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         this.drawStickyNote(res.data.figureDtos)
       } catch (err) {
@@ -110,6 +110,20 @@ export default {
               height: parseFloat(figure.height) * parseFloat(figure.get('scaleY')),
               color: figure.item(0).get('fill')
             }
+          }
+        )
+        console.log(res.data.message)
+      } catch (err) {
+        console.log(err)
+      }
+      this.refreshCanvas()
+    },
+    async changeStickyNoteContent (figure) {
+      try {
+        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/changeStickyNoteContent',
+          {
+            figureId: figure.get('id'),
+            content: figure.get('content')
           }
         )
         console.log(res.data.message)
@@ -246,7 +260,7 @@ export default {
                 canvas.remove(rect)
                 canvas.remove(dimensionText)
                 canvas.add(group)
-                _this.editStickyNote(group)
+                _this.changeStickyNoteContent(group)
               })
             }
           },
