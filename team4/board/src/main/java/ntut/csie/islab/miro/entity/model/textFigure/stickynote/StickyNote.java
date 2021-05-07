@@ -34,5 +34,14 @@ public class StickyNote extends TextFigure {
 
     }
 
+    @Override
+    public void changeColor(String newColor) {
+        if(!newColor.isEmpty() && !this.getStyle().getColor().equals(newColor)) {
+            String originalColor = this.getStyle().getColor();
+            this.getStyle().setColor(newColor);
+            addDomainEvent(new StickyNoteColorChangedDomainEvent(this.getBoardId(), this.getFigureId(), originalColor, newColor));
+        }
+    }
+
 
 }

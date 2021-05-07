@@ -47,4 +47,8 @@ public class TextFigureRepository {
     public void changeContent(TextFigure stickyNote, String content) {
         stickyNote.setContent(content);
     }
+
+    public void changeColor(TextFigure stickyNote, String color) {
+        stickyNote.getStyle().setColor(color);
+    }
 }

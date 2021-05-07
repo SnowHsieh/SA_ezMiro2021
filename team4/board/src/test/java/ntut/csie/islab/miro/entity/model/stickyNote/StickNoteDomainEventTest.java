@@ -5,6 +5,7 @@ import ntut.csie.islab.miro.entity.model.textFigure.Position;
 import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
 import ntut.csie.islab.miro.entity.model.textFigure.Style;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.StickyNote;
+import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteColorChangedDomainEvent;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteContentChangedDomainEvent;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteEditedDomainEvent;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteMovedDomainEvent;
@@ -56,6 +57,30 @@ public class StickNoteDomainEventTest {
         assertEquals(oldContent, stickyNoteContentChangedDomainEvent.getOriginalContent());
 
     }
+
+    @Test
+    public void change_stickyNote_color_then_publishes_a_stickyNote_color_changed_domain_event() {
+        TextFigure stickyNote = createStickyNote();
+        stickyNote.clearDomainEvents();
+        assertEquals(0, stickyNote.getDomainEvents().size());
+
+        String newColor = "#f9f900";
+        String originalColor = stickyNote.getStyle().getColor();
+        stickyNote.changeColor(newColor);
+
+        assertEquals(newColor, stickyNote.getStyle().getColor());
+        assertEquals(1, stickyNote.getDomainEvents().size());
+        assertEquals(StickyNoteColorChangedDomainEvent.class, stickyNote.getDomainEvents().get(0).getClass());
+
+        StickyNoteColorChangedDomainEvent stickyNoteColorChangedDomainEvent = (StickyNoteColorChangedDomainEvent) stickyNote.getDomainEvents().get(0);
+
+        assertEquals(stickyNote.getBoardId(), stickyNoteColorChangedDomainEvent.getBoardId());
+        assertEquals(stickyNote.getFigureId(), stickyNoteColorChangedDomainEvent.getFigureId());
+        assertEquals(newColor, stickyNoteColorChangedDomainEvent.getNewColor());
+        assertEquals(originalColor, stickyNoteColorChangedDomainEvent.getOriginalColor());
+
+    }
+
 
     @Test
     public void move_a_stickyNote_then_publishes_a_stickyNote_moved_domain_event() {

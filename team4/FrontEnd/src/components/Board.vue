@@ -66,7 +66,7 @@ export default {
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = '9c4a5bf9-de26-4666-a173-ef81a55ddcdb'
+        this.boardId = '482b65aa-c166-44e1-a5e2-5d2ca484eca5'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         this.drawStickyNote(res.data.figureDtos)
       } catch (err) {
@@ -124,6 +124,20 @@ export default {
           {
             figureId: figure.get('id'),
             content: figure.get('content')
+          }
+        )
+        console.log(res.data.message)
+      } catch (err) {
+        console.log(err)
+      }
+      this.refreshCanvas()
+    },
+    async changeStickyNoteColor (figure) {
+      try {
+        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/changeStickyNoteColor',
+          {
+            figureId: figure.get('id'),
+            color: figure.get('fill')
           }
         )
         console.log(res.data.message)
@@ -327,7 +341,7 @@ export default {
         // console.log('changeColor')
         _this.activeObjects.forEach((target) => {
           target.item(0).set('fill', _this.favcolor.value) // rect fill
-          _this.editStickyNote(target)
+          _this.changeStickyNoteColor(target)
         })
         _this.hideContextMenu()
       }

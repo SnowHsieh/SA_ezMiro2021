@@ -63,7 +63,10 @@ public class UseCaseInjection {
         return new ChangeStickyNoteContentUseCase(textFigureRepository,eventBus);
     }
 
-
+    @Bean(name = "changeStickyNoteColorUseCase")
+    public ChangeStickyNoteColorUseCase changeStickyNoteColorUseCase() {
+        return new ChangeStickyNoteColorUseCase(textFigureRepository,eventBus);
+    }
 
     @Autowired
     public void setBoardRepository(BoardRepository boardRepository) {
