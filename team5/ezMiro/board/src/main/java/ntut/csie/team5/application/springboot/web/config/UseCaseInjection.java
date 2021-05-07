@@ -2,8 +2,8 @@ package ntut.csie.team5.application.springboot.web.config;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.team5.usecase.board.BoardRepository;
-import ntut.csie.team5.usecase.board.change_order.ChangeFigureOrderUseCase;
-import ntut.csie.team5.usecase.board.change_order.ChangeFigureOrderUseCaseImpl;
+import ntut.csie.team5.usecase.board.change_order.ChangeFigureZOrderUseCase;
+import ntut.csie.team5.usecase.board.change_order.ChangeFigureZOrderUseCaseImpl;
 import ntut.csie.team5.usecase.board.create.CreateBoardUseCase;
 import ntut.csie.team5.usecase.board.create.CreateBoardUseCaseImpl;
 import ntut.csie.team5.usecase.board.getcontent.GetBoardContentUseCase;
@@ -72,9 +72,9 @@ public class UseCaseInjection {
         return new DeleteNoteUseCaseImpl(figureRepository, eventBus);
     }
 
-    @Bean(name = "changeFigureOrderUseCase")
-    public ChangeFigureOrderUseCase changeFigureOrderUseCase() {
-        return new ChangeFigureOrderUseCaseImpl(boardRepository, eventBus);
+    @Bean(name = "changeFigureZOrderUseCase")
+    public ChangeFigureZOrderUseCase changeFigureZOrderUseCase() {
+        return new ChangeFigureZOrderUseCaseImpl(boardRepository, eventBus);
     }
 
     @Autowired

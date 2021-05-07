@@ -4,10 +4,10 @@ import ntut.csie.sslab.ddd.model.AggregateRoot;
 import ntut.csie.team5.entity.model.board.event.BoardCreated;
 import ntut.csie.team5.entity.model.board.event.FigureCommitted;
 import ntut.csie.team5.entity.model.board.event.FigureUncommitted;
+import ntut.csie.team5.entity.model.board.event.FigureZOrderChanged;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class Board extends AggregateRoot<String> {
 
@@ -73,90 +73,100 @@ public class Board extends AggregateRoot<String> {
         return committedFigures;
     }
 
+    public void changeFigureZOrder(String figureId, ZOrderType zOrderType) {
+        switch (zOrderType) {
+            case BRING_FORWARD:
+                bringFigureForward(figureId);
+                break;
+            case SEND_BACKWARDS:
+                sendFigureBackwards(figureId);
+                break;
+            case BRING_TO_FRONT:
+                bringFigureToFront(figureId);
+                break;
+            case SEND_TO_BACK:
+                sendFigureToBack(figureId);
+                break;
+        }
 
-    public void moveFigureOrderFront(String figureId) {
+        addDomainEvent(new FigureZOrderChanged(figureId, getBoardId(), zOrderType));
+    }
+
+    public void bringFigureForward(String figureId) {
         CommittedFigure committedFigure = committedFigures.stream().filter(cf ->  cf.getFigureId().equals(figureId)).findAny().orElse(null);
 
         if(committedFigure == null)
             return;
 
-        int order = committedFigure.getOrder();
+        int zOrder = committedFigure.getZOrder();
 
-        CommittedFigure nextCommittedFigure = committedFigures.stream().filter(cf ->  cf.getOrder() == (order + 1)).findAny().orElse(null);
+        CommittedFigure nextCommittedFigure = committedFigures.stream().filter(cf ->  cf.getZOrder() == (zOrder + 1)).findAny().orElse(null);
 
         if(nextCommittedFigure == null)
             return;
 
-        committedFigure.setOrder(order + 1);
-        nextCommittedFigure.setOrder(order);
-        committedFigures.set(order, nextCommittedFigure);
-        committedFigures.set(order + 1, committedFigure);
+        committedFigures.set(zOrder, new CommittedFigure(nextCommittedFigure.getFigureId(), nextCommittedFigure.getBoardId(), zOrder));
+        committedFigures.set(zOrder + 1, new CommittedFigure(committedFigure.getFigureId(), committedFigure.getBoardId(), zOrder + 1));
     }
 
-    public void moveFigureOrderBack(String figureId) {
+    public void sendFigureBackwards(String figureId) {
         CommittedFigure committedFigure = committedFigures.stream().filter(cf ->  cf.getFigureId().equals(figureId)).findAny().orElse(null);
 
         if(committedFigure == null)
             return;
 
-        int order = committedFigure.getOrder();
+        int zOrder = committedFigure.getZOrder();
 
-        CommittedFigure previousCommittedFigure = committedFigures.stream().filter(cf ->  cf.getOrder() == (order - 1)).findAny().orElse(null);
+        CommittedFigure previousCommittedFigure = committedFigures.stream().filter(cf ->  cf.getZOrder() == (zOrder - 1)).findAny().orElse(null);
 
         if(previousCommittedFigure == null)
             return;
 
-        committedFigure.setOrder(order - 1);
-        previousCommittedFigure.setOrder(order);
-        committedFigures.set(order, previousCommittedFigure);
-        committedFigures.set(order - 1, committedFigure);
+        committedFigures.set(zOrder, new CommittedFigure(previousCommittedFigure.getFigureId(), previousCommittedFigure.getBoardId(), zOrder));
+        committedFigures.set(zOrder - 1, new CommittedFigure(committedFigure.getFigureId(), committedFigure.getBoardId(), zOrder - 1));
     }
 
-    public void moveFigureOrderFrontEnd(String figureId) {
+    public void bringFigureToFront(String figureId) {
         CommittedFigure committedFigure = committedFigures.stream().filter(cf ->  cf.getFigureId().equals(figureId)).findAny().orElse(null);
 
         if(committedFigure == null)
             return;
 
-        int order = committedFigure.getOrder();
+        int order = committedFigure.getZOrder();
 
         for (int i = order; i < committedFigures.size(); i++)
         {
-            int nextOrder = i;
-            CommittedFigure nextCommittedFigure = committedFigures.stream().filter(cf ->  cf.getOrder() == (nextOrder + 1)).findAny().orElse(null);
+            int nextZOrder = i;
+            CommittedFigure nextCommittedFigure = committedFigures.stream().filter(cf ->  cf.getZOrder() == (nextZOrder + 1)).findAny().orElse(null);
 
             if(nextCommittedFigure == null) {
-                committedFigure.setOrder(committedFigures.size() - 1);
-                committedFigures.set(committedFigures.size() - 1, committedFigure);
+                committedFigures.set(committedFigures.size() - 1, new CommittedFigure(committedFigure.getFigureId(), committedFigure.getBoardId(), committedFigures.size() - 1));
                 return;
             }
 
-            nextCommittedFigure.setOrder(nextOrder);
-            committedFigures.set(nextOrder, nextCommittedFigure);
+            committedFigures.set(nextZOrder, new CommittedFigure(nextCommittedFigure.getFigureId(), nextCommittedFigure.getBoardId(), nextZOrder));
         }
     }
 
-    public void moveFigureOrderBackEnd(String figureId) {
+    public void sendFigureToBack(String figureId) {
         CommittedFigure committedFigure = committedFigures.stream().filter(cf ->  cf.getFigureId().equals(figureId)).findAny().orElse(null);
 
         if(committedFigure == null)
             return;
 
-        int order = committedFigure.getOrder();
+        int order = committedFigure.getZOrder();
 
         for (int i = order; i >= 0; i--)
         {
-            int previousOrder = i;
-            CommittedFigure previousCommittedFigure = committedFigures.stream().filter(cf ->  cf.getOrder() == (previousOrder - 1)).findAny().orElse(null);
+            int previousZOrder = i;
+            CommittedFigure previousCommittedFigure = committedFigures.stream().filter(cf ->  cf.getZOrder() == (previousZOrder - 1)).findAny().orElse(null);
 
             if(previousCommittedFigure == null) {
-                committedFigure.setOrder(0);
-                committedFigures.set(0, committedFigure);
+                committedFigures.set(0, new CommittedFigure(committedFigure.getFigureId(), committedFigure.getBoardId(), 0));
                 return;
             }
 
-            previousCommittedFigure.setOrder(previousOrder);
-            committedFigures.set(previousOrder, previousCommittedFigure);
+            committedFigures.set(previousZOrder, new CommittedFigure(previousCommittedFigure.getFigureId(), previousCommittedFigure.getBoardId(), previousZOrder));
         }
     }
 }

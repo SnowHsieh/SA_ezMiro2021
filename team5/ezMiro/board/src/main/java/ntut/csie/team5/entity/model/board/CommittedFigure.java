@@ -6,35 +6,24 @@ public class CommittedFigure extends ValueObject {
 
     private String figureId;
     private String boardId;
-    private int order;
+    private int zOrder;
 
-    public CommittedFigure(String figureId, String boardId, int order) {
+    public CommittedFigure(String figureId, String boardId, int zOrder) {
         this.figureId = figureId;
         this.boardId = boardId;
-        this.order = order;
+        this.zOrder = zOrder;
     }
 
     public String getFigureId() {
         return figureId;
     }
 
-    public void setFigureId(String figureId) {
-        this.figureId = figureId;
-    }
-
     public String getBoardId() {
         return boardId;
     }
 
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
+    public int getZOrder() {
+        return zOrder;
     }
 
-    public int getOrder() {
-        return order;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
-    }
 }
