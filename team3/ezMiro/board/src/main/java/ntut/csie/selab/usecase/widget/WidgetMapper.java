@@ -20,8 +20,8 @@ public class WidgetMapper {
                 height,
                 widget.getColor(),
                 widget.getTextColor(),
-                widget.getText(),
-                widget.getzIndex());
+                widget.getText()
+        );
     }
 
     public List<WidgetDto> domainToDto(List<Widget> widgets) {
