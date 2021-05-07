@@ -15,10 +15,10 @@
             <button @click="createNotes('#FFF9B2')" style="width:100px;background-color:#FFF9B2">Aggregate</button>
         </div>
         <br>
+        <button @click="bringFigureForward()" style="width:100px;">Bring Figure Forward</button>
         <button @click="bringFigureToFront()" style="width:100px;">Bring Figure To Front</button>
-        <button @click="bringFigureToFrontEnd()" style="width:100px;">Bring Figure To Front End</button>
+        <button @click="sendFigureBackwards()" style="width:100px;">Send Figure Backwards</button>
         <button @click="sendFigureToBack()" style="width:100px;">Send Figure To Back</button>
-        <button @click="sendFigureToBackEnd()" style="width:100px;">Send Figure To Back End</button>
         <canvas id="canvas"></canvas>
     </div>
 </template>
@@ -231,24 +231,24 @@ export default {
             this.groupObject = null
             this.textBox = null
         },
-        bringFigureToFront () {
-            this.canvas.bringForward(this.activeObject)
+        async bringFigureForward () {
+            this.$api.board.bringFigureForward(this.boardId, this.activeObject.figureId)
+            await this.canvas.bringForward(this.activeObject)
+            this.canvas.renderAll()
+        },
+        async bringFigureToFront () {
             this.$api.board.bringFigureToFront(this.boardId, this.activeObject.figureId)
+            await this.canvas.bringToFront(this.activeObject)
             this.canvas.renderAll()
         },
-        bringFigureToFrontEnd () {
-            this.canvas.bringToFront(this.activeObject)
-            this.$api.board.bringFigureToFrontEnd(this.boardId, this.activeObject.figureId)
+        async sendFigureBackwards () {
+            this.$api.board.sendFigureBackwards(this.boardId, this.activeObject.figureId)
+            await this.canvas.sendBackwards(this.activeObject)
             this.canvas.renderAll()
         },
-        sendFigureToBack () {
-            this.canvas.sendBackwards(this.activeObject)
+        async sendFigureToBack () {
             this.$api.board.sendFigureToBack(this.boardId, this.activeObject.figureId)
-            this.canvas.renderAll()
-        },
-        sendFigureToBackEnd () {
-            this.canvas.sendToBack(this.activeObject)
-            this.$api.board.sendFigureToBackEnd(this.boardId, this.activeObject.figureId)
+            await this.canvas.sendToBack(this.activeObject)
             this.canvas.renderAll()
         }
     }
