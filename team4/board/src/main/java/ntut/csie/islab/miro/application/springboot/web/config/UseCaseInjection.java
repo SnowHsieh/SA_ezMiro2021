@@ -68,6 +68,11 @@ public class UseCaseInjection {
         return new ChangeStickyNoteColorUseCase(textFigureRepository,eventBus);
     }
 
+    @Bean(name = "resizeStickyNoteUseCase")
+    public ResizeStickyNoteUseCase resizeStickyNoteUseCase() {
+        return new ResizeStickyNoteUseCase(textFigureRepository,eventBus);
+    }
+
     @Autowired
     public void setBoardRepository(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;

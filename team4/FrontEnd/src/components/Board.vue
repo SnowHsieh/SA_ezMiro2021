@@ -66,7 +66,7 @@ export default {
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = '482b65aa-c166-44e1-a5e2-5d2ca484eca5'
+        this.boardId = '3539471c-fb96-46ff-b758-34fc110a75dd'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         this.drawStickyNote(res.data.figureDtos)
       } catch (err) {
@@ -138,6 +138,21 @@ export default {
           {
             figureId: figure.get('id'),
             color: figure.get('fill')
+          }
+        )
+        console.log(res.data.message)
+      } catch (err) {
+        console.log(err)
+      }
+      this.refreshCanvas()
+    },
+    async resizeStickyNote (figure) {
+      try {
+        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/resizeStickyNote',
+          {
+            figureId: figure.get('id'),
+            width: parseFloat(figure.width) * parseFloat(figure.get('scaleX')),
+            height: parseFloat(figure.height) * parseFloat(figure.get('scaleY'))
           }
         )
         console.log(res.data.message)
@@ -290,7 +305,7 @@ export default {
           'object:scaled': function (e) {
             // console.log('object:scaled')
             if (e.target.type === 'group') {
-              _this.editStickyNote(e.target)
+              _this.resizeStickyNote(e.target)
               _this.moveStickyNote(e.target)
             }
             // else {

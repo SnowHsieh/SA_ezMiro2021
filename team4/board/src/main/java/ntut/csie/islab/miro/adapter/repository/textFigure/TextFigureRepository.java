@@ -51,4 +51,9 @@ public class TextFigureRepository {
     public void changeColor(TextFigure stickyNote, String color) {
         stickyNote.getStyle().setColor(color);
     }
+
+    public void resize(TextFigure stickyNote, double width, double height){
+        stickyNote.getStyle().setWidth(width);
+        stickyNote.getStyle().setHeight(height);
+    }
 }
