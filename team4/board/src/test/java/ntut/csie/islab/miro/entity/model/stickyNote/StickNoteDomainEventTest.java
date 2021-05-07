@@ -5,6 +5,7 @@ import ntut.csie.islab.miro.entity.model.textFigure.Position;
 import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
 import ntut.csie.islab.miro.entity.model.textFigure.Style;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.StickyNote;
+import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteContentChangedDomainEvent;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteEditedDomainEvent;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteMovedDomainEvent;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ public class StickNoteDomainEventTest {
     }
 
     @Test
-    public void edit_a_stickyNote_then_publishes_a_stickyNote_edited_domain_event() {
+    public void change_stickyNote_content_then_publishes_a_stickyNote_content_changed_domain_event() {
         TextFigure stickyNote = createStickyNote();
         stickyNote.clearDomainEvents();
         assertEquals(0, stickyNote.getDomainEvents().size());
@@ -45,14 +46,14 @@ public class StickNoteDomainEventTest {
 
         assertEquals(newContent, stickyNote.getContent());
         assertEquals(1, stickyNote.getDomainEvents().size());
-        assertEquals(StickyNoteEditedDomainEvent.class, stickyNote.getDomainEvents().get(0).getClass());
+        assertEquals(StickyNoteContentChangedDomainEvent.class, stickyNote.getDomainEvents().get(0).getClass());
 
-        StickyNoteEditedDomainEvent stickyNoteEditedDomainEvent = (StickyNoteEditedDomainEvent) stickyNote.getDomainEvents().get(0);
+        StickyNoteContentChangedDomainEvent stickyNoteContentChangedDomainEvent = (StickyNoteContentChangedDomainEvent) stickyNote.getDomainEvents().get(0);
 
-        assertEquals(stickyNote.getBoardId(), stickyNoteEditedDomainEvent.getBoardId());
-        assertEquals(stickyNote.getFigureId(), stickyNoteEditedDomainEvent.getFigureId());
-        assertEquals(newContent, stickyNoteEditedDomainEvent.getNewContent());
-        assertEquals(oldContent, stickyNoteEditedDomainEvent.getOriginalContent());
+        assertEquals(stickyNote.getBoardId(), stickyNoteContentChangedDomainEvent.getBoardId());
+        assertEquals(stickyNote.getFigureId(), stickyNoteContentChangedDomainEvent.getFigureId());
+        assertEquals(newContent, stickyNoteContentChangedDomainEvent.getNewContent());
+        assertEquals(oldContent, stickyNoteContentChangedDomainEvent.getOriginalContent());
 
     }
 

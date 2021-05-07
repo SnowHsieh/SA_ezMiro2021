@@ -43,4 +43,8 @@ public class TextFigureRepository {
     public void move(TextFigure stickyNote, Position newPosition) {
         stickyNote.setPosition(newPosition);
     }
+
+    public void changeContent(TextFigure stickyNote, String content) {
+        stickyNote.setContent(content);
+    }
 }
