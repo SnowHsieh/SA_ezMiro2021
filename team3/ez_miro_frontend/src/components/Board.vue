@@ -4,7 +4,14 @@
     <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
       <li @click="deleteWidget()" class="list-group-item">Delete</li>
       <li class="list-group-item">
-        <input type="color" id="favcolor" name="favcolor" v-model="selectedStickyNoteColor" @change="changeColorOfStickyNote">Color</li>
+        <input type="color" id="favcolor" name="favcolor" v-model="selectedStickyNoteColor" @change="changeColorOfStickyNote">Custom Color</li>
+      <li class="list-group-item">
+        <button type="button" class="btn btn-default btn-circle" style="background-color: #4CAF50;" @click="changeColorOfStickyNoteWith('#4CAF50')"></button>
+        <button type="button" class="btn btn-default btn-circle" style="background-color: #41ABD8;" @click="changeColorOfStickyNoteWith('#41ABD8')"></button>
+        <button type="button" class="btn btn-default btn-circle" style="background-color: #FFFAAD;" @click="changeColorOfStickyNoteWith('#FFFAAD')"></button>
+        <button type="button" class="btn btn-default btn-circle" style="background-color: #FFB22E;" @click="changeColorOfStickyNoteWith('#FFB22E')"></button>
+        <button type="button" class="btn btn-default btn-circle" style="background-color: #CB56F5;" @click="changeColorOfStickyNoteWith('#CB56F5')"></button>
+      </li>
       <li class="list-group-item" @click="bringToFront">bring to front</li>
       <li class="list-group-item" @click="sendToback">send to back</li>
     </ul>
@@ -211,13 +218,16 @@ export default {
         await EditTextOfStickyNoteBy(group.id, me.boardId, objects[1].text)
       })
     },
-    async changeColorOfStickyNote () {
-      const res = await ChangeColorOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, this.selectedStickyNoteColor)
+    async changeColorOfStickyNoteWith (color) {
+      const res = await ChangeColorOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, color)
       if (res !== null) {
-        this.selectedStickyNote.rectObject.set('fill', this.selectedStickyNoteColor)
+        this.selectedStickyNote.rectObject.set('fill', color)
         this.canvas.renderAll()
       }
       this.isDisplayRightClickMenu = false
+    },
+    changeColorOfStickyNote () {
+      this.changeColorOfStickyNoteWith(this.selectedStickyNoteColor)
     },
     async bringToFront () { // TODO: 邏輯待改善
       this.indexMax += 1
