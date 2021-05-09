@@ -5,6 +5,7 @@ import ntut.csie.selab.entity.model.board.CommittedWidget;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +33,9 @@ public class ChangeZOrderOfWidgetUseCase {
                 reArrangeZOrderIn(selectedBoard, selectedCommittedWidget.getZOrder(), input.getZOrder());
 
                 domainEventBus.postAll(selectedBoard);
-                output.setBoardId(selectedCommittedWidget.getBoardId());
-                output.setWidgetId(selectedCommittedWidget.getWidgetId());
-                output.setZOrder(selectedCommittedWidget.getZOrder());
+                output.setBoardId(selectedBoard.getId());
+                output.setWidgetId(selectedBoard.getCommittedWidgetBy(selectedCommittedWidget.getWidgetId()).get().getWidgetId());
+                output.setZOrder(selectedBoard.getCommittedWidgetBy(selectedCommittedWidget.getWidgetId()).get().getZOrder());
             } else {
                 throw new RuntimeException("Widget not found, widget id = " + input.getWidgetId());
             }
@@ -46,21 +47,26 @@ public class ChangeZOrderOfWidgetUseCase {
 
     private void reArrangeZOrderIn(Board board, int originZOrder, int newZOrder) {
         List<CommittedWidget> committedWidgets = board.getCommittedWidgets();
-        List<CommittedWidget> subList = committedWidgets.subList(originZOrder, newZOrder);
-//        committedWidgets.removeAll(subList);
-        CommittedWidget target;
+        int offset = 0;
         if (originZOrder < newZOrder) {
-            target = subList.remove(0);
+            shiftZOrderInRange(originZOrder, newZOrder, newZOrder, -1, committedWidgets);
         } else {
+            shiftZOrderInRange(newZOrder, originZOrder, newZOrder, 1, committedWidgets);
+        }
+    }
+
+    private void shiftZOrderInRange(int startIndex, int endIndex, int targetZOrder, int offset, List<CommittedWidget> committedWidgets) {
+        List<CommittedWidget> subList = new ArrayList<>(committedWidgets.subList(startIndex, endIndex + 1));
+        committedWidgets.removeAll(subList);
+        CommittedWidget target;
+        if (offset > 0) {
             target = subList.remove(subList.size() - 1);
+        } else {
+            target = subList.remove(0);
         }
         for (int i = 0; i < subList.size(); i++) {
-            committedWidgets.add(originZOrder + 1, new CommittedWidget(board.getId(), subList.get(i).getWidgetId(), originZOrder + i));
+            committedWidgets.add(startIndex + i, new CommittedWidget(subList.get(i).getBoardId(), subList.get(i).getWidgetId(), subList.get(i).getZOrder() + offset));
         }
-        if (originZOrder < newZOrder) {
-            committedWidgets.add(newZOrder, new CommittedWidget(board.getId(), target.getWidgetId(), newZOrder));
-        } else {
-            committedWidgets.add(originZOrder, new CommittedWidget(board.getId(), target.getWidgetId(), newZOrder));
-        }
+        committedWidgets.add(endIndex, new CommittedWidget(target.getBoardId(), target.getWidgetId(), targetZOrder));
     }
 }

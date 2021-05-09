@@ -49,4 +49,103 @@ public class ChangeZOrderOfWidgetUseCaseTest {
         Assert.assertEquals("widgetId1", output.getWidgetId());
         Assert.assertEquals(2, output.getZOrder());
     }
+
+    @Test
+    public void change_z_order_of_sticky_note_to_neighbor_should_succeed() {
+        // Arrange
+        BoardRepository boardRepository = new BoardRepositoryImpl();
+        String boardId = "boardId";
+        Board board = MockFactory.createBoard(boardId);
+        boardRepository.add(board);
+
+        WidgetRepository widgetRepository = new WidgetRepositoryImpl();
+        String widgetId1 = "widgetId1";
+        String widgetId2 = "widgetId2";
+        String widgetId3 = "widgetId3";
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId1));
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId2));
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId3));
+
+        DomainEventBus domainEventBus = new DomainEventBus();
+        ChangeZOrderOfWidgetInput input = new ChangeZOrderOfWidgetInput();
+        input.setBoardId(boardId);
+        input.setWidgetId(widgetId1);
+        input.setZOrder(1);
+        ChangeZOrderOfWidgetOutput output = new ChangeZOrderOfWidgetOutput();
+
+        ChangeZOrderOfWidgetUseCase changeZOrderOfWidgetUseCase = new ChangeZOrderOfWidgetUseCase(boardRepository, domainEventBus);
+
+        // Act
+        changeZOrderOfWidgetUseCase.execute(input, output);
+
+        // Assert
+        Assert.assertEquals("widgetId1", output.getWidgetId());
+        Assert.assertEquals(1, output.getZOrder());
+    }
+
+    @Test
+    public void change_z_order_of_sticky_note_revert_should_succeed() {
+        // Arrange
+        BoardRepository boardRepository = new BoardRepositoryImpl();
+        String boardId = "boardId";
+        Board board = MockFactory.createBoard(boardId);
+        boardRepository.add(board);
+
+        WidgetRepository widgetRepository = new WidgetRepositoryImpl();
+        String widgetId1 = "widgetId1";
+        String widgetId2 = "widgetId2";
+        String widgetId3 = "widgetId3";
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId3));
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId2));
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId1));
+
+        DomainEventBus domainEventBus = new DomainEventBus();
+        ChangeZOrderOfWidgetInput input = new ChangeZOrderOfWidgetInput();
+        input.setBoardId(boardId);
+        input.setWidgetId(widgetId1);
+        input.setZOrder(0);
+        ChangeZOrderOfWidgetOutput output = new ChangeZOrderOfWidgetOutput();
+
+        ChangeZOrderOfWidgetUseCase changeZOrderOfWidgetUseCase = new ChangeZOrderOfWidgetUseCase(boardRepository, domainEventBus);
+
+        // Act
+        changeZOrderOfWidgetUseCase.execute(input, output);
+
+        // Assert
+        Assert.assertEquals("widgetId1", output.getWidgetId());
+        Assert.assertEquals(0, output.getZOrder());
+    }
+
+    @Test
+    public void change_z_order_of_sticky_note_to_neighbor_revert_should_succeed() {
+        // Arrange
+        BoardRepository boardRepository = new BoardRepositoryImpl();
+        String boardId = "boardId";
+        Board board = MockFactory.createBoard(boardId);
+        boardRepository.add(board);
+
+        WidgetRepository widgetRepository = new WidgetRepositoryImpl();
+        String widgetId1 = "widgetId1";
+        String widgetId2 = "widgetId2";
+        String widgetId3 = "widgetId3";
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId3));
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId2));
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId1));
+
+        DomainEventBus domainEventBus = new DomainEventBus();
+        ChangeZOrderOfWidgetInput input = new ChangeZOrderOfWidgetInput();
+        input.setBoardId(boardId);
+        input.setWidgetId(widgetId1);
+        input.setZOrder(1);
+        ChangeZOrderOfWidgetOutput output = new ChangeZOrderOfWidgetOutput();
+
+        ChangeZOrderOfWidgetUseCase changeZOrderOfWidgetUseCase = new ChangeZOrderOfWidgetUseCase(boardRepository, domainEventBus);
+
+        // Act
+        changeZOrderOfWidgetUseCase.execute(input, output);
+
+        // Assert
+        Assert.assertEquals("widgetId1", output.getWidgetId());
+        Assert.assertEquals(1, output.getZOrder());
+    }
 }
