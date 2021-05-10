@@ -199,15 +199,7 @@ export default {
         stopContextMenu: true, // <--  prevent context menu from showing
         freeDrawingCursor: 'none'
       })
-      // this.canvas.freeDrawingBrush.width = 20
-      // this.canvas.freeDrawingBrush.color = '#ff0000'
-      // this.mousecursor = new fabric.Text('I am User1', {
-      //   fontSize: 15,
-      //   originX: 'center',
-      //   originY: 'center',
-      //   selectable: false
-      // })
-      // this.canvas.add(this.mousecursor)
+      this.generateMouseCursor()
       // this.canvas.setBackgroundColor('gray')
     },
     drawStickyNote (figureDtos) {
@@ -246,6 +238,7 @@ export default {
     refreshCanvas () {
       this.canvas.clear()
       this.getBoardContent()
+      this.generateMouseCursor()
     },
     listenEventsOnCanvas () {
       var _this = this
@@ -259,20 +252,20 @@ export default {
       canvas.on(
         {
           'mouse:move': function (e) {
-            // var mouse = this.getPointer(e)
+            var mouse = this.getPointer(e)
             // console.log('mouse:', mouse)
-            // _this.mousecursor.set({
-            //   left: mouse.x + 40,
-            //   top: mouse.y
-            // }).setCoords()
-            // canvas.renderAll()
+            _this.mousecursor.set({
+              left: mouse.x + 40,
+              top: mouse.y - 5
+            }).setCoords()
+            canvas.renderAll()
           },
           'mouse:enter': function (e) {
             console.log('mouse:enter')
           },
           'mouse:leave': function (e) {
             console.log('mouse:leave')
-            // canvas.remove(_this.mousecursor)
+            canvas.remove(_this.mousecursor)
           },
           'mouse:dblclick': function (e) {
             // console.log('object:dblclick')
@@ -427,6 +420,15 @@ export default {
         _this.hideContextMenu()
       }
       _this.sendToBackButton.addEventListener('mouseup', newHandler)
+    },
+    generateMouseCursor () {
+      this.mousecursor = new fabric.Text('I am User1', {
+        fontSize: 15,
+        originX: 'center',
+        originY: 'center',
+        selectable: false
+      })
+      this.canvas.add(this.mousecursor)
     }
   }
 
