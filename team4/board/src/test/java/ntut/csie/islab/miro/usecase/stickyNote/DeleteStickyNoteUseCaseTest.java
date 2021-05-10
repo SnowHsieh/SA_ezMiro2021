@@ -87,7 +87,6 @@ public class DeleteStickyNoteUseCaseTest {
         assertNotNull(stickyNoteRepository.findById(boardId, preGeneratedStickyNoteId).get());
         //check stickynote created and committed to board.
         assertEquals(1,board.getCommittedFigures().size());
-        assertEquals(1,board.getFigureOrderList().size());
 
         DeleteStickyNoteUseCase deleteStickyNoteUseCase = new DeleteStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         DeleteStickyNoteInput input = deleteStickyNoteUseCase.newInput();
@@ -102,7 +101,6 @@ public class DeleteStickyNoteUseCaseTest {
         assertEquals(null, stickyNoteRepository.findById(boardId,UUID.fromString(output.getId())).orElse(null));
         //check stickynote uncommitted to board.
         assertEquals(0,board.getCommittedFigures().size());
-        assertEquals(0,board.getFigureOrderList().size());
 
     }
 

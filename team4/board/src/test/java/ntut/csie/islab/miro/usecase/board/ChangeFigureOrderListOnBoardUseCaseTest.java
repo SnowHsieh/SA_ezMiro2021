@@ -4,6 +4,7 @@ import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
 import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
+import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
 import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
 import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
@@ -37,7 +38,7 @@ public class ChangeFigureOrderListOnBoardUseCaseTest {
     @Test
     public void test_modifyFigureUseCase(){
 
-        assertEquals(0,board.getFigureOrderList().size());
+        assertEquals(0,board.getCommittedFigures().size());
         ChangeFigureOrderListOnBoardUseCase changeFigureOrderListOnBoardUseCase = new ChangeFigureOrderListOnBoardUseCase(boardRepository, domainEventBus);
         ChangeFigureOrderListOnBoardInput input = changeFigureOrderListOnBoardUseCase.newInput();
 
@@ -53,16 +54,16 @@ public class ChangeFigureOrderListOnBoardUseCaseTest {
 
 
         input.setBoardId(board.getBoardId());
-        input.setFigureOrderList(figureOrderList);
+        input.setCommittedFigureListOrder(figureOrderList);
         changeFigureOrderListOnBoardUseCase.execute(input, output);
 
         assertNotNull(output.getId());
         assertEquals(ExitCode.SUCCESS,output.getExitCode());
 
-        List<UUID> resultFigureOrderList = board.getFigureOrderList();
+        List<CommittedFigure> resultFigureOrderList = board.getCommittedFigures();
         assertEquals(2,resultFigureOrderList.size());
-        assertEquals(figureId_0,resultFigureOrderList.get(0));
-        assertEquals(figureId_1,resultFigureOrderList.get(1));
+        assertEquals(figureId_0,resultFigureOrderList.get(0).getFigureId());
+        assertEquals(figureId_1,resultFigureOrderList.get(1).getFigureId());
 
 
     }

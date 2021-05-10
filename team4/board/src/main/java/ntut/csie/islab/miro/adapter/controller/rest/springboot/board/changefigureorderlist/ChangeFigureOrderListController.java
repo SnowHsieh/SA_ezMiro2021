@@ -41,7 +41,7 @@ public class ChangeFigureOrderListController {
         }
         ChangeFigureOrderListOnBoardInput input = changeFigureOrderListOnBoardUseCase.newInput();
         input.setBoardId(boardId);
-        input.setFigureOrderList(figureOrderList);
+        input.setCommittedFigureListOrder(figureOrderList);
 
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 

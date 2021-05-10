@@ -42,20 +42,12 @@ public class GetBoardContentUseCase {
             return;
         }
 
-        List<CommittedFigure> CommitedFigureList = board.getCommittedFigures();
+        List<CommittedFigure> CommittedFigureList = board.getCommittedFigures();
         List<TextFigure> textFigureList = new ArrayList<TextFigure>();
-        List<UUID> figureOrderList = board.getFigureOrderList();
 
-//        for(CommittedTextFigure f :CommitedFigureList ){
-//            textFigureList.add(this.textFigureRepository.findById(board.getBoardId(),f.getFigureId()).get());
-//        }
-
-        for (UUID figureId : figureOrderList) {
-            if (CommitedFigureList.stream().filter(s -> s.getFigureId().equals(figureId)).findFirst().isPresent()) {
-                textFigureList.add(this.textFigureRepository.findById(board.getBoardId(), figureId).get());
-            }
+        for(CommittedFigure f :CommittedFigureList ){
+            textFigureList.add(this.textFigureRepository.findById(board.getBoardId(),f.getFigureId()).get());
         }
-
 
         List<TextFigureDto> textFigureDtos = ConvertFigureToDto.transform(textFigureList);
 

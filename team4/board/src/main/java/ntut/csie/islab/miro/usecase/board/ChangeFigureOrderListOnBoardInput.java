@@ -6,7 +6,7 @@ import java.util.UUID;
 public class ChangeFigureOrderListOnBoardInput {
     private UUID boardId;
     private UUID FigureId;
-    private List<UUID> textFigureIdOrderList;
+    private List<UUID> figureIdOrderList;
 
     public UUID getBoardId() {
         return boardId;
@@ -24,11 +24,11 @@ public class ChangeFigureOrderListOnBoardInput {
         FigureId = figureId;
     }
 
-    public List<UUID> getFigureOrderList() {
-        return textFigureIdOrderList;
+    public List<UUID> getCommittedFigureListOrder() {
+        return figureIdOrderList;
     }
 
-    public void setFigureOrderList(List<UUID> textFigureIdOrderList) {
-        this.textFigureIdOrderList = textFigureIdOrderList;
+    public void setCommittedFigureListOrder(List<UUID> figureIdOrderList) {
+        this.figureIdOrderList = figureIdOrderList;
     }
 }
