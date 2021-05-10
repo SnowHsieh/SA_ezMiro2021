@@ -46,7 +46,7 @@ public class ChangeZOrderOfWidgetUseCaseTest {
         changeZOrderOfWidgetUseCase.execute(input, output);
 
         // Assert
-        Assert.assertEquals("widgetId1", output.getWidgetId());
+        Assert.assertEquals(widgetId1, output.getWidgetId());
         Assert.assertEquals(2, output.getZOrder());
     }
 
@@ -62,15 +62,17 @@ public class ChangeZOrderOfWidgetUseCaseTest {
         String widgetId1 = "widgetId1";
         String widgetId2 = "widgetId2";
         String widgetId3 = "widgetId3";
+        String widgetId4 = "widgetId4";
         widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId1));
         widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId2));
         widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId3));
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId4));
 
         DomainEventBus domainEventBus = new DomainEventBus();
         ChangeZOrderOfWidgetInput input = new ChangeZOrderOfWidgetInput();
         input.setBoardId(boardId);
-        input.setWidgetId(widgetId1);
-        input.setZOrder(1);
+        input.setWidgetId(widgetId2);
+        input.setZOrder(2);
         ChangeZOrderOfWidgetOutput output = new ChangeZOrderOfWidgetOutput();
 
         ChangeZOrderOfWidgetUseCase changeZOrderOfWidgetUseCase = new ChangeZOrderOfWidgetUseCase(boardRepository, domainEventBus);
@@ -79,8 +81,8 @@ public class ChangeZOrderOfWidgetUseCaseTest {
         changeZOrderOfWidgetUseCase.execute(input, output);
 
         // Assert
-        Assert.assertEquals("widgetId1", output.getWidgetId());
-        Assert.assertEquals(1, output.getZOrder());
+        Assert.assertEquals(widgetId2, output.getWidgetId());
+        Assert.assertEquals(2, output.getZOrder());
     }
 
     @Test
@@ -95,14 +97,14 @@ public class ChangeZOrderOfWidgetUseCaseTest {
         String widgetId1 = "widgetId1";
         String widgetId2 = "widgetId2";
         String widgetId3 = "widgetId3";
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId3));
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId2));
         widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId1));
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId2));
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId3));
 
         DomainEventBus domainEventBus = new DomainEventBus();
         ChangeZOrderOfWidgetInput input = new ChangeZOrderOfWidgetInput();
         input.setBoardId(boardId);
-        input.setWidgetId(widgetId1);
+        input.setWidgetId(widgetId3);
         input.setZOrder(0);
         ChangeZOrderOfWidgetOutput output = new ChangeZOrderOfWidgetOutput();
 
@@ -112,7 +114,7 @@ public class ChangeZOrderOfWidgetUseCaseTest {
         changeZOrderOfWidgetUseCase.execute(input, output);
 
         // Assert
-        Assert.assertEquals("widgetId1", output.getWidgetId());
+        Assert.assertEquals(widgetId3, output.getWidgetId());
         Assert.assertEquals(0, output.getZOrder());
     }
 
@@ -128,14 +130,16 @@ public class ChangeZOrderOfWidgetUseCaseTest {
         String widgetId1 = "widgetId1";
         String widgetId2 = "widgetId2";
         String widgetId3 = "widgetId3";
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId3));
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId2));
+        String widgetId4 = "widgetId4";
         widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId1));
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId2));
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId3));
+        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId4));
 
         DomainEventBus domainEventBus = new DomainEventBus();
         ChangeZOrderOfWidgetInput input = new ChangeZOrderOfWidgetInput();
         input.setBoardId(boardId);
-        input.setWidgetId(widgetId1);
+        input.setWidgetId(widgetId3);
         input.setZOrder(1);
         ChangeZOrderOfWidgetOutput output = new ChangeZOrderOfWidgetOutput();
 
@@ -145,7 +149,7 @@ public class ChangeZOrderOfWidgetUseCaseTest {
         changeZOrderOfWidgetUseCase.execute(input, output);
 
         // Assert
-        Assert.assertEquals("widgetId1", output.getWidgetId());
+        Assert.assertEquals(widgetId3, output.getWidgetId());
         Assert.assertEquals(1, output.getZOrder());
     }
 }

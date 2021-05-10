@@ -47,15 +47,14 @@ public class ChangeZOrderOfWidgetUseCase {
 
     private void reArrangeZOrderIn(Board board, int originZOrder, int newZOrder) {
         List<CommittedWidget> committedWidgets = board.getCommittedWidgets();
-        int offset = 0;
         if (originZOrder < newZOrder) {
-            shiftZOrderInRange(originZOrder, newZOrder, newZOrder, -1, committedWidgets);
+            shiftZOrderInRange(originZOrder, newZOrder, newZOrder, committedWidgets, -1);
         } else {
-            shiftZOrderInRange(newZOrder, originZOrder, newZOrder, 1, committedWidgets);
+            shiftZOrderInRange(newZOrder, originZOrder, newZOrder, committedWidgets, 1);
         }
     }
 
-    private void shiftZOrderInRange(int startIndex, int endIndex, int targetZOrder, int offset, List<CommittedWidget> committedWidgets) {
+    private void shiftZOrderInRange(int startIndex, int endIndex, int targetZOrder, List<CommittedWidget> committedWidgets, int offset) {
         List<CommittedWidget> subList = new ArrayList<>(committedWidgets.subList(startIndex, endIndex + 1));
         committedWidgets.removeAll(subList);
         CommittedWidget target;
