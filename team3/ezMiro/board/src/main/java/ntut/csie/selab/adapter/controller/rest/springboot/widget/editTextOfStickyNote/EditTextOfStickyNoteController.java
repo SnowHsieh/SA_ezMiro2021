@@ -34,7 +34,7 @@ public class EditTextOfStickyNoteController {
         input.setStickyNoteId(stickyNoteId);
         input.setText(newText);
         editTextOfStickyNoteUseCase.execute(input, output);
-        return input.getStickyNoteId();
+        return output.getStickyNoteId();
     }
 }
 

@@ -3,6 +3,7 @@ package ntut.csie.selab.usecase.widget;
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
 import ntut.csie.selab.entity.model.board.Board;
+import ntut.csie.selab.entity.model.board.CommittedWidget;
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
@@ -78,7 +79,7 @@ public class DeleteStickyNoteUseCaseTest {
         String teamId = "1";
         String boardName = "first";
         Board board = new Board(boardId, teamId, boardName);
-        board.getWidgetIds().add(stickyNoteId);
+        board.getCommittedWidgets().add(new CommittedWidget(boardId, stickyNoteId, board.getCommittedWidgets().size()));
         return board;
     }
 }
