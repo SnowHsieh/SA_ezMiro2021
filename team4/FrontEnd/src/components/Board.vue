@@ -45,7 +45,8 @@ export default {
       bringForwardButton: null,
       sendBackwardButton: null,
       sendToBackButton: null,
-      activeObjects: null
+      activeObjects: null,
+      mousecursor: null
     }
   },
   async mounted () {
@@ -66,7 +67,7 @@ export default {
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = '3539471c-fb96-46ff-b758-34fc110a75dd'
+        this.boardId = '8568ffe5-8431-49ee-a6c5-3685303187fc'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         this.drawStickyNote(res.data.figureDtos)
       } catch (err) {
@@ -88,27 +89,6 @@ export default {
               width: 150.0,
               height: 150.0,
               color: '#ffa150'
-            }
-          }
-        )
-        console.log(res.data.message)
-      } catch (err) {
-        console.log(err)
-      }
-      this.refreshCanvas()
-    },
-    async editStickyNote (figure) {
-      try {
-        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/editStickyNote',
-          {
-            figureId: figure.get('id'),
-            content: figure.get('content'), // todo : combine position
-            style: {
-              fontSize: figure.item(1).get('fontSize'),
-              shape: 2,
-              width: parseFloat(figure.width) * parseFloat(figure.get('scaleX')),
-              height: parseFloat(figure.height) * parseFloat(figure.get('scaleY')),
-              color: figure.item(0).get('fill')
             }
           }
         )
@@ -216,8 +196,33 @@ export default {
         width: width,
         height: height,
         fireRightClick: true, // <-- enable firing of right click events
-        stopContextMenu: true // <--  prevent context menu from showing
+        stopContextMenu: true, // <--  prevent context menu from showing
+        freeDrawingCursor: 'none'
       })
+      this.canvas.freeDrawingBrush.width = 20
+      this.canvas.freeDrawingBrush.color = '#ff0000'
+      // this.mousecursor = new fabric.Circle({
+      //   left: -100,
+      //   top: -100,
+      //   radius: this.canvas.freeDrawingBrush.width / 2,
+      //   fill: 'rgb(255,0,0)',
+      //   stroke: 'black',
+      //   originX: 'center',
+      //   originY: 'center',
+      //   selectable: false
+      // })
+      // var checkmarkPoints = 'M 0 0 L -8 -9 Q -15 -8 -15 1 L 0 13 L 25 -20 Q 27 -26 20 -24 z'
+      // this.mousecursor = new fabric.Path(checkmarkPoints, {
+      //   fill: 'black',
+      //   selectable: false
+      // })
+      this.mousecursor = new fabric.Text('I am User1', {
+        fontSize: 15,
+        originX: 'center',
+        originY: 'center',
+        selectable: false
+      })
+      this.canvas.add(this.mousecursor)
       // this.canvas.setBackgroundColor('gray')
     },
     drawStickyNote (figureDtos) {
@@ -268,6 +273,22 @@ export default {
       var canvas = this.canvas
       canvas.on(
         {
+          'mouse:move': function (e) {
+            var mouse = this.getPointer(e)
+            // console.log('mouse:', mouse)
+            _this.mousecursor.set({
+              left: mouse.x + 40,
+              top: mouse.y
+            }).setCoords()
+            canvas.renderAll()
+          },
+          'mouse:enter': function (e) {
+            console.log('mouse:enter')
+          },
+          'mouse:leave': function (e) {
+            console.log('mouse:leave')
+            canvas.remove(_this.mousecursor)
+          },
           'mouse:dblclick': function (e) {
             // console.log('object:dblclick')
             if (e.target != null) {
@@ -312,7 +333,7 @@ export default {
             //   e.target._objects.forEach((target) => {
             //     console.log(target.)
             //     _this.editStickyNote(target)
-            //     // _this.moveStickyNote(target)
+            //     // _tdhis.moveStickyNote(target)
             //   })
             // }
           },
