@@ -103,7 +103,7 @@ export default {
         const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/changeStickyNoteContent',
           {
             figureId: figure.get('id'),
-            content: figure.get('content')
+            content: figure.item(1).get('text')
           }
         )
         console.log(res.data.message)
@@ -117,7 +117,7 @@ export default {
         const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/changeStickyNoteColor',
           {
             figureId: figure.get('id'),
-            color: figure.get('fill')
+            color: figure.item(0).get('fill')
           }
         )
         console.log(res.data.message)
@@ -175,7 +175,9 @@ export default {
         var objects = this.canvas.getObjects()
         var flist = []
         for (var i = 0; i < objects.length; i++) {
-          flist.push(objects[i].get('id'))
+          if (objects[i].get('id') !== 'mousecursorId') {
+            flist.push(objects[i].get('id'))
+          }
         }
         // console.log(flist)
         const res = await axios.post('http://localhost:8081/boards/' + this.boardId + '/changeFigureOrder',
@@ -265,7 +267,7 @@ export default {
           },
           'mouse:leave': function (e) {
             console.log('mouse:leave')
-            canvas.remove(_this.mousecursor)
+            // canvas.remove(_this.mousecursor)
           },
           'mouse:dblclick': function (e) {
             // console.log('object:dblclick')
@@ -352,7 +354,6 @@ export default {
     addListenerOfChangeTextFigureColor () {
       var _this = this
       var newHandler = function () {
-        // console.log('changeColor')
         _this.activeObjects.forEach((target) => {
           target.item(0).set('fill', _this.favcolor.value) // rect fill
           _this.changeStickyNoteColor(target)
@@ -426,7 +427,8 @@ export default {
         fontSize: 15,
         originX: 'center',
         originY: 'center',
-        selectable: false
+        selectable: false,
+        id: 'mousecursorId'
       })
       this.canvas.add(this.mousecursor)
     }

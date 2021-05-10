@@ -27,13 +27,13 @@ public class ChangeFigureOrderListController {
     public CqrsCommandViewModel changeFigureOrder(
             @PathVariable("boardId") UUID boardId,
             @RequestBody String figureOrderListInfo ){
-
         List<UUID> figureOrderList = new ArrayList<>();
         try {
             JSONObject figureOrderListInfoJSON = new JSONObject(figureOrderListInfo);
             JSONArray jsonArray = figureOrderListInfoJSON.getJSONArray("figureOrderList");
 
             for (int i=0; i<jsonArray.length(); i++) {
+
                 figureOrderList.add(UUID.fromString(jsonArray.getString(i)));
             }
         } catch (JSONException e) {
