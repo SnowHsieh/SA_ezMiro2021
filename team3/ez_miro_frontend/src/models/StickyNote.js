@@ -1,5 +1,5 @@
 import { fabric } from 'fabric'
-
+const fontSize = 18
 fabric.StickyNote = fabric.util.createClass(fabric.Rect, {
   type: 'stickynote',
   id: null,
@@ -58,9 +58,10 @@ fabric.StickyNoteNew = fabric.util.createClass(fabric.Group, {
       left: element.left + 0.5 * element.width,
       top: element.top + 0.5 * element.height,
       fill: element.textColor,
-      fontSize: 36,
+      fontSize: element.fontSize || fontSize,
       width: element.width,
       maxWidth: element.width,
+      height: element.height,
       textAlign: 'center',
       originX: 'center',
       originY: 'center',

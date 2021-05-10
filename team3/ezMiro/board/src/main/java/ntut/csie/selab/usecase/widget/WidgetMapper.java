@@ -20,7 +20,8 @@ public class WidgetMapper {
                 height,
                 widget.getColor(),
                 widget.getTextColor(),
-                widget.getText()
+                widget.getText(),
+                widget.getFontSize()
         );
     }
 

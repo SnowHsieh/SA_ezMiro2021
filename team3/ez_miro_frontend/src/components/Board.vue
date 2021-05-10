@@ -28,7 +28,8 @@ import {
   ResizeStickyNoteBy,
   EditTextOfStickyNoteBy,
   ChangeColorOfStickyNoteBy,
-  EditZIndexOfStickyNoteBy
+  EditZIndexOfStickyNoteBy,
+  EditFontSizeOfStickyNoteBy
 } from '@/apis/Widget'
 import '@/models/StickyNote'
 import { fabric } from 'fabric'
@@ -46,6 +47,7 @@ export default {
         left: '-1px'
       },
       selectedStickyNote: null,
+      oldPoint: null,
       ungroupTarget: {},
       selectedStickyNoteColor: '#000000',
       indexMax: 0, // TODO: 邏輯待改善
@@ -79,13 +81,17 @@ export default {
     })
 
     this.canvas.on('mouse:up', async function (e) {
-      // 臭到不行
-      if (e.button === 3) {
+      const target = e.target
+      if (e.button === 1) {
+        if (target) {
+          this.oldPoint = e.target.lineCoords
+        }
+      } else if (e.button === 3) { // 臭到不行
         me.isDisplayRightClickMenu = true
         const point = e.absolutePointer
         me.rightClickMenuStyle.top = point.y + 'px'
         me.rightClickMenuStyle.left = point.x + 'px'
-        me.setTargetId(e.target)
+        me.setTargetId(target)
       } else {
         me.isDisplayRightClickMenu = false
         me.setTargetId(null)
@@ -118,6 +124,11 @@ export default {
       const topLeftY = point.tl.y
       const bottomRightX = point.br.x
       const bottomRightY = point.br.y
+      const newWidth = point.br.x - point.tl.x
+      const oldWidth = this.oldPoint.br.x - this.oldPoint.tl.x
+      const fontSize = parseInt(e.target.textObject.fontSize * newWidth / oldWidth)
+      await e.target.textObject.set('fontSize', fontSize)
+      await EditFontSizeOfStickyNoteBy(stickyNoteId, me.boardId, fontSize)
       await ResizeStickyNoteBy(stickyNoteId, me.boardId, {
         topLeftX: topLeftX,
         topLeftY: topLeftY,
@@ -154,7 +165,8 @@ export default {
             width: widget.width,
             fill: widget.color,
             text: widget.text,
-            textColor: widget.textColor
+            textColor: widget.textColor,
+            fontSize: widget.fontSize
           })
         )
       })

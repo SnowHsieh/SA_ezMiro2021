@@ -1,5 +1,6 @@
 package ntut.csie.selab.application.springboot.web.config;
 
+import ntut.csie.selab.adapter.controller.rest.springboot.widget.editTextOfStickyNote.EditFontSizeOfStickyNote;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.board.create.CreateBoardUseCase;
@@ -10,6 +11,7 @@ import ntut.csie.selab.usecase.widget.create.CreateStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.delete.DeleteStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.edit.color.ChangeColorOfStickyNoteUseCase;
 import ntut.csie.selab.usecase.board.edit.zorder.ChangeZOrderOfWidgetUseCase;
+import ntut.csie.selab.usecase.widget.edit.fontsize.EditFontSizeOfStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.edit.text.EditTextOfStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.move.MoveStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetUseCase;
@@ -71,6 +73,11 @@ public class UseCaseInjection {
     @Bean(name="ChangeZOrderOfWidgetUseCase")
     public ChangeZOrderOfWidgetUseCase changeZOrderOfWidgetUseCase() {
         return new ChangeZOrderOfWidgetUseCase(boardRepository, eventBus);
+    }
+
+    @Bean("EditFontSizeOfStickyNoteUseCase")
+    public EditFontSizeOfStickyNoteUseCase editFontSizeOfStickyNoteUseCase() {
+        return new EditFontSizeOfStickyNoteUseCase(widgetRepository, eventBus);
     }
 
     @Autowired

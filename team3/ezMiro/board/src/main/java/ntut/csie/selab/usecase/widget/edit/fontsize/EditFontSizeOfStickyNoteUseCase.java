@@ -3,6 +3,7 @@ package ntut.csie.selab.usecase.widget.edit.fontsize;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
+import ntut.csie.selab.usecase.widget.WidgetDto;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 
 import java.util.Optional;
@@ -19,7 +20,7 @@ public class EditFontSizeOfStickyNoteUseCase {
     public void execute(EditFontSizeOfStickyNoteInput input, EditFontSizeOfStickyNoteOutput output) {
         Optional<Widget> stickyNote = widgetRepository.findById(input.getStickyNoteId());
         if (stickyNote.isPresent()) {
-            StickyNote selectedStickyNote = (StickyNote) stickyNote.get();
+            Widget selectedStickyNote = stickyNote.get();
             selectedStickyNote.setFontSize(input.getFontSize());
 
             domainEventBus.postAll(selectedStickyNote);

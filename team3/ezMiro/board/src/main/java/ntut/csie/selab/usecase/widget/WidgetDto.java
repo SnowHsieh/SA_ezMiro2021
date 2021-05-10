@@ -9,8 +9,10 @@ public class WidgetDto {
     private String color;
     private String textColor;
     private String text;
+    private int fontSize;
 
-    public WidgetDto(String widgetId, int topLeftX, int topLeftY, int width, int height, String color, String textColor, String text) {
+    public WidgetDto(String widgetId, int topLeftX, int topLeftY, int width, int height,
+                     String color, String textColor, String text, int fontSize) {
         this.widgetId = widgetId;
         this.topLeftX = topLeftX;
         this.topLeftY = topLeftY;
@@ -19,6 +21,7 @@ public class WidgetDto {
         this.color = color;
         this.textColor = textColor;
         this.text = text;
+        this.fontSize = fontSize;
     }
 
     public String getWidgetId() { return widgetId; }
@@ -49,5 +52,9 @@ public class WidgetDto {
 
     public String getText() {
         return text;
+    }
+
+    public int getFontSize() {
+        return fontSize;
     }
 }
