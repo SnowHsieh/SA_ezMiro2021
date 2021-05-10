@@ -29,9 +29,19 @@ var userCursorMap = new Map();
 io.on('connection', function (socket) {
     //監聽連上來了(connection)的事件 使用socket來處理
     // console.log("A user connected.", userCursorList);
-    io.emit("userCursorUpdate", JSON.stringify(Array.from(userCursorMap)))
+    io.emit("userCursorUpdate", JSON.stringify(Array.from(userCursorMap)))//add user
+
     socket.on('mouse-moved', function (message) {
-        userCursorMap.set(message.id,message.position);
+        userCursorMap.set(message.id, message.position);
+        userCursorMap.set("User2",{x:200,y:200});
+        userCursorMap.set("User3",{x:200,y:300});
+        userCursorMap.set("User4",{x:200,y:400});
+        let transitString = JSON.stringify(Array.from(userCursorMap));
+        io.emit("userCursorUpdate", transitString)
+    })
+
+    socket.on('user-left', function (message) {
+        userCursorMap.set(message.id, message.position);
         let transitString = JSON.stringify(Array.from(userCursorMap));
         io.emit("userCursorUpdate", transitString)
     })

@@ -2,7 +2,8 @@
 <template>
         <!-- <button @click="drawARect">畫圖</button> -->
         <div>
-          <div><button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
+          <div>
+<!--            <button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>-->
             <canvas id="canvas" ref='board' >
             </canvas>
           </div>
@@ -51,7 +52,7 @@ export default {
       socket: null,
       socketLoaded: null,
       userCursorList: [],
-      userId: 'islabUser1'
+      myUserId: 'islabUser1'
     }
   },
   async mounted () {
@@ -68,11 +69,8 @@ export default {
     this.listenEventsOnCanvas()
     this.socket = io('http://localhost:4040', { transports: ['websocket'] })
     this.socket.on('userCursorUpdate', data => {
-      // id + position{x,y}
-      console.log('Receive from socket server')
-      console.log(data)
-      this.userCursorList.push(data)
-      // this.updateUserCursor()
+      this.userCursorList = JSON.parse(data)
+      this.updateUserCursor()
     })
     // this.timer = setInterval(this.refreshCanvas, 10000)
   },
@@ -187,7 +185,7 @@ export default {
         var objects = this.canvas.getObjects()
         var flist = []
         for (var i = 0; i < objects.length; i++) {
-          if (objects[i].get('id') !== 'mousecursorId') {
+          if (objects[i].get('objectType') !== 'cursor') {
             flist.push(objects[i].get('id'))
           }
         }
@@ -213,8 +211,8 @@ export default {
         stopContextMenu: true, // <--  prevent context menu from showing
         freeDrawingCursor: 'none'
       })
+      fabric.Object.prototype.objectType = 'normalObject'
       this.generateMouseCursor()
-      // this.canvas.setBackgroundColor('gray')
     },
     drawStickyNote (figureDtos) {
       var _this = this
@@ -273,7 +271,7 @@ export default {
               top: mouse.y - 5
             }).setCoords()
             var data = {
-              id: _this.userId,
+              id: _this.myUserId,
               position: {
                 x: mouse.x,
                 y: mouse.y
@@ -448,25 +446,48 @@ export default {
         originX: 'center',
         originY: 'center',
         selectable: false,
-        id: this.userId
+        id: this.myUserId,
+        objectType: 'cursor'
       })
       this.canvas.add(this.mousecursor)
-    }
-    // updateUserCursor () {
-    //   let t
-    //   for (t in this.userCursorList) {
-    //     // new fabric.Text(t.id, {
-    //     //   fontSize: 15,
-    //     //   originX: 'center',
-    //     //   originY: 'center',
-    //     //   selectable: false,
-    //     //   id: t.id
-    //     // })
-    //     // this.canvas.add
-    //     console.log(t)
-    //   }
-    // }
+    },
+    updateUserCursor () {
+      var _this = this
+      var cursorList = []
+      this.canvas.getObjects().forEach(item => {
+        if (item.get('objectType') === 'cursor') {
+          cursorList.push(item)
+        }
+      })
 
+      this.userCursorList.forEach(function (item) {
+        const userId = item[0]
+        const position = item[1]
+        console.log(userId, position, position.x, position.y)
+        if (userId === _this.myUserId) {
+          return
+        }
+        //這邊出問題 要改啦
+        cursorList.forEach(function (item) {
+          if (item.get('id') === userId) {
+            console.log('move')
+            item.set('left', position.x)
+            item.set('top', position.y)
+          } else {
+            console.log('newnew')
+            const tmp = new fabric.Text(userId, {
+              fontSize: 15,
+              left: position.x,
+              top: position.y,
+              selectable: false,
+              id: userId,
+              objectType: 'cursor'
+            })
+            _this.canvas.add(tmp)
+          }
+        })
+      })
+    }
   }
 
 }
