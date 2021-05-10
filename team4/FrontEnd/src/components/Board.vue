@@ -28,6 +28,7 @@
 
 <script>
 import { fabric } from 'fabric'
+import io from 'socket.io-client'
 import axios from 'axios'
 export default {
 
@@ -46,7 +47,11 @@ export default {
       sendBackwardButton: null,
       sendToBackButton: null,
       activeObjects: null,
-      mousecursor: null
+      mousecursor: null,
+      socket: null,
+      socketLoaded: null,
+      userCursorList: [],
+      userId: 'islabUser1'
     }
   },
   async mounted () {
@@ -60,8 +65,15 @@ export default {
     this.bringForwardButton = document.getElementById('bringForwardButton')
     this.sendBackwardButton = document.getElementById('sendBackwardButton')
     this.sendToBackButton = document.getElementById('sendToBackButton')
-
     this.listenEventsOnCanvas()
+    this.socket = io('http://localhost:4040', { transports: ['websocket'] })
+    this.socket.on('userCursorUpdate', data => {
+      // id + position{x,y}
+      console.log('Receive from socket server')
+      console.log(data)
+      this.userCursorList.push(data)
+      // this.updateUserCursor()
+    })
     // this.timer = setInterval(this.refreshCanvas, 10000)
   },
   methods: {
@@ -260,6 +272,14 @@ export default {
               left: mouse.x + 40,
               top: mouse.y - 5
             }).setCoords()
+            var data = {
+              id: _this.userId,
+              position: {
+                x: mouse.x,
+                y: mouse.y
+              }
+            }
+            _this.socket.emit('mouse-moved', data)
             canvas.renderAll()
           },
           'mouse:enter': function (e) {
@@ -428,10 +448,25 @@ export default {
         originX: 'center',
         originY: 'center',
         selectable: false,
-        id: 'mousecursorId'
+        id: this.userId
       })
       this.canvas.add(this.mousecursor)
     }
+    // updateUserCursor () {
+    //   let t
+    //   for (t in this.userCursorList) {
+    //     // new fabric.Text(t.id, {
+    //     //   fontSize: 15,
+    //     //   originX: 'center',
+    //     //   originY: 'center',
+    //     //   selectable: false,
+    //     //   id: t.id
+    //     // })
+    //     // this.canvas.add
+    //     console.log(t)
+    //   }
+    // }
+
   }
 
 }
