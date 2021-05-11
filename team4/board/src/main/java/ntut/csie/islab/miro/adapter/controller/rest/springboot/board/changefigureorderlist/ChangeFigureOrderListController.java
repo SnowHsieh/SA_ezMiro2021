@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(value = "http://localhost:8080")
+@CrossOrigin
 public class ChangeFigureOrderListController {
     private ChangeFigureOrderListOnBoardUseCase changeFigureOrderListOnBoardUseCase ;
 

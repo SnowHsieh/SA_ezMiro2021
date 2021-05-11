@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(value = "http://localhost:8080")
+@CrossOrigin
 public class ChangeStickyNoteContentController {
 
     private ChangeStickyNoteContentUseCase changeStickyNoteContentUseCase;

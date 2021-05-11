@@ -4,6 +4,7 @@
         <div>
           <div>
             <button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
+            <button @click="delUserCursor('0.05')">請你離開</button>
             <canvas id="canvas" ref='board' >
             </canvas>
           </div>
@@ -51,10 +52,12 @@ export default {
       socket: null,
       socketLoaded: null,
       userCursorList: [],
-      myUserId: 'islabUser1'
+      myUserId: '你沒ip QQ',
+      hostIp: '140.124.181.8'
     }
   },
   async mounted () {
+    this.getIpClient()
     this.boardContent = this.getBoardContent()
     this.initCanvas()
     this.canvas.renderAll()
@@ -65,24 +68,39 @@ export default {
     this.bringForwardButton = document.getElementById('bringForwardButton')
     this.sendBackwardButton = document.getElementById('sendBackwardButton')
     this.sendToBackButton = document.getElementById('sendToBackButton')
-    this.socket = io('http://localhost:4040', { transports: ['websocket'] })
+    this.socket = io('http://140.124.181.8:4040', { transports: ['websocket'] })
     this.socket.on('getAllUserCursors', data => {
-      console.log(data)
+      // this.userCursorList.clear()
       this.userCursorList = JSON.parse(data)
       this.drawAllUserCursors()
     })
+    this.socket.on('userJoin', data => {
+      this.addUserCursor(data)
+    })
     this.socket.on('userCursorUpdate', data => {
-      console.log('userCursorUpdate')
       this.updateUserCursor(data)
+    })
+    this.socket.on('userLeft', userId => {
+      this.delUserCursor(userId)
     })
     this.listenEventsOnCanvas()
     // this.timer = setInterval(this.refreshCanvas, 10000)
   },
   methods: {
+    async getIpClient () {
+      try {
+        const response = await axios.get('https://api.ipify.org?format=json')
+        this.myUserId = response.data.ip
+        console.log(response, this.myUserId)
+        this.emitUserJoin()
+      } catch (error) {
+        console.log('ip error', error)
+      }
+    },
     async getBoardContent () {
       try {
-        this.boardId = '2c11de5e-e77b-4591-8545-61e8bdbbd4fa'
-        const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
+        this.boardId = '791bfc5b-00a3-4484-b695-c34579e4813a'
+        const res = await axios.get('http://' + this.hostIp + ':8081/boards/' + this.boardId + '/content')
         this.drawStickyNote(res.data.figureDtos)
       } catch (err) {
         console.log(err)
@@ -90,7 +108,7 @@ export default {
     },
     async createStickyNote () {
       try {
-        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/createStickyNote',
+        const res = await axios.post('http://' + this.hostIp + ':8081/board/' + this.boardId + '/createStickyNote',
           {
             content: '',
             position: {
@@ -114,7 +132,7 @@ export default {
     },
     async changeStickyNoteContent (figure) {
       try {
-        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/changeStickyNoteContent',
+        const res = await axios.post('http://' + this.hostIp + ':8081/board/' + this.boardId + '/changeStickyNoteContent',
           {
             figureId: figure.get('id'),
             content: figure.item(1).get('text')
@@ -128,7 +146,7 @@ export default {
     },
     async changeStickyNoteColor (figure) {
       try {
-        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/changeStickyNoteColor',
+        const res = await axios.post('http://' + this.hostIp + ':8081/board/' + this.boardId + '/changeStickyNoteColor',
           {
             figureId: figure.get('id'),
             color: figure.item(0).get('fill')
@@ -142,7 +160,7 @@ export default {
     },
     async resizeStickyNote (figure) {
       try {
-        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/resizeStickyNote',
+        const res = await axios.post('http://' + this.hostIp + ':8081/board/' + this.boardId + '/resizeStickyNote',
           {
             figureId: figure.get('id'),
             width: parseFloat(figure.width) * parseFloat(figure.get('scaleX')),
@@ -157,7 +175,7 @@ export default {
     },
     async moveStickyNote (figure) {
       try {
-        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/moveStickyNote',
+        const res = await axios.post('http://' + this.hostIp + ':8081/board/' + this.boardId + '/moveStickyNote',
           {
             figureId: figure.get('id'),
             top: figure.get('top'),
@@ -172,7 +190,7 @@ export default {
     },
     async deleteStickyNote (figure) {
       try {
-        const res = await axios.post('http://localhost:8081/board/' + this.boardId + '/deleteStickyNote',
+        const res = await axios.post('http://' + this.hostIp + ':8081/board/' + this.boardId + '/deleteStickyNote',
           {
             figureId: figure.get('id')
           }
@@ -194,7 +212,7 @@ export default {
           }
         }
         // console.log(flist)
-        const res = await axios.post('http://localhost:8081/boards/' + this.boardId + '/changeFigureOrder',
+        const res = await axios.post('http://' + this.hostIp + ':8081/boards/' + this.boardId + '/changeFigureOrder',
           {
             figureOrderList: flist
           }
@@ -431,14 +449,25 @@ export default {
       }
       _this.sendToBackButton.addEventListener('mouseup', newHandler)
     },
+    emitUserJoin () {
+      // console.log('mouse:', mouse)
+      var data = {
+        id: this.myUserId,
+        position: {
+          x: 0.0,
+          y: 0.0
+        }
+      }
+      this.socket.emit('user-join', data)
+    },
     drawAllUserCursors () {
       var _this = this
       this.userCursorList.forEach(function (item) {
         const userId = item[0]
         const position = item[1]
-        // if (userId === _this.myUserId) {
-        //   return
-        // }
+        if (userId === _this.myUserId) {
+          return
+        }
         const cursor = new fabric.Text(userId, {
           fontSize: 15,
           left: position.x,
@@ -450,15 +479,53 @@ export default {
         _this.canvas.add(cursor)
       })
     },
+    addUserCursor (data) {
+      try {
+        this.userCursorList.push(data)
+        var userId = data.id
+        var position = data.position
+        const cursor = new fabric.Text(userId, {
+          fontSize: 15,
+          left: position.x,
+          top: position.y,
+          selectable: false,
+          id: userId,
+          objectType: 'cursor'
+        })
+        this.canvas.add(cursor)
+        this.canvas.renderAll()
+      } catch (e) {
+        console.log(e)
+      }
+    },
     updateUserCursor (data) {
       try {
         this.canvas.getObjects().forEach(function (item) {
           if (item.get('id') === data.id) {
-            item.set('left', data.position.x + 10)
-            item.set('top', data.position.y - 10)
+            item.set('left', data.position.x)
+            item.set('top', data.position.y)
           }
         })
+        // console.log(this.canvas.getObjects().length)
         this.canvas.renderAll()
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    delUserCursor (userId) {
+      try {
+        const _this = this
+        const cursorObject = this.canvas.getObjects().filter(object => object.id === userId)[0]
+        this.canvas.remove(cursorObject)
+        console.log('bef!', _this.userCursorList.length)
+        for (var i = 0; i < _this.userCursorList.length; i++) {
+          if (_this.userCursorList[i][0] === userId) {
+            console.log('del!')
+            _this.userCursorList.splice(i, 1)
+            break
+          }
+        }
+        console.log('aft!', _this.userCursorList.length)
       } catch (e) {
         console.log(e)
       }
