@@ -3,7 +3,7 @@
         <!-- <button @click="drawARect">畫圖</button> -->
         <div>
           <div>
-<!--            <button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>-->
+            <button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
             <canvas id="canvas" ref='board' >
             </canvas>
           </div>
@@ -48,7 +48,6 @@ export default {
       sendBackwardButton: null,
       sendToBackButton: null,
       activeObjects: null,
-      mousecursor: null,
       socket: null,
       socketLoaded: null,
       userCursorList: [],
@@ -66,18 +65,23 @@ export default {
     this.bringForwardButton = document.getElementById('bringForwardButton')
     this.sendBackwardButton = document.getElementById('sendBackwardButton')
     this.sendToBackButton = document.getElementById('sendToBackButton')
-    this.listenEventsOnCanvas()
     this.socket = io('http://localhost:4040', { transports: ['websocket'] })
-    this.socket.on('userCursorUpdate', data => {
+    this.socket.on('getAllUserCursors', data => {
+      console.log(data)
       this.userCursorList = JSON.parse(data)
-      this.updateUserCursor()
+      this.drawAllUserCursors()
     })
+    this.socket.on('userCursorUpdate', data => {
+      console.log('userCursorUpdate')
+      this.updateUserCursor(data)
+    })
+    this.listenEventsOnCanvas()
     // this.timer = setInterval(this.refreshCanvas, 10000)
   },
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = '80bea364-0d4c-43e4-8c2e-12f623fa2b9c'
+        this.boardId = '2c11de5e-e77b-4591-8545-61e8bdbbd4fa'
         const res = await axios.get('http://localhost:8081/boards/' + this.boardId + '/content')
         this.drawStickyNote(res.data.figureDtos)
       } catch (err) {
@@ -212,7 +216,6 @@ export default {
         freeDrawingCursor: 'none'
       })
       fabric.Object.prototype.objectType = 'normalObject'
-      this.generateMouseCursor()
     },
     drawStickyNote (figureDtos) {
       var _this = this
@@ -250,7 +253,7 @@ export default {
     refreshCanvas () {
       this.canvas.clear()
       this.getBoardContent()
-      this.generateMouseCursor()
+      this.drawAllUserCursors()
     },
     listenEventsOnCanvas () {
       var _this = this
@@ -266,10 +269,6 @@ export default {
           'mouse:move': function (e) {
             var mouse = this.getPointer(e)
             // console.log('mouse:', mouse)
-            _this.mousecursor.set({
-              left: mouse.x + 40,
-              top: mouse.y - 5
-            }).setCoords()
             var data = {
               id: _this.myUserId,
               position: {
@@ -278,14 +277,6 @@ export default {
               }
             }
             _this.socket.emit('mouse-moved', data)
-            canvas.renderAll()
-          },
-          'mouse:enter': function (e) {
-            console.log('mouse:enter')
-          },
-          'mouse:leave': function (e) {
-            console.log('mouse:leave')
-            // canvas.remove(_this.mousecursor)
           },
           'mouse:dblclick': function (e) {
             // console.log('object:dblclick')
@@ -440,53 +431,37 @@ export default {
       }
       _this.sendToBackButton.addEventListener('mouseup', newHandler)
     },
-    generateMouseCursor () {
-      this.mousecursor = new fabric.Text('I am User1', {
-        fontSize: 15,
-        originX: 'center',
-        originY: 'center',
-        selectable: false,
-        id: this.myUserId,
-        objectType: 'cursor'
-      })
-      this.canvas.add(this.mousecursor)
-    },
-    updateUserCursor () {
+    drawAllUserCursors () {
       var _this = this
-      var cursorList = []
-      this.canvas.getObjects().forEach(item => {
-        if (item.get('objectType') === 'cursor') {
-          cursorList.push(item)
-        }
-      })
-
       this.userCursorList.forEach(function (item) {
         const userId = item[0]
         const position = item[1]
-        console.log(userId, position, position.x, position.y)
-        if (userId === _this.myUserId) {
-          return
-        }
-        //這邊出問題 要改啦
-        cursorList.forEach(function (item) {
-          if (item.get('id') === userId) {
-            console.log('move')
-            item.set('left', position.x)
-            item.set('top', position.y)
-          } else {
-            console.log('newnew')
-            const tmp = new fabric.Text(userId, {
-              fontSize: 15,
-              left: position.x,
-              top: position.y,
-              selectable: false,
-              id: userId,
-              objectType: 'cursor'
-            })
-            _this.canvas.add(tmp)
+        // if (userId === _this.myUserId) {
+        //   return
+        // }
+        const cursor = new fabric.Text(userId, {
+          fontSize: 15,
+          left: position.x,
+          top: position.y,
+          selectable: false,
+          id: userId,
+          objectType: 'cursor'
+        })
+        _this.canvas.add(cursor)
+      })
+    },
+    updateUserCursor (data) {
+      try {
+        this.canvas.getObjects().forEach(function (item) {
+          if (item.get('id') === data.id) {
+            item.set('left', data.position.x + 10)
+            item.set('top', data.position.y - 10)
           }
         })
-      })
+        this.canvas.renderAll()
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 
