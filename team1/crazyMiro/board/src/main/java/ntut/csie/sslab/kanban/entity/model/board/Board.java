@@ -1,10 +1,7 @@
 package ntut.csie.sslab.kanban.entity.model.board;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
-import ntut.csie.sslab.kanban.entity.model.board.event.BoardCreated;
-import ntut.csie.sslab.kanban.entity.model.board.event.FigureBroughtToFront;
-import ntut.csie.sslab.kanban.entity.model.board.event.FigureCommitted;
-import ntut.csie.sslab.kanban.entity.model.board.event.FigureSentToBack;
+import ntut.csie.sslab.kanban.entity.model.board.event.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -78,5 +75,18 @@ public class Board extends AggregateRoot<String> {
         result.addAll(nothingChangedFigures);
         committedFigures = result;
         addDomainEvent(new FigureSentToBack(boardId, figureId));
+    }
+
+    public void uncommitFigure(String figureId) {
+        CommittedFigure figure = committedFigures.stream().filter(x-> x.getFigureId().equals(figureId)).findFirst().get();
+        List<CommittedFigure> result = new ArrayList<>(committedFigures.subList(0, figure.getZOrder()));
+        List<CommittedFigure> orderChangedFigures = committedFigures.subList(figure.getZOrder()+1, committedFigures.size());
+
+        orderChangedFigures.forEach(each-> {
+            result.add(new CommittedFigure(each.getFigureId(), result.size()));
+        });
+
+        committedFigures = result;
+        addDomainEvent(new FigureUnCommitted(boardId, figureId));
     }
 }

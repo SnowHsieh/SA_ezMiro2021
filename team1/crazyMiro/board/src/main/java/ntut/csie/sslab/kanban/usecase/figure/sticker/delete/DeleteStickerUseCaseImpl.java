@@ -42,6 +42,8 @@ public class DeleteStickerUseCaseImpl implements DeleteStickerUseCase {
 
     private class DeleteStickerInputImpl implements DeleteStickerInput {
         private String stickerId;
+        private String boardId;
+
         @Override
         public void setFigureId(String stickerId) {
             this.stickerId = stickerId;
@@ -52,6 +54,14 @@ public class DeleteStickerUseCaseImpl implements DeleteStickerUseCase {
             return stickerId;
         }
 
+        @Override
+        public String getBoardId() {
+            return boardId;
+        }
 
+        @Override
+        public void setBoardId(String boardId) {
+            this.boardId = boardId;
+        }
     }
 }

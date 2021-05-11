@@ -26,16 +26,16 @@ public class Sticker extends Figure {
     public void changeSize(int width, int length) {
         setWidth(width);
         setLength(length);
-        addDomainEvent(new StickerSizeChanged(this.getFigureId(), width, length));
+        addDomainEvent(new StickerSizeChanged(getFigureId(), width, length));
     }
 
     public void changeColor(String color) {
         setColor(color);
-        addDomainEvent(new StickerColorChanged(this.getFigureId(), color));
+        addDomainEvent(new StickerColorChanged(getFigureId(), color));
     }
 
     public void deleteSticker() {
         markAsDelete();
-        addDomainEvent(new StickerDeleted(this.getFigureId()));
+        addDomainEvent(new StickerDeleted(getBoardId(), getFigureId()));
     }
 }

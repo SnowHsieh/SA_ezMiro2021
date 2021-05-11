@@ -4,6 +4,7 @@ package ntut.csie.sslab.kanban.usecase.eventhandler;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.kanban.entity.model.board.Board;
 import ntut.csie.sslab.kanban.entity.model.figure.event.StickerCreated;
+import ntut.csie.sslab.kanban.entity.model.figure.event.StickerDeleted;
 import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
 
 import java.util.Optional;
@@ -26,6 +27,17 @@ public class NotifyBoard {
         board.get().commitFigure(stickerCreated.getFigureId());
         boardRepository.save(board.get());
         domainEventBus.postAll(board.get());
+    }
+
+    public void whenStickerDeleted(StickerDeleted stickerDeleted) {
+        Optional<Board> board = boardRepository.findById(stickerDeleted.getBoardId());
+        if (!board.isPresent())
+            throw new RuntimeException("Board not found, board id = " + stickerDeleted.getBoardId());
+
+        board.get().uncommitFigure(stickerDeleted.getFigureId());
+        boardRepository.save(board.get());
+        domainEventBus.postAll(board.get());
+
     }
 
 //    public void whenWorkspaceCreated(WorkspaceCreated workspaceCreated) {

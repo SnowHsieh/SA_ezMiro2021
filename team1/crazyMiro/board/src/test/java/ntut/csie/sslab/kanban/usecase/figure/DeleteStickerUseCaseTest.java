@@ -29,6 +29,7 @@ public class DeleteStickerUseCaseTest extends AbstractSpringBootJpaTest {
         DeleteStickerInput input = deleteStickerUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setFigureId(stickerId1);
+        input.setBoardId(boardId);
 
         deleteStickerUseCase.execute(input, output);
 

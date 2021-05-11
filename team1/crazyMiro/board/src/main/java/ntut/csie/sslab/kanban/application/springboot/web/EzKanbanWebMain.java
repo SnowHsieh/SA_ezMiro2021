@@ -19,7 +19,6 @@ import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackages = {"ntut.csie.sslab.kanban"})
 @EntityScan(basePackages={"ntut.csie.sslab.kanban.adapter.gateway"})
-
 @SpringBootApplication(exclude = {
         org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class}
 )

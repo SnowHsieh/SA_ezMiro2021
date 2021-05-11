@@ -2,6 +2,7 @@ package ntut.csie.sslab.kanban.adapter.gateway.eventbus.google;
 
 import com.google.common.eventbus.Subscribe;
 import ntut.csie.sslab.kanban.entity.model.figure.event.StickerCreated;
+import ntut.csie.sslab.kanban.entity.model.figure.event.StickerDeleted;
 import ntut.csie.sslab.kanban.usecase.eventhandler.NotifyBoard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,12 @@ public class NotifyBoardAdapter {
     @Subscribe
     public void whenStickerCreated(StickerCreated stickerCreated) {
         notifyBoard.whenStickerCreated(stickerCreated);
+    }
+
+
+    @Subscribe
+    public void whenStickerDeleted(StickerDeleted stickerDeleted) {
+        notifyBoard.whenStickerDeleted(stickerDeleted);
     }
 
 }
