@@ -1,6 +1,6 @@
 package ntut.csie.sslab.kanban.usecase.figure;
 
-import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 
 public class FigureDto {
     private String figureId;

@@ -1,9 +1,10 @@
 package ntut.csie.sslab.kanban.entity.model.cursor;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
+import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorDeleted;
 import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorMoved;
 import ntut.csie.sslab.kanban.entity.model.cursor.event.CusorCreated;
-import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 
 public class Cursor extends AggregateRoot<String> {
     private String boardId;
@@ -51,5 +52,10 @@ public class Cursor extends AggregateRoot<String> {
     public void setPosition(Coordinate position) {
         this.position = position;
         addDomainEvent(new CursorMoved(cursorId, position));
+    }
+
+    public void deleteCursor() {
+        markAsDelete();
+        addDomainEvent(new CursorDeleted(cursorId));
     }
 }

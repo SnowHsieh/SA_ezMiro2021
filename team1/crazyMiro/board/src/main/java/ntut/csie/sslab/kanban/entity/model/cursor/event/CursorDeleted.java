@@ -2,23 +2,17 @@ package ntut.csie.sslab.kanban.entity.model.cursor.event;
 
 import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.common.DateProvider;
-import ntut.csie.sslab.kanban.entity.model.Coordinate;
 
-public class CursorMoved extends DomainEvent {
+
+public class CursorDeleted extends DomainEvent {
     private String cursorId;
-    private Coordinate position;
 
-    public CursorMoved(String cursorId, Coordinate position) {
+    public CursorDeleted(String cursorId) {
         super(DateProvider.now());
         this.cursorId = cursorId;
-        this.position = position;
     }
 
     public String getCursorId() {
         return cursorId;
-    }
-
-    public Coordinate getPosition() {
-        return position;
     }
 }

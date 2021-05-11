@@ -4,7 +4,7 @@ import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.kanban.entity.model.cursor.Cursor;
-import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorInput;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorUseCase;
 

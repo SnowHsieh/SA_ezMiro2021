@@ -3,7 +3,7 @@ package ntut.csie.sslab.kanban.usecase.cursor;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.kanban.entity.model.cursor.Cursor;
-import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 import ntut.csie.sslab.kanban.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorInput;
 import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorUseCase;

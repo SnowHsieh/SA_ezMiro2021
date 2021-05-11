@@ -1,6 +1,6 @@
 package ntut.csie.sslab.kanban.usecase.figure;
 
-import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 import ntut.csie.sslab.kanban.entity.model.figure.Figure;
 import ntut.csie.sslab.kanban.usecase.AbstractSpringBootJpaTest;
 import org.junit.jupiter.api.Test;

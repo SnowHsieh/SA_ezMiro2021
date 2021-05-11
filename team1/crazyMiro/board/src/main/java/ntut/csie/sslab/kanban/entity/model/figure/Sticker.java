@@ -1,5 +1,6 @@
 package ntut.csie.sslab.kanban.entity.model.figure;
 
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 import ntut.csie.sslab.kanban.entity.model.figure.event.*;
 
 public class Sticker extends Figure {

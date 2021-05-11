@@ -80,7 +80,7 @@ import ntut.csie.sslab.kanban.adapter.gateway.eventbus.google.NotifyBoardAdapter
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.cursor.CursorRepositoryImpl;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
-import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
 import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardInput;
 import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardUseCase;

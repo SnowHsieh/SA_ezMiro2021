@@ -1,16 +1,11 @@
 package ntut.csie.sslab.kanban.usecase.eventhandler;
 
-import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.kanban.entity.model.board.event.FigureCommitted;
 import ntut.csie.sslab.kanban.entity.model.board.event.FigureUnCommitted;
-import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 import ntut.csie.sslab.kanban.entity.model.figure.event.StickerCreated;
 import ntut.csie.sslab.kanban.entity.model.figure.event.StickerDeleted;
 import ntut.csie.sslab.kanban.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.sslab.kanban.usecase.figure.FigureDto;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.delete.DeleteStickerInput;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.delete.DeleteStickerUseCase;
-import ntut.csie.sslab.kanban.usecase.figure.sticker.delete.DeleteStickerUseCaseImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;

@@ -1,6 +1,6 @@
 package ntut.csie.sslab.kanban.entity.model.figure.sticker;
 
-import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 import ntut.csie.sslab.kanban.entity.model.figure.Sticker;
 import org.junit.jupiter.api.Test;
 
