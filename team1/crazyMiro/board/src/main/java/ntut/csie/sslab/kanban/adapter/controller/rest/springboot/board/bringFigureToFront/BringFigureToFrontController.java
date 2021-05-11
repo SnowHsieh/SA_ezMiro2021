@@ -5,10 +5,7 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import ntut.csie.sslab.kanban.usecase.board.bringFigureToFront.BringFigureToFrontInput;
 import ntut.csie.sslab.kanban.usecase.board.bringFigureToFront.BringFigureToFrontUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 //
 //import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
@@ -23,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 //import javax.ws.rs.QueryParam;
 //
 @RestController
+@CrossOrigin
 public class BringFigureToFrontController {
     private BringFigureToFrontUseCase bringFigureToFrontUseCase;
 
@@ -31,8 +29,8 @@ public class BringFigureToFrontController {
         this.bringFigureToFrontUseCase = bringFigureToFrontUseCase;
     }
 
-    @PostMapping(path = "${MIRO_PREFIX}/board/{boardId}/figure/bringtofront")
-    public CqrsCommandViewModel createBoard(@RequestParam("figureId") String figureId,
+    @PutMapping(path = "${MIRO_PREFIX}/board/{boardId}/figure/bringtofront")
+    public CqrsCommandViewModel bringFigureToFront(@RequestParam("figureId") String figureId,
                                             @PathVariable("boardId") String boardId) {
 
 

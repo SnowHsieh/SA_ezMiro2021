@@ -54,12 +54,12 @@ public class GetStickersController {
         List<Figure> figures = figureRepository.getFiguresByBoardId(boardId);
         List<CommittedFigure> committedFigures = boardRepository.findById(boardId).get().getCommittedFigures();
 
-        List<Figure> figures1 = new ArrayList<>();
+        List<Figure> result = new ArrayList<>();
 
         committedFigures.forEach(each->{
-           figures1.add(figures.stream().filter(x->x.getFigureId().equals(each.getFigureId())).findFirst().get());
+           result.add(figures.stream().filter(x->x.getFigureId().equals(each.getFigureId())).findFirst().get());
         });
 
-        return ConvertStickerToDto.transform(figures1);
+        return ConvertStickerToDto.transform(result);
     }
 }
