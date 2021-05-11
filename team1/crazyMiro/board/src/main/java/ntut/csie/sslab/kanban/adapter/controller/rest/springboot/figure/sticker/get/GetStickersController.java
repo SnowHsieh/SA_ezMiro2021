@@ -3,7 +3,9 @@ package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.figure.sticker
 import ntut.csie.sslab.account.users.query.usecase.UserDto;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
+import ntut.csie.sslab.kanban.entity.model.board.CommittedFigure;
 import ntut.csie.sslab.kanban.entity.model.figure.Figure;
+import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
 import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardInput;
 import ntut.csie.sslab.kanban.usecase.figure.ConvertStickerToDto;
 import ntut.csie.sslab.kanban.usecase.figure.FigureDto;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
+import java.util.ArrayList;
 import java.util.List;
 
 //package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.board.create;
@@ -33,16 +36,30 @@ import java.util.List;
 @CrossOrigin
 public class GetStickersController {
     private FigureRepository figureRepository;
+    private BoardRepository boardRepository;
 
     @Autowired
-    public void setBoardQueryRepository(FigureRepository figureRepository) {
+    public void setFigureQueryRepository(FigureRepository figureRepository) {
         this.figureRepository = figureRepository;
     }
 
-    @GetMapping(path = "${MIRO_PREFIX}/board/sticker/getall", produces = "application/json")
-    public List<FigureDto> getOnlineUsersInBoard(@QueryParam("boardId") String boardId) {
+    @Autowired
+    public void setBoardQueryRepository(BoardRepository boardRepository) {
+        this.boardRepository = boardRepository;
+    }
 
-        List<Figure> stickers = figureRepository.getStickersByBoardId(boardId);
-        return ConvertStickerToDto.transform(stickers);
+    @GetMapping(path = "${MIRO_PREFIX}/board/sticker/getall", produces = "application/json")
+    public List<FigureDto> getStickers (@QueryParam("boardId") String boardId) {
+
+        List<Figure> figures = figureRepository.getFiguresByBoardId(boardId);
+        List<CommittedFigure> committedFigures = boardRepository.findById(boardId).get().getCommittedFigures();
+
+        List<Figure> result = new ArrayList<>();
+
+        committedFigures.forEach(each->{
+           result.add(figures.stream().filter(x->x.getFigureId().equals(each.getFigureId())).findFirst().get());
+        });
+
+        return ConvertStickerToDto.transform(result);
     }
 }

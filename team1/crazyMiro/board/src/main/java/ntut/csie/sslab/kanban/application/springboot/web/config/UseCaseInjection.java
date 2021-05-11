@@ -2,6 +2,10 @@ package ntut.csie.sslab.kanban.application.springboot.web.config;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
+import ntut.csie.sslab.kanban.usecase.board.bringFigureToFront.BringFigureToFrontUseCase;
+import ntut.csie.sslab.kanban.usecase.board.bringFigureToFront.BringFigureToFrontUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.board.sendFigureToBack.SendFigureToBackUseCase;
+import ntut.csie.sslab.kanban.usecase.board.sendFigureToBack.SendFigureToBackUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.changecolor.ChangeStickerColorUseCase;
@@ -75,6 +79,17 @@ public class UseCaseInjection {
     @Bean(name="deleteStickerUseCase")
     public DeleteStickerUseCase deleteStickerUseCase() {
         return new DeleteStickerUseCaseImpl(figureRepository, eventBus);
+    }
+
+
+    @Bean(name="bringFigureToFrontUseCase")
+    public BringFigureToFrontUseCase bringFigureToFrontUseCase() {
+        return new BringFigureToFrontUseCaseImpl(boardRepository, eventBus);
+    }
+
+    @Bean(name="sendFigureToBackUseCase")
+    public SendFigureToBackUseCase sendFigureToBackUseCase() {
+        return new SendFigureToBackUseCaseImpl(boardRepository, eventBus);
     }
 
 
