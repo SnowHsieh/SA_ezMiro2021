@@ -15,6 +15,9 @@
       <li class="list-group-item" @click="bringToFront">bring to front</li>
       <li class="list-group-item" @click="sendToback">send to back</li>
     </ul>
+    <div class="cursors" v-for="user in this.collaborator" v-bind:key="user.name" >
+      {{user.name}}, {{user.x}} {{user.y}}
+    </div>
   </div>
 </template>
 
@@ -51,7 +54,18 @@ export default {
       ungroupTarget: {},
       selectedStickyNoteColor: '#000000',
       indexMax: 0, // TODO: 邏輯待改善
-      indexMin: 0 // TODO: 邏輯待改善
+      indexMin: 0, // TODO: 邏輯待改善
+      webSocket: null,
+      user: null,
+      collaborator: [{
+        name: `匿名北極熊${Math.floor((Math.random() * 10) + 1)}`,
+        x: 0,
+        y: 0
+      }, {
+        name: `匿名北極熊${Math.floor((Math.random() * 10) + 1)}`,
+        x: 0,
+        y: 0
+      }]
     }
   },
   async created () {
@@ -61,7 +75,24 @@ export default {
     this.boardContent.widgetDtos.sort((a, b) => a.zIndex - b.zIndex)
     this.loadAllStickyNote(this.boardContent.widgetDtos)
     const me = this
+    this.user = {
+      name: `匿名北極熊${Math.floor((Math.random() * 10) + 1)}`,
+      x: 0,
+      y: 0
+    }
+    this.webSocket = new WebSocket(`ws://localhost:8080/WebSocketServer/${this.user.name}`)
+    this.webSocket.onopen = function (e) {
+      console.log(e)
+      console.log('Successfully connected to the echo websocket server...')
+    }
+    this.webSocket.onmessage = async function (e) {
+      const users = await JSON.parse(e.data)
+      this.collaborator = users
+      console.log(this.collaborator)
+    }
     this.canvas.on('mouse:dblclick', async function (e) {
+      // const cursorPoint = { x: e.absolutePointer.x, y: e.absolutePointer.y }
+      // me.webSocket.send(JSON.stringify(cursorPoint))
       const info = {}
       const width = 100
       if (e.target !== null) {
