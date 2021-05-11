@@ -15,8 +15,8 @@
       <li class="list-group-item" @click="bringToFront">bring to front</li>
       <li class="list-group-item" @click="sendToback">send to back</li>
     </ul>
-    <div class="cursors" v-for="user in this.collaborator" v-bind:key="user.name" >
-      {{user.name}}, {{user.x}} {{user.y}}
+    <div class="cursors" v-for="user in this.collaborator" v-bind:key="user.name" :style="{'top': user.y + 'px', 'left': user.x + 'px'}">
+      {{user.name}}
     </div>
   </div>
 </template>
@@ -56,16 +56,9 @@ export default {
       indexMax: 0, // TODO: 邏輯待改善
       indexMin: 0, // TODO: 邏輯待改善
       webSocket: null,
+      isSamplingCursorDelayFinish: true,
       user: null,
-      collaborator: [{
-        name: `匿名北極熊${Math.floor((Math.random() * 10) + 1)}`,
-        x: 0,
-        y: 0
-      }, {
-        name: `匿名北極熊${Math.floor((Math.random() * 10) + 1)}`,
-        x: 0,
-        y: 0
-      }]
+      collaborator: []
     }
   },
   async created () {
@@ -76,7 +69,7 @@ export default {
     this.loadAllStickyNote(this.boardContent.widgetDtos)
     const me = this
     this.user = {
-      name: `匿名北極熊${Math.floor((Math.random() * 10) + 1)}`,
+      name: `匿名北極熊${Math.floor((Math.random() * 100) + 1)}`,
       x: 0,
       y: 0
     }
@@ -87,12 +80,22 @@ export default {
     }
     this.webSocket.onmessage = async function (e) {
       const users = await JSON.parse(e.data)
-      this.collaborator = users
-      console.log(this.collaborator)
+      me.collaborator = users
+      console.log(me.collaborator)
     }
+    this.canvas.on('mouse:move', function (e) {
+      if (me.isSamplingCursorDelayFinish) {
+        me.isSamplingCursorDelayFinish = false
+        console.log(e)
+        setTimeout(function () {
+          me.isSamplingCursorDelayFinish = true
+          const cursorPoint = { x: e.absolutePointer.x, y: e.absolutePointer.y }
+          me.webSocket.send(JSON.stringify(cursorPoint))
+        }, 200)
+      }
+    })
+
     this.canvas.on('mouse:dblclick', async function (e) {
-      // const cursorPoint = { x: e.absolutePointer.x, y: e.absolutePointer.y }
-      // me.webSocket.send(JSON.stringify(cursorPoint))
       const info = {}
       const width = 100
       if (e.target !== null) {

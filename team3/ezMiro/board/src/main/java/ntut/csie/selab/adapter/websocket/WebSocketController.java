@@ -16,13 +16,14 @@ public class WebSocketController {
         String message = "有新成員[" + usernick + "]加入看板!";
         System.out.println(message);
         WebSocketUtil.addSession(usernick, session);
-        WebSocketUtil.sendMessageForAll(message);
+        WebSocketUtil.sendUsersForAll();
     }
 
     @OnMessage
-    public void OnMessage(@PathParam(value = "usernick") String usernick, String message) {
-        String info = "成員[" + usernick + "]：" + message;
+    public void OnMessage(@PathParam(value = "usernick") String usernick, String message, Session session) {
+        String info = "mouse moved: 成員[" + usernick + "]：" + message;
         System.out.println(info);
-        WebSocketUtil.sendMessageForAll(message);
+        WebSocketUtil.setCursorOfUser(session, message);
+        WebSocketUtil.sendUsersForAll();
     }
 }

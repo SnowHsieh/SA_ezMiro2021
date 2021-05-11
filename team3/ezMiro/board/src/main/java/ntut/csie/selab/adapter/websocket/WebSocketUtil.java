@@ -36,7 +36,7 @@ public class WebSocketUtil {
     }
 
     // 發送群體訊息
-    public static void sendMessageForAll(String message) {
+    public static void sendUsersForAll() {
         ONLINE_SESSION.forEach((session, user) -> {
             try {
                 sendMessage(session, getAllUserData());
@@ -44,6 +44,17 @@ public class WebSocketUtil {
                 e.printStackTrace();
             }
         });
+    }
+
+    public static void setCursorOfUser(Session session, String pointerInfo) {
+        User user = ONLINE_SESSION.get(session);
+        try {
+            JSONObject pointer = new JSONObject(pointerInfo);
+            user.x = Integer.parseInt(pointer.get("x").toString());
+            user.y = Integer.parseInt(pointer.get("y").toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private static String getAllUserData () throws JSONException {
