@@ -1,6 +1,8 @@
 package ntut.csie.sslab.kanban.entity.model.board;
 
-public class CommittedFigure {
+import ntut.csie.sslab.ddd.model.ValueObject;
+
+public class CommittedFigure extends ValueObject {
     private String figureId;
     private int zOrder;
 
@@ -16,4 +18,5 @@ public class CommittedFigure {
     public int getZOrder() {
         return zOrder;
     }
+
 }
