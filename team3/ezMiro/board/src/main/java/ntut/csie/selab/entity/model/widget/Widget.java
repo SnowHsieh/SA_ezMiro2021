@@ -14,15 +14,14 @@ public abstract class Widget extends AggregateRoot<String> {
     protected String text;
     protected String color;
     protected String textColor;
-    protected int zIndex;
+    protected int fontSize;
 
     public Widget(String id, String boardId, Coordinate coordinate) {
         super(id);
         this.boardId = boardId;
         this.coordinate = coordinate;
         this.color = "#FFFAAD";
-        this.textColor = "#ffffff";
-        this.zIndex = 1;
+        this.textColor = "#000000";
         this.text = "";
 
         addDomainEvent(new WidgetCreated(new Date(), boardId, id));
@@ -76,11 +75,11 @@ public abstract class Widget extends AggregateRoot<String> {
         this.textColor = textColor;
     }
 
-    public int getzIndex() {
-        return zIndex;
+    public int getFontSize() {
+        return fontSize;
     }
 
-    public void setzIndex(int zIndex) {
-        this.zIndex = zIndex;
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
     }
 }

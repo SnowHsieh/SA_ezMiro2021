@@ -83,3 +83,13 @@ export const EditZIndexOfStickyNoteBy = async (id, boardId, zIndex) => {
     return err
   }
 }
+
+export const EditFontSizeOfStickyNoteBy = async (id, boardId, fontSize) => {
+  try {
+    const res = await axios.put(`${host}/ez-miro/boards/${boardId}/widgets/sticky-notes/${id}/font-size`, { fontSize })
+    return res.data
+  } catch (err) {
+    console.log(err)
+    return err
+  }
+}

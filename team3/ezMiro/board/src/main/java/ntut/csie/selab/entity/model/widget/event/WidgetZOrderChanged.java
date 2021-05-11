@@ -4,8 +4,8 @@ import ntut.csie.selab.model.DomainEvent;
 
 import java.util.Date;
 
-public class WidgetZIndexEdited extends DomainEvent {
-    public WidgetZIndexEdited(Date occurredOn) {
+public class WidgetZOrderChanged extends DomainEvent {
+    public WidgetZOrderChanged(Date occurredOn) {
         super(occurredOn);
     }
 }

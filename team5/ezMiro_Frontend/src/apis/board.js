@@ -7,17 +7,17 @@ const board = {
     getBoardContent (params) {
         return request('get', `/boards/${params.boardId}/content`, params)
     },
-    bringFigureToFront (params) {
-        return request('post', `/bring-figure-front`, params)
+    bringFigureForward (params) {
+        return request('post', `/bring-figure-forward`, params)
     },
-    bringFigureToFrontEnd (params) {
-        return request('post', `/bring-figure-front-end`, params)
+    bringFigureToFront (params) {
+        return request('post', `/bring-figure-to-front`, params)
+    },
+    sendFigureBackwards (params) {
+        return request('post', `/send-figure-backwards`, params)
     },
     sendFigureToBack (params) {
-        return request('post', `/send-figure-back`, params)
-    },
-    sendFigureToBackEnd (params) {
-        return request('post', `/send-figure-back-end`, params)
+        return request('post', `/send-figure-to-back`, params)
     }
 }
 

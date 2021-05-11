@@ -4,7 +4,14 @@
     <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
       <li @click="deleteWidget()" class="list-group-item">Delete</li>
       <li class="list-group-item">
-        <input type="color" id="favcolor" name="favcolor" v-model="selectedStickyNoteColor" @change="changeColorOfStickyNote">Color</li>
+        <input type="color" id="favcolor" name="favcolor" v-model="selectedStickyNoteColor" @change="changeColorOfStickyNote">Custom Color</li>
+      <li class="list-group-item">
+        <button type="button" class="btn btn-default btn-circle" style="background-color: #4CAF50;" @click="changeColorOfStickyNoteWith('#4CAF50')"></button>
+        <button type="button" class="btn btn-default btn-circle" style="background-color: #41ABD8;" @click="changeColorOfStickyNoteWith('#41ABD8')"></button>
+        <button type="button" class="btn btn-default btn-circle" style="background-color: #FFFAAD;" @click="changeColorOfStickyNoteWith('#FFFAAD')"></button>
+        <button type="button" class="btn btn-default btn-circle" style="background-color: #FFB22E;" @click="changeColorOfStickyNoteWith('#FFB22E')"></button>
+        <button type="button" class="btn btn-default btn-circle" style="background-color: #CB56F5;" @click="changeColorOfStickyNoteWith('#CB56F5')"></button>
+      </li>
       <li class="list-group-item" @click="bringToFront">bring to front</li>
       <li class="list-group-item" @click="sendToback">send to back</li>
     </ul>
@@ -21,7 +28,8 @@ import {
   ResizeStickyNoteBy,
   EditTextOfStickyNoteBy,
   ChangeColorOfStickyNoteBy,
-  EditZIndexOfStickyNoteBy
+  EditZIndexOfStickyNoteBy,
+  EditFontSizeOfStickyNoteBy
 } from '@/apis/Widget'
 import '@/models/StickyNote'
 import { fabric } from 'fabric'
@@ -39,6 +47,7 @@ export default {
         left: '-1px'
       },
       selectedStickyNote: null,
+      oldPoint: null,
       ungroupTarget: {},
       selectedStickyNoteColor: '#000000',
       indexMax: 0, // TODO: 邏輯待改善
@@ -72,13 +81,17 @@ export default {
     })
 
     this.canvas.on('mouse:up', async function (e) {
-      // 臭到不行
-      if (e.button === 3) {
+      const target = e.target
+      if (e.button === 1) {
+        if (target) {
+          this.oldPoint = e.target.lineCoords
+        }
+      } else if (e.button === 3) { // 臭到不行
         me.isDisplayRightClickMenu = true
         const point = e.absolutePointer
         me.rightClickMenuStyle.top = point.y + 'px'
         me.rightClickMenuStyle.left = point.x + 'px'
-        me.setTargetId(e.target)
+        me.setTargetId(target)
       } else {
         me.isDisplayRightClickMenu = false
         me.setTargetId(null)
@@ -111,6 +124,11 @@ export default {
       const topLeftY = point.tl.y
       const bottomRightX = point.br.x
       const bottomRightY = point.br.y
+      const newWidth = point.br.x - point.tl.x
+      const oldWidth = this.oldPoint.br.x - this.oldPoint.tl.x
+      const fontSize = parseInt(e.target.textObject.fontSize * newWidth / oldWidth)
+      await e.target.textObject.set('fontSize', fontSize)
+      await EditFontSizeOfStickyNoteBy(stickyNoteId, me.boardId, fontSize)
       await ResizeStickyNoteBy(stickyNoteId, me.boardId, {
         topLeftX: topLeftX,
         topLeftY: topLeftY,
@@ -147,7 +165,8 @@ export default {
             width: widget.width,
             fill: widget.color,
             text: widget.text,
-            textColor: widget.textColor
+            textColor: widget.textColor,
+            fontSize: widget.fontSize
           })
         )
       })
@@ -211,13 +230,16 @@ export default {
         await EditTextOfStickyNoteBy(group.id, me.boardId, objects[1].text)
       })
     },
-    async changeColorOfStickyNote () {
-      const res = await ChangeColorOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, this.selectedStickyNoteColor)
+    async changeColorOfStickyNoteWith (color) {
+      const res = await ChangeColorOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, color)
       if (res !== null) {
-        this.selectedStickyNote.rectObject.set('fill', this.selectedStickyNoteColor)
+        this.selectedStickyNote.rectObject.set('fill', color)
         this.canvas.renderAll()
       }
       this.isDisplayRightClickMenu = false
+    },
+    changeColorOfStickyNote () {
+      this.changeColorOfStickyNoteWith(this.selectedStickyNoteColor)
     },
     async bringToFront () { // TODO: 邏輯待改善
       this.indexMax += 1

@@ -23,7 +23,8 @@ public class EditTextOfStickyNoteUseCase {
             selectedStickyNote.setText(input.getText());
 
             domainEventBus.postAll(selectedStickyNote);
-            output.setModifiedText(selectedStickyNote.getText());
+            output.setStickyNoteId(input.getStickyNoteId());
+            output.setText(selectedStickyNote.getText());
         } else {
             throw new RuntimeException("Sticky note not found, sticky note id = " + input.getStickyNoteId());
         }

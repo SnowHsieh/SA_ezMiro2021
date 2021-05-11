@@ -1,13 +1,22 @@
 package ntut.csie.selab.usecase.widget.edit.text;
 
 public class EditTextOfStickyNoteOutput {
-    private String modifiedText;
+    private String StickyNoteId;
+    private String text;
 
-    public String getModifiedText() {
-        return modifiedText;
+    public String getStickyNoteId() {
+        return StickyNoteId;
     }
 
-    public void setModifiedText(String text) {
-        modifiedText = text;
+    public void setStickyNoteId(String stickyNoteId) {
+        StickyNoteId = stickyNoteId;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

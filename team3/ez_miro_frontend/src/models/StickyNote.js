@@ -1,5 +1,5 @@
 import { fabric } from 'fabric'
-
+const fontSize = 18
 fabric.StickyNote = fabric.util.createClass(fabric.Rect, {
   type: 'stickynote',
   id: null,
@@ -34,6 +34,7 @@ fabric.StickyNoteNew = fabric.util.createClass(fabric.Group, {
     this.rectObject = this._initailizeRect(element)
     this.textObject = this._initailizeText(element)
     this._setRectControlsVisibility(this.rectObject)
+    this._setTextOnInput(this.textObject, element)
     this._objects = [this.rectObject, this.textObject]
     this.callSuper('initialize', this._objects, {
       subTargetCheck: true
@@ -53,10 +54,18 @@ fabric.StickyNoteNew = fabric.util.createClass(fabric.Group, {
     })
   },
   _initailizeText (element) {
-    return new fabric.IText(element.text, {
-      left: element.left,
-      top: element.top,
-      fill: element.textColor
+    return new fabric.Textbox(element.text, {
+      left: element.left + 0.5 * element.width,
+      top: element.top + 0.5 * element.height,
+      fill: element.textColor,
+      fontSize: element.fontSize || fontSize,
+      width: element.width,
+      maxWidth: element.width,
+      height: element.height,
+      textAlign: 'center',
+      originX: 'center',
+      originY: 'center',
+      splitByGrapheme: true
     })
   },
   _setRectControlsVisibility (rect) {
@@ -75,5 +84,18 @@ fabric.StickyNoteNew = fabric.util.createClass(fabric.Group, {
   _ungroup () {
     // this._objects._restoreObjectsState()
     console.log(this.canvas)
+  },
+  _setTextOnInput (iText, element) {
+    var isLastInputDeletedOnce = false
+    iText.onInput = function (e) {
+      if (iText.height > element.height) {
+        if (!isLastInputDeletedOnce) {
+          iText.text = iText.text.slice(0, -1)
+          isLastInputDeletedOnce = true
+        }
+        return
+      }
+      this.callSuper('onInput', e)
+    }
   }
 })

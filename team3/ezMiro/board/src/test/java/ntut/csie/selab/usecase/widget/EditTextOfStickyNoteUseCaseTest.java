@@ -11,8 +11,6 @@ import ntut.csie.selab.usecase.widget.edit.text.EditTextOfStickyNoteUseCase;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.awt.*;
-
 public class EditTextOfStickyNoteUseCaseTest {
 
     @Test
@@ -34,7 +32,7 @@ public class EditTextOfStickyNoteUseCaseTest {
         editTextOfStickyNoteUseCase.execute(input, output);
 
         // Assert
-        Assert.assertEquals("modified text", output.getModifiedText());
+        Assert.assertEquals("modified text", output.getText());
         Assert.assertEquals(2, domainEventBus.getCount());
     }
 }
