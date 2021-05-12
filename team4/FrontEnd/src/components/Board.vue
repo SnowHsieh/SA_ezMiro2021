@@ -4,7 +4,6 @@
         <div>
           <div>
             <button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
-            <button @click="delUserCursor('0.05')">請你離開</button>
             <canvas id="canvas" ref='board' >
             </canvas>
           </div>
@@ -56,8 +55,10 @@ export default {
       hostIp: '140.124.181.8'
     }
   },
+  created () {
+    this.socket = io('http://' + this.hostIp + ':4040', { transports: ['websocket'] })
+  },
   async mounted () {
-    this.getIpClient()
     this.boardContent = this.getBoardContent()
     this.initCanvas()
     this.canvas.renderAll()
@@ -68,10 +69,9 @@ export default {
     this.bringForwardButton = document.getElementById('bringForwardButton')
     this.sendBackwardButton = document.getElementById('sendBackwardButton')
     this.sendToBackButton = document.getElementById('sendToBackButton')
-    this.socket = io('http://140.124.181.8:4040', { transports: ['websocket'] })
-    this.socket.on('getAllUserCursors', data => {
-      // this.userCursorList.clear()
-      this.userCursorList = JSON.parse(data)
+    this.socket.once('getAllUserCursors', data => {
+      this.myUserId = JSON.parse(data).id
+      this.userCursorList = JSON.parse(data).userCursorMap
       this.drawAllUserCursors()
     })
     this.socket.on('userJoin', data => {
@@ -87,19 +87,9 @@ export default {
     // this.timer = setInterval(this.refreshCanvas, 10000)
   },
   methods: {
-    async getIpClient () {
-      try {
-        const response = await axios.get('https://api.ipify.org?format=json')
-        this.myUserId = response.data.ip
-        console.log(response, this.myUserId)
-        this.emitUserJoin()
-      } catch (error) {
-        console.log('ip error', error)
-      }
-    },
     async getBoardContent () {
       try {
-        this.boardId = '791bfc5b-00a3-4484-b695-c34579e4813a'
+        this.boardId = 'b35788c0-a3d9-47ac-9aeb-a12189b7d96c'
         const res = await axios.get('http://' + this.hostIp + ':8081/boards/' + this.boardId + '/content')
         this.drawStickyNote(res.data.figureDtos)
       } catch (err) {
@@ -211,7 +201,6 @@ export default {
             flist.push(objects[i].get('id'))
           }
         }
-        // console.log(flist)
         const res = await axios.post('http://' + this.hostIp + ':8081/boards/' + this.boardId + '/changeFigureOrder',
           {
             figureOrderList: flist
@@ -221,7 +210,6 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      // this.refreshCanvas()
     },
     initCanvas () {
       var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
@@ -286,7 +274,6 @@ export default {
         {
           'mouse:move': function (e) {
             var mouse = this.getPointer(e)
-            // console.log('mouse:', mouse)
             var data = {
               id: _this.myUserId,
               position: {
@@ -297,7 +284,6 @@ export default {
             _this.socket.emit('mouse-moved', data)
           },
           'mouse:dblclick': function (e) {
-            // console.log('object:dblclick')
             if (e.target != null) {
               var oldleft = e.target.left
               var oldtop = e.target.top
@@ -331,31 +317,19 @@ export default {
             }
           },
           'object:scaled': function (e) {
-            // console.log('object:scaled')
             if (e.target.type === 'group') {
               _this.resizeStickyNote(e.target)
               _this.moveStickyNote(e.target)
             }
-            // else {
-            //   e.target._objects.forEach((target) => {
-            //     console.log(target.)
-            //     _this.editStickyNote(target)
-            //     // _tdhis.moveStickyNote(target)
-            //   })
-            // }
           },
           'object:moved': function (e) {
             if (e.target.type === 'group') {
-              // _this.editStickyNote(e.target)
               _this.moveStickyNote(e.target)
             } else {
               e.target._objects.forEach((target) => {
                 _this.moveStickyNote(target)
               })
             }
-            // canvas.getActiveObjects().forEach((target) => {
-            //   _this.moveStickyNote(target)
-            // })
           }
         })
     },
@@ -414,7 +388,6 @@ export default {
     },
     addListenerOfBringForward () {
       var _this = this
-      // console.log('addListenerOfBringForward')
       var newHandler = function () {
         _this.activeObjects.forEach((target) => {
           if (target.selectable) {
@@ -439,7 +412,6 @@ export default {
     },
     addListenerOfSendToBack () {
       var _this = this
-      // console.log('addListenerOfSendToBack')
       var newHandler = function () {
         _this.activeObjects.forEach((target) => {
           target.sendToBack()
@@ -448,17 +420,6 @@ export default {
         _this.hideContextMenu()
       }
       _this.sendToBackButton.addEventListener('mouseup', newHandler)
-    },
-    emitUserJoin () {
-      // console.log('mouse:', mouse)
-      var data = {
-        id: this.myUserId,
-        position: {
-          x: 0.0,
-          y: 0.0
-        }
-      }
-      this.socket.emit('user-join', data)
     },
     drawAllUserCursors () {
       var _this = this
@@ -481,9 +442,12 @@ export default {
     },
     addUserCursor (data) {
       try {
-        this.userCursorList.push(data)
         var userId = data.id
+        if (userId === this.myUserId) {
+          return
+        }
         var position = data.position
+        this.userCursorList.push(data)
         const cursor = new fabric.Text(userId, {
           fontSize: 15,
           left: position.x,
@@ -498,15 +462,15 @@ export default {
         console.log(e)
       }
     },
-    updateUserCursor (data) {
+    updateUserCursor (data) { // todo: update userCursorList
       try {
+        const _this = this
         this.canvas.getObjects().forEach(function (item) {
-          if (item.get('id') === data.id) {
+          if (data.id !== _this.myUserId && item.get('id') === data.id) {
             item.set('left', data.position.x)
             item.set('top', data.position.y)
           }
         })
-        // console.log(this.canvas.getObjects().length)
         this.canvas.renderAll()
       } catch (e) {
         console.log(e)
@@ -517,15 +481,12 @@ export default {
         const _this = this
         const cursorObject = this.canvas.getObjects().filter(object => object.id === userId)[0]
         this.canvas.remove(cursorObject)
-        console.log('bef!', _this.userCursorList.length)
         for (var i = 0; i < _this.userCursorList.length; i++) {
           if (_this.userCursorList[i][0] === userId) {
-            console.log('del!')
             _this.userCursorList.splice(i, 1)
             break
           }
         }
-        console.log('aft!', _this.userCursorList.length)
       } catch (e) {
         console.log(e)
       }

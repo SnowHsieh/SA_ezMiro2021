@@ -27,20 +27,16 @@ app.get('/api/messages', function (req, res) {
 // var userCursorList = [];
 var userCursorMap = new Map();
 io.on('connection', function (socket) {
-    let userId;
+    let userId = socket.request.connection.remoteAddress.toString().substring(7);
     //監聽連上來了(connection)的事件 使用socket來處理
-    io.emit("getAllUserCursors", JSON.stringify(Array.from(userCursorMap)))//add user
+    let returnData = {'id':userId, 'userCursorMap':Array.from(userCursorMap)};
+    io.emit("getAllUserCursors", JSON.stringify(returnData));//add user
+    io.emit("userJoin", {'id':userId, 'position': {x: 0.0, y: 0.0}});
 
     socket.on('mouse-moved', function (message) {
-        userCursorMap.set(message.id, message.position);
-        userId = message.id;
-        io.emit("userCursorUpdate", message)
-    })
-
-    socket.on('user-join', function (message) {
-        userCursorMap.set(message.id, message.position);
-        console.log(message)
-        io.emit("userJoin", message)
+        userCursorMap.set(userId, message.position);
+        message.id = userId;
+        io.emit("userCursorUpdate", message);
     })
 
     socket.on('disconnect', function() {
