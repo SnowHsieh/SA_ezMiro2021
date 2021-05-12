@@ -16,6 +16,7 @@ public class DomainEventEncoder implements Encoder.Text<DomainEvent> {
 
         String event = domainEvent.getClass().getSimpleName();
         String obstr = new Gson().toJson(domainEvent);
+        obstr = obstr.substring(0, obstr.length()-1) + ",\"event\":\"" + event + "\"}";
         return obstr;
     }
 

@@ -5,6 +5,7 @@ import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.common.DateProvider;
 import ntut.csie.sslab.kanban.entity.model.cursor.Cursor;
 import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorCreated;
+import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorMoved;
 import ntut.csie.sslab.kanban.usecase.BoardSessionBroadcaster;
 import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
 
@@ -21,15 +22,16 @@ public class NotifyBoardSessionBroadcaster {
         this.cursorRepository = cursorRepository;
     }
 
-    @Subscribe
     public void whenCursorCreated(CursorCreated cursorCreated) {
         broadcast(cursorCreated, cursorCreated.getSessionId());
     }
 
 
+    public void whenCursorMoved(CursorMoved cursorMoved) {
+        broadcast(cursorMoved, cursorMoved.getSessionId());
+    }
+
     private void broadcast(DomainEvent domainEvent, String sessionId){
-
         boardSessionBroadcaster.broadcast(domainEvent, sessionId);
-
     }
 }
