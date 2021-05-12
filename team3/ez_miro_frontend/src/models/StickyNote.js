@@ -1,14 +1,50 @@
 import { fabric } from 'fabric'
 const fontSize = 18
-fabric.StickyNote = fabric.util.createClass(fabric.Rect, {
+
+fabric.StickyNote = fabric.util.createClass(fabric.Group, {
   type: 'stickynote',
   id: null,
-  text: 'owo',
+  textObject: null,
+  rectObject: null,
   initialize: function (element, options) {
     options = options || {}
-    this.callSuper('initialize', element, options)
     this.id = element.id
-    this.setControlsVisibility({
+    this.rectObject = this._initailizeRect(element)
+    this.textObject = this._initailizeText(element)
+    this._setTextOnInput(this.textObject, element)
+    this._objects = [this.rectObject, this.textObject]
+    this.callSuper('initialize', this._objects, {
+      subTargetCheck: true,
+      scaleX: element.width / 100,
+      scaleY: element.height / 100
+    })
+    this._setControlVisible(this)
+  },
+  _initailizeRect (element) {
+    return new fabric.Rect({
+      left: element.left,
+      top: element.top,
+      height: 100,
+      width: 100,
+      fill: element.fill
+    })
+  },
+  _initailizeText (element) {
+    return new fabric.Textbox(element.text, {
+      left: element.left + 0.5 * 100,
+      top: element.top + 0.5 * 100,
+      fill: element.textColor,
+      fontSize: element.fontSize || fontSize,
+      width: 100,
+      maxWidth: 100,
+      textAlign: 'center',
+      originX: 'center',
+      originY: 'center',
+      splitByGrapheme: true
+    })
+  },
+  _setControlVisible (fabricObject) {
+    fabricObject.setControlsVisibility({
       bl: true, // 左下
       br: true, // 右下
       mb: false, // 下中
@@ -19,71 +55,6 @@ fabric.StickyNote = fabric.util.createClass(fabric.Rect, {
       tr: true, // 上右
       mtr: false // 旋轉控制鍵
     })
-    this.text = element.text
-  }
-})
-
-fabric.StickyNoteNew = fabric.util.createClass(fabric.Group, {
-  type: 'stickynotenew',
-  id: null,
-  textObject: null,
-  rectObject: null,
-  initialize: function (element, options) {
-    options = options || {}
-    this.id = element.id
-    this.rectObject = this._initailizeRect(element)
-    this.textObject = this._initailizeText(element)
-    this._setRectControlsVisibility(this.rectObject)
-    this._setTextOnInput(this.textObject, element)
-    this._objects = [this.rectObject, this.textObject]
-    this.callSuper('initialize', this._objects, {
-      subTargetCheck: true
-    })
-    this.on('mousedblclick', function (e) {
-      // e.target.textObject.enterEditing()
-      // e.target.textObject.selectAll()
-    })
-  },
-  _initailizeRect (element) {
-    return new fabric.Rect({
-      left: element.left,
-      top: element.top,
-      height: element.height,
-      width: element.width,
-      fill: element.fill
-    })
-  },
-  _initailizeText (element) {
-    return new fabric.Textbox(element.text, {
-      left: element.left + 0.5 * element.width,
-      top: element.top + 0.5 * element.height,
-      fill: element.textColor,
-      fontSize: element.fontSize || fontSize,
-      width: element.width,
-      maxWidth: element.width,
-      height: element.height,
-      textAlign: 'center',
-      originX: 'center',
-      originY: 'center',
-      splitByGrapheme: true
-    })
-  },
-  _setRectControlsVisibility (rect) {
-    rect.setControlsVisibility({
-      bl: true, // 左下
-      br: true, // 右下
-      mb: false, // 下中
-      ml: false, // 中左
-      mr: false, // 中右
-      mt: false, // 上中
-      tl: true, // 上左
-      tr: true, // 上右
-      mtr: true // 旋轉控制鍵
-    })
-  },
-  _ungroup () {
-    // this._objects._restoreObjectsState()
-    console.log(this.canvas)
   },
   _setTextOnInput (iText, element) {
     var isLastInputDeletedOnce = false

@@ -2,6 +2,7 @@ package ntut.csie.selab.adapter.websocket;
 
 import org.springframework.stereotype.Component;
 
+import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -25,5 +26,10 @@ public class WebSocketController {
         System.out.println(info);
         WebSocketUtil.setCursorOfUser(session, message);
         WebSocketUtil.sendUsersForAll();
+    }
+
+    @OnClose
+    public void OnClose(Session session) {
+        WebSocketUtil.removeSession(session);
     }
 }
