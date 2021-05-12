@@ -10,6 +10,7 @@ import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorUseCase;
 import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorUseCaseImpl;
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,11 +22,13 @@ public class CreateCursorUseCaseTest extends AbstractSpringBootJpaTest {
     public void create_a_cursor() {
         String boardId = UUID.randomUUID().toString();
         String ip = "123.123.0.1";
+        String sessionId = "1";
         CreateCursorUseCase createCursorUseCase = new CreateCursorUseCaseImpl(cursorRepository, domainEventBus);
         CreateCursorInput input = createCursorUseCase.newInput();
         CqrsCommandOutput output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);
         input.setIp(ip);
+        input.setSessionId(sessionId);
 
         createCursorUseCase.execute(input, output);
 
@@ -33,6 +36,7 @@ public class CreateCursorUseCaseTest extends AbstractSpringBootJpaTest {
         Cursor cursor = cursorRepository.findById(output.getId()).get();
         assertEquals(ip, cursor.getIp());
         assertEquals(boardId, cursor.getBoardId());
+        assertEquals(sessionId, cursor.getSessionId());
         assertTrue(new Coordinate(0,0).equals(cursor.getPosition()));
         assertEquals(1, eventListener.getEventCount());
     }

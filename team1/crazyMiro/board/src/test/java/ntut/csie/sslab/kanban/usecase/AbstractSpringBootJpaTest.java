@@ -210,12 +210,13 @@ public abstract class AbstractSpringBootJpaTest {
         deleteStickerUseCase.execute(input, output);
     }
 
-    protected String createCursor(String boardId, String ip) {
+    protected String createCursor(String boardId, String ip, String sessionId) {
         CreateCursorUseCase createCursorUseCase = new CreateCursorUseCaseImpl(cursorRepository, domainEventBus);
         CreateCursorInput input = createCursorUseCase.newInput();
         CqrsCommandOutput output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);
         input.setIp(ip);
+        input.setSessionId(sessionId);
 
         createCursorUseCase.execute(input, output);
         return output.getId();

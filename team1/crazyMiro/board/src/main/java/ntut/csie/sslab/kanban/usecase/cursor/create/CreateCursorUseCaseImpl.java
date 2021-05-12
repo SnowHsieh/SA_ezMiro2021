@@ -21,7 +21,7 @@ public class CreateCursorUseCaseImpl implements CreateCursorUseCase {
     @Override
     public void execute(CreateCursorInput input, CqrsCommandOutput output) {
         try {
-            Cursor cursor = new Cursor(input.getBoardId(), UUID.randomUUID().toString(), input.getIp());
+            Cursor cursor = new Cursor(input.getBoardId(), UUID.randomUUID().toString(), input.getIp(), input.getSessionId());
             cursorRepository.save(cursor);
             domainEventBus.postAll(cursor);
             output.setId(cursor.getCursorId())
@@ -42,6 +42,7 @@ public class CreateCursorUseCaseImpl implements CreateCursorUseCase {
     private class CreateCursorInputImpl implements CreateCursorInput {
         private String boardId;
         private String ip;
+        private String sessionId;
 
         @Override
         public String getBoardId() {
@@ -61,6 +62,16 @@ public class CreateCursorUseCaseImpl implements CreateCursorUseCase {
         @Override
         public void setIp(String ip) {
             this.ip = ip;
+        }
+
+        @Override
+        public String getSessionId() {
+            return sessionId;
+        }
+
+        @Override
+        public void setSessionId(String sessionId) {
+            this.sessionId = sessionId;
         }
     }
 }

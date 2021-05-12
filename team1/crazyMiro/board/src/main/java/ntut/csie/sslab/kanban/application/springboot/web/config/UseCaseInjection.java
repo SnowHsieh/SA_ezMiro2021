@@ -7,8 +7,10 @@ import ntut.csie.sslab.kanban.usecase.board.bringFigureToFront.BringFigureToFron
 import ntut.csie.sslab.kanban.usecase.board.sendFigureToBack.SendFigureToBackUseCase;
 import ntut.csie.sslab.kanban.usecase.board.sendFigureToBack.SendFigureToBackUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
+import ntut.csie.sslab.kanban.usecase.cursor.MoveCursorUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorUseCase;
 import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorUseCase;
 import ntut.csie.sslab.kanban.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.changecolor.ChangeStickerColorUseCase;
@@ -102,7 +104,14 @@ public class UseCaseInjection {
     public CreateCursorUseCase createCursorUseCase() {
         return new CreateCursorUseCaseImpl(cursorRepository, eventBus);
     }
-//
+
+    @Bean(name="moveCursorUseCase")
+    public MoveCursorUseCase moveCursorUseCase() {
+        return new MoveCursorUseCaseImpl(cursorRepository, eventBus);
+    }
+
+
+    //
 //
 //    @Bean(name="createWorkflowUseCase")
 //    public CreateWorkflowUseCase createWorkflowUseCase() {

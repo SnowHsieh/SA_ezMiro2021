@@ -10,15 +10,17 @@ public class Cursor extends AggregateRoot<String> {
     private String boardId;
     private String ip;
     private String cursorId;
+    private String sessionId;
     private Coordinate position;
 
-    public Cursor(String boardId, String cursorId, String ip) {
+    public Cursor(String boardId, String cursorId, String ip, String sessionId) {
         super(cursorId);
         this.boardId = boardId;
         this.cursorId = cursorId;
         this.ip = ip;
         this.position = new Coordinate(0,0);
-        addDomainEvent(new CusorCreated(boardId, cursorId, ip));
+        this.sessionId = sessionId;
+        addDomainEvent(new CusorCreated(boardId, cursorId, ip, sessionId));
     }
 
     public String getBoardId() {
@@ -47,6 +49,14 @@ public class Cursor extends AggregateRoot<String> {
 
     public Coordinate getPosition() {
         return position;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     public void setPosition(Coordinate position) {

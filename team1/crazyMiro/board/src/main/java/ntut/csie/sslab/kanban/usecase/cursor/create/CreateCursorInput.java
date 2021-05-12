@@ -10,4 +10,8 @@ public interface CreateCursorInput extends Input {
     void setBoardId(String boardId);
 
     String getBoardId();
+
+    void setSessionId(String sessionId);
+
+    String getSessionId();
 }

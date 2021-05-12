@@ -1,6 +1,7 @@
 package ntut.csie.sslab.kanban.adapter.presenter.broadcastDomainEvent;
 
 
+import com.google.gson.Gson;
 import ntut.csie.sslab.ddd.model.DomainEvent;
 
 import javax.json.Json;
@@ -16,8 +17,8 @@ public class DomainEventEncoder implements Encoder.Text<DomainEvent> {
 //        sb.append(domainEvent.getJsonEvent());
 
 //        EventDataBuilderJava8.json(remoteDomainEvent.getEventType())
-//        return Json.asString(domainEvent);
-        return null;
+        String obstr = new Gson().toJson(domainEvent);
+        return obstr;
     }
 
 
