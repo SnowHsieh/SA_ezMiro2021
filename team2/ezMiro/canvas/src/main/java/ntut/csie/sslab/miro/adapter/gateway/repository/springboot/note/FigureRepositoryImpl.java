@@ -53,11 +53,11 @@ public class FigureRepositoryImpl implements FigureRepository {
                 .width(100)
                 .height(100)
                 .build();
-        this.figures.put(note1.getId(), note1);
-        this.figures.put(note2.getId(), note2);
-        this.figures.put(note3.getId(), note3);
-        this.figures.put(note4.getId(), note4);
-        this.figures.put(note5.getId(), note5);
+//        this.figures.put(note1.getId(), note1);
+//        this.figures.put(note2.getId(), note2);
+//        this.figures.put(note3.getId(), note3);
+//        this.figures.put(note4.getId(), note4);
+//        this.figures.put(note5.getId(), note5);
     }
 
     @Override

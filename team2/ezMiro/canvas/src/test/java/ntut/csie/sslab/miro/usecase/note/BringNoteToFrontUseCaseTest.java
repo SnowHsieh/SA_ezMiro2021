@@ -5,7 +5,7 @@ import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.NotifyBoardAdapter;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.note.FigureRepositoryImpl;
-import ntut.csie.sslab.miro.entity.model.board.Board;
+import ntut.csie.sslab.miro.entity.model.board.CommittedFigure;
 import ntut.csie.sslab.miro.entity.model.note.Coordinate;
 import ntut.csie.sslab.miro.usecase.DomainEventListener;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
@@ -16,23 +16,28 @@ import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.miro.usecase.note.create.CreateNoteInput;
 import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCase;
 import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.note.edit.zorder.front.BringNoteToFrontInput;
+import ntut.csie.sslab.miro.usecase.note.edit.zorder.front.BringNoteToFrontUseCase;
+import ntut.csie.sslab.miro.usecase.note.edit.zorder.front.BringNoteToFrontUseCaseImpl;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Map;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CreateNoteUseCaseTest {
+public class BringNoteToFrontUseCaseTest {
     private FigureRepository figureRepository;
+    private BoardRepository boardRepository;
     private DomainEventBus domainEventBus;
     private DomainEventListener eventListener;
     private NotifyBoardAdapter notifyBoardAdapter;
-    private BoardRepository boardRepository;
 
     @Before
     public void setUp() {
         figureRepository = new FigureRepositoryImpl();
+        boardRepository = new BoardRepositoryImpl();
         domainEventBus = new DomainEventBus();
         eventListener = new DomainEventListener();
-        boardRepository = new BoardRepositoryImpl();
         notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(figureRepository, boardRepository, domainEventBus));
 
         domainEventBus.register(notifyBoardAdapter);
@@ -40,28 +45,27 @@ public class CreateNoteUseCaseTest {
     }
 
     @Test
-    public void create_note() {
-        CreateNoteUseCase createNoteUseCase = new CreateNoteUseCaseImpl(figureRepository, domainEventBus);
-        CreateNoteInput input = createNoteUseCase.newInput();
+    public void bring_note1_to_front() {
+        String boardId = create_board();
+        String note1Id = create_note(boardId); // zindex 0
+        String note2Id = create_note(boardId); // zindex 1
+        eventListener.clear();
+        BringNoteToFrontUseCase bringNoteToFrontUseCase = new BringNoteToFrontUseCaseImpl(figureRepository, domainEventBus);
+        BringNoteToFrontInput input = bringNoteToFrontUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-        input.setBoardId("boardId");
-        input.setCoordinate(new Coordinate(9,26));
+        input.setNoteId(note1Id); // zindex 0 -> 1
 
-        createNoteUseCase.execute(input, output);
+        bringNoteToFrontUseCase.execute(input, output);
 
         assertNotNull(output.getId());
-        assertNotNull(figureRepository.findById(output.getId()).get());
-        assertEquals(9, figureRepository.findById(output.getId()).get().getCoordinate().getX());
-        assertEquals(26, figureRepository.findById(output.getId()).get().getCoordinate().getY());
-        assertEquals(100, figureRepository.findById(output.getId()).get().getWidth());
-        assertEquals(100, figureRepository.findById(output.getId()).get().getHeight());
+        Map<String, CommittedFigure> committedFigures = boardRepository.findById(boardId).get().getCommittedFigures();
+        assertEquals(2, committedFigures.size());
+        assertEquals(1, committedFigures.get(note1Id).getZOrder());
+        assertEquals(0, committedFigures.get(note2Id).getZOrder());
         assertEquals(1, eventListener.getEventCount());
     }
 
-    @Test
-    public void should_commit_figure_to_board_when_note_created(){
-        String boardId = create_board();
-        eventListener.clear();
+    private String create_note(String boardId) {
         CreateNoteUseCase createNoteUseCase = new CreateNoteUseCaseImpl(figureRepository, domainEventBus);
         CreateNoteInput input = createNoteUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
@@ -70,11 +74,7 @@ public class CreateNoteUseCaseTest {
 
         createNoteUseCase.execute(input, output);
 
-        assertEquals(1, eventListener.getEventCount());
-        Board board = boardRepository.findById(boardId).get();
-        assertEquals(1, board.getCommittedFigures().size());
-        assertEquals(output.getId(), board.getCommittedFigures().get(output.getId()).getFigureId());
-        assertEquals(0, board.getCommittedFigures().get(output.getId()).getZOrder());
+        return output.getId();
     }
 
     private String create_board() {

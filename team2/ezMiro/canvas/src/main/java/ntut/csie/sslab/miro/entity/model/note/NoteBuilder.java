@@ -10,7 +10,6 @@ public class NoteBuilder {
     private Coordinate coordinate;
     private double width;
     private double height;
-    private int displayOrder;
 
     public static NoteBuilder newInstance() { return new NoteBuilder(); }
 
@@ -49,14 +48,9 @@ public class NoteBuilder {
         return this;
     }
 
-    public NoteBuilder displayOrder(int displayOrder) {
-        this.displayOrder = displayOrder;
-        return this;
-    }
-
     public Note build() {
         noteId = UUID.randomUUID().toString();
-        Note note = new Note(boardId, noteId, description, color, coordinate, width, height, displayOrder);
+        Note note = new Note(boardId, noteId, description, color, coordinate, width, height);
         return note;
     }
 }

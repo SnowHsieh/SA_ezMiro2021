@@ -14,4 +14,8 @@ public class DomainEventListener {
     public int getEventCount() {
         return eventCount;
     }
+
+    public void clear() {
+        eventCount = 0;
+    }
 }

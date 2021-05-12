@@ -11,7 +11,7 @@ public class NoteDto {
     private double width;
     private double height;
     private Coordinate coordinate;
-    private int displayOrder;
+    private int zOrder;
 
     public String getBoardId() {
         return boardId;
@@ -69,11 +69,11 @@ public class NoteDto {
         this.color = color;
     }
 
-    public int getDisplayOrder() {
-        return displayOrder;
+    public int getZOrder() {
+        return zOrder;
     }
 
-    public void setDisplayOrder(int displayOrder) {
-        this.displayOrder = displayOrder;
+    public void setZOrder(int zOrder) {
+        this.zOrder = zOrder;
     }
 }

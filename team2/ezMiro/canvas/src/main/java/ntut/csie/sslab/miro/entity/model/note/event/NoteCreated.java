@@ -5,7 +5,6 @@ import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.miro.entity.model.note.Coordinate;
 
 public class NoteCreated extends DomainEvent {
-
     private final String boardId;
     private final String noteId;
     private final String description;
@@ -13,9 +12,8 @@ public class NoteCreated extends DomainEvent {
     private final Coordinate coordinate;
     private final double width;
     private final double height;
-    private final int displayOrder;
 
-    public NoteCreated(String boardId, String noteId, String description, String color, Coordinate coordinate, double width, double height, int displayOrder) {
+    public NoteCreated(String boardId, String noteId, String description, String color, Coordinate coordinate, double width, double height) {
         super(DateProvider.now());
         this.boardId = boardId;
         this.noteId = noteId;
@@ -24,7 +22,6 @@ public class NoteCreated extends DomainEvent {
         this.coordinate = coordinate;
         this.width = width;
         this.height = height;
-        this.displayOrder = displayOrder;
     }
 
     public String boardId() { return boardId; }
@@ -40,8 +37,4 @@ public class NoteCreated extends DomainEvent {
     public double width() { return width; }
 
     public double height() { return height; }
-
-    public int displayOrder() {
-        return displayOrder;
-    }
 }
