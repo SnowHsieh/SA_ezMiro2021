@@ -5,10 +5,12 @@ import ntut.csie.team5.adapter.presenter.board.getcontent.GetBoardContentPresent
 import ntut.csie.team5.usecase.board.getcontent.GetBoardContentInput;
 import ntut.csie.team5.usecase.board.getcontent.GetBoardContentUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins = "${CORS_URL}")
 @RestController
 public class GetBoardContentController {
 

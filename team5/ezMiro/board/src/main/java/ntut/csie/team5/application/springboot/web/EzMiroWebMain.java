@@ -1,6 +1,5 @@
 package ntut.csie.team5.application.springboot.web;
 
-import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.team5.usecase.eventhandler.NotifyBoard;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @ComponentScan(basePackages = {"ntut.csie.team5"})
 @EntityScan(basePackages = {"ntut.csie.team5.adapter"})
@@ -18,6 +20,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @SpringBootApplication(exclude = {
         org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class
 })
+@EnableWebSocket
 public class EzMiroWebMain extends SpringBootServletInitializer implements CommandLineRunner {
 
 
@@ -47,5 +50,10 @@ public class EzMiroWebMain extends SpringBootServletInitializer implements Comma
     public void run(String... args) throws Exception {
         System.out.println("EzMiroWebMain run");
         domainEventBus.register(notifyBoard);
+    }
+
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter() {
+        return new ServerEndpointExporter();
     }
 }

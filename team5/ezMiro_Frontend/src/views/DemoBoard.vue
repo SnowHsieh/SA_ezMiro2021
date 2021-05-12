@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div v-if="isActive">
+
+        <div v-if="isActive" >
             <button @click="changeColor('#CADF58')" style="width:100px;background-color:#CADF58">Read Model</button>
             <button @click="changeColor('#6CD5F5')" style="width:100px;background-color:#6CD5F5">Command</button>
             <button @click="changeColor('#FD9E4B')" style="width:100px;background-color:#FD9E4B">Domain Event</button>
@@ -15,11 +16,22 @@
             <button @click="createNotes('#FFF9B2')" style="width:100px;background-color:#FFF9B2">Aggregate</button>
         </div>
         <br>
-        <button @click="bringFigureForward()" style="width:100px;">Bring Figure Forward</button>
-        <button @click="bringFigureToFront()" style="width:100px;">Bring Figure To Front</button>
-        <button @click="sendFigureBackwards()" style="width:100px;">Send Figure Backwards</button>
-        <button @click="sendFigureToBack()" style="width:100px;">Send Figure To Back</button>
+        <div>
+            <button @click="bringFigureForward()" style="width:100px;">Bring Figure Forward</button>
+            <button @click="bringFigureToFront()" style="width:100px;">Bring Figure To Front</button>
+            <button @click="sendFigureBackwards()" style="width:100px;">Send Figure Backwards</button>
+            <button @click="sendFigureToBack()" style="width:100px;">Send Figure To Back</button>
+        </div>
         <canvas id="canvas"></canvas>
+        <div v-for="user in users" :key="user.name">
+            <div
+                v-if="user.name !== this.user.name"
+                style="position: absolute;"
+                :style="{ top: user.y + 'px', left: user.x + 'px' }"
+            >
+                x<br />{{ user.name }}
+            </div>
+        </div>
     </div>
 </template>
 
@@ -37,7 +49,10 @@ export default {
             activeTextBox: null,
             isOverText: false,
             isEditingText: false,
-            isActive: false
+            isActive: false,
+            webSocket: null,
+            user: null,
+            users: []
         }
     },
     async mounted () {
@@ -47,6 +62,28 @@ export default {
                 height: 900
             })
         )
+        
+        this.user = {
+            name: `匿名使用者${Math.floor(Math.random() * 1000) + 1}`,
+            x: 0,
+            y: 0
+        }
+        
+        this.webSocket = new WebSocket(`ws://localhost:8080/WebSocketServer/${this.user.name}`)
+        this.webSocket.onopen = (e) => {
+            console.log(e)
+            console.log('WebSocket connected.')
+        }
+        this.webSocket.onmessage = async (e) => {
+            const users = await JSON.parse(e.data)
+            console.log(users)
+            this.users = users
+        }
+        this.canvas.on('mouse:move', (e) => {
+            this.webSocket.send(JSON.stringify({x: e.absolutePointer.x, y: e.absolutePointer.y}))
+        })
+
+
         this.canvas.on('object:moving', (event) => {
             var target = event.target
             this.$api.note.moveNote(target.figureId, target.top, target.left)
@@ -162,8 +199,10 @@ export default {
                 hasControls: false,
                 hasBorders: false,
                 lockMovementX: true,
-                lockMovementY: true
+                lockMovementY: true,
+                textAlign: 'center' 
             })
+            this.setTextBoxFontSize(textBox, group)
         },
         addNoteSettings (group) {
             const invisibleControls = ["mt", "mr", "ml", "mb", "mtr"]
@@ -212,7 +251,7 @@ export default {
                 this.canvas.renderAll()
             }
         },
-        editNoteText (textBox, group) {
+        setTextBoxFontSize (textBox, group) {
             let lineNumber = 0
             let maxLineTextWidth = 0
 
@@ -224,6 +263,41 @@ export default {
                 lineNumber += 1
             })
             textBox.width = maxLineTextWidth
+
+            const maxFixedWidth = group.item(0).width - 20
+            const maxFiexdHeight = group.item(0).height - 20
+            const maxFontSize = group.item(0).height - 20
+
+            let newFontSize = textBox.fontSize
+
+            newFontSize *= maxFixedWidth / (textBox.width + 1)
+            if (newFontSize > maxFontSize) {
+                newFontSize = maxFontSize
+                textBox.set({ fontSize: maxFontSize })
+            } else {
+                textBox.set({ fontSize: newFontSize })
+            }
+            textBox.width = maxFixedWidth
+
+            while (textBox.height > maxFiexdHeight) {
+                const scale = textBox.height / maxFiexdHeight
+                if (textBox.fontSize > maxFontSize) {
+                    textBox.fontSize = maxFontSize
+                }
+                newFontSize -= scale
+                // if (scale >= 4) {
+                //     newFontSize -= scale
+                // } else if (scale < 4 && scale >= 1) {
+                //     newFontSize -= 4
+                // } else {
+                //     newFontSize -= 1
+                // }
+
+                textBox.set({ fontSize: newFontSize })
+            }
+        },
+        editNoteText (textBox, group) {
+            this.setTextBoxFontSize(textBox, group)
             this.$api.note.editNoteText(group.figureId, textBox.text)
             this.canvas.renderAll()
         },
