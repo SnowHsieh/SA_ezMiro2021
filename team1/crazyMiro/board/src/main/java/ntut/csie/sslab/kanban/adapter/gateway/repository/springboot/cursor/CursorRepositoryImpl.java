@@ -6,6 +6,7 @@ import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class CursorRepositoryImpl implements CursorRepository {
 
@@ -27,6 +28,11 @@ public class CursorRepositoryImpl implements CursorRepository {
 
     public Optional<Cursor> getCursorBySessionId(String sessionId){
         return cursors.stream().filter(x -> x.getSessionId().equals(sessionId)).findFirst();
+    }
+
+    @Override
+    public List<Cursor> getCursorByBoardId(String boardId) {
+        return cursors.stream().filter(x -> x.getBoardId().equals(boardId)).collect(Collectors.toList());
     }
 
     @Override

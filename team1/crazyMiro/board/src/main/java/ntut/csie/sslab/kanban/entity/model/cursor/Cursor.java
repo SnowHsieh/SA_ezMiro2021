@@ -61,7 +61,7 @@ public class Cursor extends AggregateRoot<String> {
 
     public void setPosition(Coordinate position) {
         this.position = position;
-        addDomainEvent(new CursorMoved(cursorId, position, sessionId));
+        addDomainEvent(new CursorMoved(cursorId, position));
     }
 
     public void deleteCursor() {

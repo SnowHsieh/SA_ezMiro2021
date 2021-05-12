@@ -6,19 +6,14 @@ import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.kanban.adapter.presenter.broadcastDomainEvent.DomainEventEncoder;
 import ntut.csie.sslab.kanban.application.springboot.web.config.websocket.EndpointConfigure;
 import ntut.csie.sslab.kanban.entity.model.Coordinate;
-import ntut.csie.sslab.kanban.entity.model.cursor.Cursor;
 import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorMoved;
 import ntut.csie.sslab.kanban.usecase.BoardSessionBroadcaster;
-import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
-import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
 import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorInput;
 import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorUseCase;
 import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorInput;
 import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorUseCase;
-import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorInput;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorUseCase;
-import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +67,7 @@ public class BoardSessionWebSocketAdapter {
         JSONObject info;
         try {
             JSONObject jsonObject = new JSONObject(message);
+            jsonObject = jsonObject.getJSONObject("message");
             event = jsonObject.getString("event");
             info = jsonObject.getJSONObject("info");
             websocketEventHandler(event, info);
@@ -112,7 +108,7 @@ public class BoardSessionWebSocketAdapter {
     public void onClose(Session session) {
         DeleteCursorInput input = deleteCursorUseCase.newInput();
         CqrsCommandOutput output = CqrsCommandPresenter.newInstance();
-        input.setCursorId(session.getId());
+        input.setSessionId(session.getId());
 
         deleteCursorUseCase.execute(input, output);
         ((WebSocketBroadcaster)boardSessionBroadcaster).removeSession(session.getId());

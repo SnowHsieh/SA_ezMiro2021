@@ -5,8 +5,6 @@ import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.kanban.entity.model.cursor.Cursor;
 import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
-import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorInput;
-import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorUseCase;
 
 public class DeleteCursorUseCaseImpl implements DeleteCursorUseCase {
     private CursorRepository cursorRepository;
@@ -20,10 +18,10 @@ public class DeleteCursorUseCaseImpl implements DeleteCursorUseCase {
     @Override
     public void execute(DeleteCursorInput input, CqrsCommandOutput output) {
 
-        Cursor cursor = cursorRepository.findById(input.getCursorId()).get();
+        Cursor cursor = cursorRepository.getCursorBySessionId(input.getSessionId()).get();
 
         cursor.deleteCursor();
-        cursorRepository.deleteById(input.getCursorId());
+        cursorRepository.deleteById(input.getSessionId());
         domainEventBus.postAll(cursor);
 
         output.setId(cursor.getId())
@@ -37,16 +35,16 @@ public class DeleteCursorUseCaseImpl implements DeleteCursorUseCase {
     }
 
     private class DeleteCursorInputImpl implements DeleteCursorInput {
-        private String cursorId;
+        private String sessionId;
 
         @Override
-        public String getCursorId() {
-            return cursorId;
+        public String getSessionId() {
+            return sessionId;
         }
 
         @Override
-        public void setCursorId(String cursorId) {
-            this.cursorId = cursorId;
+        public void setSessionId(String sessionId) {
+            this.sessionId = sessionId;
         }
     }
 }

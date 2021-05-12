@@ -5,10 +5,13 @@ import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.common.DateProvider;
 import ntut.csie.sslab.kanban.entity.model.cursor.Cursor;
 import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorCreated;
+import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorDeleted;
 import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorMoved;
 import ntut.csie.sslab.kanban.usecase.BoardSessionBroadcaster;
 import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class NotifyBoardSessionBroadcaster {
@@ -28,7 +31,20 @@ public class NotifyBoardSessionBroadcaster {
 
 
     public void whenCursorMoved(CursorMoved cursorMoved) {
-        broadcast(cursorMoved, cursorMoved.getSessionId());
+        Cursor cursor = cursorRepository.findById(cursorMoved.getCursorId()).get();
+        List<Cursor> cursors = cursorRepository.getCursorByBoardId(cursor.getBoardId());
+        List<String> sessionIds = new ArrayList<>();
+        cursors.forEach(each->sessionIds.add(each.getSessionId()));
+        sessionIds.forEach(each->broadcast(cursorMoved, each));
+    }
+
+
+    public void whenCursorDeleted(CursorDeleted cursorDeleted) {
+        Cursor cursor = cursorRepository.findById(cursorDeleted.getCursorId()).get();
+        List<Cursor> cursors = cursorRepository.getCursorByBoardId(cursor.getBoardId());
+        List<String> sessionIds = new ArrayList<>();
+        cursors.forEach(each->sessionIds.add(each.getSessionId()));
+        sessionIds.forEach(each->broadcast(cursorDeleted, each));
     }
 
     private void broadcast(DomainEvent domainEvent, String sessionId){

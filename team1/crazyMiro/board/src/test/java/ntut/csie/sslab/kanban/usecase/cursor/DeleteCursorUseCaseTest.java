@@ -25,7 +25,7 @@ public class DeleteCursorUseCaseTest extends AbstractSpringBootJpaTest {
         DeleteCursorUseCase deleteCursorUseCase = new DeleteCursorUseCaseImpl(cursorRepository, domainEventBus);
         DeleteCursorInput input = deleteCursorUseCase.newInput();
         CqrsCommandOutput output = CqrsCommandPresenter.newInstance();
-        input.setCursorId(cursorId);
+        input.setSessionId(cursorId);
 
         deleteCursorUseCase.execute(input, output);
 
