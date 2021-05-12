@@ -18,7 +18,7 @@ public class ChangeZOrderOfStickyNoteController {
         this.changeZOrderOfWidgetUseCase = changeZOrderOfWidgetUseCase;
     }
 
-    @PutMapping(path = "/${EZ_MIRO_PREFIX}/boards/{boardId}/widgets/{widgetId}/z-order", consumes = "application/json", produces = "application/json")
+    @PutMapping(path = "/${EZ_MIRO_PREFIX}/boards/{boardId}/widgets/sticky-notes/{widgetId}/z-order", consumes = "application/json", produces = "application/json")
     public String changeZOrderOfWidget(@PathVariable("boardId") String boardId,
                                        @PathVariable("widgetId") String widgetId,
                                        @RequestBody String zOrderInfo) {
@@ -34,6 +34,7 @@ public class ChangeZOrderOfStickyNoteController {
         }
         input.setWidgetId(widgetId);
         input.setZOrder(zIndex);
+        input.setBoardId(boardId);
         changeZOrderOfWidgetUseCase.execute(input, output);
 
         return output.getWidgetId();

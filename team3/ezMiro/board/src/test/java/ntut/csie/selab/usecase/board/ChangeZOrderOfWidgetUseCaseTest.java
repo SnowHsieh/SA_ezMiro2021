@@ -48,6 +48,20 @@ public class ChangeZOrderOfWidgetUseCaseTest {
         // Assert
         Assert.assertEquals(widgetId1, output.getWidgetId());
         Assert.assertEquals(2, output.getZOrder());
+
+        // round 2
+        input.setBoardId(boardId);
+        input.setWidgetId(widgetId2);
+        input.setZOrder(2);
+
+        changeZOrderOfWidgetUseCase.execute(input, output);
+
+        Assert.assertEquals(widgetId2, output.getWidgetId());
+        Assert.assertEquals(2, output.getZOrder());
+
+        Assert.assertEquals(1, board.getCommittedWidgetBy(widgetId1).get().getZOrder());
+        Assert.assertEquals(2, board.getCommittedWidgetBy(widgetId2).get().getZOrder());
+        Assert.assertEquals(0, board.getCommittedWidgetBy(widgetId3).get().getZOrder());
     }
 
     @Test

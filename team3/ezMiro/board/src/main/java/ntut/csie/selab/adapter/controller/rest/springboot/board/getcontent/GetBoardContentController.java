@@ -9,6 +9,8 @@ import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
+import ntut.csie.selab.usecase.board.CommittedWidgetDto;
+import ntut.csie.selab.usecase.board.CommittedWidgetMapper;
 import ntut.csie.selab.usecase.board.create.CreateBoardInput;
 import ntut.csie.selab.usecase.board.create.CreateBoardOutput;
 import ntut.csie.selab.usecase.board.create.CreateBoardUseCase;
@@ -42,13 +44,15 @@ public class GetBoardContentController {
     public BoardContentViewModel getBoardContent(@PathVariable("boardId") String boardId) {
         GetBoardContentInput input = new GetBoardContentInput();
         GetBoardContentOutput output = new GetBoardContentOutput();
-        List<WidgetDto> widgetDtos = new ArrayList<>();
+        List<WidgetDto> widgetDtos;
+        List<CommittedWidgetDto> committedWidgetDtos;
         WidgetMapper widgetMapper = new WidgetMapper();
+        CommittedWidgetMapper committedWidgetMapper = new CommittedWidgetMapper();
         input.setBoardId(boardId);
 
         getBoardContentUseCase.execute(input, output);
         widgetDtos = widgetMapper.domainToDto(output.getWidgets());
-        BoardContentViewModel boardContentViewModel = new BoardContentViewModel(output.getBoardId(), widgetDtos);
-        return boardContentViewModel;
+        committedWidgetDtos = committedWidgetMapper.domainToDto(output.getCommittedWidgets());
+        return new BoardContentViewModel(output.getBoardId(), widgetDtos, committedWidgetDtos);
     }
 }
