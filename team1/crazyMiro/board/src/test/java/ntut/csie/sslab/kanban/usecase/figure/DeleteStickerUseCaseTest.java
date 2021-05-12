@@ -1,7 +1,7 @@
 package ntut.csie.sslab.kanban.usecase.figure;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 import ntut.csie.sslab.kanban.entity.model.figure.Figure;
 import ntut.csie.sslab.kanban.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.delete.DeleteStickerUseCaseImpl;
@@ -29,6 +29,7 @@ public class DeleteStickerUseCaseTest extends AbstractSpringBootJpaTest {
         DeleteStickerInput input = deleteStickerUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setFigureId(stickerId1);
+        input.setBoardId(boardId);
 
         deleteStickerUseCase.execute(input, output);
 

@@ -1,4 +1,4 @@
-package ntut.csie.sslab.kanban.entity.model.figure;
+package ntut.csie.sslab.kanban.entity.model;
 
 import ntut.csie.sslab.ddd.model.ValueObject;
 

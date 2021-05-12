@@ -7,4 +7,8 @@ public interface DeleteStickerInput extends Input {
     void setFigureId(String stickerId);
 
     String getFigureId();
+
+    void setBoardId(String boardId);
+
+    String getBoardId();
 }

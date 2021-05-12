@@ -1,6 +1,7 @@
 package ntut.csie.sslab.kanban.entity.model.figure;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 
 
 public abstract class Figure extends AggregateRoot<String> {

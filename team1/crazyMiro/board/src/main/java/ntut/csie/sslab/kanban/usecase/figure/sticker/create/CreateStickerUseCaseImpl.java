@@ -3,7 +3,7 @@ package ntut.csie.sslab.kanban.usecase.figure.sticker.create;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
-import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 import ntut.csie.sslab.kanban.entity.model.figure.Figure;
 import ntut.csie.sslab.kanban.entity.model.figure.Sticker;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;

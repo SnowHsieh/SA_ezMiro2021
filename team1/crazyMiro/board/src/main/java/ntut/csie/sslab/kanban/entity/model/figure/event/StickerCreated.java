@@ -2,7 +2,7 @@ package ntut.csie.sslab.kanban.entity.model.figure.event;
 
 import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.common.DateProvider;
-import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 
 public class StickerCreated extends DomainEvent {
     private final String boardId;

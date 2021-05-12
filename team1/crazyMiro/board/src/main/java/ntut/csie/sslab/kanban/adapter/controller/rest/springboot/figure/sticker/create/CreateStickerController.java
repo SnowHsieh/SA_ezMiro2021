@@ -3,7 +3,7 @@ package ntut.csie.sslab.kanban.adapter.controller.rest.springboot.figure.sticker
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
-import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerInput;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCase;
 import org.json.JSONException;

@@ -2,9 +2,7 @@ package ntut.csie.sslab.kanban.entity.model.figure.event;
 
 import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.common.DateProvider;
-import ntut.csie.sslab.kanban.entity.model.figure.Coordinate;
-
-import java.util.Date;
+import ntut.csie.sslab.kanban.entity.model.Coordinate;
 
 public class StickerMoved extends DomainEvent {
     private String figureId;
