@@ -29,3 +29,21 @@
   line-height: 1.428571429;
   border-radius: 15px;
 }
+
+.cursors {
+  position: absolute;
+  transition: 0.2s;
+  font-weight: bold;
+  color: gray;
+  opacity: 0.8;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: -20px;
+    width: 20px;
+    height: 20px;
+    background-image: url('./assets/cursor.svg');
+    background-repeat: no-repeat;
+  }
+}

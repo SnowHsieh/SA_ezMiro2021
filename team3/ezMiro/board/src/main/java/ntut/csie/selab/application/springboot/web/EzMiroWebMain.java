@@ -6,10 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 
 @SpringBootApplication
+@EnableWebSocket
 @ComponentScan(basePackages = {"ntut.csie.selab"} )
 public class EzMiroWebMain implements CommandLineRunner {
     private DomainEventBus domainEventBus;
@@ -32,5 +36,10 @@ public class EzMiroWebMain implements CommandLineRunner {
         System.out.println("EzMiroWebMain run");
 
         domainEventBus.register(notifyBoard);
+    }
+
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter() {
+        return new ServerEndpointExporter();
     }
 }
