@@ -31,11 +31,12 @@ import {
   ResizeStickyNoteBy,
   EditTextOfStickyNoteBy,
   ChangeColorOfStickyNoteBy,
-  EditZIndexOfStickyNoteBy,
+  ChangeZOrderOfStickyNoteBy,
   EditFontSizeOfStickyNoteBy
 } from '@/apis/Widget'
 import '@/models/StickyNote'
 import { fabric } from 'fabric'
+import { webSocketHost } from '@/config/config'
 
 export default {
   data () {
@@ -53,8 +54,6 @@ export default {
       oldPoint: null,
       ungroupTarget: {},
       selectedStickyNoteColor: '#000000',
-      indexMax: 0, // TODO: 邏輯待改善
-      indexMin: 0, // TODO: 邏輯待改善
       webSocket: null,
       isSamplingCursorDelayFinish: true,
       user: null,
@@ -62,18 +61,17 @@ export default {
     }
   },
   async created () {
+    const me = this
     this.boardId = this.$route.params.boardId
     this.boardContent = await GetBoardContent(this.boardId)
     this.initCanvas()
-    this.boardContent.widgetDtos.sort((a, b) => a.zIndex - b.zIndex)
     this.loadAllStickyNote(this.boardContent.widgetDtos)
-    const me = this
     this.user = {
       name: `匿名北極熊${Math.floor((Math.random() * 100) + 1)}`,
       x: 0,
       y: 0
     }
-    this.webSocket = new WebSocket(`ws://1.34.135.153:8080/WebSocketServer/${this.user.name}`)
+    this.webSocket = new WebSocket(`${webSocketHost}/WebSocketServer/${this.user.name}`)
     this.webSocket.onopen = function (e) {
       console.log(e)
       console.log('Successfully connected to the echo websocket server...')
@@ -166,7 +164,6 @@ export default {
       // const oldWidth = me.oldPoint.br.x - me.oldPoint.tl.x
       // const fontSize = parseInt(e.target.textObject.fontSize * newWidth / oldWidth)
       // await e.target.textObject.set('fontSize', fontSize)
-      // console.log(fontSize)
       await EditFontSizeOfStickyNoteBy(stickyNoteId, me.boardId, e.target.textObject.fontSize)
       await ResizeStickyNoteBy(stickyNoteId, me.boardId, {
         topLeftX: topLeftX,
@@ -281,15 +278,15 @@ export default {
       this.changeColorOfStickyNoteWith(this.selectedStickyNoteColor)
     },
     async bringToFront () { // TODO: 邏輯待改善
-      this.indexMax += 1
-      await EditZIndexOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, this.indexMax)
       await this.canvas.bringToFront(this.selectedStickyNote)
+      const zOrder = this.canvas.getObjects().indexOf(this.selectedStickyNote)
+      await ChangeZOrderOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, zOrder)
       this.isDisplayRightClickMenu = false
     },
-    async sendToback () { // TODO: 邏輯待改善
-      this.indexMin -= 1
-      await EditZIndexOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, this.indexMin)
+    async sendToback () {
       await this.canvas.sendToBack(this.selectedStickyNote)
+      const zOrder = this.canvas.getObjects().indexOf(this.selectedStickyNote)
+      await ChangeZOrderOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, zOrder)
       this.isDisplayRightClickMenu = false
     },
     sortStickyNotesByZIndex (widgets) {

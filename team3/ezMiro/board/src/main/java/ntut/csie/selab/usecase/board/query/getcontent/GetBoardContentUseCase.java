@@ -35,6 +35,7 @@ public class GetBoardContentUseCase {
             }
 
             output.setWidgets(widgetList);
+            output.setCommittedWidgets(board.get().getCommittedWidgets());
             output.setBoardId(board.get().getId());
         } else {
             throw new RuntimeException("Board not found, board id = " + input.getBoardId());

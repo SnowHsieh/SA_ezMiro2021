@@ -6,6 +6,7 @@ import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +53,11 @@ public class ChangeZOrderOfWidgetUseCase {
         } else {
             shiftZOrderInRange(newZOrder, originZOrder, newZOrder, committedWidgets, 1);
         }
+        sortAscendByZOrder(board.getCommittedWidgets());
+    }
+
+    private void sortAscendByZOrder(List<CommittedWidget> widgets) {
+        widgets.sort((w1, w2) -> w1.getZOrder() - w2.getZOrder());
     }
 
     private void shiftZOrderInRange(int startIndex, int endIndex, int targetZOrder, List<CommittedWidget> committedWidgets, int offset) {

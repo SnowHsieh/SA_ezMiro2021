@@ -25,7 +25,6 @@ public class CreateNoteUseCaseImpl implements CreateNoteUseCase {
                 .coordinate(input.getCoordinate())
                 .width(100)
                 .height(100)
-                .displayOrder(0)
                 .build();
 
         figureRepository.save(note);

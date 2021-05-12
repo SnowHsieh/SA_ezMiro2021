@@ -6,11 +6,11 @@ import ntut.csie.sslab.miro.entity.model.note.event.*;
 public class Note extends Figure {
     private String description;
 
-    public Note(String boardId, String noteId, String description, String color, Coordinate coordinate, double width, double height, int displayOrder) {
-        super(noteId, boardId, coordinate, color, width, height, displayOrder);
+    public Note(String boardId, String noteId, String description, String color, Coordinate coordinate, double width, double height) {
+        super(noteId, boardId, coordinate, color, width, height);
         this.description = description;
 
-        addDomainEvent(new NoteCreated(boardId, noteId, description, color, coordinate, width, height, displayOrder));
+        addDomainEvent(new NoteCreated(boardId, noteId, description, color, coordinate, width, height));
     }
 
     public String getDescription() {
@@ -43,11 +43,12 @@ public class Note extends Figure {
         }
     }
 
-    public void changeDisplayOrder(int displayOrder) {
-        if(getDisplayOrder() != displayOrder) {
-            this.setDisplayOrder(displayOrder);
-            addDomainEvent(new NoteDisplayOrderChanged(getId(), displayOrder, getBoardId()));
-        }
+    public void bringToFront() {
+        addDomainEvent(new NoteBroughtToFront(getId(), getBoardId()));
+    }
+
+    public void sendToBack() {
+        addDomainEvent(new NoteSentToBack(getId(), getBoardId()));
     }
 
     public void move(Coordinate coordinate) {
@@ -58,6 +59,6 @@ public class Note extends Figure {
     }
 
     public void markAsRemoved(String boardId) {
-        addDomainEvent(new NoteDeleted(boardId));
+        addDomainEvent(new NoteDeleted(boardId, getId()));
     }
 }

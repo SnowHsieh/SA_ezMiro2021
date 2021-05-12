@@ -8,13 +8,14 @@ import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.usecase.board.BoardRepository;
+import ntut.csie.selab.usecase.board.CommittedWidgetDto;
+import ntut.csie.selab.usecase.board.CommittedWidgetMapper;
 import ntut.csie.selab.usecase.widget.WidgetDto;
 import ntut.csie.selab.usecase.widget.WidgetMapper;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GetBoardContentUseCaseTest {
@@ -30,17 +31,21 @@ public class GetBoardContentUseCaseTest {
         create_single_board_with_event_storming(boardRepository, widgetRepository);
         input.setBoardId("firstId");
         WidgetMapper widgetMapper = new WidgetMapper();
-        List<WidgetDto> widgetDtos = new ArrayList<>();
+        CommittedWidgetMapper committedWidgetMapper = new CommittedWidgetMapper();
+        List<WidgetDto> widgetDtos;
+        List<CommittedWidgetDto> committedWidgetDtos;
 
         // Act
         getBoardContentUseCase.execute(input, output);
+
         widgetDtos = widgetMapper.domainToDto(output.getWidgets());
-        BoardContentViewModel boardContentViewModel = new BoardContentViewModel(output.getBoardId(), widgetDtos);
+        committedWidgetDtos = committedWidgetMapper.domainToDto(output.getCommittedWidgets());
+        BoardContentViewModel boardContentViewModel = new BoardContentViewModel(output.getBoardId(), widgetDtos, committedWidgetDtos);
 
         // Assert
         Assert.assertEquals("firstId", boardContentViewModel.getBoardId());
         Assert.assertEquals(4, boardContentViewModel.getWidgetDtos().size());
-
+        Assert.assertEquals(4, boardContentViewModel.getCommittedWidgetDtos().size());
     }
 
     private void create_single_board_with_event_storming(BoardRepository boardRepository, WidgetRepository widgetRepository) {

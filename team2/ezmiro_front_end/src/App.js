@@ -1,134 +1,74 @@
 import './App.css';
 import Axios from 'axios';
-import { Component, useState, useEffect, useRef, createRef } from 'react';
-import { Rnd } from "react-rnd";
-import ContentEditable from 'react-contenteditable';
-import { TwitterPicker } from 'react-color';
+import { Component, createRef } from 'react';
+import Note from './Note'
+import SockJsClient from 'react-stomp';
 
-function Note({index, note, onNoteCoordinateChange, onNoteSizeChange, onNoteDescriptionChange, onNoteColorChange, onNoteDisplayOrderChange, onNoteDelete}) {
-  let [isEditable, setIsEditable] = useState(false);
-  let [width, setWidth] = useState(note.width);
-  let [height, setHeight] = useState(note.height);
-  let [position, setPosition] = useState(note.coordinate);
-  let [color, setColor] = useState(note.color);
-  let [displayColorPicker, setDisplayColorPicker] = useState("none");
-  let description = useRef(note.description);
-  let contentEditableRef = createRef();
-  let [displayOrder, setDisplayOrder] = useState(note.displayOrder);
-  let displayOrderTmp = note.displayOrder;
-  let [isDelete, setIsDelete] = useState("visible");
-
-  let handleDragStop = (event, d) => {
-    onNoteCoordinateChange(index, {
-      x: d.x, 
-      y: d.y
-    });
-    setPosition({ x: d.x, y: d.y });
-  }
-  
-  let handleResizeStop = (event, direction, ref, delta, position) => {
-    onNoteSizeChange(index, {
-      width: parseInt(ref.style.width),
-      height: parseInt(ref.style.height)
-    });
-    onNoteCoordinateChange(index, 
-      position
-    );
-    setWidth(parseInt(ref.style.width));
-    setHeight(parseInt(ref.style.height));
-    setPosition(position);
-  }
-
-  let handleEditMode = () => {
-    setIsEditable(true);
-    setDisplayColorPicker(true);
-  }
-
-  let handleDescriptionEditDone = (event) => {
-    onNoteDescriptionChange(index, description.current);
-    setIsEditable(false);
-    setDisplayColorPicker("none");
-  }
-
-  let handleDescriptionChange = (event) => {
-    description.current = event.target.value;
-  }
-
-  let handleColorChangeComplete = (event) => {
-    setColor(event.hex);
-    console.log(event.hex);
-    setDisplayColorPicker("none");
-  }
-
-  let handleKeyDown = (event) => {
-    if (event.keyCode == 33) {
-      onNoteDisplayOrderChange(index, displayOrderTmp+1);
-      setDisplayOrder(displayOrderTmp+1);
-    } else if (event.keyCode == 34) {
-      onNoteDisplayOrderChange(index, displayOrderTmp-1);
-      setDisplayOrder(displayOrderTmp-1); 
-    } else if (event.keyCode == 46) {
-      onNoteDelete(index);
-      setIsDelete("hidden");
-    }
-  }
-
-  useEffect(() => {onNoteColorChange(index, color)}, [color]);
-
-  return (
-    <Rnd
-      className="draggable-note" 
-      style={{backgroundColor: note.color, 
-        zIndex: displayOrder, 
-        visibility: isDelete}}
-      size={{ width: width, height: height }}
-      position={ position }
-      onDragStop={handleDragStop}
-      onResizeStop={handleResizeStop}
-      onDoubleClick={handleEditMode}
-      onBlur={handleDescriptionEditDone}
-      onKeyDown={handleKeyDown}
-    >
-      <ContentEditable
-        innerRef = {contentEditableRef}
-        style={{width: "100%", height: "100%", display: "flex",
-        justifyContent: "center",
-        alignItems: "center"}}
-        html={description.current} 
-        disabled={!isEditable}  
-        onChange={handleDescriptionChange} 
-      />
-
-      <div style={ {position: 'absolute', display: displayColorPicker, zIndex: '2'} }>
-        <TwitterPicker
-          color={color}
-          onChangeComplete={handleColorChangeComplete}
-        /> 
-      </div>
-      </Rnd>  
-  );
-}
+const SOCKET_URL = 'http://localhost:8080/ezmiro/ws-message';
 
 class App extends Component {
   constructor(props){
     super(props);
-    this.state = {
-      notes: []
+    this.state = { 
+      notes: [],
+      reconnectTime: 0,
+      isConnect: false,
+      message:'You server message here.',
+      onlineUsers: []
     };
-    this.getNotes();
+    this.getBoardContent();
+    this.getBoardContent = this.getBoardContent.bind(this);
+    this.createNote = this.createNote.bind(this);
+    this.deleteNote = this.deleteNote.bind(this);
+    this.updateMousePosition = this.updateMousePosition.bind(this);
+    this.componentWillUnmount = this.componentWillUnmount.bind(this);
+    window.addEventListener("mousemove", this.updateMousePosition);
+    this.clientRef = createRef();
+    this.cursorBroadcast = null;
+    this.userId = "userId"
+    this.cursor = {
+      x: 0,
+      y: 0
+    }
   }
 
-  getNotes() {
-    Axios.get('http://localhost:8080/ezmiro/miro/notes?boardId=boardId').then(response => {
-      this.setState({notes: response.data.notes});
+  componentDidMount() {
+    this.cursorBroadcast = setInterval(()=>{
+      try {
+        const myCursor = {
+          userId: this.userId,
+          ...this.cursor
+        }
+        this.clientRef.current.sendMessage("/app/sendMessage", JSON.stringify(myCursor))
+      } catch(error) {
+        console.error(error);  
+      }
+    }, 100);
+    this.userId = prompt("Your user Id")
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("mousemove", this.updateMousePosition);
+    this.clientRef.current.disconnect()
+    clearInterval(this.cursorBroadcast);
+  }
+
+  updateMousePosition = (event) => {
+    this.cursor = {
+      x: event.clientX,
+      y: event.clientY
+    }
+  };
+
+  getBoardContent() {
+    Axios.get('http://localhost:8080/ezmiro/miro/boards/boardId/getcontent').then(response => {
+      this.setState({notes: response.data});
+      console.log("getBoardContent",response.data);
     }).catch(error => console.error(error));
   }
 
-  moveNote = (index, coordinate) => {
-    var {notes} = this.state;
-    notes[index].coordinate = coordinate;
-    this.setState({notes: notes});
-    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${notes[index].noteId}/move`,{
+  moveNote = (id, coordinate) => {
+    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/move`,{
       coordinate: {
         x: coordinate.x,
         y: coordinate.y
@@ -136,55 +76,92 @@ class App extends Component {
     }).catch(error => console.error(error));
   }
 
-  changeNoteSize = (index, size) => {
-    var {notes} = this.state;
-    notes[index].size = size;
-    this.setState({notes: notes});
-    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${notes[index].noteId}/edit/size`,{
+  changeNoteSize = (id, size) => {
+    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/edit/size`,{
       size: size
     }).catch(error => console.error(error));
   }
 
-  changeNoteDescription = (index, description) => {
-    var {notes} = this.state;
-    notes[index].description = description;
-    this.setState({notes: notes});
-    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${notes[index].noteId}/edit/description`,{
+  changeNoteDescription = (id, description) => {
+    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/edit/description`,{
       description: description
     }).catch(error => console.error(error));
   }
 
-  changeNoteColor = (index, color) => {
-    var {notes} = this.state;
-    notes[index].color = color;
-    this.setState({notes: notes});
-    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${notes[index].noteId}/edit/color`,{
+  changeNoteColor = (id, color) => {
+    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/edit/color`,{
       color: color
     }).catch(error => console.error(error));
   }
 
-  changeNoteDisplayOrder = (index, displayOrder) => {
-    var {notes} = this.state;
-    notes[index].displayOrder = displayOrder;
-    this.setState({notes: notes});
-    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${notes[index].noteId}/edit/displayorder`,{
-      displayOrder: displayOrder
+  bringNoteToFront = (id) => {
+    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/edit/zorder/front`,{
+    }).then((response) => {
+      console.log("bringNoteToFront", response.data);
+      this.getBoardContent();
     }).catch(error => console.error(error));
   }
 
-  deleteNote = (index) => {
-    var {notes} = this.state;
-    this.setState({notes: notes});
-    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${notes[index].noteId}/delete?boardId=boardId`,{
+  sendNoteToBack = (id) => {
+    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/edit/zorder/back`,{
+    }).then((response) => {
+      console.log("sendNoteToBack", response.data);
+      this.getBoardContent();
     }).catch(error => console.error(error));
+  }
+
+  deleteNote = (id) => {
+    var {notes} = this.state;
+    this.setState({
+      notes:notes.filter( x => x.noteId !== id)
+    });
+    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/delete?boardId=boardId`,{
+    }).then(() => {
+      this.getBoardContent();
+    }).catch(error => console.error(error));
+  }
+
+  createNote = () => {
+    console.log("double click")
+    Axios.post('http://localhost:8080/ezmiro/miro/figures/notes?boardId=boardId',
+      {
+        "coordinate": {
+          "x": this.cursor.x - 50,
+          "y": this.cursor.y - 50
+        }
+      }).then(response => {
+        console.log("creatNote", response.data)
+        this.getBoardContent();
+      }).catch(error => console.error(error));
+  }
+
+  onPositionReceived = (allUserCursors) => {
+    const onlineUsers = allUserCursors.filter(cursor => cursor.userId !== this.userId)
+      console.log("received onlineUsers:", onlineUsers)
+      this.setState({
+        onlineUsers: onlineUsers
+      })
   }
 
   render() {
     return (
-      <div id="canvas"> 
-        {this.state.notes.map((note, index) => 
+      <div id="canvas" style={{width: window.innerWidth, height: window.innerHeight}} onDoubleClick={this.createNote}> 
+        <SockJsClient
+          url={SOCKET_URL}
+          topics={['/topic/position']}
+          onConnect={()=> console.log("Connected!")}
+          onDisconnect={()=> console.log("Disconnected!")}
+          onMessage={this.onPositionReceived}
+          ref={ (client) => { this.clientRef.current = client }}
+        />
+        {this.state.onlineUsers.map(user => (
+          <div style={{position: "fixed", top: user.y, left: user.x}}>{user.userId}</div>
+        ))}
+        {
+          this.state.notes.map((note) => 
           <Note
-            index={index}
+            id={note.noteId}
+            key={note.noteId}
             note={note}
             onNoteCoordinateChange={this.moveNote}
             onNoteSizeChange={this.changeNoteSize}
@@ -192,6 +169,8 @@ class App extends Component {
             onNoteColorChange={this.changeNoteColor}
             onNoteDisplayOrderChange={this.changeNoteDisplayOrder}
             onNoteDelete={this.deleteNote}
+            onNoteBringToFront={this.bringNoteToFront}
+            onNoteSendToBack={this.sendNoteToBack}
           />
         )}
       </div>

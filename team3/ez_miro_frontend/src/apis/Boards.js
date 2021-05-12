@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { host } from '../config/config'
+import { host } from '@/config/config'
 
 export const GetBoardContent = async (boardId) => {
   try {

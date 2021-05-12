@@ -23,5 +23,4 @@ public class DomainEventBus extends EventBus {
 
         domainEvents.clear();
     }
-
 }
