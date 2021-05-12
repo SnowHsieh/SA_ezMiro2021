@@ -7,6 +7,7 @@ import ntut.csie.sslab.kanban.entity.model.Coordinate;
 import ntut.csie.sslab.kanban.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorInput;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorUseCase;
+import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorUseCaseImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;

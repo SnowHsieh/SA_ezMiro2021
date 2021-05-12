@@ -1,17 +1,21 @@
 package ntut.csie.sslab.kanban.application.springboot.web.config;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
+import ntut.csie.sslab.kanban.usecase.BoardSessionBroadcaster;
 import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
 import ntut.csie.sslab.kanban.usecase.board.bringFigureToFront.BringFigureToFrontUseCase;
 import ntut.csie.sslab.kanban.usecase.board.bringFigureToFront.BringFigureToFrontUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.board.sendFigureToBack.SendFigureToBackUseCase;
 import ntut.csie.sslab.kanban.usecase.board.sendFigureToBack.SendFigureToBackUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
-import ntut.csie.sslab.kanban.usecase.cursor.MoveCursorUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorUseCase;
+import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorUseCase;
 import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorUseCase;
 import ntut.csie.sslab.kanban.usecase.eventhandler.NotifyBoard;
+import ntut.csie.sslab.kanban.usecase.eventhandler.NotifyBoardSessionBroadcaster;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.changecolor.ChangeStickerColorUseCase;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.changecolor.ChangeStickerColorUseCaseImpl;
@@ -42,23 +46,25 @@ public class UseCaseInjection {
 
     @Autowired
     private CursorRepository cursorRepository;
-//    private WorkflowRepository workflowRepository;
-//    private CardRepository cardRepository;
+
+
+    @Autowired
+    private BoardSessionBroadcaster boardSessionBroadcaster;
+
     private DomainEventBus eventBus;
-//    private ExecutorService executor;
-//
-//
+
+
     @Bean(name="createNotifyBoard")
     public NotifyBoard createNotifyBoard() {
         return new NotifyBoard(boardRepository, eventBus);
     }
-//
-//    @Bean(name="createNotifyWorkflow")
-//    public NotifyWorkflow createNotifyWorkflow() {
-//        return new NotifyWorkflow(cardRepository, workflowRepository, eventBus);
-//    }
-//
-//
+
+
+    @Bean(name="createNotifyBoardSessionBroadcaster")
+    public NotifyBoardSessionBroadcaster createNotifyBoardSessionBroadcaster() {
+        return new NotifyBoardSessionBroadcaster(boardSessionBroadcaster, cursorRepository);
+    }
+
     @Bean(name="createStickerUseCase")
     public CreateStickerUseCase createStickerUseCase() {
         return new CreateStickerUseCaseImpl(figureRepository, eventBus);
@@ -103,6 +109,11 @@ public class UseCaseInjection {
     @Bean(name="createCursorUseCase")
     public CreateCursorUseCase createCursorUseCase() {
         return new CreateCursorUseCaseImpl(cursorRepository, eventBus);
+    }
+
+    @Bean(name="deleteCursorUseCase")
+    public DeleteCursorUseCase deleteCursorUseCase() {
+        return new DeleteCursorUseCaseImpl(cursorRepository, eventBus);
     }
 
     @Bean(name="moveCursorUseCase")

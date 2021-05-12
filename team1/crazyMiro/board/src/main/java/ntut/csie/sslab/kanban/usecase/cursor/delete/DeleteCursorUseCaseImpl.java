@@ -1,9 +1,10 @@
-package ntut.csie.sslab.kanban.usecase.cursor;
+package ntut.csie.sslab.kanban.usecase.cursor.delete;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.kanban.entity.model.cursor.Cursor;
+import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
 import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorInput;
 import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorUseCase;
 

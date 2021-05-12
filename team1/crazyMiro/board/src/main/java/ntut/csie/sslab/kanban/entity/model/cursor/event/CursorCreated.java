@@ -3,13 +3,13 @@ package ntut.csie.sslab.kanban.entity.model.cursor.event;
 import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.common.DateProvider;
 
-public class CusorCreated extends DomainEvent {
+public class CursorCreated extends DomainEvent {
     private String boardId;
     private String cursorId;
     private String ip;
     private String sessionId;
 
-    public CusorCreated(String boardId, String cursorId, String ip, String sessionId) {
+    public CursorCreated(String boardId, String cursorId, String ip, String sessionId) {
         super(DateProvider.now());
         this.boardId = boardId;
         this.cursorId = cursorId;

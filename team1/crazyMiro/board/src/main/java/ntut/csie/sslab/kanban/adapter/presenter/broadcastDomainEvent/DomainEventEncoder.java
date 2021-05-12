@@ -13,10 +13,8 @@ public class DomainEventEncoder implements Encoder.Text<DomainEvent> {
 
     @Override
     public String encode(DomainEvent domainEvent) throws EncodeException {
-        StringBuilder sb = new StringBuilder();
-//        sb.append(domainEvent.getJsonEvent());
 
-//        EventDataBuilderJava8.json(remoteDomainEvent.getEventType())
+        String event = domainEvent.getClass().getSimpleName();
         String obstr = new Gson().toJson(domainEvent);
         return obstr;
     }

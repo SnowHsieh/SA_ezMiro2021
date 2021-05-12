@@ -3,7 +3,7 @@ package ntut.csie.sslab.kanban.entity.model.cursor;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorDeleted;
 import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorMoved;
-import ntut.csie.sslab.kanban.entity.model.cursor.event.CusorCreated;
+import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorCreated;
 import ntut.csie.sslab.kanban.entity.model.Coordinate;
 
 public class Cursor extends AggregateRoot<String> {
@@ -20,7 +20,7 @@ public class Cursor extends AggregateRoot<String> {
         this.ip = ip;
         this.position = new Coordinate(0,0);
         this.sessionId = sessionId;
-        addDomainEvent(new CusorCreated(boardId, cursorId, ip, sessionId));
+        addDomainEvent(new CursorCreated(boardId, cursorId, ip, sessionId));
     }
 
     public String getBoardId() {

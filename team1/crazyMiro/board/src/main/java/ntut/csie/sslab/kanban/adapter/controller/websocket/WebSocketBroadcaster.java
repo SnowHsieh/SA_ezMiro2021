@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class WebSocketBroadcaster implements BoardSessionBroadcaster {
     private Map<String, Session> sessionMap;
 
@@ -18,8 +19,8 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
     }
 
     @Override
-    public void broadcast(DomainEvent domainEvent, String boardSessionId) {
-        Session session = sessionMap.get(boardSessionId);
+    public void broadcast(DomainEvent domainEvent, String sessionId) {
+        Session session = sessionMap.get(sessionId);
         if(session == null)
             return;
 
@@ -37,8 +38,8 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
         this.sessionMap.put(boardSessionId, session);
     }
 
-    public void removeSession(String boardSessionId) {
-        sessionMap.remove(boardSessionId);
+    public void removeSession(String cursorId) {
+        sessionMap.remove(cursorId);
     }
 
     public String getBoardSessionIdBySessionId(String sessionId){

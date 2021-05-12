@@ -6,12 +6,19 @@ import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.kanban.adapter.presenter.broadcastDomainEvent.DomainEventEncoder;
 import ntut.csie.sslab.kanban.application.springboot.web.config.websocket.EndpointConfigure;
 import ntut.csie.sslab.kanban.entity.model.Coordinate;
+import ntut.csie.sslab.kanban.entity.model.cursor.Cursor;
 import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorMoved;
 import ntut.csie.sslab.kanban.usecase.BoardSessionBroadcaster;
+import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
+import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
 import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorInput;
 import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorUseCase;
+import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorInput;
+import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorUseCase;
+import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorInput;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorUseCase;
+import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +41,17 @@ public class BoardSessionWebSocketAdapter {
     private MoveCursorUseCase moveCursorUseCase;
 
     private CreateCursorUseCase createCursorUseCase;
+    private DeleteCursorUseCase deleteCursorUseCase;
     private BoardSessionBroadcaster boardSessionBroadcaster;
 
     @Autowired
     public void setCreateCursorUseCase(CreateCursorUseCase createCursorUseCase) {
         this.createCursorUseCase = createCursorUseCase;
+    }
+
+    @Autowired
+    public void setDeleteCursorUseCase(DeleteCursorUseCase deleteCursorUseCase) {
+        this.deleteCursorUseCase = deleteCursorUseCase;
     }
 
     @Autowired
@@ -50,6 +63,7 @@ public class BoardSessionWebSocketAdapter {
     public void setBoardSessionBroadcaster(BoardSessionBroadcaster boardSessionBroadcaster) {
         this.boardSessionBroadcaster = boardSessionBroadcaster;
     }
+
 
 
     @OnMessage
@@ -79,6 +93,8 @@ public class BoardSessionWebSocketAdapter {
     public void onOpen(Session session,
                        @PathParam("boardId") String boardId,
                        @PathParam("ip") String ip) throws IOException {
+        ((WebSocketBroadcaster)boardSessionBroadcaster).addSession(session.getId(), session);
+
         CreateCursorInput input = createCursorUseCase.newInput();
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);
@@ -86,24 +102,20 @@ public class BoardSessionWebSocketAdapter {
         input.setSessionId(session.getId());
         createCursorUseCase.execute(input, presenter);
 
-        ((WebSocketBroadcaster)boardSessionBroadcaster).addSession(presenter.getId(), session);
-        boardSessionBroadcaster.broadcast(new CursorMoved("123", new Coordinate(0, 0)), presenter.getId());
+//        ((WebSocketBroadcaster)boardSessionBroadcaster).addSession(presenter.getId(), session);
+//        boardSessionBroadcaster.broadcast(new CursorMoved("123", new Coordinate(0, 0)), presenter.getId());
+//        boardSessionBroadcaster.broadcast(new CursorMoved("123", new Coordinate(0, 0)), presenter.getId());
+
     }
 
     @OnClose
     public void onClose(Session session) {
+        DeleteCursorInput input = deleteCursorUseCase.newInput();
+        CqrsCommandOutput output = CqrsCommandPresenter.newInstance();
+        input.setCursorId(session.getId());
 
-        Session s = session;
-//        String boardSessionId = ((WebSocketBroadcaster)boardSessionBroadcaster).getBoardSessionIdBySessionId(session.getId());
-//        String boardId = session.getPathParameters().get("boardId");
-//
-//        LeaveBoardInput input = leaveBoardUseCase.newInput();
-//        input.setBoardSessionId(boardSessionId);
-//        input.setBoardId(boardId);
-//
-//        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
-//        leaveBoardUseCase.execute(input, presenter);
-//        ((WebSocketBroadcaster)boardSessionBroadcaster).removeSession(presenter.getId());
+        deleteCursorUseCase.execute(input, output);
+        ((WebSocketBroadcaster)boardSessionBroadcaster).removeSession(session.getId());
     }
 
     private void handleCursorMoved(JSONObject info) {

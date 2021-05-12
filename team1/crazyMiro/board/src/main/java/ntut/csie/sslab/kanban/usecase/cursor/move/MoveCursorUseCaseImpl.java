@@ -1,10 +1,11 @@
-package ntut.csie.sslab.kanban.usecase.cursor;
+package ntut.csie.sslab.kanban.usecase.cursor.move;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.kanban.entity.model.cursor.Cursor;
 import ntut.csie.sslab.kanban.entity.model.Coordinate;
+import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorInput;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorUseCase;
 

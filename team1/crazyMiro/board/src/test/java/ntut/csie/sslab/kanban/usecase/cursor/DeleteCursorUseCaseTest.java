@@ -5,6 +5,7 @@ import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.kanban.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorInput;
 import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorUseCase;
+import ntut.csie.sslab.kanban.usecase.cursor.delete.DeleteCursorUseCaseImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;

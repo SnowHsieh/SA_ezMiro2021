@@ -90,6 +90,7 @@ import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorInput;
 import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorUseCase;
 import ntut.csie.sslab.kanban.usecase.cursor.create.CreateCursorUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.eventhandler.NotifyBoard;
+import ntut.csie.sslab.kanban.usecase.eventhandler.NotifyBoardSessionBroadcaster;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerInput;
 import ntut.csie.sslab.kanban.usecase.figure.sticker.create.CreateStickerUseCase;
@@ -123,6 +124,7 @@ public abstract class AbstractSpringBootJpaTest {
     protected CursorRepository cursorRepository;
     protected DomainEventBus domainEventBus;
     protected EventListener eventListener;
+    protected BoardSessionBroadcaster boardSessionBroadcaster;
 
     public NotifyBoardAdapter notifyBoardAdapter;
 
@@ -133,7 +135,8 @@ public abstract class AbstractSpringBootJpaTest {
         cursorRepository = new CursorRepositoryImpl();
         domainEventBus = new GoogleEventBus();
         eventListener = new EventListener();
-        notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
+        notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus),
+                new NotifyBoardSessionBroadcaster(boardSessionBroadcaster, cursorRepository));
         domainEventBus.register(notifyBoardAdapter);
         domainEventBus.register(eventListener);
     }
