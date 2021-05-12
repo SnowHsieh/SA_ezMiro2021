@@ -94,6 +94,7 @@ export default {
             height = parseInt(Math.round(height), 10)
             var width = target.width * target.scaleX
             width = parseInt(Math.round(width), 10)
+            this.setTextBoxFontSize(target.item(1), target)
             this.$api.note.resizeNote(target.figureId, height, width)
             this.$api.note.moveNote(target.figureId, target.top, target.left)
         })
@@ -264,37 +265,30 @@ export default {
             })
             textBox.width = maxLineTextWidth
 
-            const maxFixedWidth = group.item(0).width - 20
-            const maxFiexdHeight = group.item(0).height - 20
-            const maxFontSize = group.item(0).height - 20
+            const maxFixedWidth = group.item(0).width * 0.9
+            const maxFiexdHeight = group.item(0).height * 0.9
+            const maxFontSize = group.item(0).height * 0.9
 
             let newFontSize = textBox.fontSize
 
             newFontSize *= maxFixedWidth / (textBox.width + 1)
             if (newFontSize > maxFontSize) {
                 newFontSize = maxFontSize
-                textBox.set({ fontSize: maxFontSize })
+                // textBox.set({ fontSize: maxFontSize })
             } else {
-                textBox.set({ fontSize: newFontSize })
+                // textBox.set({ fontSize: newFontSize })
             }
             textBox.width = maxFixedWidth
 
             while (textBox.height > maxFiexdHeight) {
                 const scale = textBox.height / maxFiexdHeight
-                if (textBox.fontSize > maxFontSize) {
-                    textBox.fontSize = maxFontSize
+                if (newFontSize > maxFontSize) {
+                    newFontSize = maxFontSize
                 }
                 newFontSize -= scale
-                // if (scale >= 4) {
-                //     newFontSize -= scale
-                // } else if (scale < 4 && scale >= 1) {
-                //     newFontSize -= 4
-                // } else {
-                //     newFontSize -= 1
-                // }
-
-                textBox.set({ fontSize: newFontSize })
             }
+
+            textBox.set({ fontSize: newFontSize })
         },
         editNoteText (textBox, group) {
             this.setTextBoxFontSize(textBox, group)
