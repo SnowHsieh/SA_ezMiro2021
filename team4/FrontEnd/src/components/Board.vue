@@ -13,7 +13,19 @@
               <ul>
                 <label>
                   <li>ColorPicker
-                    <input type="color" id="favcolor" name="favcolor" style="margin-left: 4rem" />
+                    <input type="color" id="favcolor" name="favcolor" list="colors" style="margin-left: 4rem" />
+                    <datalist id="colors">
+                      <option>#fffabb</option>
+                      <option>#c8dd57</option>
+                      <option>#7adbfa</option>
+                      <option>#ffaa61</option>
+                      <option>#c697ce</option>
+                      <option>#fefe45</option>
+                      <option>#e693b9</option>
+                      <option>#ffffff</option>
+                      <option>#da0063</option>
+                      <option>#5b9bd5</option>
+                    </datalist>
                   </li>
                 </label>
                 <li id="delButton" name="delButton">Delete</li>
@@ -52,7 +64,7 @@ export default {
       socketLoaded: null,
       userCursorList: [],
       myUserId: '你沒ip QQ',
-      hostIp: '140.124.181.8'
+      hostIp: '140.124.181.9'
     }
   },
   created () {
@@ -89,7 +101,7 @@ export default {
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = 'b35788c0-a3d9-47ac-9aeb-a12189b7d96c'
+        this.boardId = '44b608e4-781b-47c5-9034-a8c89430b1e4'
         const res = await axios.get('http://' + this.hostIp + ':8081/boards/' + this.boardId + '/content')
         this.drawStickyNote(res.data.figureDtos)
       } catch (err) {
