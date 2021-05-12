@@ -73,25 +73,28 @@ export default {
       x: 0,
       y: 0
     }
-    this.webSocket = new WebSocket(`ws://localhost:8080/WebSocketServer/${this.user.name}`)
+    this.webSocket = new WebSocket(`ws://1.34.135.153:8080/WebSocketServer/${this.user.name}`)
     this.webSocket.onopen = function (e) {
       console.log(e)
       console.log('Successfully connected to the echo websocket server...')
     }
     this.webSocket.onmessage = async function (e) {
       const users = await JSON.parse(e.data)
+      for (let user = 0; user < users.length; user++) {
+        if (users[user].name === me.user.name) {
+          users.splice(user, 1)
+        }
+      }
       me.collaborator = users
-      console.log(me.collaborator)
     }
     this.canvas.on('mouse:move', function (e) {
       if (me.isSamplingCursorDelayFinish) {
         me.isSamplingCursorDelayFinish = false
-        console.log(e)
         setTimeout(function () {
           me.isSamplingCursorDelayFinish = true
-          const cursorPoint = { x: e.absolutePointer.x, y: e.absolutePointer.y }
+          const cursorPoint = { x: Math.floor(e.absolutePointer.x), y: Math.floor(e.absolutePointer.y) }
           me.webSocket.send(JSON.stringify(cursorPoint))
-        }, 200)
+        }, 100)
       }
     })
 
@@ -117,8 +120,9 @@ export default {
     this.canvas.on('mouse:up', async function (e) {
       const target = e.target
       if (e.button === 1) {
+        me.isDisplayRightClickMenu = false
         if (target) {
-          this.oldPoint = e.target.lineCoords
+          me.oldPoint = target.lineCoords
         }
       } else if (e.button === 3) { // 臭到不行
         me.isDisplayRightClickMenu = true
@@ -158,11 +162,12 @@ export default {
       const topLeftY = point.tl.y
       const bottomRightX = point.br.x
       const bottomRightY = point.br.y
-      const newWidth = point.br.x - point.tl.x
-      const oldWidth = this.oldPoint.br.x - this.oldPoint.tl.x
-      const fontSize = parseInt(e.target.textObject.fontSize * newWidth / oldWidth)
-      await e.target.textObject.set('fontSize', fontSize)
-      await EditFontSizeOfStickyNoteBy(stickyNoteId, me.boardId, fontSize)
+      // const newWidth = point.br.x - point.tl.x
+      // const oldWidth = me.oldPoint.br.x - me.oldPoint.tl.x
+      // const fontSize = parseInt(e.target.textObject.fontSize * newWidth / oldWidth)
+      // await e.target.textObject.set('fontSize', fontSize)
+      // console.log(fontSize)
+      await EditFontSizeOfStickyNoteBy(stickyNoteId, me.boardId, e.target.textObject.fontSize)
       await ResizeStickyNoteBy(stickyNoteId, me.boardId, {
         topLeftX: topLeftX,
         topLeftY: topLeftY,
@@ -191,7 +196,7 @@ export default {
     async loadAllStickyNote (widgets) {
       await widgets.forEach(widget => {
         this.canvas.add(
-          new fabric.StickyNoteNew({
+          new fabric.StickyNote({
             id: widget.widgetId,
             left: widget.topLeftX,
             top: widget.topLeftY,
@@ -209,7 +214,7 @@ export default {
     async loadStickyNoteBy (id) {
       const stickyNote = await ReadStickyNoteBy(id, this.boardId)
       await this.canvas.add(
-        new fabric.StickyNoteNew({
+        new fabric.StickyNote({
           id: id,
           left: stickyNote.widgetDto.topLeftX,
           top: stickyNote.widgetDto.topLeftY,
@@ -250,7 +255,7 @@ export default {
         objects.forEach(item => {
           canvas.remove(item)
         })
-        canvas.add(new fabric.StickyNoteNew({
+        canvas.add(new fabric.StickyNote({
           id: group.id,
           left: objects[0].left,
           top: objects[0].top,
