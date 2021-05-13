@@ -6,18 +6,17 @@ import org.json.JSONObject;
 
 import javax.websocket.RemoteEndpoint.Async;
 import javax.websocket.Session;
-import java.awt.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WebSocketUtil {
 
-    private static final Map<Session, User> ONLINE_SESSION = new ConcurrentHashMap<>();
+    private static final Map<Session, Cursor> ONLINE_SESSION = new ConcurrentHashMap<>();
 
     // 新增紀錄Session
     public static void addSession(String userNick, Session session) {
-        User user = new User(userNick, 0, 0);
-        ONLINE_SESSION.put(session, user);
+        Cursor cursor = new Cursor(userNick, 0, 0);
+        ONLINE_SESSION.put(session, cursor);
     }
 
     // 移除Session
@@ -37,7 +36,7 @@ public class WebSocketUtil {
 
     // 發送群體訊息
     public static void sendUsersForAll() {
-        ONLINE_SESSION.forEach((session, user) -> {
+        ONLINE_SESSION.forEach((session, cursor) -> {
             try {
                 sendMessage(session, getAllUserData());
             } catch (JSONException e) {
@@ -47,11 +46,11 @@ public class WebSocketUtil {
     }
 
     public static void setCursorOfUser(Session session, String pointerInfo) {
-        User user = ONLINE_SESSION.get(session);
+        Cursor cursor = ONLINE_SESSION.get(session);
         try {
             JSONObject pointer = new JSONObject(pointerInfo);
-            user.x = Integer.parseInt(pointer.get("x").toString());
-            user.y = Integer.parseInt(pointer.get("y").toString());
+            cursor.x = Integer.parseInt(pointer.get("x").toString());
+            cursor.y = Integer.parseInt(pointer.get("y").toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -59,11 +58,11 @@ public class WebSocketUtil {
 
     private static String getAllUserData () throws JSONException {
         JSONArray result = new JSONArray();
-        for (User user: ONLINE_SESSION.values()) {
+        for (Cursor cursor : ONLINE_SESSION.values()) {
             JSONObject theUser = new JSONObject();
-            theUser.put("name", user.name);
-            theUser.put("x", user.x);
-            theUser.put("y", user.y);
+            theUser.put("name", cursor.userName);
+            theUser.put("x", cursor.x);
+            theUser.put("y", cursor.y);
             result.put(theUser);
         }
         return result.toString();
@@ -86,22 +85,3 @@ public class WebSocketUtil {
 //    }
 }
 
-class User {
-    public String name;
-    public int x;
-    public int y;
-
-    public User(String name, int x, int y) {
-        this.name = name;
-        this.x = x;
-        this.y = y;
-    }
-
-    public String toJSON() throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.append("name", name);
-        jsonObject.append("x", x);
-        jsonObject.append("y", y);
-        return jsonObject.toString();
-    }
-}

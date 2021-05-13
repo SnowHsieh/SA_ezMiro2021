@@ -4,7 +4,7 @@
     <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
       <li @click="deleteWidget()" class="list-group-item">Delete</li>
       <li class="list-group-item">
-        <input type="color" id="favcolor" name="favcolor" v-model="selectedStickyNoteColor" @change="changeColorOfStickyNote">Custom Color</li>
+        <input type="color" id="favcolor" name="favcolor" v-model="selectedStickyNoteColor" @change="changeColorOfStickyNoteWith(selectedStickyNoteColor)">Custom Color</li>
       <li class="list-group-item">
         <button type="button" class="btn btn-default btn-circle" style="background-color: #4CAF50;" @click="changeColorOfStickyNoteWith('#4CAF50')"></button>
         <button type="button" class="btn btn-default btn-circle" style="background-color: #41ABD8;" @click="changeColorOfStickyNoteWith('#41ABD8')"></button>
@@ -51,7 +51,6 @@ export default {
         left: '-1px'
       },
       selectedStickyNote: null,
-      oldPoint: null,
       ungroupTarget: {},
       selectedStickyNoteColor: '#000000',
       webSocket: null,
@@ -66,6 +65,7 @@ export default {
     this.boardContent = await GetBoardContent(this.boardId)
     this.initCanvas()
     this.loadAllStickyNote(this.boardContent.widgetDtos)
+    this.initEventListener()
     this.user = {
       name: `匿名北極熊${Math.floor((Math.random() * 100) + 1)}`,
       x: 0,
@@ -120,6 +120,7 @@ export default {
       if (e.button === 1) {
         me.isDisplayRightClickMenu = false
         if (target) {
+          me.setTarget(target)
           me.oldPoint = target.lineCoords
         }
       } else if (e.button === 3) { // 臭到不行
@@ -127,10 +128,10 @@ export default {
         const point = e.absolutePointer
         me.rightClickMenuStyle.top = point.y + 'px'
         me.rightClickMenuStyle.left = point.x + 'px'
-        me.setTargetId(target)
+        me.setTarget(target)
       } else {
         me.isDisplayRightClickMenu = false
-        me.setTargetId(null)
+        me.setTarget(null)
       }
     })
 
@@ -160,10 +161,6 @@ export default {
       const topLeftY = point.tl.y
       const bottomRightX = point.br.x
       const bottomRightY = point.br.y
-      // const newWidth = point.br.x - point.tl.x
-      // const oldWidth = me.oldPoint.br.x - me.oldPoint.tl.x
-      // const fontSize = parseInt(e.target.textObject.fontSize * newWidth / oldWidth)
-      // await e.target.textObject.set('fontSize', fontSize)
       await EditFontSizeOfStickyNoteBy(stickyNoteId, me.boardId, e.target.textObject.fontSize)
       await ResizeStickyNoteBy(stickyNoteId, me.boardId, {
         topLeftX: topLeftX,
@@ -191,40 +188,16 @@ export default {
       }
     },
     async loadAllStickyNote (widgets) {
-      await widgets.forEach(widget => {
-        this.canvas.add(
-          new fabric.StickyNote({
-            id: widget.widgetId,
-            left: widget.topLeftX,
-            top: widget.topLeftY,
-            height: widget.height,
-            width: widget.width,
-            fill: widget.color,
-            text: widget.text,
-            textColor: widget.textColor,
-            fontSize: widget.fontSize
-          })
-        )
-      })
+      await widgets.forEach(widget => { this.canvas.add(this.buildFabricObjectOfStickyNote(widget)) })
       this.canvas.renderAll()
     },
     async loadStickyNoteBy (id) {
       const stickyNote = await ReadStickyNoteBy(id, this.boardId)
-      await this.canvas.add(
-        new fabric.StickyNote({
-          id: id,
-          left: stickyNote.widgetDto.topLeftX,
-          top: stickyNote.widgetDto.topLeftY,
-          height: stickyNote.widgetDto.height,
-          width: stickyNote.widgetDto.width,
-          fill: stickyNote.widgetDto.color,
-          text: stickyNote.widgetDto.text,
-          textColor: stickyNote.widgetDto.textColor
-        })
-      )
+      console.log(stickyNote)
+      await this.canvas.add(this.buildFabricObjectOfStickyNote(stickyNote.widgetDto))
       this.canvas.renderAll()
     },
-    setTargetId (target) {
+    setTarget (target) {
       if (target !== null) {
         this.selectedStickyNote = target
       } else {
@@ -274,23 +247,33 @@ export default {
       }
       this.isDisplayRightClickMenu = false
     },
-    changeColorOfStickyNote () {
-      this.changeColorOfStickyNoteWith(this.selectedStickyNoteColor)
-    },
-    async bringToFront () { // TODO: 邏輯待改善
+    async bringToFront () {
       await this.canvas.bringToFront(this.selectedStickyNote)
-      const zOrder = this.canvas.getObjects().indexOf(this.selectedStickyNote)
+      const zOrder = this.getZOrderOf(this.selectedStickyNote)
       await ChangeZOrderOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, zOrder)
       this.isDisplayRightClickMenu = false
     },
     async sendToback () {
       await this.canvas.sendToBack(this.selectedStickyNote)
-      const zOrder = this.canvas.getObjects().indexOf(this.selectedStickyNote)
+      const zOrder = this.getZOrderOf(this.selectedStickyNote)
       await ChangeZOrderOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, zOrder)
       this.isDisplayRightClickMenu = false
     },
-    sortStickyNotesByZIndex (widgets) {
-      widgets.sort((a, b) => a.zIndex > b.zIndex)
+    buildFabricObjectOfStickyNote (widget) {
+      return new fabric.StickyNote({
+        id: widget.widgetId,
+        left: widget.topLeftX,
+        top: widget.topLeftY,
+        height: widget.height,
+        width: widget.width,
+        fill: widget.color,
+        text: widget.text,
+        textColor: widget.textColor,
+        fontSize: widget.fontSize
+      })
+    },
+    getZOrderOf (widget) {
+      return this.canvas.getObjects().indexOf(widget)
     }
   }
 }
