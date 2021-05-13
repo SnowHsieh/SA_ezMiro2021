@@ -26,9 +26,6 @@ public class CursorRepositoryImpl implements CursorRepository {
         return cursors.stream().filter(x -> x.getCursorId().equals(id)).findFirst();
     }
 
-    public Optional<Cursor> getCursorBySessionId(String sessionId){
-        return cursors.stream().filter(x -> x.getSessionId().equals(sessionId)).findFirst();
-    }
 
     @Override
     public List<Cursor> getCursorByBoardId(String boardId) {

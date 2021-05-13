@@ -3,21 +3,20 @@ package ntut.csie.sslab.kanban.entity.model.board;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 import ntut.csie.sslab.kanban.entity.model.board.event.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Board extends AggregateRoot<String> {
     String boardId;
     String boardName;
     List<CommittedFigure> committedFigures;
+    List<BoardSession> boardSessions;
 
     public Board(String boardId, String boardName) {
         super(boardId);
         this.boardId = boardId;
         this.boardName = boardName;
         this.committedFigures = new ArrayList<>();
+        this.boardSessions = new ArrayList<>();
 
         addDomainEvent(new BoardCreated(boardId));
     }
@@ -40,6 +39,10 @@ public class Board extends AggregateRoot<String> {
 
     public List<CommittedFigure> getCommittedFigures() {
         return committedFigures;
+    }
+
+    public List<BoardSession> getBoardSessions() {
+        return boardSessions;
     }
 
     public void commitFigure(String figureId) {
@@ -88,5 +91,12 @@ public class Board extends AggregateRoot<String> {
 
         committedFigures = result;
         addDomainEvent(new FigureUnCommitted(boardId, figureId));
+    }
+
+    public void addBoardSession(BoardSession boardSession) {
+        boardSessions.add(boardSession);
+        addDomainEvent(new BoardEntered(boardSession.getUserId(),
+                                        boardSession.getBoardId(),
+                                        boardSession.getBoardSessionId()));
     }
 }

@@ -8,19 +8,17 @@ import ntut.csie.sslab.kanban.entity.model.Coordinate;
 
 public class Cursor extends AggregateRoot<String> {
     private String boardId;
-    private String ip;
+    private String userId;
     private String cursorId;
-    private String sessionId;
     private Coordinate position;
 
-    public Cursor(String boardId, String cursorId, String ip, String sessionId) {
+    public Cursor(String userId, String boardId, String cursorId) {
         super(cursorId);
         this.boardId = boardId;
         this.cursorId = cursorId;
-        this.ip = ip;
+        this.userId = userId;
         this.position = new Coordinate(0,0);
-        this.sessionId = sessionId;
-        addDomainEvent(new CursorCreated(boardId, cursorId, ip, sessionId));
+        addDomainEvent(new CursorCreated(userId, boardId, cursorId));
     }
 
     public String getBoardId() {
@@ -31,12 +29,12 @@ public class Cursor extends AggregateRoot<String> {
         this.boardId = boardId;
     }
 
-    public String getIp() {
-        return ip;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getCursorId() {
@@ -49,14 +47,6 @@ public class Cursor extends AggregateRoot<String> {
 
     public Coordinate getPosition() {
         return position;
-    }
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
     }
 
     public void setPosition(Coordinate position) {

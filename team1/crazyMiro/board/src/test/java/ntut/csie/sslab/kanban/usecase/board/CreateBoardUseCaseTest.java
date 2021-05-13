@@ -33,6 +33,7 @@ public class CreateBoardUseCaseTest extends AbstractSpringBootJpaTest {
         Board board = boardRepository.findById(input.getBoardId()).get();
         assertEquals(boardId, board.getBoardId());
         assertEquals(boardName, board.getBoardName());
+        assertEquals(0, board.getBoardSessions().size());
         assertEquals(0, board.getCommittedFigures().size());
         assertEquals(1, eventListener.getEventCount());
     }

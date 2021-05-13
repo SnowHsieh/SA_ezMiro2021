@@ -3,8 +3,8 @@ package ntut.csie.sslab.kanban.entity.model.board;
 import ntut.csie.sslab.ddd.model.ValueObject;
 
 public class CommittedFigure extends ValueObject {
-    private String figureId;
-    private int zOrder;
+    private final String figureId;
+    private final int zOrder;
 
     public CommittedFigure(String figureId, int zOrder) {
         this.figureId = figureId;

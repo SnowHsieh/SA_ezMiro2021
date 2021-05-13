@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class BroadcastInjection {
+
     @Bean(name="boardSessionBroadcaster")
     public BoardSessionBroadcaster createBoardSessionBroadcaster() {
         return new WebSocketBroadcaster();

@@ -23,6 +23,9 @@ public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
     public void execute(MoveCursorInput input, CqrsCommandOutput output) {
         try{
             Cursor cursor = cursorRepository.findById(input.getCursorId()).get();
+            if(cursor.getPosition().equals(input.getPosition()))
+                return;
+
             cursor.setPosition(input.getPosition());
 
             cursorRepository.save(cursor);
