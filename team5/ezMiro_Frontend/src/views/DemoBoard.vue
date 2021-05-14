@@ -286,6 +286,8 @@ export default {
                     newFontSize = maxFontSize
                 }
                 newFontSize -= scale
+
+                textBox.set({ fontSize: newFontSize })
             }
 
             textBox.set({ fontSize: newFontSize })
