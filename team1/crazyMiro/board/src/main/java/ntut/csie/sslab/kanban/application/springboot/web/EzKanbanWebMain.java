@@ -4,10 +4,12 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.kanban.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
+import ntut.csie.sslab.kanban.adapter.gateway.eventbus.google.NotifyCursorAdapter;
 import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
 import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardInput;
 import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardUseCase;
 import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.eventhandler.NotifyBoardSessionBroadcaster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,7 +28,8 @@ public class EzKanbanWebMain extends SpringBootServletInitializer implements Com
 
     private DomainEventBus domainEventBus;
     private NotifyBoardAdapter notifyBoardAdapter;
-//    private NotifyWorkflowAdapter notifyWorkflowAdapter;
+    private NotifyCursorAdapter notifyCursorAdapter;
+    private NotifyBoardSessionBroadcaster notifyBoardSessionBroadcaster;
     private BoardRepository boardRepository;
 
 
@@ -38,6 +41,15 @@ public class EzKanbanWebMain extends SpringBootServletInitializer implements Com
     @Autowired
     public void setNotifyBoardAdapter(NotifyBoardAdapter notifyBoardAdapter) { this.notifyBoardAdapter = notifyBoardAdapter; }
 
+    @Autowired
+    public void setNotifyCursorAdapter(NotifyCursorAdapter notifyCursorAdapter) {
+        this.notifyCursorAdapter = notifyCursorAdapter;
+    }
+
+    @Autowired
+    public void setNotifyBoardSessionBroadcaster(NotifyBoardSessionBroadcaster notifyBoardSessionBroadcaster) {
+        this.notifyBoardSessionBroadcaster = notifyBoardSessionBroadcaster;
+    }
 
     @Autowired
     public void setBoardRepository(BoardRepository boardRepository) {
@@ -58,6 +70,8 @@ public class EzKanbanWebMain extends SpringBootServletInitializer implements Com
     public void run(String... arg0) throws Exception {
         System.out.println("EzKanbanWebMain run");
         domainEventBus.register(notifyBoardAdapter);
+        domainEventBus.register(notifyCursorAdapter);
+        domainEventBus.register(notifyBoardSessionBroadcaster);
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCaseImpl(boardRepository, domainEventBus);
         CreateBoardInput input = createBoardUseCase.newInput();
         CqrsCommandOutput output = CqrsCommandPresenter.newInstance();

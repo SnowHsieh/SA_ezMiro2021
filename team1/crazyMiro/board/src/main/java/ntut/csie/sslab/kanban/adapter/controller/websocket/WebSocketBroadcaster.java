@@ -38,8 +38,8 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
         this.sessionMap.put(boardSessionId, session);
     }
 
-    public void removeSession(String cursorId) {
-        sessionMap.remove(cursorId);
+    public void removeSession(String boardSessionId) {
+        sessionMap.remove(boardSessionId);
     }
 
     public String getBoardSessionIdBySessionId(String sessionId){

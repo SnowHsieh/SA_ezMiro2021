@@ -19,7 +19,7 @@ public class NotifyBoard {
         this.domainEventBus = domainEventBus;
     }
 
-    public void whenStickerCreated(StickerCreated stickerCreated) {
+    public void handleStickerCreated(StickerCreated stickerCreated) {
         Optional<Board> board = boardRepository.findById(stickerCreated.getBoardId());
         if (!board.isPresent())
             throw new RuntimeException("Board not found, board id = " + stickerCreated.getBoardId());
@@ -29,7 +29,7 @@ public class NotifyBoard {
         domainEventBus.postAll(board.get());
     }
 
-    public void whenStickerDeleted(StickerDeleted stickerDeleted) {
+    public void handleStickerDeleted(StickerDeleted stickerDeleted) {
         Optional<Board> board = boardRepository.findById(stickerDeleted.getBoardId());
         if (!board.isPresent())
             throw new RuntimeException("Board not found, board id = " + stickerDeleted.getBoardId());
