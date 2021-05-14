@@ -38,16 +38,16 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         changeFigureZOrderInput.setZOrderType(ZOrderType.BRING_FORWARD);
 
         Board board = boardRepository.findById(boardId).get();
-        assertEquals(0, board.getCommittedFigures().get(0).getZOrder());
-        assertEquals(1, board.getCommittedFigures().get(1).getZOrder());
+        assertEquals(0, board.getCommittedFigures().get(0).zOrder());
+        assertEquals(1, board.getCommittedFigures().get(1).zOrder());
 
         changeFigureZOrderUseCase.execute(changeFigureZOrderInput, changeFigureOrderOutput);
         assertNotNull(changeFigureOrderOutput.getId());
         assertEquals(ExitCode.SUCCESS, changeFigureOrderOutput.getExitCode());
 
         board = boardRepository.findById(changeFigureOrderOutput.getId()).get();
-        assertEquals(0, board.getCommittedFigures().get(0).getZOrder());
-        assertEquals(1, board.getCommittedFigures().get(1).getZOrder());
+        assertEquals(0, board.getCommittedFigures().get(0).zOrder());
+        assertEquals(1, board.getCommittedFigures().get(1).zOrder());
     }
 
     @Test
@@ -65,16 +65,16 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         changeFigureZOrderInput.setZOrderType(ZOrderType.SEND_BACKWARDS);
 
         Board board = boardRepository.findById(boardId).get();
-        assertEquals(0, board.getCommittedFigures().get(0).getZOrder());
-        assertEquals(1, board.getCommittedFigures().get(1).getZOrder());
+        assertEquals(0, board.getCommittedFigures().get(0).zOrder());
+        assertEquals(1, board.getCommittedFigures().get(1).zOrder());
 
         changeFigureZOrderUseCase.execute(changeFigureZOrderInput, changeFigureOrderOutput);
         assertNotNull(changeFigureOrderOutput.getId());
         assertEquals(ExitCode.SUCCESS, changeFigureOrderOutput.getExitCode());
 
         board = boardRepository.findById(changeFigureOrderOutput.getId()).get();
-        assertEquals(0, board.getCommittedFigures().get(0).getZOrder());
-        assertEquals(1, board.getCommittedFigures().get(1).getZOrder());
+        assertEquals(0, board.getCommittedFigures().get(0).zOrder());
+        assertEquals(1, board.getCommittedFigures().get(1).zOrder());
     }
 
     @Test
@@ -93,18 +93,18 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         changeFigureZOrderInput.setZOrderType(ZOrderType.BRING_TO_FRONT);
 
         Board board = boardRepository.findById(boardId).get();
-        assertEquals(0, board.getCommittedFigures().get(0).getZOrder());
-        assertEquals(1, board.getCommittedFigures().get(1).getZOrder());
-        assertEquals(2, board.getCommittedFigures().get(2).getZOrder());
+        assertEquals(0, board.getCommittedFigures().get(0).zOrder());
+        assertEquals(1, board.getCommittedFigures().get(1).zOrder());
+        assertEquals(2, board.getCommittedFigures().get(2).zOrder());
 
         changeFigureZOrderUseCase.execute(changeFigureZOrderInput, changeFigureOrderOutput);
         assertNotNull(changeFigureOrderOutput.getId());
         assertEquals(ExitCode.SUCCESS, changeFigureOrderOutput.getExitCode());
 
         board = boardRepository.findById(changeFigureOrderOutput.getId()).get();
-        assertEquals(0, board.getCommittedFigures().get(0).getZOrder());
-        assertEquals(1, board.getCommittedFigures().get(1).getZOrder());
-        assertEquals(2, board.getCommittedFigures().get(2).getZOrder());
+        assertEquals(0, board.getCommittedFigures().get(0).zOrder());
+        assertEquals(1, board.getCommittedFigures().get(1).zOrder());
+        assertEquals(2, board.getCommittedFigures().get(2).zOrder());
     }
 
     @Test
@@ -123,17 +123,17 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         changeFigureZOrderInput.setZOrderType(ZOrderType.SEND_TO_BACK);
 
         Board board = boardRepository.findById(boardId).get();
-        assertEquals(0, board.getCommittedFigures().get(0).getZOrder());
-        assertEquals(1, board.getCommittedFigures().get(1).getZOrder());
-        assertEquals(2, board.getCommittedFigures().get(2).getZOrder());
+        assertEquals(0, board.getCommittedFigures().get(0).zOrder());
+        assertEquals(1, board.getCommittedFigures().get(1).zOrder());
+        assertEquals(2, board.getCommittedFigures().get(2).zOrder());
 
         changeFigureZOrderUseCase.execute(changeFigureZOrderInput, changeFigureOrderOutput);
         assertNotNull(changeFigureOrderOutput.getId());
         assertEquals(ExitCode.SUCCESS, changeFigureOrderOutput.getExitCode());
 
         board = boardRepository.findById(changeFigureOrderOutput.getId()).get();
-        assertEquals(0, board.getCommittedFigures().get(0).getZOrder());
-        assertEquals(1, board.getCommittedFigures().get(1).getZOrder());
-        assertEquals(2, board.getCommittedFigures().get(2).getZOrder());
+        assertEquals(0, board.getCommittedFigures().get(0).zOrder());
+        assertEquals(1, board.getCommittedFigures().get(1).zOrder());
+        assertEquals(2, board.getCommittedFigures().get(2).zOrder());
     }
 }

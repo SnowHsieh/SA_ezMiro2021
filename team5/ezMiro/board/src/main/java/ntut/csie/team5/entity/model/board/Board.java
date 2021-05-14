@@ -1,10 +1,7 @@
 package ntut.csie.team5.entity.model.board;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
-import ntut.csie.team5.entity.model.board.event.BoardCreated;
-import ntut.csie.team5.entity.model.board.event.FigureCommitted;
-import ntut.csie.team5.entity.model.board.event.FigureUncommitted;
-import ntut.csie.team5.entity.model.board.event.FigureZOrderChanged;
+import ntut.csie.team5.entity.model.board.event.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +11,16 @@ public class Board extends AggregateRoot<String> {
     private String name;
     private String projectId;
     private final List<CommittedFigure> committedFigures;
+    private final List<BoardSession> boardSessions;
+    private final List<Cursor> cursors;
 
     public Board(String boardId, String name, String projectId) {
         super(boardId);
         this.name = name;
         this.projectId = projectId;
         this.committedFigures = new ArrayList<>();
+        this.boardSessions = new ArrayList<>();
+        this.cursors = new ArrayList<>();
 
         addDomainEvent(new BoardCreated(boardId, name, projectId));
     }
@@ -45,28 +46,20 @@ public class Board extends AggregateRoot<String> {
     }
 
     public void commitFigure(String figureId) {
-        addFigure(figureId);
+        committedFigures.add(new CommittedFigure(figureId, getBoardId(), committedFigures.size()));
 
         addDomainEvent(new FigureCommitted(figureId, getBoardId()));
     }
 
-    public void addFigure(String figureId) {
-        committedFigures.add(new CommittedFigure(figureId, getBoardId(), committedFigures.size()));
-    }
-
     public void uncommitFigure(String figureId) {
-        removeFigure(figureId);
-
-        addDomainEvent(new FigureUncommitted(figureId, getBoardId()));
-    }
-
-    public void removeFigure(String figureId) {
         for(int i = 0; i < committedFigures.size(); i++){
-            if(committedFigures.get(i).getFigureId().equals(figureId)) {
+            if(committedFigures.get(i).figureId().equals(figureId)) {
                 committedFigures.remove(i);
                 break;
             }
         }
+
+        addDomainEvent(new FigureUncommitted(figureId, getBoardId()));
     }
 
     public List<CommittedFigure> getCommittedFigures() {
@@ -93,80 +86,126 @@ public class Board extends AggregateRoot<String> {
     }
 
     public void bringFigureForward(String figureId) {
-        CommittedFigure committedFigure = committedFigures.stream().filter(cf ->  cf.getFigureId().equals(figureId)).findAny().orElse(null);
+        CommittedFigure committedFigure = committedFigures.stream().filter(cf ->  cf.figureId().equals(figureId)).findAny().orElse(null);
 
         if(committedFigure == null)
             return;
 
-        int zOrder = committedFigure.getZOrder();
+        int zOrder = committedFigure.zOrder();
 
-        CommittedFigure nextCommittedFigure = committedFigures.stream().filter(cf ->  cf.getZOrder() == (zOrder + 1)).findAny().orElse(null);
+        CommittedFigure nextCommittedFigure = committedFigures.stream().filter(cf ->  cf.zOrder() == (zOrder + 1)).findAny().orElse(null);
 
         if(nextCommittedFigure == null)
             return;
 
-        committedFigures.set(zOrder, new CommittedFigure(nextCommittedFigure.getFigureId(), nextCommittedFigure.getBoardId(), zOrder));
-        committedFigures.set(zOrder + 1, new CommittedFigure(committedFigure.getFigureId(), committedFigure.getBoardId(), zOrder + 1));
+        committedFigures.set(zOrder, new CommittedFigure(nextCommittedFigure.figureId(), nextCommittedFigure.boardId(), zOrder));
+        committedFigures.set(zOrder + 1, new CommittedFigure(committedFigure.figureId(), committedFigure.boardId(), zOrder + 1));
     }
 
     public void sendFigureBackwards(String figureId) {
-        CommittedFigure committedFigure = committedFigures.stream().filter(cf ->  cf.getFigureId().equals(figureId)).findAny().orElse(null);
+        CommittedFigure committedFigure = committedFigures.stream().filter(cf ->  cf.figureId().equals(figureId)).findAny().orElse(null);
 
         if(committedFigure == null)
             return;
 
-        int zOrder = committedFigure.getZOrder();
+        int zOrder = committedFigure.zOrder();
 
-        CommittedFigure previousCommittedFigure = committedFigures.stream().filter(cf ->  cf.getZOrder() == (zOrder - 1)).findAny().orElse(null);
+        CommittedFigure previousCommittedFigure = committedFigures.stream().filter(cf ->  cf.zOrder() == (zOrder - 1)).findAny().orElse(null);
 
         if(previousCommittedFigure == null)
             return;
 
-        committedFigures.set(zOrder, new CommittedFigure(previousCommittedFigure.getFigureId(), previousCommittedFigure.getBoardId(), zOrder));
-        committedFigures.set(zOrder - 1, new CommittedFigure(committedFigure.getFigureId(), committedFigure.getBoardId(), zOrder - 1));
+        committedFigures.set(zOrder, new CommittedFigure(previousCommittedFigure.figureId(), previousCommittedFigure.boardId(), zOrder));
+        committedFigures.set(zOrder - 1, new CommittedFigure(committedFigure.figureId(), committedFigure.boardId(), zOrder - 1));
     }
 
     public void bringFigureToFront(String figureId) {
-        CommittedFigure committedFigure = committedFigures.stream().filter(cf ->  cf.getFigureId().equals(figureId)).findAny().orElse(null);
+        CommittedFigure committedFigure = committedFigures.stream().filter(cf ->  cf.figureId().equals(figureId)).findAny().orElse(null);
 
         if(committedFigure == null)
             return;
 
-        int order = committedFigure.getZOrder();
+        int order = committedFigure.zOrder();
 
         for (int i = order; i < committedFigures.size(); i++)
         {
             int nextZOrder = i;
-            CommittedFigure nextCommittedFigure = committedFigures.stream().filter(cf ->  cf.getZOrder() == (nextZOrder + 1)).findAny().orElse(null);
+            CommittedFigure nextCommittedFigure = committedFigures.stream().filter(cf ->  cf.zOrder() == (nextZOrder + 1)).findAny().orElse(null);
 
             if(nextCommittedFigure == null) {
-                committedFigures.set(committedFigures.size() - 1, new CommittedFigure(committedFigure.getFigureId(), committedFigure.getBoardId(), committedFigures.size() - 1));
+                committedFigures.set(committedFigures.size() - 1, new CommittedFigure(committedFigure.figureId(), committedFigure.boardId(), committedFigures.size() - 1));
                 return;
             }
 
-            committedFigures.set(nextZOrder, new CommittedFigure(nextCommittedFigure.getFigureId(), nextCommittedFigure.getBoardId(), nextZOrder));
+            committedFigures.set(nextZOrder, new CommittedFigure(nextCommittedFigure.figureId(), nextCommittedFigure.boardId(), nextZOrder));
         }
     }
 
     public void sendFigureToBack(String figureId) {
-        CommittedFigure committedFigure = committedFigures.stream().filter(cf ->  cf.getFigureId().equals(figureId)).findAny().orElse(null);
+        CommittedFigure committedFigure = committedFigures.stream().filter(cf ->  cf.figureId().equals(figureId)).findAny().orElse(null);
 
         if(committedFigure == null)
             return;
 
-        int order = committedFigure.getZOrder();
+        int order = committedFigure.zOrder();
 
         for (int i = order; i >= 0; i--)
         {
             int previousZOrder = i;
-            CommittedFigure previousCommittedFigure = committedFigures.stream().filter(cf ->  cf.getZOrder() == (previousZOrder - 1)).findAny().orElse(null);
+            CommittedFigure previousCommittedFigure = committedFigures.stream().filter(cf ->  cf.zOrder() == (previousZOrder - 1)).findAny().orElse(null);
 
             if(previousCommittedFigure == null) {
-                committedFigures.set(0, new CommittedFigure(committedFigure.getFigureId(), committedFigure.getBoardId(), 0));
+                committedFigures.set(0, new CommittedFigure(committedFigure.figureId(), committedFigure.boardId(), 0));
                 return;
             }
 
-            committedFigures.set(previousZOrder, new CommittedFigure(previousCommittedFigure.getFigureId(), previousCommittedFigure.getBoardId(), previousZOrder));
+            committedFigures.set(previousZOrder, new CommittedFigure(previousCommittedFigure.figureId(), previousCommittedFigure.boardId(), previousZOrder));
         }
+    }
+
+    public void acceptUserEntry(BoardSessionId boardSessionId, String userId) {
+        BoardSession boardSession = new BoardSession(getBoardId(), userId, boardSessionId);
+        boardSessions.add(boardSession);
+        createCursor(userId);
+
+        addDomainEvent(new BoardEntered(boardSession.boardId(), boardSession.userId(), boardSession.boardSessionId()));
+    }
+
+    public void acceptUserLeaving(BoardSessionId boardSessionId, String userId) {
+        for(int i = 0; i < boardSessions.size(); i++){
+            if(boardSessions.get(i).boardSessionId().equals(boardSessionId)) {
+                boardSessions.remove(i);
+                break;
+            }
+        }
+        deleteCursor(userId);
+
+        addDomainEvent(new BoardLeft(getBoardId(), boardSessionId, userId));
+    }
+
+    public List<BoardSession> getBoardSessions() {
+        return boardSessions;
+    }
+
+    private void createCursor(String userId) {
+        Cursor cursor = new Cursor(userId, 0, 0);
+        cursors.add(cursor);
+
+        addDomainEvent(new CursorCreated(getBoardId(), userId));
+    }
+
+    private void deleteCursor(String userId) {
+        for(int i = 0; i < cursors.size(); i++){
+            if(cursors.get(i).userId().equals(userId)) {
+                cursors.remove(i);
+                break;
+            }
+        }
+
+        addDomainEvent(new CursorDeleted(getBoardId(), userId));
+    }
+
+    public List<Cursor> getCursors() {
+        return cursors;
     }
 }

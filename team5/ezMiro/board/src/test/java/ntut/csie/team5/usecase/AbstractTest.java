@@ -36,6 +36,7 @@ public abstract class AbstractTest {
     public String teamId;
     public String projectId;
     public String projectName;
+    public String userId;
     public String boardId;
     public String boardName;
     public Point defaultLeftTopPosition;
@@ -55,6 +56,7 @@ public abstract class AbstractTest {
         teamId = UUID.randomUUID().toString();
         projectId = UUID.randomUUID().toString();
         projectName = "ezmiro project";
+        userId = UUID.randomUUID().toString();
         boardId = UUID.randomUUID().toString();
         boardName = "ezmiro board";
         defaultLeftTopPosition = new Point(0,0);
