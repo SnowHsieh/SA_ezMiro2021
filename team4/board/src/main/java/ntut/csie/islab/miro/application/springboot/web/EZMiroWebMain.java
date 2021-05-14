@@ -10,7 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @ComponentScan(basePackages = {"ntut.csie.islab.miro"})
 @EntityScan(basePackages = {"ntut.csie.islab.miro.adapter"})
@@ -19,6 +22,7 @@ import org.springframework.context.annotation.ComponentScan;
         org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class
 })
 
+@EnableWebSocket
 public class EZMiroWebMain extends SpringBootServletInitializer implements CommandLineRunner {
     private NotifyBoardAdapter notifyBoardAdapter;
     private DomainEventBus domainEventBus;
@@ -46,6 +50,10 @@ public class EZMiroWebMain extends SpringBootServletInitializer implements Comma
     public void run(String... args) throws Exception {
         System.out.println("Team4 EZMiroWebMain run");
         domainEventBus.register(notifyBoardAdapter);
+    }
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter() {
+        return new ServerEndpointExporter();
     }
 
 }

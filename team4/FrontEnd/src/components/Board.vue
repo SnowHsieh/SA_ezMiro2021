@@ -41,7 +41,7 @@
 
 <script>
 import { fabric } from 'fabric'
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 import axios from 'axios'
 export default {
 
@@ -64,11 +64,18 @@ export default {
       socketLoaded: null,
       userCursorList: [],
       myUserId: '你沒ip QQ',
-      hostIp: '140.124.181.9'
+      hostIp: '140.124.181.2'
     }
   },
   created () {
-    this.socket = io('http://' + this.hostIp + ':4040', { transports: ['websocket'] })
+    this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/')
+    this.socket.onopen = (e) => {
+      console.log(e)
+      console.log('WebSocket connected.')
+    }
+    this.socket.onmessage = function (event) {
+      console.debug('WebSocket message received:', event)
+    }
   },
   async mounted () {
     this.boardContent = this.getBoardContent()
@@ -81,6 +88,7 @@ export default {
     this.bringForwardButton = document.getElementById('bringForwardButton')
     this.sendBackwardButton = document.getElementById('sendBackwardButton')
     this.sendToBackButton = document.getElementById('sendToBackButton')
+
     this.socket.once('getAllUserCursors', data => {
       this.myUserId = JSON.parse(data).id
       this.userCursorList = JSON.parse(data).userCursorMap
