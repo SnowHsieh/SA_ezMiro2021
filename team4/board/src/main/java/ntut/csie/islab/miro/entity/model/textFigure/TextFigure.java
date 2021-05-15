@@ -1,6 +1,7 @@
 package ntut.csie.islab.miro.entity.model.textFigure;
 
 
+import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 
 import java.util.UUID;

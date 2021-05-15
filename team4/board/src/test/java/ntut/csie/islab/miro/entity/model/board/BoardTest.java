@@ -26,4 +26,10 @@ class BoardTest {
         assertEquals(figureId, board.getCommittedFigures().get(0).getFigureId());
     }
 
+    @Test
+    public  void get_cursor_list(){
+        Board board = createBoard();
+        assertEquals(0, board.getCursorList().size());
+
+    }
 }

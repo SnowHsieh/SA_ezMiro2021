@@ -1,14 +1,13 @@
 package ntut.csie.islab.miro.entity.model.board;
 
-import ntut.csie.islab.miro.entity.model.board.event.BoardCreatedDomainEvent;
-import ntut.csie.islab.miro.entity.model.board.event.FigureChangedDomainEvent;
-import ntut.csie.islab.miro.entity.model.board.event.FigureCommittedDomainEvent;
-import ntut.csie.islab.miro.entity.model.board.event.FigureUncommittedDomainEvent;
-import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
+import ntut.csie.islab.miro.entity.model.board.cursor.Cursor;
+import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorCreatedDomainEvent;
+import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorDeletedDomainEvent;
+import ntut.csie.islab.miro.entity.model.board.event.*;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,12 +19,16 @@ public class Board extends AggregateRoot<UUID> {
     private UUID teamId;
     private String boardName;
     private List<CommittedFigure> figureList;
+    private List<Cursor> cursorList;
+    private List<BoardSession> boardSessionList;
 
     public Board(UUID teamId,String boardName){
         super(UUID.randomUUID());
         this.teamId = teamId;
         this.boardName = boardName;
         this.figureList = new ArrayList<CommittedFigure>();
+        this.cursorList = new ArrayList<Cursor>();
+        this.boardSessionList = new ArrayList<BoardSession>();
         addDomainEvent(new BoardCreatedDomainEvent(teamId, getBoardId()));
 
     }
@@ -35,6 +38,8 @@ public class Board extends AggregateRoot<UUID> {
         this.teamId = teamId;
         this.boardName = boardName;
         this.figureList = new ArrayList<CommittedFigure>();
+        this.cursorList = new ArrayList<Cursor>();
+        this.boardSessionList = new ArrayList<BoardSession>();
         addDomainEvent(new BoardCreatedDomainEvent(teamId, getBoardId()));
 
     }
@@ -102,4 +107,51 @@ public class Board extends AggregateRoot<UUID> {
         addDomainEvent(new FigureChangedDomainEvent(this.getBoardId(), this.figureList));
 
     }
+
+
+
+    public List<BoardSession> getBoardSessionList() {
+        return boardSessionList;
+    }
+
+    public List<Cursor> getCursorList() {
+        return  cursorList;
+    }
+
+    private void createCursor(UUID userId) {
+        Cursor cursor = new Cursor(userId, this.getBoardId());
+        cursorList.add(cursor);
+
+        addDomainEvent(new CursorCreatedDomainEvent(getBoardId(), userId));
+    }
+    private void deleteCursor(UUID userId) {
+        for(int i = 0; i < cursorList.size(); i++){
+            if(cursorList.get(i).getUserId().equals(userId)) {
+                cursorList.remove(i);
+                break;
+            }
+        }
+
+        addDomainEvent(new CursorDeletedDomainEvent(getBoardId(), userId));
+    }
+
+    public void acceptUserEntry(BoardSessionId boardSessionId, UUID userId) {
+        BoardSession boardSession = new BoardSession(getBoardId(), userId, boardSessionId);
+        boardSessionList.add(boardSession);
+        createCursor(userId);
+
+        addDomainEvent(new BoardEnteredDomainEvent(boardSession.boardId(), boardSession.userId(), boardSession.boardSessionId()));
+    }
+
+    public void acceptUserLeaving(BoardSessionId boardSessionId, UUID userId) {
+        for(int i = 0; i < boardSessionList.size(); i++){
+            if(boardSessionList.get(i).boardSessionId().equals(boardSessionId)) {
+                boardSessionList.remove(i);
+                break;
+            }
+        }
+        deleteCursor(userId);
+        addDomainEvent(new BoardLeftDomainEvent(getBoardId(),userId,boardSessionId));
+    }
+
 }

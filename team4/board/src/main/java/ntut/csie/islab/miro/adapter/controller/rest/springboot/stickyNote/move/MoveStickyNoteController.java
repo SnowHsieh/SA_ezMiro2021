@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.adapter.controller.rest.springboot.stickyNote.move;
 
-import ntut.csie.islab.miro.entity.model.textFigure.Position;
+import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.MoveStickyNoteInput;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.MoveStickyNoteUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;

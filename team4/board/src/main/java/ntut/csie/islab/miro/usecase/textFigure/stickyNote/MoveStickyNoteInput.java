@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.usecase.textFigure.stickyNote;
 
-import ntut.csie.islab.miro.entity.model.textFigure.Position;
+import ntut.csie.islab.miro.entity.model.Position;
 
 import java.util.UUID;
 

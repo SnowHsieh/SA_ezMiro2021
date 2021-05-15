@@ -15,7 +15,6 @@ public class BoardDomainEventTest {
     public void create_a_board_then_publishes_a_board_created_domain_event(){
         Board board = createBoard();
         assertEquals(1,board.getDomainEvents().size());
-
     }
     @Test
     public void commit_a_figure_then_publishes_a_figure_committed_domain_event() {
@@ -30,4 +29,4 @@ public class BoardDomainEventTest {
     }
 
 
-    }
+}

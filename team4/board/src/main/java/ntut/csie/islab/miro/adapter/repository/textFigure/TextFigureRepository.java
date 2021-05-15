@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.adapter.repository.textFigure;
 
-import ntut.csie.islab.miro.entity.model.textFigure.Position;
+import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
 import ntut.csie.islab.miro.entity.model.textFigure.Style;
 import java.util.*;

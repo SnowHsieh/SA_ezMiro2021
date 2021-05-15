@@ -1,7 +1,7 @@
 package ntut.csie.islab.miro.entity.model.stickyNote;
 
 import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
-import ntut.csie.islab.miro.entity.model.textFigure.Position;
+import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
 import ntut.csie.islab.miro.entity.model.textFigure.Style;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.StickyNote;

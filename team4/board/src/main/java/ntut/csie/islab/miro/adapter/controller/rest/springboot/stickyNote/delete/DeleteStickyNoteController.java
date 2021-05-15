@@ -1,6 +1,5 @@
 package ntut.csie.islab.miro.adapter.controller.rest.springboot.stickyNote.delete;
 
-import ntut.csie.islab.miro.entity.model.textFigure.Position;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.DeleteStickyNoteInput;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.DeleteStickyNoteUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;

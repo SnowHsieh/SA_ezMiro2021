@@ -1,6 +1,7 @@
 package ntut.csie.islab.miro.usecase.scenario;
 
 import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.textFigure.*;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.*;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
