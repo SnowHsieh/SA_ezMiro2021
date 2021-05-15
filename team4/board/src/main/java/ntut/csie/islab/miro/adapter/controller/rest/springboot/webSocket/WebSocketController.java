@@ -31,12 +31,8 @@ public class WebSocketController {
 
     @OnMessage
     public void onMessage(@PathParam(value = "usernick") String userNick,String message, Session session) throws JSONException {
-        String info = "成員[" + userNick + "]: " + message;
         WebSocketUtil.setCursorOfUser(session, message);
-        //WebSocketUtil.sendMessageToAllUser();
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("msg",info);
-        WebSocketUtil.sendMessageForAll(jsonObject.toString());
+        WebSocketUtil.sendMessageToAllUser();
     }
 
     @OnError

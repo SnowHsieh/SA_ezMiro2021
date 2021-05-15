@@ -1,11 +1,10 @@
-package ntut.csie.islab.miro.usecase.board.cursor;
+package ntut.csie.islab.miro.usecase.board;
 
 import java.util.UUID;
 
-public class LeaveBoardInput {
+public class EnterBoardInput {
     private UUID boardId;
     private UUID userId;
-    private String boardSessionId;
 
     public UUID getBoardId() {
         return boardId;
@@ -21,13 +20,5 @@ public class LeaveBoardInput {
 
     public void setUserId(UUID userId) {
         this.userId = userId;
-    }
-
-    public String getBoardSessionId() {
-        return boardSessionId;
-    }
-
-    public void setBoardSessionId(String boardSessionId) {
-        this.boardSessionId = boardSessionId;
     }
 }
