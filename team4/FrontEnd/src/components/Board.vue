@@ -4,6 +4,8 @@
         <div>
           <div>
             <button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
+            <input v-model="myUserId" placeholder="input userName">
+            <button id="sendUserName" @click="socketInit()">sendUserName</button>
             <canvas id="canvas" ref='board' >
             </canvas>
           </div>
@@ -63,19 +65,14 @@ export default {
       socket: null,
       socketLoaded: null,
       userCursorList: [],
-      myUserId: '你沒ip QQ',
+      myUserId: 'QQ',
       hostIp: '140.124.181.2'
     }
   },
   created () {
-    this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/')
-    this.socket.onopen = (e) => {
-      console.log(e)
-      console.log('WebSocket connected.')
-    }
-    this.socket.onmessage = function (event) {
-      console.debug('WebSocket message received:', event)
-    }
+  },
+  destroyed: function () { // 离开页面生命周期函数
+    this.websocketclose()
   },
   async mounted () {
     this.boardContent = this.getBoardContent()
@@ -89,20 +86,20 @@ export default {
     this.sendBackwardButton = document.getElementById('sendBackwardButton')
     this.sendToBackButton = document.getElementById('sendToBackButton')
 
-    this.socket.once('getAllUserCursors', data => {
-      this.myUserId = JSON.parse(data).id
-      this.userCursorList = JSON.parse(data).userCursorMap
-      this.drawAllUserCursors()
-    })
-    this.socket.on('userJoin', data => {
-      this.addUserCursor(data)
-    })
-    this.socket.on('userCursorUpdate', data => {
-      this.updateUserCursor(data)
-    })
-    this.socket.on('userLeft', userId => {
-      this.delUserCursor(userId)
-    })
+    // this.socket.once('getAllUserCursors', data => {
+    //   this.myUserId = JSON.parse(data).id
+    //   this.userCursorList = JSON.parse(data).userCursorMap
+    //   this.drawAllUserCursors()
+    // })
+    // this.socket.on('userJoin', data => {
+    //   this.addUserCursor(data)
+    // })
+    // this.socket.on('userCursorUpdate', data => {
+    //   this.updateUserCursor(data)
+    // })
+    // this.socket.on('userLeft', userId => {
+    //   this.delUserCursor(userId)
+    // })
     this.listenEventsOnCanvas()
     // this.timer = setInterval(this.refreshCanvas, 10000)
   },
@@ -301,7 +298,8 @@ export default {
                 y: mouse.y
               }
             }
-            _this.socket.emit('mouse-moved', data)
+            _this.sendMessage(JSON.stringify(data))
+            // _this.socket.emit('mouse-moved', data)
           },
           'mouse:dblclick': function (e) {
             if (e.target != null) {
@@ -510,6 +508,30 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    websocketonopen: function () {
+      console.log('WebSocket连接成功')
+    },
+    websocketonerror: function () {
+      console.log('WebSocket连接发生错误')
+    },
+    websocketonmessage: function (e) {
+      console.log('收到來自後端的訊息=')
+      console.log(JSON.parse(e.data)) // console.log(e);
+    },
+    websocketclose: function (e) {
+      console.log('connection closed ()', e.data)
+    },
+    socketInit () {
+      this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/' + this.myUserId + '/')
+      this.socket.onopen = this.websocketonopen
+      this.socket.onerror = this.websocketonerror
+      this.socket.onmessage = this.websocketonmessage
+      this.socket.onclose = this.websocketclose
+    },
+    sendMessage: function (data) {
+      console.log('sendMsg:', data)
+      this.socket.send(data)
     }
   }
 
