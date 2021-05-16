@@ -28,7 +28,7 @@ public class CursorRepositoryImpl implements CursorRepository {
 
 
     @Override
-    public List<Cursor> getCursorByBoardId(String boardId) {
+    public List<Cursor> getCursorsByBoardId(String boardId) {
         return cursors.stream().filter(x -> x.getBoardId().equals(boardId)).collect(Collectors.toList());
     }
 

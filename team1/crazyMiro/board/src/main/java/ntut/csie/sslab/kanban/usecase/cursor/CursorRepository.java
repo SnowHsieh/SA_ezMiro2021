@@ -9,5 +9,6 @@ import java.util.Optional;
 
 public interface CursorRepository extends AbstractRepository<Cursor, String> {
 
-    List<Cursor> getCursorByBoardId(String boardId);
+    List<Cursor> getCursorsByBoardId(String boardId);
+
 }

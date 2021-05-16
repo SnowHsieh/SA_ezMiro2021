@@ -92,7 +92,7 @@ public class BoardSessionWebSocketAdapter {
 
     @OnClose
     public void onClose(Session session) {
-
+        String boardSessionId = ((WebSocketBroadcaster)boardSessionBroadcaster).getBoardSessionIdBySessionId(session.getId());
         ((WebSocketBroadcaster)boardSessionBroadcaster).removeSession(session.getId());
     }
 

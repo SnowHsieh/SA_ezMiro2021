@@ -99,4 +99,10 @@ public class Board extends AggregateRoot<String> {
                                         boardSession.getBoardId(),
                                         boardSession.getBoardSessionId()));
     }
+
+    public void removeBoardSession(String boardSessionId) {
+        BoardSession boardSession = boardSessions.stream().filter(x->x.getBoardSessionId().equals(boardSessionId)).findFirst().get();
+        boardSessions.removeIf(x->x.getBoardSessionId().equals(boardSessionId));
+        addDomainEvent(new BoardLeft(boardSession.getUserId(), boardId, boardSessionId));
+    }
 }

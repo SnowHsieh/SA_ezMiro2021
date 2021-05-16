@@ -86,6 +86,9 @@ import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
 import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardInput;
 import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardUseCase;
 import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.board.enter.EnterBoardInput;
+import ntut.csie.sslab.kanban.usecase.board.enter.EnterBoardUseCase;
+import ntut.csie.sslab.kanban.usecase.board.enter.EnterBoardUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
 import ntut.csie.sslab.kanban.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.kanban.usecase.eventhandler.NotifyCursor;
@@ -204,13 +207,27 @@ public abstract class AbstractSpringBootJpaTest {
         return output.getId();
     }
 
-    protected void deleteSticker(String stickerId) {
+    protected String deleteSticker(String stickerId) {
         DeleteStickerUseCase deleteStickerUseCase = new DeleteStickerUseCaseImpl(figureRepository, domainEventBus);
         DeleteStickerInput input = deleteStickerUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setFigureId(stickerId);
 
         deleteStickerUseCase.execute(input, output);
+
+        return output.getId();
+    }
+
+    protected String enterBoard(String boardId, String userId) {
+        EnterBoardUseCase enterBoardUseCase = new EnterBoardUseCaseImpl(boardRepository, domainEventBus);
+        EnterBoardInput input = enterBoardUseCase.newInput();
+        CqrsCommandOutput output = CqrsCommandPresenter.newInstance();
+        input.setUserId(userId);
+        input.setBoardId(boardId);
+
+        enterBoardUseCase.execute(input, output);
+
+        return output.getId();
     }
 
 
