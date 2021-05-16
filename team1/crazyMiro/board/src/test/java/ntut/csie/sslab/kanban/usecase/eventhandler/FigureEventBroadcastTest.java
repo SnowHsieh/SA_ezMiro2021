@@ -30,7 +30,7 @@ public class FigureEventBroadcastTest extends AbstractSpringBootJpaTest {
 //    }
 
     @Test
-    public void create_a_sticker_broadcasts_a_sticker_created_model_and_a_figure_committed_model(){
+    public void create_a_sticker_broadcasts_a_sticker_created_event_and_a_figure_committed_model(){
         String boardId = createBoard(UUID.randomUUID().toString(), "boardName");
         Coordinate stickerPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
         eventListener.clearEventCount();
@@ -43,7 +43,7 @@ public class FigureEventBroadcastTest extends AbstractSpringBootJpaTest {
     }
 
     @Test
-    public void delete_a_sticker_broadcasts_a_sticker_deleted_model_and_a_figure_uncommitted_model(){
+    public void delete_a_sticker_broadcasts_a_sticker_deleted_event_and_a_figure_uncommitted_event(){
         String boardId = createBoard(UUID.randomUUID().toString(), "boardName");
         Coordinate stickerPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
         String stickerId = createSticker(boardId, "ddd", 100, 200, "red", stickerPosition);

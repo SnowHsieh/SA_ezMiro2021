@@ -33,13 +33,19 @@ public class CursorRepositoryImpl implements CursorRepository {
     }
 
     @Override
+    public Optional<Cursor> findCursorByUserId(String userId) {
+        return cursors.stream().filter(x-> x.getUserId().equals(userId)).findFirst();
+    }
+
+
+    @Override
     public void save(Cursor cursor) {
         cursors.removeIf(x -> x.getCursorId().equals(cursor.getCursorId()));
         cursors.add(cursor);
     }
 
     @Override
-    public void deleteById(String s) {
-
+    public void deleteById(String id) {
+        cursors.removeIf(x -> x.getCursorId().equals(id));
     }
 }

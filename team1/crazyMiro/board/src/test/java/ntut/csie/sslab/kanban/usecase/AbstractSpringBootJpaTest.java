@@ -89,6 +89,9 @@ import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.board.enter.EnterBoardInput;
 import ntut.csie.sslab.kanban.usecase.board.enter.EnterBoardUseCase;
 import ntut.csie.sslab.kanban.usecase.board.enter.EnterBoardUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.board.leave.LeaveBoardInput;
+import ntut.csie.sslab.kanban.usecase.board.leave.LeaveBoardUseCase;
+import ntut.csie.sslab.kanban.usecase.board.leave.LeaveBoardUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
 import ntut.csie.sslab.kanban.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.kanban.usecase.eventhandler.NotifyCursor;
@@ -138,7 +141,7 @@ public abstract class AbstractSpringBootJpaTest {
         domainEventBus = new GoogleEventBus();
         eventListener = new EventListener();
         notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
-        notifyCursorAdapter = new NotifyCursorAdapter(new NotifyCursor(cursorRepository, domainEventBus));
+        notifyCursorAdapter = new NotifyCursorAdapter(new NotifyCursor(cursorRepository, boardRepository, domainEventBus));
         domainEventBus.register(notifyBoardAdapter);
         domainEventBus.register(notifyCursorAdapter);
         domainEventBus.register(eventListener);
@@ -230,6 +233,15 @@ public abstract class AbstractSpringBootJpaTest {
         return output.getId();
     }
 
+    protected void leaveBoard(String boardId, String boardSessionId) {
+        LeaveBoardUseCase leaveBoardUseCase = new LeaveBoardUseCaseImpl(boardRepository, domainEventBus);
+        LeaveBoardInput input = leaveBoardUseCase.newInput();
+        CqrsCommandOutput output = CqrsCommandPresenter.newInstance();
+        input.setBoardId(boardId);
+        input.setBoardSessionId(boardSessionId);
+
+        leaveBoardUseCase.execute(input, output);
+    }
 
 //
 //

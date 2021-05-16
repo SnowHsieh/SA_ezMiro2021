@@ -11,4 +11,6 @@ public interface CursorRepository extends AbstractRepository<Cursor, String> {
 
     List<Cursor> getCursorsByBoardId(String boardId);
 
+    Optional<Cursor> findCursorByUserId(String userId);
+
 }

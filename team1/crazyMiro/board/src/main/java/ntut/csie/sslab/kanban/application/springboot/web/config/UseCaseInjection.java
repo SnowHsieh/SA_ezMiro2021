@@ -60,7 +60,7 @@ public class UseCaseInjection {
 
     @Bean(name="createNotifyCursor")
     public NotifyCursor createNotifyCursor() {
-        return new NotifyCursor(cursorRepository, eventBus);
+        return new NotifyCursor(cursorRepository, boardRepository, eventBus);
     }
 
     @Bean(name="createNotifyBoardSessionBroadcaster")

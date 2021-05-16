@@ -23,7 +23,6 @@ public class LeaveBoardUseCaseTest extends AbstractSpringBootJpaTest {
         createBoard(boardId, "Jay board");
         eventListener.clearEventCount();
         String userId = "user1";
-        enterBoard(boardId, UUID.randomUUID().toString());
         String boardSessionId = enterBoard(boardId, userId);
         eventListener.clearEventCount();
         LeaveBoardUseCase leaveBoardUseCase = new LeaveBoardUseCaseImpl(boardRepository, domainEventBus);
@@ -38,7 +37,7 @@ public class LeaveBoardUseCaseTest extends AbstractSpringBootJpaTest {
         List<BoardSession> boardSessions = board.getBoardSessions();
         assertEquals(1, boardSessions.size());
         assertFalse(boardSessions.stream().anyMatch(x->x.getBoardSessionId().equals(boardSessionId)));
-        assertEquals(1,eventListener.getEventCount());
+        assertEquals(2,eventListener.getEventCount());
     }
 
 
