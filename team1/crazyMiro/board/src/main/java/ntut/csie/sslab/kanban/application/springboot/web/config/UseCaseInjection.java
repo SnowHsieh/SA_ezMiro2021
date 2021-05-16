@@ -7,6 +7,8 @@ import ntut.csie.sslab.kanban.usecase.board.bringFigureToFront.BringFigureToFron
 import ntut.csie.sslab.kanban.usecase.board.bringFigureToFront.BringFigureToFrontUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.board.enter.EnterBoardUseCase;
 import ntut.csie.sslab.kanban.usecase.board.enter.EnterBoardUseCaseImpl;
+import ntut.csie.sslab.kanban.usecase.board.leave.LeaveBoardUseCase;
+import ntut.csie.sslab.kanban.usecase.board.leave.LeaveBoardUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.board.sendFigureToBack.SendFigureToBackUseCase;
 import ntut.csie.sslab.kanban.usecase.board.sendFigureToBack.SendFigureToBackUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
@@ -65,7 +67,7 @@ public class UseCaseInjection {
 
     @Bean(name="createNotifyBoardSessionBroadcaster")
     public NotifyBoardSessionBroadcaster createNotifyBoardSessionBroadcaster() {
-        return new NotifyBoardSessionBroadcaster(boardSessionBroadcaster, boardRepository);
+        return new NotifyBoardSessionBroadcaster(boardSessionBroadcaster, boardRepository, figureRepository);
     }
 
     @Bean(name="createStickerUseCase")
@@ -117,6 +119,11 @@ public class UseCaseInjection {
     @Bean(name="enterBoardUseCase")
     public EnterBoardUseCase enterBoardUseCase() {
         return new EnterBoardUseCaseImpl(boardRepository, eventBus);
+    }
+
+    @Bean(name="leaveBoardUseCase")
+    public LeaveBoardUseCase leaveBoardUseCase() {
+        return new LeaveBoardUseCaseImpl(boardRepository, eventBus);
     }
 
     @Autowired

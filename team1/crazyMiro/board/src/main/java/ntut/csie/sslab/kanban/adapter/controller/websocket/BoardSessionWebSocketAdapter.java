@@ -10,6 +10,9 @@ import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorMoved;
 import ntut.csie.sslab.kanban.usecase.BoardSessionBroadcaster;
 import ntut.csie.sslab.kanban.usecase.board.enter.EnterBoardInput;
 import ntut.csie.sslab.kanban.usecase.board.enter.EnterBoardUseCase;
+import ntut.csie.sslab.kanban.usecase.board.leave.LeaveBoardInput;
+import ntut.csie.sslab.kanban.usecase.board.leave.LeaveBoardUseCase;
+import ntut.csie.sslab.kanban.usecase.board.leave.LeaveBoardUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorInput;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorUseCase;
 import org.json.JSONException;
@@ -33,6 +36,7 @@ public class BoardSessionWebSocketAdapter {
 
     private MoveCursorUseCase moveCursorUseCase;
     private EnterBoardUseCase enterBoardUseCase;
+    private LeaveBoardUseCase leaveBoardUseCase;
     private BoardSessionBroadcaster boardSessionBroadcaster;
 
     @Autowired
@@ -43,6 +47,11 @@ public class BoardSessionWebSocketAdapter {
     @Autowired
     public void setEnterBoardUseCase(EnterBoardUseCase enterBoardUseCase) {
         this.enterBoardUseCase = enterBoardUseCase;
+    }
+
+    @Autowired
+    public void setLeaveBoardUseCase(LeaveBoardUseCase leaveBoardUseCase) {
+        this.leaveBoardUseCase = leaveBoardUseCase;
     }
 
     @Autowired
@@ -93,6 +102,13 @@ public class BoardSessionWebSocketAdapter {
     @OnClose
     public void onClose(Session session) {
         String boardSessionId = ((WebSocketBroadcaster)boardSessionBroadcaster).getBoardSessionIdBySessionId(session.getId());
+        LeaveBoardInput input = leaveBoardUseCase.newInput();
+        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+        input.setBoardId(session.getPathParameters().get("boardId"));
+        input.setBoardSessionId(boardSessionId);
+
+        leaveBoardUseCase.execute(input, presenter);
+
         ((WebSocketBroadcaster)boardSessionBroadcaster).removeSession(session.getId());
     }
 

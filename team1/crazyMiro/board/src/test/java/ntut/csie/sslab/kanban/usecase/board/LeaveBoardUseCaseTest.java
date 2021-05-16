@@ -35,7 +35,7 @@ public class LeaveBoardUseCaseTest extends AbstractSpringBootJpaTest {
 
         Board board = boardRepository.findById(boardId).get();
         List<BoardSession> boardSessions = board.getBoardSessions();
-        assertEquals(1, boardSessions.size());
+        assertEquals(0, boardSessions.size());
         assertFalse(boardSessions.stream().anyMatch(x->x.getBoardSessionId().equals(boardSessionId)));
         assertEquals(2,eventListener.getEventCount());
     }

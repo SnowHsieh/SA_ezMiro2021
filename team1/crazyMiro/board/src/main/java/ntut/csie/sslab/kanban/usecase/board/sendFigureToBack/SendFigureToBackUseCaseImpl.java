@@ -36,7 +36,7 @@ public class SendFigureToBackUseCaseImpl implements SendFigureToBackUseCase {
 
             boardRepository.save(board);
             domainEventBus.postAll(board);
-            output.setId(input.getBoardId())
+            output.setId(input.getFigureId())
                     .setExitCode(ExitCode.SUCCESS);
 //        }
 //        catch (Exception e){
