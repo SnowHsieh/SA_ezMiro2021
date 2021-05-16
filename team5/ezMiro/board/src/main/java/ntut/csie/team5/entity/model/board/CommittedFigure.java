@@ -14,15 +14,15 @@ public class CommittedFigure extends ValueObject {
         this.zOrder = zOrder;
     }
 
-    public String getFigureId() {
+    public String figureId() {
         return figureId;
     }
 
-    public String getBoardId() {
+    public String boardId() {
         return boardId;
     }
 
-    public int getZOrder() {
+    public int zOrder() {
         return zOrder;
     }
 

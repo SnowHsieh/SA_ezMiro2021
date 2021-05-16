@@ -44,11 +44,11 @@ public class GetBoardContentUseCaseImpl implements GetBoardContentUseCase, GetBo
         System.out.println(board.getCommittedFigures().size());
         List<FigureDto> figureDtos = new ArrayList<>();
         for (CommittedFigure committedFigure : board.getCommittedFigures()) {
-            Figure figure = figureRepository.findById(committedFigure.getFigureId()).orElse(null);
+            Figure figure = figureRepository.findById(committedFigure.figureId()).orElse(null);
             if (null == figure) {
                 output.setBoardId(input.getBoardId())
                         .setExitCode(ExitCode.FAILURE)
-                        .setMessage("Get board content failed: figure not found, figure id = " + committedFigure.getFigureId());
+                        .setMessage("Get board content failed: figure not found, figure id = " + committedFigure.figureId());
                 domainEventBus.post(new ClientBoardContentMightExpire(input.getBoardId()));
                 return;
             }
