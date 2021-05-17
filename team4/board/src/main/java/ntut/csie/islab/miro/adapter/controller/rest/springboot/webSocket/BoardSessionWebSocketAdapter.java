@@ -58,14 +58,12 @@ public class BoardSessionWebSocketAdapter {
         this.boardSessionBroadcaster = boardSessionBroadcaster;
     }
 
-
-
     @OnMessage
-    public void onMessage(String message, Session session)  {
+    public void onMessage(String jsonString, Session session)  {
         String event = "";
         JSONObject info;
         try {
-            JSONObject jsonObject = new JSONObject(message);
+            JSONObject jsonObject = new JSONObject(jsonString);
             jsonObject = jsonObject.getJSONObject("message");
             event = jsonObject.getString("event");
             info = jsonObject.getJSONObject("info");
@@ -82,17 +80,15 @@ public class BoardSessionWebSocketAdapter {
         }
     }
 
-
-
     @OnOpen
     public void onOpen(Session session,
-                       @PathParam("boardId") UUID boardId,
-                       @PathParam("userId") UUID userId) throws IOException {
+                       @PathParam("boardId") String boardId,
+                       @PathParam("userId") String userId) throws IOException {
         System.out.println(userId.toString() + "加入了戰局");
         EnterBoardInput input = enterBoardUseCase.newInput();
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
-        input.setUserId(userId);
-        input.setBoardId(boardId);
+        input.setUserId(UUID.fromString(userId));
+        input.setBoardId(UUID.fromString(boardId));
 
         enterBoardUseCase.execute(input, presenter);
 

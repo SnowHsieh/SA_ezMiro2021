@@ -78,9 +78,9 @@ public class EZMiroWebMain extends SpringBootServletInitializer implements Comma
         System.out.println("Default board Id : " + output.getId());
 
     }
-//    @Bean
-//    public ServerEndpointExporter serverEndpointExporter() {
-//        return new ServerEndpointExporter();
-//    }
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter() {
+        return new ServerEndpointExporter();
+    }
 
 }

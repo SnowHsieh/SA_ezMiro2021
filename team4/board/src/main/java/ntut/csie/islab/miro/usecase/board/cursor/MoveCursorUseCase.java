@@ -32,8 +32,7 @@ public class MoveCursorUseCase {
             domainEventBus.post(new BoardContentMightExpire(input.getBoardId()));
             return;
         }
-        Cursor cursor = board.getCursorList().stream().filter(x->x.getUserId()==input.getUserId()).findFirst().get();
-
+        Cursor cursor = board.getCursorList().stream().filter(x->x.getUserId().equals(input.getUserId())).findFirst().get();
         cursor.setPosition(input.getPosition());
         output.setId(cursor.getUserId().toString());
         output.setExitCode(ExitCode.SUCCESS);

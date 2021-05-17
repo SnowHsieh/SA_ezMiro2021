@@ -49,7 +49,7 @@ export default {
 
   data () {
     return {
-      boardId: 'b962567b-d2c9-4f5e-a320-e03c33880bc2',
+      boardId: '031f8834-faeb-4ad2-986a-d2a496ae612f',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -70,6 +70,7 @@ export default {
     }
   },
   created () {
+    this.socketInit()
   },
   destroyed: function () { // 离开页面生命周期函数
     this.websocketclose()
@@ -85,22 +86,6 @@ export default {
     this.bringForwardButton = document.getElementById('bringForwardButton')
     this.sendBackwardButton = document.getElementById('sendBackwardButton')
     this.sendToBackButton = document.getElementById('sendToBackButton')
-    // this.socket.
-    // this.socket.once('getAllUserCursors', data => {
-    //   this.myUserId = JSON.parse(data).id
-    //   this.userCursorList = JSON.parse(data).userCursorMap
-    //   this.drawAllUserCursors()
-    // })
-
-    // this.socket.on('userJoin', data => {
-    //   this.addUserCursor(data)
-    // })
-    // this.socket.on('userCursorUpdate', data => {
-    //   this.updateUserCursor(data)
-    // })
-    // this.socket.on('userLeft', userId => {
-    //   this.delUserCursor(userId)
-    // })
     this.listenEventsOnCanvas()
     // this.timer = setInterval(this.refreshCanvas, 10000)
   },
@@ -290,16 +275,21 @@ export default {
       canvas.on(
         {
           'mouse:move': function (e) {
-            // var mouse = this.getPointer(e)
-            // var data = {
-            //   id: _this.myUserId,
-            //   position: {
-            //     x: mouse.x,
-            //     y: mouse.y
-            //   }
-            // }
-            // console.log(data)
-            // _this.sendMessage(JSON.stringify(data))
+            var mouse = this.getPointer(e)
+            var data = {
+              message: {
+                event: 'CursorMovedDomainEvent',
+                info: {
+                  userId: _this.myUserId,
+                  boardId: _this.boardId,
+                  position: {
+                    x: mouse.x,
+                    y: mouse.y
+                  }
+                }
+              }
+            }
+            _this.sendMessage(JSON.stringify(data))
             // _this.socket.emit('mouse-moved', data)
           },
           'mouse:dblclick': function (e) {
@@ -510,30 +500,47 @@ export default {
         console.log(e)
       }
     },
-    websocketonopen: function () {
+    websocketonopen: function (e) {
       console.log('WebSocket连接成功')
     },
-    websocketonerror: function () {
-      console.log('WebSocket连接发生错误')
+    websocketonerror: function (e) {
+      console.log('WebSocket连接发生错误', JSON.stringify(e))
     },
     websocketonmessage: function (e) {
       console.log('收到來自後端的訊息=')
-      console.log(JSON.parse(e.data)) // console.log(e);
+      console.log(e) // console.log(e);
     },
     websocketclose: function (e) {
-      console.log('connection closed ()', e.data)
+      console.log(e, 'connection closed ()')
     },
     socketInit () {
+      this.myUserId = this.generateUUID()
       const url = 'ws://' + this.hostIp + ':8081/websocket/' + this.boardId + '/' + this.myUserId + '/'
+      // const url = 'ws://' + 'localhost' + ':8081/websocket/' + this.boardId + '/' + this.myUserId
+
+      console.log('url', url)
       this.socket = new WebSocket(url)
-      this.socket.onopen = this.websocketonopen
-      this.socket.onerror = this.websocketonerror
-      this.socket.onmessage = this.websocketonmessage
-      this.socket.onclose = this.websocketclose
+      this.socket.onopen = this.websocketonopen()
+      this.socket.onerror = this.websocketonerror()
+      this.socket.onmessage = this.websocketonmessage()
+      this.socket.onclose = this.websocketclose()
     },
     sendMessage: function (data) {
       console.log('sendMsg:', data)
-      this.socket.send(data)
+      if (this.socket.readyState === 1) {
+        this.socket.send(data)
+      }
+    },
+    generateUUID () {
+      var d = Date.now()
+      if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+        d += performance.now() // use high-precision timer if available
+      }
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0
+        d = Math.floor(d / 16)
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+      })
     }
   }
 

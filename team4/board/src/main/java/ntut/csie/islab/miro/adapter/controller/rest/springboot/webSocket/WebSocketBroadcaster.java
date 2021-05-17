@@ -24,6 +24,8 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
         synchronized (session) {
             try {
                 session.getAsyncRemote().sendObject(domainEvent); // getBasicRemote -> getAsyncRemote
+                System.out.println(session.getAsyncRemote());
+                System.out.println(domainEvent.detail());
             } catch ( IllegalStateException e) {
                 e.printStackTrace();
             }
@@ -32,7 +34,6 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
     public void addSession(String boardSessionId, Session session) {
         this.ONLINE_SESSION.put(boardSessionId, session);
     }
-
     public void removeSession(String boardSessionId) {
         ONLINE_SESSION.remove(boardSessionId);
     }
