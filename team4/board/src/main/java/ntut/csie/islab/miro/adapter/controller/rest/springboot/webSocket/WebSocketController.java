@@ -22,9 +22,10 @@ public class WebSocketController {
     }
 
     @OnClose
-    public void onClose(@PathParam(value = "usernick") String userNick,Session session) {
+    public void onClose(@PathParam(value = "usernick") String userNick,Session session) throws IOException {
         String message = "成員[" + userNick + "]退出聊天室!";
         System.out.println(message);
+        session.close();
         WebSocketUtil.remoteSession(session);
         WebSocketUtil.sendMessageForAll(message);
     }

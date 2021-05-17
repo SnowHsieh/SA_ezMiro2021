@@ -31,13 +31,15 @@ public class WebSocketUtil {
     }
 
     public static void sendMessageForAll(String message) {
-        ONLINE_SESSION.forEach((user, session) -> sendMessage(user, message));
+        ONLINE_SESSION.forEach((session,user) -> sendMessage(session, message));
     }
 
     public static void sendMessageToAllUser() {
         ONLINE_SESSION.forEach((session, user) -> {
             try {
-                sendMessage(session, getAllUserData());
+                if(session.isOpen()){
+                    sendMessage(session, getAllUserData());
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
