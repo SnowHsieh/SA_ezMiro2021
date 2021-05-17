@@ -2,11 +2,12 @@ package ntut.csie.islab.miro.application.springboot.web.config;
 
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
 import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
-import ntut.csie.islab.miro.usecase.board.ChangeFigureOrderListOnBoardUseCase;
-import ntut.csie.islab.miro.usecase.board.CreateBoardUseCase;
-import ntut.csie.islab.miro.usecase.board.GetBoardContentUseCase;
+import ntut.csie.islab.miro.usecase.board.*;
+import ntut.csie.islab.miro.usecase.board.cursor.MoveCursorUseCase;
 import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
+import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoardSessionBroadcaster;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.*;
+import ntut.csie.islab.miro.usecase.webSocket.BoardSessionBroadcaster;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,8 @@ public class UseCaseInjection {
     private TextFigureRepository textFigureRepository;
     private DomainEventBus eventBus;
 
+    @Autowired
+    private BoardSessionBroadcaster boardSessionBroadcaster;
 
     @Bean(name="createNotifyBoard")
     public NotifyBoard createNotifyBoard() {
@@ -72,6 +75,25 @@ public class UseCaseInjection {
     public ResizeStickyNoteUseCase resizeStickyNoteUseCase() {
         return new ResizeStickyNoteUseCase(textFigureRepository,eventBus);
     }
+    @Bean(name="moveCursorUseCase")
+    public MoveCursorUseCase moveCursorUseCase() {
+        return new MoveCursorUseCase(boardRepository, eventBus);
+    }
+
+    @Bean(name="enterBoardUseCase")
+    public EnterBoardUseCase enterBoardUseCase() {
+        return new EnterBoardUseCase(eventBus , boardRepository);
+    }
+
+    @Bean(name="leaveBoardUseCase")
+    public LeaveBoardUseCase leaveBoardUseCase() {
+        return new LeaveBoardUseCase(boardRepository, eventBus);
+    }
+
+//    @Bean(name="createNotifyBoardSessionBroadcaster")
+//    public NotifyBoardSessionBroadcaster createNotifyBoardSessionBroadcaster() {
+//        return new NotifyBoardSessionBroadcaster(boardSessionBroadcaster, boardRepository, textFigureRepository);
+//    }
 
     @Autowired
     public void setBoardRepository(BoardRepository boardRepository) {

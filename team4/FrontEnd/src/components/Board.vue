@@ -49,7 +49,7 @@ export default {
 
   data () {
     return {
-      boardId: null,
+      boardId: 'b962567b-d2c9-4f5e-a320-e03c33880bc2',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -66,7 +66,7 @@ export default {
       socketLoaded: null,
       userCursorList: [],
       myUserId: 'QQ',
-      hostIp: '140.124.181.2'
+      hostIp: '140.124.181.20'
     }
   },
   created () {
@@ -85,12 +85,13 @@ export default {
     this.bringForwardButton = document.getElementById('bringForwardButton')
     this.sendBackwardButton = document.getElementById('sendBackwardButton')
     this.sendToBackButton = document.getElementById('sendToBackButton')
-
+    // this.socket.
     // this.socket.once('getAllUserCursors', data => {
     //   this.myUserId = JSON.parse(data).id
     //   this.userCursorList = JSON.parse(data).userCursorMap
     //   this.drawAllUserCursors()
     // })
+
     // this.socket.on('userJoin', data => {
     //   this.addUserCursor(data)
     // })
@@ -106,7 +107,6 @@ export default {
   methods: {
     async getBoardContent () {
       try {
-        this.boardId = '44b608e4-781b-47c5-9034-a8c89430b1e4'
         const res = await axios.get('http://' + this.hostIp + ':8081/boards/' + this.boardId + '/content')
         this.drawStickyNote(res.data.figureDtos)
       } catch (err) {
@@ -290,15 +290,16 @@ export default {
       canvas.on(
         {
           'mouse:move': function (e) {
-            var mouse = this.getPointer(e)
-            var data = {
-              id: _this.myUserId,
-              position: {
-                x: mouse.x,
-                y: mouse.y
-              }
-            }
-            _this.sendMessage(JSON.stringify(data))
+            // var mouse = this.getPointer(e)
+            // var data = {
+            //   id: _this.myUserId,
+            //   position: {
+            //     x: mouse.x,
+            //     y: mouse.y
+            //   }
+            // }
+            // console.log(data)
+            // _this.sendMessage(JSON.stringify(data))
             // _this.socket.emit('mouse-moved', data)
           },
           'mouse:dblclick': function (e) {
@@ -523,7 +524,8 @@ export default {
       console.log('connection closed ()', e.data)
     },
     socketInit () {
-      this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/' + this.myUserId + '/')
+      const url = 'ws://' + this.hostIp + ':8081/websocket/' + this.boardId + '/' + this.myUserId + '/'
+      this.socket = new WebSocket(url)
       this.socket.onopen = this.websocketonopen
       this.socket.onerror = this.websocketonerror
       this.socket.onmessage = this.websocketonmessage

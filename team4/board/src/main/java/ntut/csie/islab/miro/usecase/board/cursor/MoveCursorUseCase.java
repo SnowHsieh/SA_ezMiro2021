@@ -35,7 +35,6 @@ public class MoveCursorUseCase {
         Cursor cursor = board.getCursorList().stream().filter(x->x.getUserId()==input.getUserId()).findFirst().get();
 
         cursor.setPosition(input.getPosition());
-
         output.setId(cursor.getUserId().toString());
         output.setExitCode(ExitCode.SUCCESS);
 
