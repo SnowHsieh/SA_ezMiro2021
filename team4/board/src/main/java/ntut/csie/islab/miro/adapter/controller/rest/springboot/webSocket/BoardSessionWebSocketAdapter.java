@@ -131,8 +131,6 @@ public class BoardSessionWebSocketAdapter {
         input.setPosition(newPosition);
         moveCursorUseCase.execute(input, output);
 
-        WebSocketBroadcaster webSocketBroadcaster = new WebSocketBroadcaster();
-        webSocketBroadcaster.broadcastMsg(info.toString());
 
     }
 }

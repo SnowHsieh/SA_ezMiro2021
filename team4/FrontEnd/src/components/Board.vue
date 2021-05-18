@@ -49,7 +49,7 @@ export default {
 
   data () {
     return {
-      boardId: '792171fc-67c9-45d8-8ab2-adba4d755c71',
+      boardId: 'c0e9bb7a-8fe8-4452-b070-f116d5dce517',
       canvasContext: null,
       boardContent: null,
       canvas: null,

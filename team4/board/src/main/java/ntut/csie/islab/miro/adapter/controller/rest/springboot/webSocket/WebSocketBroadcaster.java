@@ -20,13 +20,17 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
     @Override
     public void broadcast(DomainEvent domainEvent, String userId) {
 
+        this.broadcastMsg(domainEvent.toString());
+
         Session session = ONLINE_SESSION.get(userId);
         if(session == null)
             return;
 
         synchronized (session) {
             try {
-                session.getAsyncRemote().sendObject(domainEvent); // getBasicRemote -> getAsyncRemote
+                if(session.isOpen()){
+                    session.getAsyncRemote().sendObject(domainEvent); // getBasicRemote -> getAsyncRemote
+                }
 
             } catch ( IllegalStateException e) {
                 e.printStackTrace();
