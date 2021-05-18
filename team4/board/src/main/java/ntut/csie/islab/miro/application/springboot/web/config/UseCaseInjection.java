@@ -41,6 +41,11 @@ public class UseCaseInjection {
     public GetBoardContentUseCase getBoardContentUseCase() {
         return new GetBoardContentUseCase(eventBus,boardRepository, textFigureRepository);
     }
+    @Bean(name = "getAllUserCursorsUseCase")
+    public GetAllUserCursorsUseCase getAllUserCursorsUseCase() {
+        return new GetAllUserCursorsUseCase(eventBus,boardRepository);
+    }
+
 
     @Bean(name = "createStickyNoteUseCase")
     public CreateStickyNoteUseCase createStickyNoteUseCase() {

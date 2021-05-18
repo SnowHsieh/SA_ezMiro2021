@@ -1,15 +1,19 @@
 package ntut.csie.islab.miro.entity.model.board.event;
 
 import ntut.csie.islab.miro.entity.model.board.BoardSessionId;
+import ntut.csie.islab.miro.entity.model.board.cursor.Cursor;
 import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.common.DateProvider;
 
+import java.util.List;
 import java.util.UUID;
 
 public class BoardEnteredDomainEvent extends DomainEvent {
     private UUID boardId;
     private UUID userId;
     private BoardSessionId boardSessionId;
+    private List<Cursor> cursorList;
+
 
     public BoardEnteredDomainEvent(UUID boardId, UUID userId, BoardSessionId boardSessionId) {
         super(DateProvider.now());

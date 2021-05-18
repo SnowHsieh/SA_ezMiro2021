@@ -4,6 +4,7 @@
         <div>
           <div>
             <button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
+            <button id="sendGetAllCursors" @click="sendGetAllCursors()">get all cursor</button>
             <input v-model="myUserId" placeholder="input userName">
             <button id="sendUserName" @click="socketInit()">sendUserName</button>
             <canvas id="canvas" ref='board' >
@@ -46,10 +47,9 @@ import { fabric } from 'fabric'
 // import io from 'socket.io-client'
 import axios from 'axios'
 export default {
-
   data () {
     return {
-      boardId: 'c0e9bb7a-8fe8-4452-b070-f116d5dce517',
+      boardId: 'b888fa6b-0f1c-4344-a33b-aba58703955c',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -66,7 +66,7 @@ export default {
       socketLoaded: null,
       userCursorList: [],
       myUserId: '7398cd26-da85-4c05-b04b-122e73888dfb',
-      hostIp: '140.124.181.2',
+      hostIp: '140.124.181.20',
       mouseData: null
     }
   },
@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     sendMouseData () {
-      console.log(this.mouseData)
+      // console.log(this.mouseData)
       this.sendMessage(JSON.stringify(this.mouseData))
     },
     async getBoardContent () {
@@ -517,16 +517,48 @@ export default {
       console.log('WebSocket连接发生错误')
     },
     websocketonmessage: function (e) {
-      console.log('收到來自後端的訊息', e)
+      console.log('收到來自後端的訊息1', e)
+      // console.log('收到來自後端的訊息1', JSON.parse(e.data).event)
+      // if (JSON.parse(e.data).event === 'CursorMovedDomainEvent') {
+      //   // console.log(JSON.parse(e.data).event)
+      // }
+      // if (JSON.parse(e.data).event === 'BoardEnteredDomainEvent') {
+      //   console.log(JSON.parse(e.data))
+      // } else {
+      //   console.log(e)
+      // }
+      // if (JSON.parse(e.data).event === 'CursorCreatedDomainEvent') {
+      //   console.log(JSON.parse(e.data))
+
+      // if (JSON.parse(e.data).event === 'CursorCreatedDomainEvent') {
+      //   console.log(JSON.parse(e.data))
+      // }
+      // console.log('收到來自後端的訊息2', e.message.event)
+      // console.log('收到來自後端的訊息3', e.message.info)
+      // console.log('收到來自後端的訊息4', e.message.position)
       // console.log(JSON.parse(e.data)) // console.log(e);
     },
     websocketclose: function (e) {
-      console.log('connection closed ()', e.data)
+      console.log('connection closed ()')
     },
     socketInit () {
       // this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/' + this.myUserId + '/')
       this.myUserId = this.generateUUID()
       this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/' + this.boardId + '/' + this.myUserId + '/')
+    },
+    sendGetAllCursors () {
+      if (this.socket.readyState === 1) {
+        console.log('sendGetAllCursors')
+        const data = {
+          message: {
+            event: 'getAllUser',
+            info: {
+              boardId: this.boardId
+            }
+          }
+        }
+        this.socket.send(JSON.stringify(data))
+      }
     },
     sendMessage: function (data) {
       // console.log('sendMsg:', data)

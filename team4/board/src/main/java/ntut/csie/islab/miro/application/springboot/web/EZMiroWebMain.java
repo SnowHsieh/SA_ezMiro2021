@@ -69,14 +69,6 @@ public class EZMiroWebMain extends SpringBootServletInitializer implements Comma
         System.out.println("Team4 EZMiroWebMain run");
         domainEventBus.register(notifyBoardAdapter);
         domainEventBus.register(notifyBoardSessionBroadcaster);
-        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(domainEventBus,boardRepository);
-        CreateBoardInput input = createBoardUseCase.newInput();
-        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-        input.setTeamId(UUID.randomUUID());
-        input.setBoardName("EZMIROISLAB");
-        createBoardUseCase.execute(input, output);
-        System.out.println("Default board Id : " + output.getId());
-
     }
     @Bean
     public ServerEndpointExporter serverEndpointExporter() {

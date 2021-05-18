@@ -1,18 +1,17 @@
 package ntut.csie.islab.miro.adapter.controller.rest.springboot.webSocket;
 
 import ntut.csie.islab.miro.adapter.presenter.broadcastDomainEvent.DomainEventEncoder;
+import ntut.csie.islab.miro.adapter.presenter.getAllCursors.GetAllUserCursorsPresenter;
 import ntut.csie.islab.miro.application.springboot.web.config.websocket.EndpointConfigure;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorMovedDomainEvent;
-import ntut.csie.islab.miro.usecase.board.EnterBoardInput;
-import ntut.csie.islab.miro.usecase.board.EnterBoardUseCase;
-import ntut.csie.islab.miro.usecase.board.LeaveBoardInput;
-import ntut.csie.islab.miro.usecase.board.LeaveBoardUseCase;
+import ntut.csie.islab.miro.usecase.board.*;
 import ntut.csie.islab.miro.usecase.board.cursor.MoveCursorInput;
 import ntut.csie.islab.miro.usecase.board.cursor.MoveCursorUseCase;
 import ntut.csie.islab.miro.usecase.webSocket.BoardSessionBroadcaster;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,12 @@ public class BoardSessionWebSocketAdapter {
     private MoveCursorUseCase moveCursorUseCase;
     private EnterBoardUseCase enterBoardUseCase;
     private LeaveBoardUseCase leaveBoardUseCase;
+    private GetAllUserCursorsUseCase getAllUserCursorsUseCase;
     private BoardSessionBroadcaster boardSessionBroadcaster;
+    @Autowired
+    public void setGetAllUserCursorsUseCase(GetAllUserCursorsUseCase getAllUserCursorsUseCase) {
+        this.getAllUserCursorsUseCase = getAllUserCursorsUseCase;
+    }
 
     @Autowired
     public void setMoveCursorUseCase(MoveCursorUseCase moveCursorUseCase) {
@@ -68,16 +72,38 @@ public class BoardSessionWebSocketAdapter {
             event = jsonObject.getString("event");
             info = jsonObject.getJSONObject("info");
             System.out.println("event in onMessage is: "+jsonObject.toString());
-            websocketEventHandler(event, info);
+            websocketEventHandler(event, info , session);
         }catch (JSONException err){
-            System.out.println(err);
+            System.out.println("onMessage err:" + err);
         }
     }
 
-    private void websocketEventHandler(String event, JSONObject info) {
+    private void websocketEventHandler(String event, JSONObject info , Session session) throws JSONException {
         if(CursorMovedDomainEvent.class.getSimpleName().equals(event)){
             handleCursorMoved(info);
         }
+        else if (event.equals("getAllUser")){
+            handleGetAllUser(info);
+        }
+    }
+
+    private void handleGetAllUser(JSONObject info) throws JSONException {
+        String boardId = "";
+        try {
+            boardId = info.getString("boardId");
+
+        }catch (JSONException err){
+            System.out.println(err);
+            return;
+        }
+        GetAllUserCursorsInput input = getAllUserCursorsUseCase.newInput();
+        input.setBoardId(UUID.fromString(boardId));
+        GetAllUserCursorsPresenter presenter = new GetAllUserCursorsPresenter();
+        getAllUserCursorsUseCase.execute(input, presenter);
+        WebSocketBroadcaster webSocketBroadcaster = new WebSocketBroadcaster();
+        JSONArray jb = new JSONArray(presenter.getCursorDtos());
+        System.out.println(jb);
+        webSocketBroadcaster.broadcastMsg(jb);
     }
 
     @OnOpen

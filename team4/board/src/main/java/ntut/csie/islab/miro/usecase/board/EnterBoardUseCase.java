@@ -32,7 +32,6 @@ public class EnterBoardUseCase {
         }
 
         BoardSessionId boardSessionId = BoardSessionId.create();
-
         board.acceptUserEntry(boardSessionId, input.getUserId());
         this.domainEventBus.postAll(board);
         output.setId(boardSessionId.id());

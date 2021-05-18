@@ -123,7 +123,6 @@ public class Board extends AggregateRoot<UUID> {
     private void createCursor(UUID userId) {
         Cursor cursor = new Cursor(userId, this.getBoardId());
         cursorList.add(cursor);
-        System.out.println("Current cursor num : " +cursorList.size());
         addDomainEvent(new CursorCreatedDomainEvent(getBoardId(), userId));
     }
     private void deleteCursor(UUID userId) {
