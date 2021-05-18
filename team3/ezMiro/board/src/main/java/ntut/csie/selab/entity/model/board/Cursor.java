@@ -4,11 +4,11 @@ import java.awt.*;
 
 public class Cursor {
     private String userId;
-    private Point coordinate;
+    private Point point;
 
-    public Cursor(String userId, Point coordinate) {
+    public Cursor(String userId, Point point) {
         this.userId = userId;
-        this.coordinate = coordinate;
+        this.point = point;
     }
 
     public String getUserId() {
@@ -19,7 +19,9 @@ public class Cursor {
         this.userId = userId;
     }
 
-    public Point getCoordinate() {
-        return coordinate;
+    public Point getPoint() {
+        return point;
     }
+
+    public void setPoint(Point point) { this.point = point; }
 }

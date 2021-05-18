@@ -4,6 +4,9 @@ import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.domain.MockFactory;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.model.DomainEventBus;
+import ntut.csie.selab.usecase.board.enterboard.EnterBoardInput;
+import ntut.csie.selab.usecase.board.enterboard.EnterBoardOutput;
+import ntut.csie.selab.usecase.board.enterboard.EnterBoardUseCase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,15 +14,15 @@ public class EnterBoardUseCaseTest {
     @Test
     public void enter_board_should_succeed() {
         // Arrange
-        String bordId = "bordId";
+        String boardId = "boardId";
         String userId = "userId";
-        Board board = MockFactory.createBoard(bordId);
+        Board board = MockFactory.createBoard(boardId);
         BoardRepository boardRepository = new BoardRepositoryImpl();
         DomainEventBus domainEventBus = new DomainEventBus();
         EnterBoardUseCase enterBoardUseCase = new EnterBoardUseCase(boardRepository, domainEventBus);
         EnterBoardInput input = new EnterBoardInput();
         EnterBoardOutput output = new EnterBoardOutput();
-        input.setBoardId(bordId);
+        input.setBoardId(boardId);
         input.setUserId(userId);
         boardRepository.add(board);
         // Act

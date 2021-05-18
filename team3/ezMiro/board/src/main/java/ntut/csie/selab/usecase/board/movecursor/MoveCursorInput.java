@@ -1,8 +1,11 @@
-package ntut.csie.selab.usecase.board;
+package ntut.csie.selab.usecase.board.movecursor;
 
-public class EnterBoardInput {
+import java.awt.*;
+
+public class MoveCursorInput {
     private String boardId;
     private String userId;
+    private Point point;
 
     public String getBoardId() {
         return boardId;
@@ -18,5 +21,13 @@ public class EnterBoardInput {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Point getPoint() {
+        return point;
+    }
+
+    public void setPoint(Point point) {
+        this.point = point;
     }
 }

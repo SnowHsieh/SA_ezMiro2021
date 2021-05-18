@@ -1,4 +1,4 @@
-package ntut.csie.selab.usecase.board;
+package ntut.csie.selab.usecase.board.enterboard;
 
 import ntut.csie.selab.entity.model.board.Cursor;
 

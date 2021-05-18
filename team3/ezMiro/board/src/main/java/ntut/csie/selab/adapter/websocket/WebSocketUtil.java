@@ -1,8 +1,5 @@
 package ntut.csie.selab.adapter.websocket;
 
-import ntut.csie.selab.usecase.board.EnterBoardOutput;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.websocket.RemoteEndpoint.Async;

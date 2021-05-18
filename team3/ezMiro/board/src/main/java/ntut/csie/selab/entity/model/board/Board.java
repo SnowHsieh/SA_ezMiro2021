@@ -4,7 +4,9 @@ import ntut.csie.selab.entity.model.board.event.BoardCreated;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.AggregateRoot;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
@@ -38,6 +40,14 @@ public class Board extends AggregateRoot<String> {
 
     public List<CommittedWidget> getCommittedWidgets() {
         return committedWidgets;
+    }
+
+    public Cursor getCursorBy(String userId) {
+        return cursorSet.stream().filter(e -> e.getUserId().equals(userId)).findFirst().orElse(null);
+    }
+
+    public void moveCursorOf(String userId, Point point) {
+        Objects.requireNonNull(cursorSet.stream().filter(e -> e.getUserId().equals(userId)).findFirst().orElse(null)).setPoint(point);
     }
 
     public Optional<CommittedWidget> getCommittedWidgetBy(String widgetId) {

@@ -1,10 +1,10 @@
 package ntut.csie.selab.application.springboot.web.config;
 
-import ntut.csie.selab.adapter.controller.rest.springboot.widget.editTextOfStickyNote.EditFontSizeOfStickyNote;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
-import ntut.csie.selab.usecase.board.EnterBoardUseCase;
+import ntut.csie.selab.usecase.board.enterboard.EnterBoardUseCase;
 import ntut.csie.selab.usecase.board.create.CreateBoardUseCase;
+import ntut.csie.selab.usecase.board.movecursor.MoveCursorUseCase;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
@@ -48,6 +48,11 @@ public class UseCaseInjection {
     @Bean(name="MoveStickyNoteUseCase")
     public MoveStickyNoteUseCase moveStickyNoteUseCase() {
         return new MoveStickyNoteUseCase(widgetRepository, eventBus);
+    }
+
+    @Bean(name="MoveCursorUseCase")
+    public MoveCursorUseCase moveCursorUseCase() {
+        return new MoveCursorUseCase(boardRepository, eventBus);
     }
 
     @Bean(name="ChangeColorOfStickyNoteUseCase")

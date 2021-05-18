@@ -1,8 +1,9 @@
-package ntut.csie.selab.usecase.board;
+package ntut.csie.selab.usecase.board.enterboard;
 
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.board.Cursor;
 import ntut.csie.selab.model.DomainEventBus;
+import ntut.csie.selab.usecase.board.BoardRepository;
 
 import java.awt.*;
 import java.util.Optional;
