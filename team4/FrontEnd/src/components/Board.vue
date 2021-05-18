@@ -49,7 +49,7 @@ export default {
 
   data () {
     return {
-      boardId: 'dc1793fc-b6e6-4f2c-afe1-227ba2103e99',
+      boardId: '792171fc-67c9-45d8-8ab2-adba4d755c71',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -66,10 +66,12 @@ export default {
       socketLoaded: null,
       userCursorList: [],
       myUserId: '7398cd26-da85-4c05-b04b-122e73888dfb',
-      hostIp: '140.124.181.2'
+      hostIp: '140.124.181.2',
+      mouseData: null
     }
   },
   created () {
+    this.socketInit()
   },
   destroyed: function () { // 离开页面生命周期函数
     this.websocketclose()
@@ -86,9 +88,18 @@ export default {
     this.sendBackwardButton = document.getElementById('sendBackwardButton')
     this.sendToBackButton = document.getElementById('sendToBackButton')
     this.listenEventsOnCanvas()
+    this.socket.onopen = this.websocketonopen
+    this.socket.onerror = this.websocketonerror
+    this.socket.onmessage = this.websocketonmessage
+    this.socket.onclose = this.websocketclose
     // this.timer = setInterval(this.refreshCanvas, 10000)
+    this.timer = setInterval(this.sendMouseData, 1000)
   },
   methods: {
+    sendMouseData () {
+      console.log(this.mouseData)
+      this.sendMessage(JSON.stringify(this.mouseData))
+    },
     async getBoardContent () {
       try {
         const res = await axios.get('http://' + this.hostIp + ':8081/boards/' + this.boardId + '/content')
@@ -275,7 +286,7 @@ export default {
         {
           'mouse:move': function (e) {
             var mouse = this.getPointer(e)
-            var data = {
+            _this.mouseData = {
               message: {
                 event: 'CursorMovedDomainEvent',
                 info: {
@@ -288,7 +299,7 @@ export default {
                 }
               }
             }
-            _this.sendMessage(JSON.stringify(data))
+            // _this.sendMessage(JSON.stringify(data))
             // _this.socket.emit('mouse-moved', data)
           },
           'mouse:dblclick': function (e) {
@@ -507,22 +518,32 @@ export default {
     },
     websocketonmessage: function (e) {
       console.log('收到來自後端的訊息', e)
-      console.log(JSON.parse(e.data)) // console.log(e);
+      // console.log(JSON.parse(e.data)) // console.log(e);
     },
     websocketclose: function (e) {
       console.log('connection closed ()', e.data)
     },
     socketInit () {
       // this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/' + this.myUserId + '/')
+      this.myUserId = this.generateUUID()
       this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/' + this.boardId + '/' + this.myUserId + '/')
-      this.socket.onopen = this.websocketonopen
-      this.socket.onerror = this.websocketonerror
-      this.socket.onmessage = this.websocketonmessage
-      this.socket.onclose = this.websocketclose
     },
     sendMessage: function (data) {
       // console.log('sendMsg:', data)
-      this.socket.send(data)
+      if (this.socket.readyState === 1) {
+        this.socket.send(data)
+      }
+    },
+    generateUUID () {
+      var d = Date.now()
+      if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+        d += performance.now() // use high-precision timer if available
+      }
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (d + Math.random() * 16) % 16 | 0
+        d = Math.floor(d / 16)
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+      })
     }
   }
 

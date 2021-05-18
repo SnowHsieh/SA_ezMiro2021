@@ -72,13 +72,11 @@ public class BoardSessionWebSocketAdapter {
         }catch (JSONException err){
             System.out.println(err);
         }
-
     }
 
     private void websocketEventHandler(String event, JSONObject info) {
         if(CursorMovedDomainEvent.class.getSimpleName().equals(event)){
             handleCursorMoved(info);
-
         }
     }
 
@@ -91,13 +89,9 @@ public class BoardSessionWebSocketAdapter {
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
         input.setUserId(UUID.fromString(userId));
         input.setBoardId(UUID.fromString(boardId));
-
         enterBoardUseCase.execute(input, presenter);
-
         ((WebSocketBroadcaster)boardSessionBroadcaster).addSession(presenter.getId(), session);
 
-        WebSocketBroadcaster webSocketBroadcaster = new WebSocketBroadcaster();
-        webSocketBroadcaster.broadcast2();
     }
 
     @OnClose
@@ -136,5 +130,9 @@ public class BoardSessionWebSocketAdapter {
         input.setBoardId(UUID.fromString(boardId));
         input.setPosition(newPosition);
         moveCursorUseCase.execute(input, output);
+
+        WebSocketBroadcaster webSocketBroadcaster = new WebSocketBroadcaster();
+        webSocketBroadcaster.broadcastMsg(info.toString());
+
     }
 }

@@ -1,8 +1,10 @@
 package ntut.csie.islab.miro.entity.model.board;
 
+import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.board.cursor.Cursor;
 import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorDeletedDomainEvent;
+import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorMovedDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.event.*;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 
@@ -154,4 +156,10 @@ public class Board extends AggregateRoot<UUID> {
         addDomainEvent(new BoardLeftDomainEvent(getBoardId(),userId,boardSessionId));
     }
 
+    public void setCursorPosition(UUID userId , Position newPosition){
+        Cursor cursor = this.getCursorList().stream().filter(x->x.getUserId().equals(userId)).findFirst().get();
+        Position oldPosition = cursor.getPosition();
+        cursor.setPosition(newPosition);
+        addDomainEvent(new CursorMovedDomainEvent(getBoardId(), cursor.getUserId(),oldPosition,newPosition));
+    }
 }

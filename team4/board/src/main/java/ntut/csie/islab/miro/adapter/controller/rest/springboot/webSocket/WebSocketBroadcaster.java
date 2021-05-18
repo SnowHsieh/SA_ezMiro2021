@@ -27,8 +27,7 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
         synchronized (session) {
             try {
                 session.getAsyncRemote().sendObject(domainEvent); // getBasicRemote -> getAsyncRemote
-                System.out.println(session.getAsyncRemote());
-                System.out.println(domainEvent.detail());
+
             } catch ( IllegalStateException e) {
                 e.printStackTrace();
             }
@@ -49,13 +48,16 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
         throw new RuntimeException("sessionId: " + sessionId +" not found!");
     }
 
-    public void broadcast2() {
+    public void broadcastMsg(String msg) {
         Collection<Session> sessions = ONLINE_SESSION.values();
         for(Session session : sessions){
+
             synchronized (session) {
                 try {
-                    session.getAsyncRemote().sendText("我來自後端");
-                } catch ( IllegalStateException e) {
+                    if(session.isOpen()){
+                        session.getAsyncRemote().sendText(msg);
+                    }
+                } catch ( Exception e) {
                     e.printStackTrace();
                 }
             }
