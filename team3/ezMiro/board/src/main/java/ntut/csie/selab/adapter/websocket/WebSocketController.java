@@ -61,8 +61,9 @@ public class WebSocketController {
         int y = 0;
         try {
             JSONObject messageJSON = new JSONObject(message);
-            x = messageJSON.getInt("x");
-            y = messageJSON.getInt("y");
+            JSONObject cursor = messageJSON.getJSONObject("cursor");
+            x = cursor.getInt("x");
+            y = cursor.getInt("y");
         } catch (JSONException e) {
             e.printStackTrace();
         }

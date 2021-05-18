@@ -15,8 +15,8 @@
       <li class="list-group-item" @click="bringToFront">bring to front</li>
       <li class="list-group-item" @click="sendToback">send to back</li>
     </ul>
-    <div class="cursors" v-for="user in this.collaborator" v-bind:key="user.name" :style="{'top': user.y + 'px', 'left': user.x + 'px'}">
-      {{user.name}}
+    <div class="cursors" v-for="user in this.collaborator" v-bind:key="user.userId" :style="{'top': user.y + 'px', 'left': user.x + 'px'}">
+      {{user.userId}}
     </div>
   </div>
 </template>
@@ -78,13 +78,22 @@ export default {
     }
     this.webSocket.onmessage = async function (e) {
       console.log(e.data)
-      const users = await JSON.parse(e.data)
-      for (let user = 0; user < users.length; user++) {
-        if (users[user].name === me.user.name) {
-          users.splice(user, 1)
+      // const users = await JSON.parse(e.data)
+      const message = await JSON.parse(e.data)
+      console.log(message)
+      const cursors = message.cursors
+      for (let index = 0; index < cursors.length; index++) {
+        if (cursors[index].userId === me.user.name) {
+          cursors.splice(index, 1)
         }
       }
-      me.collaborator = users
+      me.collaborator = cursors
+      // for (let user = 0; user < users.length; user++) {
+      //   if (users[user].name === me.user.name) {
+      //     users.splice(user, 1)
+      //   }
+      // }
+      // me.collaborator = users
     }
     this.canvas.on('mouse:move', function (e) {
       if (me.isSamplingCursorDelayFinish) {
