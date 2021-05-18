@@ -12,12 +12,14 @@ public class Board extends AggregateRoot<String> {
     private String teamId;
     private String boardName;
     private List<CommittedWidget> committedWidgets;
+    private Set<Cursor> cursorSet;
 
     public Board(String id, String teamId, String boardName) {
         super(id);
         this.teamId = teamId;
         this.boardName = boardName;
         this.committedWidgets = new ArrayList<>();
+        this.cursorSet = new HashSet<>();
 
         addDomainEvent(new BoardCreated(new Date(), id, teamId));
     }
@@ -63,5 +65,17 @@ public class Board extends AggregateRoot<String> {
                 committedWidgets.add(new CommittedWidget(widgetId, getId(), zOrder));
             }
         }
+    }
+
+    public void addCursor(Cursor cursor) {
+        cursorSet.add(cursor);
+    }
+
+    public int getCursorCount() {
+        return cursorSet.size();
+    }
+
+    public Set<Cursor> getCursors() {
+        return cursorSet;
     }
 }

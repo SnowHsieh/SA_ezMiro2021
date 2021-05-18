@@ -3,6 +3,7 @@ package ntut.csie.selab.application.springboot.web.config;
 import ntut.csie.selab.adapter.controller.rest.springboot.widget.editTextOfStickyNote.EditFontSizeOfStickyNote;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
+import ntut.csie.selab.usecase.board.EnterBoardUseCase;
 import ntut.csie.selab.usecase.board.create.CreateBoardUseCase;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
@@ -78,6 +79,11 @@ public class UseCaseInjection {
     @Bean("EditFontSizeOfStickyNoteUseCase")
     public EditFontSizeOfStickyNoteUseCase editFontSizeOfStickyNoteUseCase() {
         return new EditFontSizeOfStickyNoteUseCase(widgetRepository, eventBus);
+    }
+
+    @Bean("EnterBoardUseCase")
+    public EnterBoardUseCase enterBoardUseCase() {
+        return new EnterBoardUseCase(boardRepository, eventBus);
     }
 
     @Autowired
