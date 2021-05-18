@@ -6,9 +6,8 @@ import ntut.csie.selab.usecase.board.EnterBoardUseCase;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -16,32 +15,30 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.util.List;
 
 @Component
-@ServerEndpoint(value = "/{boardId}/{userId}")
+@ServerEndpoint(value = "/WebSocketServer/{boardId}/{userId}")
 public class WebSocketController {
-
+    private static ApplicationContext applicationContext ;
 
     private EnterBoardUseCase enterBoardUseCase;
 
-    @Autowired
-    public WebSocketController(EnterBoardUseCase enterBoardUseCase) {
-        this.enterBoardUseCase = enterBoardUseCase;
+    public static void setApplicationContext (ApplicationContext applicationContext) {
+        WebSocketController. applicationContext = applicationContext ;
     }
 
     @OnOpen
     public void onOpen(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String userId, Session session) throws JSONException {
-
+        enterBoardUseCase = applicationContext.getBean(EnterBoardUseCase.class);
         EnterBoardInput input = new EnterBoardInput();
         EnterBoardOutput output = new EnterBoardOutput();
-//        input.setBoardId(boardId);
-//        input.setUserId(userId);
+        input.setBoardId(boardId);
+        input.setUserId(userId);
         enterBoardUseCase.execute(input, output);
 
-//        String msg = "有新成員[" + userId + "]加入看板!";
-//        System.out.println(msg);
-//        WebSocketUtil.addSession(userId, session);
+        String msg = "有新成員[" + userId + "]加入看板!";
+        System.out.println(msg);
+        WebSocketUtil.addSession(userId, session);
 
         JSONArray parsedCursors = new JSONArray();
         output.getCursor().forEach(cursor -> {

@@ -65,13 +65,13 @@ export default {
     this.boardContent = await GetBoardContent(this.boardId)
     this.initCanvas()
     this.loadAllStickyNote(this.boardContent.widgetDtos)
-    this.initEventListener()
+    // this.initEventListener()
     this.user = {
       name: `匿名北極熊${Math.floor((Math.random() * 100) + 1)}`,
       x: 0,
       y: 0
     }
-    this.webSocket = new WebSocket(`${webSocketHost}/WebSocketServer/${this.user.name}`)
+    this.webSocket = new WebSocket(`${webSocketHost}/WebSocketServer/${this.boardId}/${this.user.name}`)
     this.webSocket.onopen = function (e) {
       console.log(e)
       console.log('Successfully connected to the echo websocket server...')
