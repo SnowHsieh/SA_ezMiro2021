@@ -67,6 +67,7 @@ public class BoardSessionWebSocketAdapter {
             jsonObject = jsonObject.getJSONObject("message");
             event = jsonObject.getString("event");
             info = jsonObject.getJSONObject("info");
+            System.out.println("event in onMessage is: "+jsonObject.toString());
             websocketEventHandler(event, info);
         }catch (JSONException err){
             System.out.println(err);
@@ -77,6 +78,7 @@ public class BoardSessionWebSocketAdapter {
     private void websocketEventHandler(String event, JSONObject info) {
         if(CursorMovedDomainEvent.class.getSimpleName().equals(event)){
             handleCursorMoved(info);
+
         }
     }
 
@@ -93,6 +95,9 @@ public class BoardSessionWebSocketAdapter {
         enterBoardUseCase.execute(input, presenter);
 
         ((WebSocketBroadcaster)boardSessionBroadcaster).addSession(presenter.getId(), session);
+
+        WebSocketBroadcaster webSocketBroadcaster = new WebSocketBroadcaster();
+        webSocketBroadcaster.broadcast2();
     }
 
     @OnClose

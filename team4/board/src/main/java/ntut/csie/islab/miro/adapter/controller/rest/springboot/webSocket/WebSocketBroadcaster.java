@@ -6,6 +6,9 @@ import ntut.csie.sslab.ddd.model.DomainEvent;
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -46,4 +49,16 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
         throw new RuntimeException("sessionId: " + sessionId +" not found!");
     }
 
+    public void broadcast2() {
+        Collection<Session> sessions = ONLINE_SESSION.values();
+        for(Session session : sessions){
+            synchronized (session) {
+                try {
+                    session.getAsyncRemote().sendText("我來自後端");
+                } catch ( IllegalStateException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

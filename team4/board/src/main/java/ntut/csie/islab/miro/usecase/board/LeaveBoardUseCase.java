@@ -34,7 +34,7 @@ public class LeaveBoardUseCase {
         BoardSessionId boardSessionId = BoardSessionId.valueOf(input.getBoardSessionId());
 
         board.acceptUserLeaving(boardSessionId, input.getUserId());
-
+        this.domainEventBus.postAll(board);
         output.setId(boardSessionId.id());
         output.setExitCode(ExitCode.SUCCESS);
 

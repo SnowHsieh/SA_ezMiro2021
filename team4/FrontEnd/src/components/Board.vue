@@ -49,7 +49,7 @@ export default {
 
   data () {
     return {
-      boardId: '031f8834-faeb-4ad2-986a-d2a496ae612f',
+      boardId: '4c9affb6-923f-479d-9f2e-25286fc1079a',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -65,12 +65,11 @@ export default {
       socket: null,
       socketLoaded: null,
       userCursorList: [],
-      myUserId: 'QQ',
-      hostIp: '140.124.181.20'
+      myUserId: '44b608e4-781b-47c5-9034-a8c89430b1e4',
+      hostIp: '140.124.181.2'
     }
   },
   created () {
-    this.socketInit()
   },
   destroyed: function () { // 离开页面生命周期函数
     this.websocketclose()
@@ -500,47 +499,30 @@ export default {
         console.log(e)
       }
     },
-    websocketonopen: function (e) {
+    websocketonopen: function () {
       console.log('WebSocket连接成功')
     },
-    websocketonerror: function (e) {
-      console.log('WebSocket连接发生错误', JSON.stringify(e))
+    websocketonerror: function () {
+      console.log('WebSocket连接发生错误')
     },
     websocketonmessage: function (e) {
-      console.log('收到來自後端的訊息=')
-      console.log(e) // console.log(e);
+      console.log('收到來自後端的訊息', e)
+      console.log(JSON.parse(e.data)) // console.log(e);
     },
     websocketclose: function (e) {
-      console.log(e, 'connection closed ()')
+      console.log('connection closed ()', e.data)
     },
     socketInit () {
-      this.myUserId = this.generateUUID()
-      const url = 'ws://' + this.hostIp + ':8081/websocket/' + this.boardId + '/' + this.myUserId + '/'
-      // const url = 'ws://' + 'localhost' + ':8081/websocket/' + this.boardId + '/' + this.myUserId
-
-      console.log('url', url)
-      this.socket = new WebSocket(url)
-      this.socket.onopen = this.websocketonopen()
-      this.socket.onerror = this.websocketonerror()
-      this.socket.onmessage = this.websocketonmessage()
-      this.socket.onclose = this.websocketclose()
+      // this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/' + this.myUserId + '/')
+      this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/' + this.boardId + '/' + this.myUserId + '/')
+      this.socket.onopen = this.websocketonopen
+      this.socket.onerror = this.websocketonerror
+      this.socket.onmessage = this.websocketonmessage
+      this.socket.onclose = this.websocketclose
     },
     sendMessage: function (data) {
-      console.log('sendMsg:', data)
-      if (this.socket.readyState === 1) {
-        this.socket.send(data)
-      }
-    },
-    generateUUID () {
-      var d = Date.now()
-      if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-        d += performance.now() // use high-precision timer if available
-      }
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = (d + Math.random() * 16) % 16 | 0
-        d = Math.floor(d / 16)
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
-      })
+      // console.log('sendMsg:', data)
+      this.socket.send(data)
     }
   }
 
