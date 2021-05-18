@@ -38,7 +38,7 @@ public class WebSocketController {
 
         String msg = "有新成員[" + userId + "]加入看板!";
         System.out.println(msg);
-        WebSocketUtil.addSession(userId, session);
+        WebSocketUtil.addSessionIn(boardId, userId, session);
 
         JSONArray parsedCursors = new JSONArray();
         output.getCursor().forEach(cursor -> {
@@ -54,20 +54,19 @@ public class WebSocketController {
         });
         JSONObject message = new JSONObject();
         message.put("cursors", parsedCursors);
-        WebSocketUtil.sendUsersForAll(message);
+        WebSocketUtil.sendMessageForAllUsersIn(boardId, message);
     }
 
     @OnMessage
-    public void OnMessage(@PathParam(value = "userId") String usernick, String message, Session session) {
+    public void OnMessage(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String usernick, String message, Session session) {
         String info = "mouse moved: 成員[" + usernick + "]：" + message;
         System.out.println(info);
-
     }
 
     @OnClose
-    public void OnClose(@PathParam(value = "userId") String usernick, Session session) {
-        WebSocketUtil.removeSession(session);
-        String info = "成員[" + usernick + "]：連線已斷開" ;
+    public void OnClose(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String usernick, Session session) {
+        WebSocketUtil.removeSessionFrom(boardId, session);
+        String info = "Board[" + boardId + "]中成員[" + usernick + "]的連線已斷開" ;
         System.out.println(info);
     }
 }

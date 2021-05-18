@@ -77,6 +77,7 @@ export default {
       console.log('Successfully connected to the echo websocket server...')
     }
     this.webSocket.onmessage = async function (e) {
+      console.log(e.data)
       const users = await JSON.parse(e.data)
       for (let user = 0; user < users.length; user++) {
         if (users[user].name === me.user.name) {
@@ -90,8 +91,7 @@ export default {
         me.isSamplingCursorDelayFinish = false
         setTimeout(function () {
           me.isSamplingCursorDelayFinish = true
-          const cursorPoint = { x: Math.floor(e.absolutePointer.x), y: Math.floor(e.absolutePointer.y) }
-          me.webSocket.send(JSON.stringify(cursorPoint))
+          me.webSocket.send(me._composeCursorInfo(e.absolutePointer.x, e.absolutePointer.y))
         }, 100)
       }
     })
@@ -274,6 +274,9 @@ export default {
     },
     getZOrderOf (widget) {
       return this.canvas.getObjects().indexOf(widget)
+    },
+    _composeCursorInfo (x, y) {
+      return JSON.stringify({ cursor: { x: Math.floor(x), y: Math.floor(y) } })
     }
   }
 }

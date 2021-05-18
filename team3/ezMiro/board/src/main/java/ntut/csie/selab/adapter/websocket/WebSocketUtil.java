@@ -7,21 +7,30 @@ import org.json.JSONObject;
 
 import javax.websocket.RemoteEndpoint.Async;
 import javax.websocket.Session;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WebSocketUtil {
 
-    private static final Map<Session, String> ONLINE_SESSION = new ConcurrentHashMap<>();
+    private static final Map<String, Map<Session, String>> ONLINE_SESSION = new ConcurrentHashMap<>();
 
     // 新增紀錄Session
-    public static void addSession(String userId, Session session) {
-        ONLINE_SESSION.put(session, userId);
+    public static void addSessionIn(String boardId, String userId, Session session) {
+        if (!ONLINE_SESSION.containsKey(boardId)) {
+            ONLINE_SESSION.put(boardId, new HashMap<Session, String>() {{
+                put(session, userId);
+            }});
+        } else {
+            Map<Session, String> selectedBoard = ONLINE_SESSION.get(boardId);
+            selectedBoard.put(session, userId);
+        }
     }
 
     // 移除Session
-    public static void removeSession(Session session) {
-        ONLINE_SESSION.remove(session);
+    public static void removeSessionFrom(String boardId, Session session) {
+        Map<Session, String> selectedBoard = ONLINE_SESSION.get(boardId);
+        selectedBoard.remove(session);
     }
 
     // 發送訊息
@@ -35,10 +44,14 @@ public class WebSocketUtil {
     }
 
     // 發送群體訊息
-    public static void sendUsersForAll(JSONObject message) {
-        ONLINE_SESSION.forEach((session, userId) -> {
+    public static void sendMessageForAllUsersIn(String boardId, JSONObject message) {
+        Map<Session, String> boardUsers= ONLINE_SESSION.get(boardId);
+        boardUsers.forEach((session, userId) -> {
             sendMessage(session, message);
         });
+//        ONLINE_SESSION.forEach((session, userId) -> {
+//            sendMessage(session, message);
+//        });
     }
 }
 
