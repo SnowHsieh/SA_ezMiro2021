@@ -49,7 +49,7 @@ export default {
 
   data () {
     return {
-      boardId: '4c9affb6-923f-479d-9f2e-25286fc1079a',
+      boardId: 'dc1793fc-b6e6-4f2c-afe1-227ba2103e99',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -65,7 +65,7 @@ export default {
       socket: null,
       socketLoaded: null,
       userCursorList: [],
-      myUserId: '44b608e4-781b-47c5-9034-a8c89430b1e4',
+      myUserId: '7398cd26-da85-4c05-b04b-122e73888dfb',
       hostIp: '140.124.181.2'
     }
   },
