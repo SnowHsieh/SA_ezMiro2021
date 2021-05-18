@@ -4,9 +4,9 @@ import ntut.csie.sslab.ddd.model.ValueObject;
 
 public class CommittedFigure extends ValueObject {
 
-    private String figureId;
-    private String boardId;
-    private int zOrder;
+    private final String figureId;
+    private final String boardId;
+    private final int zOrder;
 
     public CommittedFigure(String figureId, String boardId, int zOrder) {
         this.figureId = figureId;

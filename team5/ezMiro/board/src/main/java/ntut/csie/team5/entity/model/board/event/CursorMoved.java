@@ -2,30 +2,35 @@ package ntut.csie.team5.entity.model.board.event;
 
 import ntut.csie.sslab.ddd.model.DateProvider;
 import ntut.csie.sslab.ddd.model.DomainEvent;
-import ntut.csie.team5.entity.model.board.BoardSessionId;
 
-public class BoardLeft extends DomainEvent {
+public class CursorMoved extends DomainEvent {
 
     private final String boardId;
-    private final BoardSessionId boardSessionId;
     private final String userId;
+    private final int positionX;
+    private final int positionY;
 
-    public BoardLeft(String boardId, BoardSessionId boardSessionId, String userId) {
+    public CursorMoved(String boardId, String userId, int positionX, int positionY) {
         super(DateProvider.now());
         this.boardId = boardId;
-        this.boardSessionId = boardSessionId;
         this.userId = userId;
+        this.positionX = positionX;
+        this.positionY = positionY;
     }
 
     public String boardId() {
         return boardId;
     }
 
-    public BoardSessionId boardSessionId() {
-        return boardSessionId;
-    }
-
     public String userId() {
         return userId;
+    }
+
+    public int positionX() {
+        return positionX;
+    }
+
+    public int positionY() {
+        return positionY;
     }
 }

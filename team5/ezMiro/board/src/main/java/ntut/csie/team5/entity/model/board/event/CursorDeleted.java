@@ -5,8 +5,8 @@ import ntut.csie.sslab.ddd.model.DomainEvent;
 
 public class CursorDeleted extends DomainEvent {
 
-    private String boardId;
-    private String userId;
+    private final String boardId;
+    private final String userId;
 
     public CursorDeleted(String boardId, String userId) {
         super(DateProvider.now());

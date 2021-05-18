@@ -6,9 +6,9 @@ import ntut.csie.team5.entity.model.board.ZOrderType;
 
 public class FigureZOrderChanged extends DomainEvent {
 
-    private String figureId;
-    private String boardId;
-    private ZOrderType zOrderType;
+    private final String figureId;
+    private final String boardId;
+    private final ZOrderType zOrderType;
 
     public FigureZOrderChanged(String figureId, String boardId, ZOrderType zOrderType) {
         super(DateProvider.now());

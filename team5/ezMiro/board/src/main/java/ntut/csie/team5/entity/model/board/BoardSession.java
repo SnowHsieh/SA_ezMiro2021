@@ -4,9 +4,9 @@ import ntut.csie.sslab.ddd.model.ValueObject;
 
 public class BoardSession extends ValueObject {
 
-    private String boardId;
-    private String userId;
-    private BoardSessionId boardSessionId;
+    private final String boardId;
+    private final String userId;
+    private final BoardSessionId boardSessionId;
 
     public BoardSession(String boardId, String userId, BoardSessionId boardSessionId) {
         this.boardId = boardId;

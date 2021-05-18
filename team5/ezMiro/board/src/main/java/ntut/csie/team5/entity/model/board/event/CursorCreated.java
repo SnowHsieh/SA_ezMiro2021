@@ -5,8 +5,8 @@ import ntut.csie.sslab.ddd.model.DomainEvent;
 
 public class CursorCreated extends DomainEvent {
 
-    private String boardId;
-    private String userId;
+    private final String boardId;
+    private final String userId;
 
     public CursorCreated(String boardId, String userId) {
         super(DateProvider.now());

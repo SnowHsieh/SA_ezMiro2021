@@ -2,6 +2,7 @@ package ntut.csie.team5.usecase;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
+import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.team5.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
 import ntut.csie.team5.adapter.project.ProjectRepositoryImpl;
@@ -10,6 +11,9 @@ import ntut.csie.team5.usecase.board.BoardRepository;
 import ntut.csie.team5.usecase.board.create.CreateBoardInput;
 import ntut.csie.team5.usecase.board.create.CreateBoardUseCase;
 import ntut.csie.team5.usecase.board.create.CreateBoardUseCaseImpl;
+import ntut.csie.team5.usecase.board.enter.EnterBoardInput;
+import ntut.csie.team5.usecase.board.enter.EnterBoardUseCase;
+import ntut.csie.team5.usecase.board.enter.EnterBoardUseCaseImpl;
 import ntut.csie.team5.usecase.eventhandler.NotifyBoard;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteInput;
@@ -23,6 +27,9 @@ import org.junit.Before;
 
 import java.awt.*;
 import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public abstract class AbstractTest {
 
@@ -104,5 +111,18 @@ public abstract class AbstractTest {
 
         postNoteUseCase.execute(postNoteInput, postNoteOutput);
         return postNoteOutput.getId();
+    }
+
+    public String enterBoard(String boardId, String userId) {
+        EnterBoardUseCase enterBoardUseCase = new EnterBoardUseCaseImpl(boardRepository, domainEventBus);
+        EnterBoardInput enterBoardInput = enterBoardUseCase.newInput();
+        CqrsCommandPresenter enterBoardOutput = CqrsCommandPresenter.newInstance();
+
+        enterBoardInput.setBoardId(boardId);
+        enterBoardInput.setUserId(userId);
+
+        enterBoardUseCase.execute(enterBoardInput, enterBoardOutput);
+
+        return enterBoardOutput.getId();
     }
 }

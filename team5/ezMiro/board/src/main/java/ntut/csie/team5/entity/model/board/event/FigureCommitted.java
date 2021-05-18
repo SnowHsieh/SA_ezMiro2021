@@ -5,8 +5,8 @@ import ntut.csie.sslab.ddd.model.DomainEvent;
 
 public class FigureCommitted extends DomainEvent {
 
-    private String figureId;
-    private String boardId;
+    private final String figureId;
+    private final String boardId;
 
     public FigureCommitted(String figureId, String boardId) {
         super(DateProvider.now());

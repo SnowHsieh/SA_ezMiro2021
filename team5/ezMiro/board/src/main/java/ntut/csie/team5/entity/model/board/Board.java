@@ -208,4 +208,22 @@ public class Board extends AggregateRoot<String> {
     public List<Cursor> getCursors() {
         return cursors;
     }
+
+    public Cursor getUserCursor(String userId) {
+        return cursors.stream().filter(cu -> cu.userId().equals(userId)).findAny().orElse(null);
+    }
+
+
+    public void moveCursor(String userId, int positionX, int positionY) {
+        Cursor cursor = getUserCursor(userId);
+
+        if(cursor == null)
+            return;
+
+        int index = cursors.indexOf(cursor);
+
+        cursors.set(index, new Cursor(userId, positionX, positionY));
+
+        addDomainEvent(new CursorMoved(getBoardId(), userId, positionX, positionY));
+    }
 }

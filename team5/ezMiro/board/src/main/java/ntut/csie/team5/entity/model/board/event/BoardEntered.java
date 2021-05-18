@@ -6,9 +6,9 @@ import ntut.csie.team5.entity.model.board.BoardSessionId;
 
 public class BoardEntered extends DomainEvent {
 
-    private String boardId;
-    private String userId;
-    private BoardSessionId boardSessionId;
+    private final String boardId;
+    private final String userId;
+    private final BoardSessionId boardSessionId;
 
     public BoardEntered(String boardId, String userId, BoardSessionId boardSessionId) {
         super(DateProvider.now());
