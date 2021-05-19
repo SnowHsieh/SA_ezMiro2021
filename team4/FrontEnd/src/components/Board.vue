@@ -48,7 +48,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      boardId: '037cd8e0-6447-4b05-a78b-c89a6a6cb0a8',
+      boardId: '7cb48574-886a-4ba9-8f92-67ba9abb33c9',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -65,7 +65,7 @@ export default {
       socketLoaded: null,
       userCursorList: [],
       myUserId: '7398cd26-da85-4c05-b04b-122e73888dfb',
-      hostIp: 'localhost',
+      hostIp: '140.124.181.8',
       mouseData: null
     }
   },
@@ -239,7 +239,7 @@ export default {
       figureDtos.forEach(figure => {
         _this.addStickyNote(figure)
       })
-      this.canvas.renderAll()
+      // this.canvas.renderAll()
     },
     addStickyNote (figure) {
       var shadow = new fabric.Shadow({
@@ -549,7 +549,7 @@ export default {
       } else if (receivedData.event === 'StickyNoteCreatedDomainEvent') {
         console.log(receivedData)
         const figure = {
-          figureId: receivedData,
+          figureId: receivedData.figureId,
           content: '',
           position: {
             x: 100,

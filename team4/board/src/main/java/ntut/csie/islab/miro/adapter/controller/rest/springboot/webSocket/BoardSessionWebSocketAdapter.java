@@ -11,7 +11,6 @@ import ntut.csie.islab.miro.usecase.board.cursor.MoveCursorUseCase;
 import ntut.csie.islab.miro.usecase.webSocket.BoardSessionBroadcaster;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +23,6 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.UUID;
 
 @ServerEndpoint(value = "/websocket/{boardId}/{userId}",
@@ -87,11 +84,11 @@ public class BoardSessionWebSocketAdapter {
             handleCursorMoved(info);
         }
         else if (event.equals("getAllUser")){
-            handleGetAllUser(info);
+            handleGetAllUser(info, session);
         }
     }
 
-    private void handleGetAllUser(JSONObject info) throws JSONException {
+    private void handleGetAllUser(JSONObject info, Session session) throws JSONException {
         String boardId = "";
         try {
             boardId = info.getString("boardId");
@@ -108,7 +105,7 @@ public class BoardSessionWebSocketAdapter {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("event", "GetAllCursorList");
         jsonObject.put("cursorList", new JSONObject(presenter.buildViewModel()));
-        webSocketBroadcaster.broadcastMsg(jsonObject);
+        webSocketBroadcaster.narrowCastMsg(jsonObject, session);
     }
 
     @OnOpen

@@ -20,9 +20,6 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
 
     @Override
     public void broadcast(DomainEvent domainEvent, String userId) {
-
-        this.broadcastDomainEvent(domainEvent);
-
         Session session = ONLINE_SESSION.get(userId);
         if(session == null)
             return;
@@ -53,31 +50,29 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
         throw new RuntimeException("sessionId: " + sessionId +" not found!");
     }
 
-    public void broadcastDomainEvent(DomainEvent domainEvent) {
-        Collection<Session> sessions = ONLINE_SESSION.values();
-        for(Session session : sessions){
-            synchronized (session) {
-                try {
-                    if(session.isOpen()){
-                        session.getAsyncRemote().sendObject(domainEvent);
-                    }
-                } catch ( Exception e) {
-                    e.printStackTrace();
+//    public void broadcastDomainEvent(DomainEvent domainEvent) {
+//        Collection<Session> sessions = ONLINE_SESSION.values();
+//        for(Session session : sessions){
+//            synchronized (session) {
+//                try {
+//                    if(session.isOpen()){
+//                        session.getAsyncRemote().sendObject(domainEvent);
+//                    }
+//                } catch ( Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
+
+    public void narrowCastMsg(JSONObject obj, Session session) {
+        synchronized (session) {
+            try {
+                if(session.isOpen()){
+                    session.getAsyncRemote().sendText(obj.toString());
                 }
-            }
-        }
-    }
-    public void broadcastMsg(JSONObject obj) {
-        Collection<Session> sessions = ONLINE_SESSION.values();
-        for(Session session : sessions){
-            synchronized (session) {
-                try {
-                    if(session.isOpen()){
-                        session.getAsyncRemote().sendText(obj.toString());
-                    }
-                } catch ( Exception e) {
-                    e.printStackTrace();
-                }
+            } catch ( Exception e) {
+                e.printStackTrace();
             }
         }
     }
