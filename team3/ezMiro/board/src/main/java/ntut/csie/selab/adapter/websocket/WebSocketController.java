@@ -4,6 +4,9 @@ import ntut.csie.selab.entity.model.board.Cursor;
 import ntut.csie.selab.usecase.board.enterboard.EnterBoardInput;
 import ntut.csie.selab.usecase.board.enterboard.EnterBoardOutput;
 import ntut.csie.selab.usecase.board.enterboard.EnterBoardUseCase;
+import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardInput;
+import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardOutput;
+import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.selab.usecase.board.movecursor.MoveCursorInput;
 import ntut.csie.selab.usecase.board.movecursor.MoveCursorOutput;
 import ntut.csie.selab.usecase.board.movecursor.MoveCursorUseCase;
@@ -29,6 +32,7 @@ public class WebSocketController {
 
     private EnterBoardUseCase enterBoardUseCase;
     private MoveCursorUseCase moveCursorUseCase;
+    private LeaveBoardUseCase leaveBoardUseCase;
 
     public static void setApplicationContext (ApplicationContext applicationContext) {
         WebSocketController. applicationContext = applicationContext ;
@@ -80,7 +84,14 @@ public class WebSocketController {
 
     @OnClose
     public void OnClose(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String usernick, Session session) {
+        leaveBoardUseCase = applicationContext.getBean(LeaveBoardUseCase.class);
+        LeaveBoardInput input= new LeaveBoardInput();
+        LeaveBoardOutput output = new LeaveBoardOutput();
+        input.setBoardId(boardId);
+        input.setUserId(usernick);
+        leaveBoardUseCase.execute(input, output);
         WebSocketUtil.removeSessionFrom(boardId, session);
+        WebSocketUtil.sendMessageForAllUsersIn(boardId, convertCursorToMessage(output.getCursors()));
         String info = "Board[" + boardId + "]中成員[" + usernick + "]的連線已斷開" ;
         System.out.println(info);
     }

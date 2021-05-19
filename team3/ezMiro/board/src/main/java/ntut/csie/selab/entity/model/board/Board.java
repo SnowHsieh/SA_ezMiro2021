@@ -81,6 +81,10 @@ public class Board extends AggregateRoot<String> {
         cursorSet.add(cursor);
     }
 
+    public void removeCursorBy(String userId) {
+        cursorSet.removeIf(cursor -> cursor.getUserId().equals(userId));
+    }
+
     public int getCursorCount() {
         return cursorSet.size();
     }
@@ -88,4 +92,5 @@ public class Board extends AggregateRoot<String> {
     public Set<Cursor> getCursors() {
         return cursorSet;
     }
+
 }

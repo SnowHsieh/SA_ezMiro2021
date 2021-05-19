@@ -4,6 +4,7 @@ import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.board.enterboard.EnterBoardUseCase;
 import ntut.csie.selab.usecase.board.create.CreateBoardUseCase;
+import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.selab.usecase.board.movecursor.MoveCursorUseCase;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
@@ -89,6 +90,11 @@ public class UseCaseInjection {
     @Bean("EnterBoardUseCase")
     public EnterBoardUseCase enterBoardUseCase() {
         return new EnterBoardUseCase(boardRepository, eventBus);
+    }
+
+    @Bean("LeaveBoardUseCase")
+    public LeaveBoardUseCase leaveBoardUseCase() {
+        return new LeaveBoardUseCase(boardRepository, eventBus);
     }
 
     @Autowired
