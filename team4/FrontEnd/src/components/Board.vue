@@ -48,7 +48,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      boardId: '7cb48574-886a-4ba9-8f92-67ba9abb33c9',
+      boardId: '9307151b-88f1-462c-a53d-17d52c33aa63',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -66,7 +66,9 @@ export default {
       userCursorList: [],
       myUserId: '7398cd26-da85-4c05-b04b-122e73888dfb',
       hostIp: '140.124.181.8',
-      mouseData: null
+      mouseData: null,
+      updateCursorFlag: true,
+      updateFigureFlag: true
     }
   },
   created () {
@@ -92,12 +94,19 @@ export default {
     this.socket.onmessage = this.websocketonmessage
     this.socket.onclose = this.websocketclose
     // this.timer = setInterval(this.refreshCanvas, 10000)
-    this.timer = setInterval(this.sendMouseData, 500)
+    this.timer = setInterval(this.updateFlag, 100)
   },
   methods: {
+    updateFlag () {
+      this.updateCursorFlag = true
+      this.updateFigureFlag = true
+    },
     sendMouseData () {
       // console.log(this.mouseData)
-      this.sendMessage(JSON.stringify(this.mouseData))
+      if (this.updateCursorFlag) {
+        this.sendMessage(JSON.stringify(this.mouseData))
+        this.updateCursorFlag = false
+      }
     },
     async getBoardContent () {
       try {
@@ -129,7 +138,7 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      this.refreshCanvas()
+      // this.refreshCanvas()
     },
     async changeStickyNoteContent (figure) {
       try {
@@ -302,6 +311,7 @@ export default {
                 }
               }
             }
+            _this.sendMouseData(_this.mouseData)
             // _this.sendMessage(JSON.stringify(data))
             // _this.socket.emit('mouse-moved', data)
           },
@@ -344,13 +354,16 @@ export default {
               _this.moveStickyNote(e.target)
             }
           },
-          'object:moved': function (e) {
-            if (e.target.type === 'group') {
-              _this.moveStickyNote(e.target)
-            } else {
-              e.target._objects.forEach((target) => {
-                _this.moveStickyNote(target)
-              })
+          'object:moving': function (e) {
+            if (_this.updateFigureFlag) {
+              if (e.target.type === 'group') {
+                _this.moveStickyNote(e.target)
+              } else {
+                e.target._objects.forEach((target) => {
+                  _this.moveStickyNote(target)
+                })
+              }
+              _this.updateFigureFlag = false
             }
           }
         })
