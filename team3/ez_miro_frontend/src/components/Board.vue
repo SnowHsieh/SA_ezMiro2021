@@ -55,6 +55,7 @@ export default {
       selectedStickyNoteColor: '#000000',
       webSocket: null,
       isSamplingCursorDelayFinish: true,
+      isSamplingWidgetDelayFinish: true,
       user: null,
       collaborator: []
     }
@@ -91,7 +92,7 @@ export default {
       }
       this.webSocket.onmessage = async function (e) {
         const message = await JSON.parse(e.data)
-        console.log(message)
+        // console.log(message)
         me.handleCursorMessage(message.cursors)
         me.handleWidgetMessage(message.widgets)
       }
@@ -110,14 +111,32 @@ export default {
       if (widgets !== undefined) {
         for (let index = 0; index < widgets.length; index++) {
           if (this.boardContent.widgetDtos.some(widgetDto => widgetDto.widgetId === widgets[index].widgetId)) {
-            this.updateWidgetInCanvas()
+            this.updateWidgetInCanvas(widgets[index])
           } else {
+            this.boardContent.widgetDtos.push(widgets[index])
             this.addWidgetToCanvas(widgets[index])
           }
         }
       }
     },
-    updateWidgetInCanvas () {
+    updateWidgetInCanvas (widgetDto) {
+      const canvas = this.canvas
+      const activeWidget = this.canvas.getActiveObject()
+      this.canvas.getObjects().forEach(function (o) {
+        if (o.id === widgetDto.widgetId && (activeWidget === undefined || activeWidget.id !== widgetDto.widgetId)) {
+          o.animate('left', widgetDto.topLeftX, {
+            duration: 200,
+            onChange: canvas.renderAll.bind(canvas),
+            easing: fabric.util.ease.easeInOutSine
+          })
+          o.animate('top', widgetDto.topLeftY, {
+            duration: 200,
+            onChange: canvas.renderAll.bind(canvas),
+            easing: fabric.util.ease.easeInOutSine
+          })
+        }
+      })
+      this.canvas.renderAll()
     },
     addWidgetToCanvas (widgetDto) {
       this.loadStickyNoteIntoCanvas(widgetDto)
@@ -149,6 +168,7 @@ export default {
           info.bottomRightY = info.topLeftY + width
           const stickyNoteId = await CreateStickyNote(me.boardId, info)
           const stickyNote = await ReadStickyNoteBy(stickyNoteId, me.boardId)
+          me.boardContent.widgetDtos.push(stickyNote.widgetDto)
           await me.loadStickyNoteIntoCanvas(stickyNote.widgetDto)
           me.webSocket.send(me.composeWidgetInfo(stickyNote))
         }
@@ -190,6 +210,30 @@ export default {
             bottomRightY: bottomRightY
           }
         })
+      })
+      this.canvas.on('object:moving', function (o) {
+        const target = o.target
+        const stickyNoteId = target.id
+        const point = target.lineCoords
+        const topLeftX = point.tl.x
+        const topLeftY = point.tl.y
+        const bottomRightX = point.br.x
+        const bottomRightY = point.br.y
+
+        if (me.isSamplingWidgetDelayFinish) {
+          me.isSamplingWidgetDelayFinish = false
+          setTimeout(function () {
+            me.isSamplingWidgetDelayFinish = true
+            MoveStickyNoteBy(me.boardId, {
+              [stickyNoteId]: {
+                topLeftX: topLeftX,
+                topLeftY: topLeftY,
+                bottomRightX: bottomRightX,
+                bottomRightY: bottomRightY
+              }
+            })
+          }, 200)
+        }
       })
 
       this.canvas.on('object:scaled', async function (e) {
