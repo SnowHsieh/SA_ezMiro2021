@@ -48,7 +48,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      boardId: '9307151b-88f1-462c-a53d-17d52c33aa63',
+      boardId: '6537abc5-64b0-431d-88c0-7cc935ee0b77',
       canvasContext: null,
       boardContent: null,
       canvas: null,

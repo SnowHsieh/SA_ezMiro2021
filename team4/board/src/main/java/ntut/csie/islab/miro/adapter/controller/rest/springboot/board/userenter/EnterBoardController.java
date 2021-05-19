@@ -1,6 +1,6 @@
 //package ntut.csie.islab.miro.adapter.controller.rest.springboot.board.userenter;
 //
-//import ntut.csie.islab.miro.adapter.presenter.GetBoardContentPresenter;
+//import ntut.csie.islab.miro.adapter.presenter.getContent.GetBoardContentPresenter;
 //import ntut.csie.islab.miro.adapter.presenter.getContent.BoardContentViewModel;
 //import ntut.csie.islab.miro.usecase.board.EnterBoardInput;
 //import ntut.csie.islab.miro.usecase.board.EnterBoardUseCase;

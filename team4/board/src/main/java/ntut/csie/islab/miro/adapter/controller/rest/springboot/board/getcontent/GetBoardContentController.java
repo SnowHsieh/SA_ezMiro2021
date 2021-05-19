@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.adapter.controller.rest.springboot.board.getcontent;
 
-import ntut.csie.islab.miro.adapter.presenter.GetBoardContentPresenter;
+import ntut.csie.islab.miro.adapter.presenter.getContent.GetBoardContentPresenter;
 import ntut.csie.islab.miro.adapter.presenter.getContent.BoardContentViewModel;
 import ntut.csie.islab.miro.usecase.board.GetBoardContentUseCase;
 import ntut.csie.islab.miro.usecase.board.GetBoardContentInput;

@@ -1,7 +1,7 @@
 package ntut.csie.islab.miro.usecase.board;
 
 import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
-import ntut.csie.islab.miro.adapter.presenter.GetBoardContentPresenter;
+import ntut.csie.islab.miro.adapter.presenter.getContent.GetBoardContentPresenter;
 import ntut.csie.islab.miro.adapter.presenter.getContent.BoardContentViewModel;
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
 import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;

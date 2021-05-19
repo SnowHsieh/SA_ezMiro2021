@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.usecase.board;
 
-import ntut.csie.islab.miro.adapter.presenter.GetBoardContentPresenter;
+import ntut.csie.islab.miro.adapter.presenter.getContent.GetBoardContentPresenter;
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
@@ -13,7 +13,6 @@ import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class GetBoardContentUseCase {
 

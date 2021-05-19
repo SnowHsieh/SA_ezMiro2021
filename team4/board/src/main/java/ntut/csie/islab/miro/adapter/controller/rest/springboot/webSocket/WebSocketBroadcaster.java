@@ -50,21 +50,6 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
         throw new RuntimeException("sessionId: " + sessionId +" not found!");
     }
 
-//    public void broadcastDomainEvent(DomainEvent domainEvent) {
-//        Collection<Session> sessions = ONLINE_SESSION.values();
-//        for(Session session : sessions){
-//            synchronized (session) {
-//                try {
-//                    if(session.isOpen()){
-//                        session.getAsyncRemote().sendObject(domainEvent);
-//                    }
-//                } catch ( Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
-
     public void narrowCastMsg(JSONObject obj, Session session) {
         synchronized (session) {
             try {

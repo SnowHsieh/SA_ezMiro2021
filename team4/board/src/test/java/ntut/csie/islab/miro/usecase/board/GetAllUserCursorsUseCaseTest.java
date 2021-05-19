@@ -1,26 +1,12 @@
 package ntut.csie.islab.miro.usecase.board;
 
 import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
-import ntut.csie.islab.miro.adapter.presenter.GetBoardContentPresenter;
 import ntut.csie.islab.miro.adapter.presenter.getAllCursors.AllCursorsViewModel;
 import ntut.csie.islab.miro.adapter.presenter.getAllCursors.GetAllUserCursorsPresenter;
-import ntut.csie.islab.miro.adapter.presenter.getContent.BoardContentViewModel;
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
-import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
-import ntut.csie.islab.miro.entity.model.Position;
-import ntut.csie.islab.miro.entity.model.board.Board;
-import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.textFigure.Style;
 import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
-import ntut.csie.islab.miro.usecase.textFigure.TextFigureDto;
-import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteInput;
-import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteUseCase;
-import ntut.csie.islab.miro.usecase.textFigure.stickyNote.EditStickyNoteInput;
-import ntut.csie.islab.miro.usecase.textFigure.stickyNote.EditStickyNoteUseCase;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
-import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
