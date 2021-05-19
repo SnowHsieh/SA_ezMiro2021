@@ -123,7 +123,8 @@ export default {
       const canvas = this.canvas
       const activeWidget = this.canvas.getActiveObject()
       this.canvas.getObjects().forEach(function (o) {
-        if (o.id === widgetDto.widgetId && (activeWidget === undefined || activeWidget.id !== widgetDto.widgetId)) {
+        console.log(activeWidget)
+        if (o.id === widgetDto.widgetId && (!activeWidget || activeWidget.id !== widgetDto.widgetId)) {
           o.animate('left', widgetDto.topLeftX, {
             duration: 200,
             onChange: canvas.renderAll.bind(canvas),
