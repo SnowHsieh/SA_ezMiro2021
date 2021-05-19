@@ -60,7 +60,7 @@ public class WebSocketController {
             JSONObject messageJSON = new JSONObject(message);
             if (!messageJSON.isNull("cursor")) {
                 processCursorMessage(messageJSON, boardId, usernick);
-            } else if (!messageJSON.isNull("widget")) {
+            } else if (!messageJSON.isNull("widgets")) {
                 processWidgetMessage(messageJSON, boardId, usernick);
             }
         } catch (JSONException e) {
@@ -68,11 +68,14 @@ public class WebSocketController {
         }
     }
 
-    private void processWidgetMessage(JSONObject messageJSON, String boardId, String usernick) {
+    private void processWidgetMessage(JSONObject message, String boardId, String usernick) {
+        String info = "widget changed or created: 成員[" + usernick + "]：" + message + "in board：" + boardId;
+        WebSocketUtil.sendMessageForAllUsersIn(boardId, message);
+        System.out.println(info);
     }
 
     private void processCursorMessage(JSONObject message, String boardId, String usernick) throws JSONException {
-        String info = "mouse moved: 成員[" + usernick + "]：" + message;
+        String info = "mouse moved: 成員[" + usernick + "]：" + message + "in board：" + boardId;
         moveCursorUseCase = applicationContext.getBean(MoveCursorUseCase.class);
         MoveCursorInput input = new MoveCursorInput();
         MoveCursorOutput output = new MoveCursorOutput();

@@ -91,6 +91,7 @@ export default {
       }
       this.webSocket.onmessage = async function (e) {
         const message = await JSON.parse(e.data)
+        console.log(message)
         me.handleCursorMessage(message.cursors)
         me.handleWidgetMessage(message.widgets)
       }
@@ -111,14 +112,15 @@ export default {
           if (this.boardContent.widgetDtos.some(widgetDto => widgetDto.widgetId === widgets[index].widgetId)) {
             this.updateWidgetInCanvas()
           } else {
-            this.addWidgetToCanvas()
+            this.addWidgetToCanvas(widgets[index])
           }
         }
       }
     },
     updateWidgetInCanvas () {
     },
-    addWidgetToCanvas () {
+    addWidgetToCanvas (widgetDto) {
+      this.loadStickyNoteIntoCanvas(widgetDto)
     },
     bindCanvasEventListener () {
       const me = this
@@ -147,7 +149,7 @@ export default {
           info.bottomRightY = info.topLeftY + width
           const stickyNoteId = await CreateStickyNote(me.boardId, info)
           const stickyNote = await ReadStickyNoteBy(stickyNoteId, me.boardId)
-          await me.loadStickyNoteIntoCanvas(stickyNote)
+          await me.loadStickyNoteIntoCanvas(stickyNote.widgetDto)
           me.webSocket.send(me.composeWidgetInfo(stickyNote))
         }
       })
@@ -220,8 +222,8 @@ export default {
       await widgets.forEach(widget => { this.canvas.add(this.buildFabricObjectOfStickyNote(widget)) })
       this.canvas.renderAll()
     },
-    async loadStickyNoteIntoCanvas (stickyNote) {
-      await this.canvas.add(this.buildFabricObjectOfStickyNote(stickyNote.widgetDto))
+    async loadStickyNoteIntoCanvas (widgetDto) {
+      await this.canvas.add(this.buildFabricObjectOfStickyNote(widgetDto))
       this.canvas.renderAll()
     },
     setTarget (target) {
@@ -306,7 +308,7 @@ export default {
       return JSON.stringify({ cursor: { x: Math.floor(x), y: Math.floor(y) } })
     },
     composeWidgetInfo (widget) {
-      return JSON.stringify({ widget: widget.widgetDto })
+      return JSON.stringify({ widgets: [widget.widgetDto] })
     }
   }
 }
