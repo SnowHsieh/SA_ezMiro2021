@@ -37,6 +37,7 @@ public class ResizeNoteUseCaseImpl implements ResizeNoteUseCase {
         Note note = (Note)figure;
         note.changeSize(input.getHeight(), input.getWidth());
         figureRepository.save(note);
+        domainEventBus.postAll(note);
 
         output.setId(figure.getId());
         output.setExitCode(ExitCode.SUCCESS);

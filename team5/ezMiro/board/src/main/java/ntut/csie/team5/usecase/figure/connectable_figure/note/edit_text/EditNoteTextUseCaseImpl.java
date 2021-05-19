@@ -37,6 +37,7 @@ public class EditNoteTextUseCaseImpl implements EditNoteTextUseCase {
         Note note = (Note)figure;
         note.editText(input.getText());
         figureRepository.save(note);
+        domainEventBus.postAll(note);
 
         output.setId(figure.getId());
         output.setExitCode(ExitCode.SUCCESS);

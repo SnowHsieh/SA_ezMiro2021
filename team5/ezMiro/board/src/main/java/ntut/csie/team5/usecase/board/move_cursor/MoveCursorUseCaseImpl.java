@@ -35,6 +35,9 @@ public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
 
         board.moveCursor(input.getUserId(), input.getPositionX(), input.getPositionY());
 
+        boardRepository.save(board);
+        domainEventBus.postAll(board);
+
         output.setId(board.getId());
         output.setExitCode(ExitCode.SUCCESS);
     }

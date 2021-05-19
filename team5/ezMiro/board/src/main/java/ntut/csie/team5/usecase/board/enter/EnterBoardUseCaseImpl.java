@@ -40,6 +40,9 @@ public class EnterBoardUseCaseImpl implements EnterBoardUseCase {
 
         board.acceptUserEntry(boardSessionId, input.getUserId());
 
+        boardRepository.save(board);
+        domainEventBus.postAll(board);
+
         output.setId(boardSessionId.id());
         output.setExitCode(ExitCode.SUCCESS);
     }

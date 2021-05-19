@@ -37,6 +37,7 @@ public class ChangeNoteColorUseCaseImpl implements ChangeNoteColorUseCase {
         Note note = (Note)figure;
         note.changeColor(input.getColor());
         figureRepository.save(note);
+        domainEventBus.postAll(note);
 
         output.setId(figure.getId());
         output.setExitCode(ExitCode.SUCCESS);

@@ -6,8 +6,14 @@ import ntut.csie.team5.usecase.board.change_order.ChangeFigureZOrderUseCase;
 import ntut.csie.team5.usecase.board.change_order.ChangeFigureZOrderUseCaseImpl;
 import ntut.csie.team5.usecase.board.create.CreateBoardUseCase;
 import ntut.csie.team5.usecase.board.create.CreateBoardUseCaseImpl;
+import ntut.csie.team5.usecase.board.enter.EnterBoardUseCase;
+import ntut.csie.team5.usecase.board.enter.EnterBoardUseCaseImpl;
 import ntut.csie.team5.usecase.board.getcontent.GetBoardContentUseCase;
 import ntut.csie.team5.usecase.board.getcontent.GetBoardContentUseCaseImpl;
+import ntut.csie.team5.usecase.board.leave.LeaveBoardUseCase;
+import ntut.csie.team5.usecase.board.leave.LeaveBoardUseCaseImpl;
+import ntut.csie.team5.usecase.board.move_cursor.MoveCursorUseCase;
+import ntut.csie.team5.usecase.board.move_cursor.MoveCursorUseCaseImpl;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.change_color.ChangeNoteColorUseCase;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.change_color.ChangeNoteColorUseCaseImpl;
@@ -40,6 +46,21 @@ public class UseCaseInjection {
     @Bean(name = "getBoardContentUseCase")
     public GetBoardContentUseCase getBoardContentUseCase() {
         return new GetBoardContentUseCaseImpl(boardRepository, figureRepository, eventBus);
+    }
+
+    @Bean(name = "enterBoardUseCase")
+    public EnterBoardUseCase enterBoardUseCase() {
+        return new EnterBoardUseCaseImpl(boardRepository, eventBus);
+    }
+
+    @Bean(name = "leaveBoardUseCase")
+    public LeaveBoardUseCase leaveBoardUseCase() {
+        return new LeaveBoardUseCaseImpl(boardRepository, eventBus);
+    }
+
+    @Bean(name = "moveCursorUseCase")
+    public MoveCursorUseCase moveCursorUseCase() {
+        return new MoveCursorUseCaseImpl(boardRepository, eventBus);
     }
 
     @Bean(name = "postNoteUseCase")
@@ -91,4 +112,6 @@ public class UseCaseInjection {
     public void setEventBus(DomainEventBus eventBus) {
         this.eventBus = eventBus;
     }
+
+
 }

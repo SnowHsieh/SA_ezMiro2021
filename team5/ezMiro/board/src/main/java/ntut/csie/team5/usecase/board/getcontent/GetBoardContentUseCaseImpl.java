@@ -40,8 +40,6 @@ public class GetBoardContentUseCaseImpl implements GetBoardContentUseCase, GetBo
             return;
         }
 
-//        List<FigureDto> figureDtos = ConvertFiguresToDto.transform(figureRepository.getFiguresByBoardId(input.getBoardId()));
-        System.out.println(board.getCommittedFigures().size());
         List<FigureDto> figureDtos = new ArrayList<>();
         for (CommittedFigure committedFigure : board.getCommittedFigures()) {
             Figure figure = figureRepository.findById(committedFigure.figureId()).orElse(null);
@@ -53,7 +51,6 @@ public class GetBoardContentUseCaseImpl implements GetBoardContentUseCase, GetBo
                 return;
             }
             FigureDto figureDto = ConvertFiguresToDto.transform(figure);
-            System.out.println(figureDto);
             figureDtos.add(figureDto);
         }
 

@@ -40,10 +40,10 @@ public class MoveNoteController {
         }
 
         MoveNoteInput input = moveNoteUseCase.newInput();
+        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+
         input.setFigureId(figureId);
         input.setLeftTopPosition(new Point(leftTopPositionX, leftTopPositionY));
-
-        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
         moveNoteUseCase.execute(input, presenter);
         return presenter.buildViewModel();

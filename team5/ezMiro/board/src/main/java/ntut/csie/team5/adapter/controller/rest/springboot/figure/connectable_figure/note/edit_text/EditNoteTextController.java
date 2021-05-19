@@ -37,10 +37,10 @@ public class EditNoteTextController {
         }
 
         EditNoteTextInput input = editNoteTextUseCase.newInput();
+        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+
         input.setFigureId(figureId);
         input.setText(text);
-
-        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
         editNoteTextUseCase.execute(input, presenter);
         return presenter.buildViewModel();

@@ -32,10 +32,10 @@ public class CreateBoardController {
         }
 
         CreateBoardInput input = createBoardUseCase.newInput();
+        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+
         input.setBoardName(name);
         input.setProjectId(projectId);
-
-        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
         createBoardUseCase.execute(input, presenter);
         return presenter.buildViewModel();

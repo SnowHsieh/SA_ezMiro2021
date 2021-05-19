@@ -38,11 +38,11 @@ public class ResizeNoteController {
         }
 
         ResizeNoteInput input = resizeNoteUseCase.newInput();
+        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+
         input.setFigureId(figureId);
         input.setHeight(height);
         input.setWidth(width);
-
-        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
         resizeNoteUseCase.execute(input, presenter);
         return presenter.buildViewModel();

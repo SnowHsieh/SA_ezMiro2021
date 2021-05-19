@@ -47,14 +47,14 @@ public class PostNoteController {
         }
 
         PostNoteInput input = postNoteUseCase.newInput();
+        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+
         input.setBoardId(boardId);
         input.setLeftTopPosition(new Point(leftTopPositionX, leftTopPositionY));
         input.setHeight(height);
         input.setWidth(width);
         input.setColor(color);
         input.setFigureType(FigureType.NOTE);
-
-        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
         postNoteUseCase.execute(input, presenter);
         return presenter.buildViewModel();

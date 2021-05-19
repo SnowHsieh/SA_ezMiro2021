@@ -39,6 +39,7 @@ public class MoveNoteUseCaseImpl implements MoveNoteUseCase {
         Note note = (Note)figure;
         note.changePosition(input.getLeftTopPosition());
         figureRepository.save(note);
+        domainEventBus.postAll(note);
 
         output.setId(figure.getId());
         output.setExitCode(ExitCode.SUCCESS);

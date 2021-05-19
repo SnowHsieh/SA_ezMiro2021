@@ -21,25 +21,25 @@ public class NotifyBoard {
 
     @Subscribe
     public void whenFigureCreated(FigureCreated figureCreated) {
-        Optional<Board> board = boardRepository.findById((figureCreated.boardId()));
-        if (!board.isPresent()) {
+        Board board = boardRepository.findById((figureCreated.boardId())).orElse(null);
+        if (null == board) {
             throw new RuntimeException("Board not found, board id = " + figureCreated.boardId());
         }
 
-        board.get().commitFigure(figureCreated.figureId());
-        boardRepository.save(board.get());
-        domainEventBus.postAll(board.get());
+        board.commitFigure(figureCreated.figureId());
+        boardRepository.save(board);
+        domainEventBus.postAll(board);
     }
 
     @Subscribe
     public void whenFigureDeleted(FigureDeleted figureDeleted) {
-        Optional<Board> board = boardRepository.findById((figureDeleted.boardId()));
-        if (!board.isPresent()) {
+        Board board = boardRepository.findById((figureDeleted.boardId())).orElse(null);
+        if (null == board) {
             throw new RuntimeException("Board not found, board id = " + figureDeleted.boardId());
         }
 
-        board.get().uncommitFigure(figureDeleted.figureId());
-        boardRepository.save(board.get());
-        domainEventBus.postAll(board.get());
+        board.uncommitFigure(figureDeleted.figureId());
+        boardRepository.save(board);
+        domainEventBus.postAll(board);
     }
 }

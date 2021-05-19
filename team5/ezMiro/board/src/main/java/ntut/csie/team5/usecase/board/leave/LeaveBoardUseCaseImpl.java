@@ -40,6 +40,9 @@ public class LeaveBoardUseCaseImpl implements LeaveBoardUseCase {
 
         board.acceptUserLeaving(boardSessionId, input.getUserId());
 
+        boardRepository.save(board);
+        domainEventBus.postAll(board);
+
         output.setId(boardSessionId.id());
         output.setExitCode(ExitCode.SUCCESS);
 

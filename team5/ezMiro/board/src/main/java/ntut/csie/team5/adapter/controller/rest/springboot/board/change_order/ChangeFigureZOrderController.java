@@ -37,11 +37,11 @@ public class ChangeFigureZOrderController {
         }
 
         ChangeFigureZOrderInput input = changeFigureZOrderUseCase.newInput();
+        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+
         input.setBoardId(boardId);
         input.setFigureId(figureId);
         input.setZOrderType(ZOrderType.BRING_FORWARD);
-
-        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
         changeFigureZOrderUseCase.execute(input, presenter);
         return presenter.buildViewModel();
@@ -60,11 +60,11 @@ public class ChangeFigureZOrderController {
         }
 
         ChangeFigureZOrderInput input = changeFigureZOrderUseCase.newInput();
+        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+
         input.setBoardId(boardId);
         input.setFigureId(figureId);
         input.setZOrderType(ZOrderType.BRING_TO_FRONT);
-
-        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
         changeFigureZOrderUseCase.execute(input, presenter);
         return presenter.buildViewModel();
@@ -83,11 +83,11 @@ public class ChangeFigureZOrderController {
         }
 
         ChangeFigureZOrderInput input = changeFigureZOrderUseCase.newInput();
+        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+
         input.setBoardId(boardId);
         input.setFigureId(figureId);
         input.setZOrderType(ZOrderType.SEND_BACKWARDS);
-
-        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
         changeFigureZOrderUseCase.execute(input, presenter);
         return presenter.buildViewModel();
@@ -106,11 +106,11 @@ public class ChangeFigureZOrderController {
         }
 
         ChangeFigureZOrderInput input = changeFigureZOrderUseCase.newInput();
+        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+
         input.setBoardId(boardId);
         input.setFigureId(figureId);
         input.setZOrderType(ZOrderType.SEND_TO_BACK);
-
-        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
         changeFigureZOrderUseCase.execute(input, presenter);
         return presenter.buildViewModel();

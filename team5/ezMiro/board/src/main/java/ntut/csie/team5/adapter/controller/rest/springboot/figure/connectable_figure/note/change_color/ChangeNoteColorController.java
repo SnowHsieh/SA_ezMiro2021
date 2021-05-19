@@ -37,10 +37,10 @@ public class ChangeNoteColorController {
         }
 
         ChangeNoteColorInput input = changeNoteColorUseCase.newInput();
+        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+
         input.setFigureId(figureId);
         input.setColor(color);
-
-        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
         changeNoteColorUseCase.execute(input, presenter);
         return presenter.buildViewModel();

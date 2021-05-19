@@ -34,9 +34,9 @@ public class DeleteNoteController {
         }
 
         DeleteNoteInput input = deleteNoteUseCase.newInput();
-        input.setFigureId(figureId);
-
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+
+        input.setFigureId(figureId);
 
         deleteNoteUseCase.execute(input, presenter);
         return presenter.buildViewModel();

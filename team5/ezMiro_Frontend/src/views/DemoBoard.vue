@@ -56,6 +56,9 @@ export default {
         }
     },
     async mounted () {
+        const boardId = this.$route.params.id
+        this.boardId = boardId
+        
         this.canvas = markRaw(
             new fabric.Canvas('canvas', {
                 width: 1600, 
@@ -68,21 +71,28 @@ export default {
             x: 0,
             y: 0
         }
-        
-        this.webSocket = new WebSocket(`ws://localhost:8080/WebSocketServer/${this.user.name}`)
+        this.webSocket = new WebSocket(`ws://localhost:8080/WebSocketServer/${this.boardId}/${this.user.name}`)
         this.webSocket.onopen = (e) => {
             console.log(e)
             console.log('WebSocket connected.')
         }
         this.webSocket.onmessage = async (e) => {
-            const users = await JSON.parse(e.data)
-            console.log(users)
-            this.users = users
+            const data = await JSON.parse(e.data)
+            if (data.type === 'CURSOR') {
+                this.users = data.cursors
+            } else if (data.type === 'BOARD_CONTENT') {
+                this.drawNotes(data.figures)
+                console.log(data)
+            }
+            // const users = await JSON.parse(e.data)
+            // console.log(users)
+            // this.users = users
         }
         this.canvas.on('mouse:move', (e) => {
-            this.webSocket.send(JSON.stringify({x: e.absolutePointer.x, y: e.absolutePointer.y}))
+            setTimeout(() => {
+                this.webSocket.send(JSON.stringify({x: e.absolutePointer.x, y: e.absolutePointer.y}))
+            }, 200)
         })
-
 
         this.canvas.on('object:moving', (event) => {
             var target = event.target
@@ -116,8 +126,7 @@ export default {
             this.activeObject = event.target
         })
 
-        const boardId = this.$route.params.id
-        this.boardId = boardId
+
         var figures = await this.$api.board.getBoardContent(boardId)
         this.drawNotes(figures)
     },

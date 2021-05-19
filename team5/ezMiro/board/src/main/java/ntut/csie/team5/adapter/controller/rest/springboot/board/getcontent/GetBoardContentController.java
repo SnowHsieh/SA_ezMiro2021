@@ -1,5 +1,7 @@
 package ntut.csie.team5.adapter.controller.rest.springboot.board.getcontent;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ntut.csie.team5.adapter.presenter.board.getcontent.BoardContentViewModel;
 import ntut.csie.team5.adapter.presenter.board.getcontent.GetBoardContentPresenter;
 import ntut.csie.team5.usecase.board.getcontent.GetBoardContentInput;
@@ -25,9 +27,10 @@ public class GetBoardContentController {
     public BoardContentViewModel getBoardContent(@PathVariable("boardId") String boardId) {
 
         GetBoardContentInput input = (GetBoardContentInput) getBoardContentUseCase;
+        GetBoardContentPresenter presenter = new GetBoardContentPresenter();
+
         input.setBoardId(boardId);
 
-        GetBoardContentPresenter presenter = new GetBoardContentPresenter();
         getBoardContentUseCase.execute(input, presenter);
         return presenter.buildViewModel();
     }
