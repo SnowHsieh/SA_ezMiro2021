@@ -91,7 +91,7 @@ export default {
       }
       this.webSocket.onmessage = async function (e) {
         const message = await JSON.parse(e.data)
-        console.log(message)
+        // console.log(message)
         me.handleCursorMessage(message.cursors)
         me.handleWidgetMessage(message.widgets)
       }
@@ -110,14 +110,22 @@ export default {
       if (widgets !== undefined) {
         for (let index = 0; index < widgets.length; index++) {
           if (this.boardContent.widgetDtos.some(widgetDto => widgetDto.widgetId === widgets[index].widgetId)) {
-            this.updateWidgetInCanvas()
+            this.updateWidgetInCanvas(widgets[index])
           } else {
+            this.boardContent.widgetDtos.push(widgets[index])
             this.addWidgetToCanvas(widgets[index])
           }
         }
       }
     },
-    updateWidgetInCanvas () {
+    updateWidgetInCanvas (widgetDto) {
+      this.canvas.getObjects().forEach(function (o) {
+        if (o.id === widgetDto.widgetId) {
+          o.set('left', widgetDto.topLeftX)
+          o.set('top', widgetDto.topLeftY)
+        }
+      })
+      this.canvas.renderAll()
     },
     addWidgetToCanvas (widgetDto) {
       this.loadStickyNoteIntoCanvas(widgetDto)
@@ -149,6 +157,7 @@ export default {
           info.bottomRightY = info.topLeftY + width
           const stickyNoteId = await CreateStickyNote(me.boardId, info)
           const stickyNote = await ReadStickyNoteBy(stickyNoteId, me.boardId)
+          me.boardContent.widgetDtos.push(stickyNote.widgetDto)
           await me.loadStickyNoteIntoCanvas(stickyNote.widgetDto)
           me.webSocket.send(me.composeWidgetInfo(stickyNote))
         }
