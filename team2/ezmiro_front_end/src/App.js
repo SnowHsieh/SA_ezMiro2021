@@ -1,8 +1,9 @@
 import './App.css';
 import Axios from 'axios';
 import { Component, createRef } from 'react';
-import Note from './Note'
+import Note from './Note';
 import SockJsClient from 'react-stomp';
+import {RiCursorFill} from 'react-icons/ri'
 
 const SOCKET_URL = 'http://localhost:8080/ezmiro/ws-message';
 
@@ -13,7 +14,6 @@ class App extends Component {
       notes: [],
       reconnectTime: 0,
       isConnect: false,
-      message:'You server message here.',
       onlineUsers: []
     };
     this.getBoardContent();
@@ -21,35 +21,46 @@ class App extends Component {
     this.createNote = this.createNote.bind(this);
     this.deleteNote = this.deleteNote.bind(this);
     this.updateMousePosition = this.updateMousePosition.bind(this);
-    this.componentWillUnmount = this.componentWillUnmount.bind(this);
+    this.moveNote = this.moveNote.bind(this);
     window.addEventListener("mousemove", this.updateMousePosition);
+    this.componentWillUnmount = this.componentWillUnmount.bind(this);
     this.clientRef = createRef();
+    this.noteRef = createRef();
     this.cursorBroadcast = null;
-    this.userId = "userId"
+    this.userId = "小貓熊"+Math.floor(Math.random()*100+1);
+    this.boardChannel = "";
     this.cursor = {
       x: 0,
       y: 0
     }
+    this.oldCursor = {
+      x: 0,
+      y: 0
+    }
+    this.draggingNote = ""
   }
 
   componentDidMount() {
-    this.cursorBroadcast = setInterval(()=>{
+    this.cursorBroadcaster = setInterval(()=>{
       try {
-        const myCursor = {
-          userId: this.userId,
-          ...this.cursor
+        if (this.oldCursor != this.cursor) {
+          const myCursor = {
+            userId: this.userId,
+            ...this.cursor
+          }
+          this.clientRef.current.sendMessage(`/app/sendMessage/${this.boardChannel}`, JSON.stringify(myCursor));
+          this.oldCursor = this.cursor;
         }
-        this.clientRef.current.sendMessage("/app/sendMessage", JSON.stringify(myCursor))
       } catch(error) {
-        console.error(error);  
+        console.error(error);
       }
     }, 100);
-    this.userId = prompt("Your user Id")
   }
 
   componentWillUnmount() {
     window.removeEventListener("mousemove", this.updateMousePosition);
     this.clientRef.current.disconnect()
+    this.noteRef.current.disconnect()
     clearInterval(this.cursorBroadcast);
   }
 
@@ -62,18 +73,39 @@ class App extends Component {
 
   getBoardContent() {
     Axios.get('http://localhost:8080/ezmiro/miro/boards/boardId/getcontent').then(response => {
-      this.setState({notes: response.data});
-      console.log("getBoardContent",response.data);
+      this.setState({notes: response.data.notes})
+      this.boardChannel = response.data.boardChannel
     }).catch(error => console.error(error));
   }
 
   moveNote = (id, coordinate) => {
+    this.draggingNote = ""
     Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/move`,{
       coordinate: {
         x: coordinate.x,
         y: coordinate.y
       }
-    }).catch(error => console.error(error));
+    }).then((response) => {
+      this.getBoardContent();
+      try {
+        this.noteRef.current.sendMessage("/app/sendNote", JSON.stringify(this.state.notes))
+      } catch(error) {
+        console.error(error);
+      }
+    }
+    ).catch(error => console.error(error));
+  }
+
+  dragNote = (id, coordinate) => {
+    this.draggingNote = id
+    this.setState({
+      notes: this.state.notes.map(x => x.noteId === id ? {...x, coordinate} : x)
+    })
+    try {
+      this.noteRef.current.sendMessage("/app/sendNote", JSON.stringify(this.state.notes))
+    } catch(error) {
+      console.error(error);
+    }
   }
 
   changeNoteSize = (id, size) => {
@@ -91,21 +123,32 @@ class App extends Component {
   changeNoteColor = (id, color) => {
     Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/edit/color`,{
       color: color
-    }).catch(error => console.error(error));
+    }).then((response) => {
+      try {
+        this.noteRef.current.sendMessage("/app/sendNote", JSON.stringify(this.state.notes))
+      } catch(error) {
+        console.error(error); 
+      }
+    }
+
+    ).catch(error => console.error(error));
   }
 
   bringNoteToFront = (id) => {
     Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/edit/zorder/front`,{
     }).then((response) => {
-      console.log("bringNoteToFront", response.data);
       this.getBoardContent();
+      try {
+        this.noteRef.current.sendMessage("/app/sendNote", JSON.stringify(this.state.notes))
+      } catch(error) {
+        console.error(error);
+      }
     }).catch(error => console.error(error));
   }
 
   sendNoteToBack = (id) => {
     Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/edit/zorder/back`,{
     }).then((response) => {
-      console.log("sendNoteToBack", response.data);
       this.getBoardContent();
     }).catch(error => console.error(error));
   }
@@ -118,6 +161,11 @@ class App extends Component {
     Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/delete?boardId=boardId`,{
     }).then(() => {
       this.getBoardContent();
+      try {
+        this.noteRef.current.sendMessage("/app/sendNote", JSON.stringify(this.state.notes))
+      } catch(error) {
+        console.error(error);
+      }
     }).catch(error => console.error(error));
   }
 
@@ -130,17 +178,37 @@ class App extends Component {
           "y": this.cursor.y - 50
         }
       }).then(response => {
-        console.log("creatNote", response.data)
         this.getBoardContent();
+        try {
+          this.noteRef.current.sendMessage("/app/sendNote", JSON.stringify(this.state.notes))
+        } catch(error) {
+          console.error(error);
+        }
       }).catch(error => console.error(error));
   }
 
   onPositionReceived = (allUserCursors) => {
     const onlineUsers = allUserCursors.filter(cursor => cursor.userId !== this.userId)
-      console.log("received onlineUsers:", onlineUsers)
       this.setState({
         onlineUsers: onlineUsers
       })
+  }
+  
+  onNoteReceived = (allOnlineNotes) => {
+    console.log("allOnlineNotes", allOnlineNotes)
+    let notes = allOnlineNotes.map(x => {
+      if(x.noteId === this.draggingNote) {
+        return this.state.notes.find(y => y.noteId === this.draggingNote)
+      }
+      return x
+    })
+    this.setState({
+      notes
+    })
+  }
+
+  enterBoard = () => {
+    this.clientRef.current.sendMessage("/app/enterBoard/boardId", this.userId)
   }
 
   render() {
@@ -148,14 +216,23 @@ class App extends Component {
       <div id="canvas" style={{width: window.innerWidth, height: window.innerHeight}} onDoubleClick={this.createNote}> 
         <SockJsClient
           url={SOCKET_URL}
-          topics={['/topic/position']}
-          onConnect={()=> console.log("Connected!")}
-          onDisconnect={()=> console.log("Disconnected!")}
+          topics={[`/topic/${this.boardChannel}/position`]}
+          onConnect={this.enterBoard}
+          onDisconnect={()=> console.log("DisconnectedNote!")}
           onMessage={this.onPositionReceived}
           ref={ (client) => { this.clientRef.current = client }}
         />
+
+        <SockJsClient
+          url={SOCKET_URL}
+          topics={['/topic/note']}
+          onConnect={()=> console.log("ConnectedNote!")}
+          onDisconnect={()=> console.log("DisconnectedNote!")}
+          onMessage={this.onNoteReceived}
+          ref={ (client) => { this.noteRef.current = client }}
+        />
         {this.state.onlineUsers.map(user => (
-          <div style={{position: "fixed", top: user.y, left: user.x}}>{user.userId}</div>
+          <div style={{position: "fixed", top: user.y, left: user.x, zIndex:999}}><RiCursorFill/>{user.userId}</div>
         ))}
         {
           this.state.notes.map((note) => 
@@ -171,6 +248,7 @@ class App extends Component {
             onNoteDelete={this.deleteNote}
             onNoteBringToFront={this.bringNoteToFront}
             onNoteSendToBack={this.sendNoteToBack}
+            onNoteDragging={this.dragNote}
           />
         )}
       </div>

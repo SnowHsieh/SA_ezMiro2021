@@ -1,11 +1,14 @@
 package ntut.csie.sslab.miro.application.springboot.web.config;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
-//import ntut.csie.sslab.miro.adapter.controller.websocket.BoardSessionWebSocketAdapter;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.NotifyBoardAdapter;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
-import ntut.csie.sslab.miro.usecase.board.CreateBoardUseCase;
-import ntut.csie.sslab.miro.usecase.board.CreateBoardUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCase;
+import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.board.enter.EnterBoardUseCase;
+import ntut.csie.sslab.miro.usecase.board.enter.EnterBoardUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCase;
+import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCase;
@@ -41,6 +44,16 @@ public class UseCaseInjection {
     @Bean(name="createBoardUseCase")
     public CreateBoardUseCase createBoardUseCase() {
         return new CreateBoardUseCaseImpl(boardRepository, eventBus);
+    }
+
+    @Bean(name="enterBoardUseCase")
+    public EnterBoardUseCase enterBoardUseCase() {
+        return new EnterBoardUseCaseImpl(boardRepository, eventBus);
+    }
+
+    @Bean(name="leaveBoardUseCase")
+    public LeaveBoardUseCase leaveBoardUseCase() {
+        return new LeaveBoardUseCaseImpl(boardRepository, eventBus);
     }
 
     @Bean(name="createNoteUseCase")
@@ -87,11 +100,6 @@ public class UseCaseInjection {
     public NotifyBoardAdapter notifyBoardAdapter() {
         return new NotifyBoardAdapter(new NotifyBoard(figureRepository, boardRepository, eventBus));
     }
-
-//    @Bean(name="boardSessionWebSocketAdapter")
-//    public BoardSessionWebSocketAdapter boardSessionWebSocketAdapter() {
-//        return new BoardSessionWebSocketAdapter();
-//    }
 
     @Bean(name="deleteNoteUseCase")
     public DeleteNoteUseCase deleteNoteUseCase() {

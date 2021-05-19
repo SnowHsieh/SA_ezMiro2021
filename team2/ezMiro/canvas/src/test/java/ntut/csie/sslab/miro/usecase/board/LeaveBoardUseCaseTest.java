@@ -7,12 +7,15 @@ import ntut.csie.sslab.miro.usecase.DomainEventListener;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardInput;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCase;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardInput;
+import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCase;
+import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCaseImpl;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-public class CreateBoardUseCaseTest {
+public class LeaveBoardUseCaseTest {
     private BoardRepository boardRepository;
     private DomainEventBus domainEventBus;
     private DomainEventListener eventListener;
@@ -27,7 +30,23 @@ public class CreateBoardUseCaseTest {
     }
 
     @Test
-    public void create_board() {
+    public void leave_board() {
+        String boardId = create_board();
+        eventListener.clear();
+        LeaveBoardUseCase leaveBoardUseCase = new LeaveBoardUseCaseImpl(boardRepository, domainEventBus);
+        LeaveBoardInput input = leaveBoardUseCase.newInput();
+        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
+        input.setBoardId(boardId);
+        input.setUserId("userId");
+
+        leaveBoardUseCase.execute(input, output);
+
+        assertNotNull(output.getId());
+        assertEquals(boardId, output.getId());
+        assertEquals(1, eventListener.getEventCount());
+    }
+
+    private String create_board() {
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCaseImpl(boardRepository, domainEventBus);
         CreateBoardInput input = createBoardUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
@@ -36,10 +55,6 @@ public class CreateBoardUseCaseTest {
 
         createBoardUseCase.execute(input, output);
 
-        assertNotNull(output.getId());
-        assertNotNull(boardRepository.findById(output.getId()).get());
-        assertEquals("TeamId", boardRepository.findById(output.getId()).get().getTeamId());
-        assertEquals("Team2sBoard", boardRepository.findById(output.getId()).get().getBoardName());
-        assertNotNull(boardRepository.findById(output.getId()).get().getBoardChannel());
+        return output.getId();
     }
 }

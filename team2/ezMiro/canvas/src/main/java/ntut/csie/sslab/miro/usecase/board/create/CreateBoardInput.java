@@ -1,4 +1,4 @@
-package ntut.csie.sslab.miro.usecase.board;
+package ntut.csie.sslab.miro.usecase.board.create;
 
 import ntut.csie.sslab.ddd.usecase.Input;
 

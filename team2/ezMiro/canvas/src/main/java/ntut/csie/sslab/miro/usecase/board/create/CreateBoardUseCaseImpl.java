@@ -1,9 +1,10 @@
-package ntut.csie.sslab.miro.usecase.board;
+package ntut.csie.sslab.miro.usecase.board.create;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.miro.entity.model.board.Board;
 import ntut.csie.sslab.miro.entity.model.board.BoardBuilder;
+import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 
 public class CreateBoardUseCaseImpl implements CreateBoardUseCase {
     private BoardRepository boardRepository;
@@ -19,6 +20,7 @@ public class CreateBoardUseCaseImpl implements CreateBoardUseCase {
         Board board = BoardBuilder.newInstance()
                 .teamId(input.getTeamId())
                 .boardName(input.getBoardName())
+                .boardChannel("boardChannel")
                 .build();
 
         boardRepository.save(board);

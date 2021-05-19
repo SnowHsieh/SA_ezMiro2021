@@ -2,8 +2,8 @@ package ntut.csie.sslab.miro.adapter.controller.rest.springboot.board;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
-import ntut.csie.sslab.miro.usecase.board.CreateBoardInput;
-import ntut.csie.sslab.miro.usecase.board.CreateBoardUseCase;
+import ntut.csie.sslab.miro.usecase.board.create.CreateBoardInput;
+import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCase;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
