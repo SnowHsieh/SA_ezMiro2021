@@ -1,36 +1,15 @@
 package ntut.csie.sslab.miro.entity.model.board;
 
-import ntut.csie.sslab.ddd.model.Entity;
-import java.util.ArrayList;
-import java.util.List;
+import ntut.csie.sslab.ddd.model.ValueObject;
 
-public class BoardChannel extends Entity {
-    private String channel;
-    private List<String> onlineUsers;
+public class BoardChannel extends ValueObject {
+    private final String channel;
 
-    public BoardChannel(String channelId, String channel) {
-        super(channelId);
+    public BoardChannel(String channel) {
         this.channel = channel;
-        this.onlineUsers = new ArrayList<>();
     }
 
     public String getChannel() {
         return channel;
-    }
-
-    public void setChannel(String channel) {
-        this.channel = channel;
-    }
-
-    public List<String> getOnlineUsers() {
-        return onlineUsers;
-    }
-
-    public void addOnlineUser(String onlineUser) {
-        onlineUsers.add(onlineUser);
-    }
-
-    public void removeOnlineUser(String onlineUser) {
-        onlineUsers.remove(onlineUser);
     }
 }

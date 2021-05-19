@@ -11,7 +11,7 @@ public class BoardRepositoryImpl implements BoardRepository {
     private List<Board> boards = new ArrayList<>();
 
     public BoardRepositoryImpl() {
-        Board board = new Board("team2", "boardId", "ezMiro", new BoardChannel("boardChannelId", "boardChannel"));
+        Board board = new Board("team2", "boardId", "ezMiro", new BoardChannel("boardChannel"));
         boards.add(board);
     }
 

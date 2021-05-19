@@ -32,8 +32,7 @@ public class BoardBuilder {
 
     public Board build() {
         boardId = UUID.randomUUID().toString();
-        String boardChannelId = UUID.randomUUID().toString();
-        Board board = new Board(teamId, boardId, boardName, new BoardChannel(boardChannelId, boardChannel));
+        Board board = new Board(teamId, boardId, boardName, new BoardChannel(boardChannel));
         return board;
     }
 }
