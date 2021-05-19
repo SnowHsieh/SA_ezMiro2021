@@ -2,7 +2,7 @@ package ntut.csie.sslab.miro.usecase.note;
 
 import ntut.csie.sslab.miro.entity.model.note.Coordinate;
 
-public class NoteDto {
+public class NoteDTO {
 
     private String boardId;
     private String noteId;
@@ -12,6 +12,7 @@ public class NoteDto {
     private double height;
     private Coordinate coordinate;
     private int zOrder;
+    private String userId;
 
     public String getBoardId() {
         return boardId;
@@ -75,5 +76,13 @@ public class NoteDto {
 
     public void setZOrder(int zOrder) {
         this.zOrder = zOrder;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

@@ -65,14 +65,14 @@ public class GetNoteUseCaseTest {
         getNoteUseCase.execute(input, output);
 
         assertEquals(2, output.getNotes().size());
-        NoteDto note1Dto = output.getNotes().stream().filter(x -> x.getNoteId().equals(note1Id)).findFirst().get();
+        NoteDTO note1Dto = output.getNotes().stream().filter(x -> x.getNoteId().equals(note1Id)).findFirst().get();
         assertEquals("", note1Dto.getDescription());
         assertEquals("#6FB7B7", note1Dto.getColor());
         assertEquals(100, note1Dto.getWidth());
         assertEquals(100, note1Dto.getHeight());
         assertEquals(5, note1Dto.getCoordinate().getX());
         assertEquals(6, note1Dto.getCoordinate().getY());
-        NoteDto note2Dto = output.getNotes().stream().filter(x -> x.getNoteId().equals(note2Id)).findFirst().get();
+        NoteDTO note2Dto = output.getNotes().stream().filter(x -> x.getNoteId().equals(note2Id)).findFirst().get();
         assertEquals("", note2Dto.getDescription());
         assertEquals("#6FB7B7", note2Dto.getColor());
         assertEquals(100, note2Dto.getWidth());

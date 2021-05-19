@@ -4,9 +4,9 @@ import ntut.csie.sslab.miro.entity.model.note.Note;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConvertNoteToDto {
-    public static NoteDto transform(Note note) {
-        NoteDto dto = new NoteDto();
+public class ConvertNoteToDTO {
+    public static NoteDTO transform(Note note) {
+        NoteDTO dto = new NoteDTO();
         dto.setNoteId(note.getId());
         dto.setBoardId(note.getBoardId());
         dto.setDescription(note.getDescription());
@@ -17,11 +17,11 @@ public class ConvertNoteToDto {
         return dto;
     }
 
-    public static List<NoteDto> transform(List<Note> notes) {
-        List<NoteDto> noteDtos = new ArrayList<>();
+    public static List<NoteDTO> transform(List<Note> notes) {
+        List<NoteDTO> noteDTOs = new ArrayList<>();
         for(Note note : notes) {
-            noteDtos.add(transform(note));
+            noteDTOs.add(transform(note));
         }
-        return noteDtos;
+        return noteDTOs;
     }
 }
