@@ -116,7 +116,12 @@ public class NotifyBoardSessionBroadcaster {
 
     @Subscribe
     public void whenCursorDeleted(CursorDeleted cursorDeleted) {
-
+        Board board = boardRepository.findById(cursorDeleted.getBoardId()).get();
+        List<BoardSession> boardSessions = board.getBoardSessions();
+        if(boardSessions.stream().anyMatch(x->x.getUserId().equals(cursorDeleted.getUserId())))
+            return;
+        boardSessions = boardSessions.stream().filter(x->!x.getUserId().equals(cursorDeleted.getUserId())).collect(Collectors.toList());
+        boardSessions.forEach(each->broadcast(cursorDeleted, each.getBoardSessionId()));
     }
 
     @Subscribe
