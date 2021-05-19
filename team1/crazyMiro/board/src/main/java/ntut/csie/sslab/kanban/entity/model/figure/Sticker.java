@@ -19,9 +19,9 @@ public class Sticker extends Figure {
         addDomainEvent(new StickerContentChanged(this.getFigureId(), content));
     }
 
-    public void move(Coordinate position) {
+    public void move(Coordinate position, String userId) {
         setPosition(position);
-        addDomainEvent(new StickerMoved(this.getFigureId(), position));
+        addDomainEvent(new StickerMoved(this.getFigureId(), position, userId));
     }
 
     public void changeSize(int width, int length) {

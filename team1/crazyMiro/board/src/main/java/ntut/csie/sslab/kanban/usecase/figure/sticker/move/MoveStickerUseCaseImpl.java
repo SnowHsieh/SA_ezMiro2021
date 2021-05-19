@@ -25,7 +25,7 @@ public class MoveStickerUseCaseImpl implements MoveStickerUseCase {
                 return;
 
 
-            sticker.move(input.getPosition());
+            sticker.move(input.getPosition(), input.getUserId());
             figureRepository.save(sticker);
             domainEventBus.postAll(sticker);
             output.setId(input.getFigureId())
@@ -44,7 +44,9 @@ public class MoveStickerUseCaseImpl implements MoveStickerUseCase {
     private class MoveStickerInputImpl implements MoveStickerInput {
         private String figureId;
         private Coordinate position;
+        private String userId;
 
+        @Override
         public String getFigureId() {
             return figureId;
         }
@@ -54,6 +56,7 @@ public class MoveStickerUseCaseImpl implements MoveStickerUseCase {
             this.figureId = figureId;
         }
 
+        @Override
         public Coordinate getPosition() {
             return position;
         }
@@ -61,6 +64,14 @@ public class MoveStickerUseCaseImpl implements MoveStickerUseCase {
         @Override
         public void setPosition(Coordinate position) {
             this.position = position;
+        }
+
+        @Override
+        public void setUserId(String userId){this.userId = userId; }
+
+        @Override
+        public String getUserId() {
+            return userId;
         }
     }
 }

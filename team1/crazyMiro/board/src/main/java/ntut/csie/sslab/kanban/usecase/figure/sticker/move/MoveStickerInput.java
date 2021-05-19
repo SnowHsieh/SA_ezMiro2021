@@ -9,7 +9,11 @@ public interface MoveStickerInput extends Input {
 
     void setPosition(Coordinate position);
 
+    void setUserId(String userId);
+
     String getFigureId();
 
     Coordinate getPosition();
+
+    String getUserId();
 }
