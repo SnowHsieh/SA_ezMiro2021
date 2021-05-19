@@ -55,13 +55,13 @@ public class WebSocketController {
     }
 
     @OnMessage
-    public void OnMessage(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String usernick, String message, Session session) {
+    public void OnMessage(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String userId, String message, Session session) {
         try {
             JSONObject messageJSON = new JSONObject(message);
             if (!messageJSON.isNull("cursor")) {
-                processCursorMessage(messageJSON, boardId, usernick);
+                processCursorMessage(messageJSON, boardId, userId);
             } else if (!messageJSON.isNull("widgets")) {
-                processWidgetMessage(messageJSON, boardId, usernick);
+                processWidgetMessage(messageJSON, boardId, userId);
             }
         } catch (JSONException e) {
             e.printStackTrace();

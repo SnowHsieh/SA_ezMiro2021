@@ -55,6 +55,7 @@ export default {
       selectedStickyNoteColor: '#000000',
       webSocket: null,
       isSamplingCursorDelayFinish: true,
+      isSamplingWidgetDelayFinish: true,
       user: null,
       collaborator: []
     }
@@ -119,8 +120,9 @@ export default {
       }
     },
     updateWidgetInCanvas (widgetDto) {
+      const activeWidget = this.canvas.getActiveObject()
       this.canvas.getObjects().forEach(function (o) {
-        if (o.id === widgetDto.widgetId) {
+        if (o.id === widgetDto.widgetId && (activeWidget === undefined || activeWidget.id !== widgetDto.widgetId)) {
           o.set('left', widgetDto.topLeftX)
           o.set('top', widgetDto.topLeftY)
         }
@@ -199,6 +201,30 @@ export default {
             bottomRightY: bottomRightY
           }
         })
+      })
+      this.canvas.on('object:moving', function (o) {
+        const target = o.target
+        const stickyNoteId = target.id
+        const point = target.lineCoords
+        const topLeftX = point.tl.x
+        const topLeftY = point.tl.y
+        const bottomRightX = point.br.x
+        const bottomRightY = point.br.y
+
+        if (me.isSamplingWidgetDelayFinish) {
+          me.isSamplingWidgetDelayFinish = false
+          setTimeout(function () {
+            me.isSamplingWidgetDelayFinish = true
+            MoveStickyNoteBy(me.boardId, {
+              [stickyNoteId]: {
+                topLeftX: topLeftX,
+                topLeftY: topLeftY,
+                bottomRightX: bottomRightX,
+                bottomRightY: bottomRightY
+              }
+            })
+          }, 200)
+        }
       })
 
       this.canvas.on('object:scaled', async function (e) {
