@@ -87,28 +87,40 @@ export default {
       const me = this
       this.webSocket = new WebSocket(`${webSocketHost}/WebSocketServer/${this.boardId}/${this.user.name}`)
       this.webSocket.onopen = function (e) {
-        console.log(e)
         console.log('Successfully connected to the echo websocket server...')
       }
       this.webSocket.onmessage = async function (e) {
-        console.log(e.data)
-        // const users = await JSON.parse(e.data)
         const message = await JSON.parse(e.data)
         console.log(message)
-        const cursors = message.cursors
+        me.handleCursorMessage(message.cursors)
+        me.handleWidgetMessage(message.widgets)
+      }
+    },
+    handleCursorMessage (cursors) {
+      if (cursors !== undefined) {
         for (let index = 0; index < cursors.length; index++) {
-          if (cursors[index].userId === me.user.name) {
+          if (cursors[index].userId === this.user.name) {
             cursors.splice(index, 1)
           }
         }
-        me.collaborator = cursors
-        // for (let user = 0; user < users.length; user++) {
-        //   if (users[user].name === me.user.name) {
-        //     users.splice(user, 1)
-        //   }
-        // }
-        // me.collaborator = users
+        this.collaborator = cursors
       }
+    },
+    handleWidgetMessage (widgets) {
+      if (widgets !== undefined) {
+        for (let index = 0; index < widgets.length; index++) {
+          if (this.boardContent.widgetDtos.some(widgetDto => widgetDto.widgetId === widgets[index].widgetId)) {
+            this.updateWidgetInCanvas()
+          } else {
+            this.addWidgetToCanvas(widgets[index])
+          }
+        }
+      }
+    },
+    updateWidgetInCanvas () {
+    },
+    addWidgetToCanvas (widgetDto) {
+      this.loadStickyNoteIntoCanvas(widgetDto)
     },
     bindCanvasEventListener () {
       const me = this
@@ -117,7 +129,7 @@ export default {
           me.isSamplingCursorDelayFinish = false
           setTimeout(function () {
             me.isSamplingCursorDelayFinish = true
-            me.webSocket.send(me._composeCursorInfo(e.absolutePointer.x, e.absolutePointer.y))
+            me.webSocket.send(me.composeCursorInfo(e.absolutePointer.x, e.absolutePointer.y))
           }, 100)
         }
       })
@@ -136,7 +148,9 @@ export default {
           info.bottomRightX = info.topLeftX + width
           info.bottomRightY = info.topLeftY + width
           const stickyNoteId = await CreateStickyNote(me.boardId, info)
-          await me.loadStickyNoteBy(stickyNoteId)
+          const stickyNote = await ReadStickyNoteBy(stickyNoteId, me.boardId)
+          await me.loadStickyNoteIntoCanvas(stickyNote.widgetDto)
+          me.webSocket.send(me.composeWidgetInfo(stickyNote))
         }
       })
 
@@ -208,10 +222,8 @@ export default {
       await widgets.forEach(widget => { this.canvas.add(this.buildFabricObjectOfStickyNote(widget)) })
       this.canvas.renderAll()
     },
-    async loadStickyNoteBy (id) {
-      const stickyNote = await ReadStickyNoteBy(id, this.boardId)
-      console.log(stickyNote)
-      await this.canvas.add(this.buildFabricObjectOfStickyNote(stickyNote.widgetDto))
+    async loadStickyNoteIntoCanvas (widgetDto) {
+      await this.canvas.add(this.buildFabricObjectOfStickyNote(widgetDto))
       this.canvas.renderAll()
     },
     setTarget (target) {
@@ -292,8 +304,11 @@ export default {
     getZOrderOf (widget) {
       return this.canvas.getObjects().indexOf(widget)
     },
-    _composeCursorInfo (x, y) {
+    composeCursorInfo (x, y) {
       return JSON.stringify({ cursor: { x: Math.floor(x), y: Math.floor(y) } })
+    },
+    composeWidgetInfo (widget) {
+      return JSON.stringify({ widgets: [widget.widgetDto] })
     }
   }
 }

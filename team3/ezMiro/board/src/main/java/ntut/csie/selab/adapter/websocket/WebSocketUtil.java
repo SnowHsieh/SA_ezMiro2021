@@ -24,15 +24,12 @@ public class WebSocketUtil {
         }
     }
 
-    // 移除Session
     public static void removeSessionFrom(String boardId, Session session) {
         Map<Session, String> selectedBoard = ONLINE_SESSION.get(boardId);
         selectedBoard.remove(session);
     }
 
-    // 發送訊息
     public static void sendMessage(Session session, JSONObject message) {
-        System.out.println("users: "+ message + ", session: "+ session);
         if (session == null) {
             return;
         }
@@ -40,15 +37,11 @@ public class WebSocketUtil {
         async.sendText(message.toString());
     }
 
-    // 發送群體訊息
     public static void sendMessageForAllUsersIn(String boardId, JSONObject message) {
         Map<Session, String> boardUsers= ONLINE_SESSION.get(boardId);
         boardUsers.forEach((session, userId) -> {
             sendMessage(session, message);
         });
-//        ONLINE_SESSION.forEach((session, userId) -> {
-//            sendMessage(session, message);
-//        });
     }
 }
 
