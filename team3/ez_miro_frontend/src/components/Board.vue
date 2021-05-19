@@ -60,124 +60,12 @@ export default {
     }
   },
   async created () {
-    const me = this
     this.boardId = this.$route.params.boardId
     this.boardContent = await GetBoardContent(this.boardId)
     this.initCanvas()
     this.loadAllStickyNote(this.boardContent.widgetDtos)
-    // this.initEventListener()
-    this.user = {
-      name: `匿名北極熊${Math.floor((Math.random() * 100) + 1)}`,
-      x: 0,
-      y: 0
-    }
-    this.webSocket = new WebSocket(`${webSocketHost}/WebSocketServer/${this.boardId}/${this.user.name}`)
-    this.webSocket.onopen = function (e) {
-      console.log(e)
-      console.log('Successfully connected to the echo websocket server...')
-    }
-    this.webSocket.onmessage = async function (e) {
-      console.log(e.data)
-      // const users = await JSON.parse(e.data)
-      const message = await JSON.parse(e.data)
-      console.log(message)
-      const cursors = message.cursors
-      for (let index = 0; index < cursors.length; index++) {
-        if (cursors[index].userId === me.user.name) {
-          cursors.splice(index, 1)
-        }
-      }
-      me.collaborator = cursors
-      // for (let user = 0; user < users.length; user++) {
-      //   if (users[user].name === me.user.name) {
-      //     users.splice(user, 1)
-      //   }
-      // }
-      // me.collaborator = users
-    }
-    this.canvas.on('mouse:move', function (e) {
-      if (me.isSamplingCursorDelayFinish) {
-        me.isSamplingCursorDelayFinish = false
-        setTimeout(function () {
-          me.isSamplingCursorDelayFinish = true
-          me.webSocket.send(me._composeCursorInfo(e.absolutePointer.x, e.absolutePointer.y))
-        }, 100)
-      }
-    })
-
-    this.canvas.on('mouse:dblclick', async function (e) {
-      const info = {}
-      const width = 100
-      if (e.target !== null) {
-        me.ungroup(e.target)
-        const textObject = e.target.textObject
-        me.canvas.setActiveObject(textObject)
-        textObject.enterEditing()
-        textObject.selectAll()
-      } else {
-        info.topLeftX = e.absolutePointer.x - width / 2
-        info.topLeftY = e.absolutePointer.y - width / 2
-        info.bottomRightX = info.topLeftX + width
-        info.bottomRightY = info.topLeftY + width
-        const stickyNoteId = await CreateStickyNote(me.boardId, info)
-        await me.loadStickyNoteBy(stickyNoteId)
-      }
-    })
-
-    this.canvas.on('mouse:up', async function (e) {
-      const target = e.target
-      if (e.button === 1) {
-        me.isDisplayRightClickMenu = false
-        if (target) {
-          me.setTarget(target)
-          me.oldPoint = target.lineCoords
-        }
-      } else if (e.button === 3) { // 臭到不行
-        me.isDisplayRightClickMenu = true
-        const point = e.absolutePointer
-        me.rightClickMenuStyle.top = point.y + 'px'
-        me.rightClickMenuStyle.left = point.x + 'px'
-        me.setTarget(target)
-      } else {
-        me.isDisplayRightClickMenu = false
-        me.setTarget(null)
-      }
-    })
-
-    this.canvas.on('object:moved', async function (e) {
-      const target = e.target
-      const stickyNoteId = target.id
-      const point = target.lineCoords
-      const topLeftX = point.tl.x
-      const topLeftY = point.tl.y
-      const bottomRightX = point.br.x
-      const bottomRightY = point.br.y
-      await MoveStickyNoteBy(me.boardId, {
-        [stickyNoteId]: {
-          topLeftX: topLeftX,
-          topLeftY: topLeftY,
-          bottomRightX: bottomRightX,
-          bottomRightY: bottomRightY
-        }
-      })
-    })
-
-    this.canvas.on('object:scaled', async function (e) {
-      const target = e.target
-      const stickyNoteId = target.id
-      const point = target.lineCoords
-      const topLeftX = point.tl.x
-      const topLeftY = point.tl.y
-      const bottomRightX = point.br.x
-      const bottomRightY = point.br.y
-      await EditFontSizeOfStickyNoteBy(stickyNoteId, me.boardId, e.target.textObject.fontSize)
-      await ResizeStickyNoteBy(stickyNoteId, me.boardId, {
-        topLeftX: topLeftX,
-        topLeftY: topLeftY,
-        bottomRightX: bottomRightX,
-        bottomRightY: bottomRightY
-      })
-    })
+    this.user = this.createStubUser()
+    this.initWebSocketAndBingEventListener()
   },
   methods: {
     initCanvas () {
@@ -185,6 +73,126 @@ export default {
         fireRightClick: true,
         width: window.innerWidth,
         height: window.innerHeight
+      })
+      this.bindCanvasEventListener()
+    },
+    createStubUser () {
+      return {
+        name: `匿名北極熊${Math.floor((Math.random() * 100) + 1)}`,
+        x: 0,
+        y: 0
+      }
+    },
+    initWebSocketAndBingEventListener () {
+      const me = this
+      this.webSocket = new WebSocket(`${webSocketHost}/WebSocketServer/${this.boardId}/${this.user.name}`)
+      this.webSocket.onopen = function (e) {
+        console.log(e)
+        console.log('Successfully connected to the echo websocket server...')
+      }
+      this.webSocket.onmessage = async function (e) {
+        console.log(e.data)
+        // const users = await JSON.parse(e.data)
+        const message = await JSON.parse(e.data)
+        console.log(message)
+        const cursors = message.cursors
+        for (let index = 0; index < cursors.length; index++) {
+          if (cursors[index].userId === me.user.name) {
+            cursors.splice(index, 1)
+          }
+        }
+        me.collaborator = cursors
+        // for (let user = 0; user < users.length; user++) {
+        //   if (users[user].name === me.user.name) {
+        //     users.splice(user, 1)
+        //   }
+        // }
+        // me.collaborator = users
+      }
+    },
+    bindCanvasEventListener () {
+      const me = this
+      this.canvas.on('mouse:move', function (e) {
+        if (me.isSamplingCursorDelayFinish) {
+          me.isSamplingCursorDelayFinish = false
+          setTimeout(function () {
+            me.isSamplingCursorDelayFinish = true
+            me.webSocket.send(me._composeCursorInfo(e.absolutePointer.x, e.absolutePointer.y))
+          }, 100)
+        }
+      })
+      this.canvas.on('mouse:dblclick', async function (e) {
+        const info = {}
+        const width = 100
+        if (e.target !== null) {
+          me.ungroup(e.target)
+          const textObject = e.target.textObject
+          me.canvas.setActiveObject(textObject)
+          textObject.enterEditing()
+          textObject.selectAll()
+        } else {
+          info.topLeftX = e.absolutePointer.x - width / 2
+          info.topLeftY = e.absolutePointer.y - width / 2
+          info.bottomRightX = info.topLeftX + width
+          info.bottomRightY = info.topLeftY + width
+          const stickyNoteId = await CreateStickyNote(me.boardId, info)
+          await me.loadStickyNoteBy(stickyNoteId)
+        }
+      })
+
+      this.canvas.on('mouse:up', async function (e) {
+        const target = e.target
+        if (e.button === 1) {
+          me.isDisplayRightClickMenu = false
+          if (target) {
+            me.setTarget(target)
+            me.oldPoint = target.lineCoords
+          }
+        } else if (e.button === 3) { // 臭到不行
+          me.isDisplayRightClickMenu = true
+          const point = e.absolutePointer
+          me.rightClickMenuStyle.top = point.y + 'px'
+          me.rightClickMenuStyle.left = point.x + 'px'
+          me.setTarget(target)
+        } else {
+          me.isDisplayRightClickMenu = false
+          me.setTarget(null)
+        }
+      })
+
+      this.canvas.on('object:moved', async function (e) {
+        const target = e.target
+        const stickyNoteId = target.id
+        const point = target.lineCoords
+        const topLeftX = point.tl.x
+        const topLeftY = point.tl.y
+        const bottomRightX = point.br.x
+        const bottomRightY = point.br.y
+        await MoveStickyNoteBy(me.boardId, {
+          [stickyNoteId]: {
+            topLeftX: topLeftX,
+            topLeftY: topLeftY,
+            bottomRightX: bottomRightX,
+            bottomRightY: bottomRightY
+          }
+        })
+      })
+
+      this.canvas.on('object:scaled', async function (e) {
+        const target = e.target
+        const stickyNoteId = target.id
+        const point = target.lineCoords
+        const topLeftX = point.tl.x
+        const topLeftY = point.tl.y
+        const bottomRightX = point.br.x
+        const bottomRightY = point.br.y
+        await EditFontSizeOfStickyNoteBy(stickyNoteId, me.boardId, e.target.textObject.fontSize)
+        await ResizeStickyNoteBy(stickyNoteId, me.boardId, {
+          topLeftX: topLeftX,
+          topLeftY: topLeftY,
+          bottomRightX: bottomRightX,
+          bottomRightY: bottomRightY
+        })
       })
     },
     async deleteWidget () {
