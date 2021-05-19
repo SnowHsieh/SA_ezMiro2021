@@ -4,9 +4,6 @@ import ntut.csie.selab.entity.model.board.Cursor;
 import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardInput;
 import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardOutput;
 import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardUseCase;
-import ntut.csie.selab.usecase.board.movecursor.MoveCursorInput;
-import ntut.csie.selab.usecase.board.movecursor.MoveCursorOutput;
-import ntut.csie.selab.usecase.board.movecursor.MoveCursorUseCase;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +16,6 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.awt.Point;
 import java.util.Set;
 
 @Component
@@ -27,7 +23,6 @@ import java.util.Set;
 public class WebSocketController {
     private static ApplicationContext applicationContext ;
 
-    private MoveCursorUseCase moveCursorUseCase;
     private LeaveBoardUseCase leaveBoardUseCase;
 
     public static void setApplicationContext (ApplicationContext applicationContext) {

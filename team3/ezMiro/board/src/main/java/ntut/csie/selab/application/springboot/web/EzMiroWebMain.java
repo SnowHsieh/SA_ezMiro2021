@@ -1,5 +1,4 @@
 package ntut.csie.selab.application.springboot.web;
-import ntut.csie.selab.adapter.controller.rest.springboot.board.getcontent.GetBoardContentController;
 import ntut.csie.selab.adapter.websocket.WebSocketController;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
