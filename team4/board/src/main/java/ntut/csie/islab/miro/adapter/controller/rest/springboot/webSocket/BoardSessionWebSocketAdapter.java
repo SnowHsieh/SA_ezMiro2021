@@ -24,6 +24,8 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @ServerEndpoint(value = "/websocket/{boardId}/{userId}",
@@ -71,8 +73,10 @@ public class BoardSessionWebSocketAdapter {
             jsonObject = jsonObject.getJSONObject("message");
             event = jsonObject.getString("event");
             info = jsonObject.getJSONObject("info");
-            System.out.println("event in onMessage is: "+jsonObject.toString());
+//            System.out.println("event in onMessage is: "+jsonObject.toString());
+            System.out.println("eventhandler start");
             websocketEventHandler(event, info , session);
+            System.out.println("eventhandler end");
         }catch (JSONException err){
             System.out.println("onMessage err:" + err);
         }
@@ -101,9 +105,10 @@ public class BoardSessionWebSocketAdapter {
         GetAllUserCursorsPresenter presenter = new GetAllUserCursorsPresenter();
         getAllUserCursorsUseCase.execute(input, presenter);
         WebSocketBroadcaster webSocketBroadcaster = new WebSocketBroadcaster();
-        JSONArray jb = new JSONArray(presenter.getCursorDtos());
-        System.out.println(jb);
-        webSocketBroadcaster.broadcastMsg(jb);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("event", "GetAllCursorList");
+        jsonObject.put("cursorList", new JSONObject(presenter.buildViewModel()));
+        webSocketBroadcaster.broadcastMsg(jsonObject);
     }
 
     @OnOpen
@@ -117,7 +122,6 @@ public class BoardSessionWebSocketAdapter {
         input.setBoardId(UUID.fromString(boardId));
         enterBoardUseCase.execute(input, presenter);
         ((WebSocketBroadcaster)boardSessionBroadcaster).addSession(presenter.getId(), session);
-
     }
 
     @OnClose
@@ -156,7 +160,5 @@ public class BoardSessionWebSocketAdapter {
         input.setBoardId(UUID.fromString(boardId));
         input.setPosition(newPosition);
         moveCursorUseCase.execute(input, output);
-
-
     }
 }

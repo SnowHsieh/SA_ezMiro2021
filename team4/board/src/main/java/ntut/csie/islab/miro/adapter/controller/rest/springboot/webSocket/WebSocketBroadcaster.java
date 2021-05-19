@@ -2,6 +2,7 @@ package ntut.csie.islab.miro.adapter.controller.rest.springboot.webSocket;
 
 import ntut.csie.islab.miro.usecase.webSocket.BoardSessionBroadcaster;
 import ntut.csie.sslab.ddd.model.DomainEvent;
+import org.json.JSONObject;
 
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
@@ -55,7 +56,6 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
     public void broadcastDomainEvent(DomainEvent domainEvent) {
         Collection<Session> sessions = ONLINE_SESSION.values();
         for(Session session : sessions){
-
             synchronized (session) {
                 try {
                     if(session.isOpen()){
@@ -67,15 +67,13 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
             }
         }
     }
-    public void broadcastMsg(Object obj) {
-        System.out.println(obj.toString());
+    public void broadcastMsg(JSONObject obj) {
         Collection<Session> sessions = ONLINE_SESSION.values();
         for(Session session : sessions){
-
             synchronized (session) {
                 try {
                     if(session.isOpen()){
-                        session.getAsyncRemote().sendObject(obj);
+                        session.getAsyncRemote().sendText(obj.toString());
                     }
                 } catch ( Exception e) {
                     e.printStackTrace();

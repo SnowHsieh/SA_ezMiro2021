@@ -4,7 +4,6 @@
         <div>
           <div>
             <button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
-            <button id="sendGetAllCursors" @click="sendGetAllCursors()">get all cursor</button>
             <input v-model="myUserId" placeholder="input userName">
             <button id="sendUserName" @click="socketInit()">sendUserName</button>
             <canvas id="canvas" ref='board' >
@@ -49,7 +48,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      boardId: 'b888fa6b-0f1c-4344-a33b-aba58703955c',
+      boardId: '037cd8e0-6447-4b05-a78b-c89a6a6cb0a8',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -66,7 +65,7 @@ export default {
       socketLoaded: null,
       userCursorList: [],
       myUserId: '7398cd26-da85-4c05-b04b-122e73888dfb',
-      hostIp: '140.124.181.20',
+      hostIp: 'localhost',
       mouseData: null
     }
   },
@@ -93,7 +92,7 @@ export default {
     this.socket.onmessage = this.websocketonmessage
     this.socket.onclose = this.websocketclose
     // this.timer = setInterval(this.refreshCanvas, 10000)
-    this.timer = setInterval(this.sendMouseData, 1000)
+    this.timer = setInterval(this.sendMouseData, 500)
   },
   methods: {
     sendMouseData () {
@@ -238,34 +237,38 @@ export default {
     drawStickyNote (figureDtos) {
       var _this = this
       figureDtos.forEach(figure => {
-        var shadow = new fabric.Shadow({
-          color: 'gray',
-          blur: 8
-        })
-        var rect = new fabric.Rect({
-          id: figure.figureId,
-          originX: 'center',
-          originY: 'center',
-          width: figure.style.width,
-          height: figure.style.height,
-          fill: figure.style.color,
-          shadow: shadow
-        })
-        var text = new fabric.IText(figure.content, {
-          fontSize: figure.style.fontSize,
-          originX: 'center',
-          originY: 'center'
-        }
-        )
-        var group = new fabric.Group([rect, text], {
-          id: figure.figureId,
-          content: figure.content,
-          top: figure.position.y,
-          left: figure.position.x,
-          subTargetCheck: true
-        })
-        _this.canvas.add(group)
+        _this.addStickyNote(figure)
       })
+      this.canvas.renderAll()
+    },
+    addStickyNote (figure) {
+      var shadow = new fabric.Shadow({
+        color: 'gray',
+        blur: 8
+      })
+      var rect = new fabric.Rect({
+        id: figure.figureId,
+        originX: 'center',
+        originY: 'center',
+        width: figure.style.width,
+        height: figure.style.height,
+        fill: figure.style.color,
+        shadow: shadow
+      })
+      var text = new fabric.IText(figure.content, {
+        fontSize: figure.style.fontSize,
+        originX: 'center',
+        originY: 'center'
+      }
+      )
+      var group = new fabric.Group([rect, text], {
+        id: figure.figureId,
+        content: figure.content,
+        top: figure.position.y,
+        left: figure.position.x,
+        subTargetCheck: true
+      })
+      this.canvas.add(group)
       this.canvas.renderAll()
     },
     refreshCanvas () {
@@ -440,11 +443,24 @@ export default {
       }
       _this.sendToBackButton.addEventListener('mouseup', newHandler)
     },
+    updateStickyPosition (figure) { // todo: update userCursorList
+      try {
+        this.canvas.getObjects().forEach(function (item) {
+          if (item.get('id') === figure.figureId) {
+            item.set('left', figure.newPosition.x)
+            item.set('top', figure.newPosition.y)
+          }
+        })
+        this.canvas.renderAll()
+      } catch (e) {
+        console.log(e)
+      }
+    },
     drawAllUserCursors () {
       var _this = this
       this.userCursorList.forEach(function (item) {
-        const userId = item[0]
-        const position = item[1]
+        const userId = item.userId
+        const position = item.position
         if (userId === _this.myUserId) {
           return
         }
@@ -461,16 +477,15 @@ export default {
     },
     addUserCursor (data) {
       try {
-        var userId = data.id
+        var userId = data.userId
         if (userId === this.myUserId) {
           return
         }
-        var position = data.position
         this.userCursorList.push(data)
         const cursor = new fabric.Text(userId, {
           fontSize: 15,
-          left: position.x,
-          top: position.y,
+          left: 0.0,
+          top: 0.0,
           selectable: false,
           id: userId,
           objectType: 'cursor'
@@ -485,9 +500,9 @@ export default {
       try {
         const _this = this
         this.canvas.getObjects().forEach(function (item) {
-          if (data.id !== _this.myUserId && item.get('id') === data.id) {
-            item.set('left', data.position.x)
-            item.set('top', data.position.y)
+          if (data.userId !== _this.myUserId && item.get('id') === data.userId) {
+            item.set('left', data.newPosition.x)
+            item.set('top', data.newPosition.y)
           }
         })
         this.canvas.renderAll()
@@ -512,21 +527,50 @@ export default {
     },
     websocketonopen: function () {
       console.log('WebSocket连接成功')
+      this.sendGetAllCursors()
     },
     websocketonerror: function () {
       console.log('WebSocket连接发生错误')
     },
     websocketonmessage: function (e) {
-      console.log('收到來自後端的訊息1', e)
-      // console.log('收到來自後端的訊息1', JSON.parse(e.data).event)
-      // if (JSON.parse(e.data).event === 'CursorMovedDomainEvent') {
-      //   // console.log(JSON.parse(e.data).event)
-      // }
-      // if (JSON.parse(e.data).event === 'BoardEnteredDomainEvent') {
-      //   console.log(JSON.parse(e.data))
-      // } else {
-      //   console.log(e)
-      // }
+      const _this = this
+      const receivedData = JSON.parse(e.data)
+      if (receivedData.event === 'CursorMovedDomainEvent') {
+        // console.log(receivedData)
+        _this.updateUserCursor(receivedData)
+      } else if (receivedData.event === 'BoardEnteredDomainEvent') {
+        // console.log(receivedData)
+      } else if (receivedData.event === 'CursorCreatedDomainEvent') {
+        console.log(receivedData)
+        _this.addUserCursor(receivedData)
+      } else if (receivedData.event === 'CursorDeletedDomainEvent') {
+        console.log(receivedData)
+        _this.delUserCursor(receivedData.userId)
+      } else if (receivedData.event === 'StickyNoteCreatedDomainEvent') {
+        console.log(receivedData)
+        const figure = {
+          figureId: receivedData,
+          content: '',
+          position: {
+            x: 100,
+            y: 100
+          },
+          style: {
+            fontSize: 20,
+            shape: 2,
+            width: 150.0,
+            height: 150.0,
+            color: '#ffa150'
+          }
+        }
+        _this.addStickyNote(figure)
+      } else if (receivedData.event === 'StickyNoteMovedDomainEvent') {
+        console.log(receivedData)
+        _this.updateStickyPosition(receivedData)
+      } else if (receivedData.event === 'GetAllCursorList') {
+        _this.userCursorList = receivedData.cursorList.cursorDtos
+        _this.drawAllUserCursors()
+      }
       // if (JSON.parse(e.data).event === 'CursorCreatedDomainEvent') {
       //   console.log(JSON.parse(e.data))
 
