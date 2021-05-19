@@ -24,7 +24,7 @@ public class EnterBoardUseCase {
 
         if (board.isPresent()) {
             Board selectedBoard = board.get();
-            selectedBoard.addCursor(new Cursor(input.getUserId(), new Point(100, 100)));
+            selectedBoard.addCursor(new Cursor(input.getBoardId(), input.getUserId(), new Point(100, 100)));
             output.setCursorCountInBoard(selectedBoard.getCursorCount());
             output.setCursor(selectedBoard.getCursors());
         } else {

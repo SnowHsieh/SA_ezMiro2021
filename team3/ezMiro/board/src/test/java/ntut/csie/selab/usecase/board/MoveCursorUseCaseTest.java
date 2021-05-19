@@ -28,7 +28,7 @@ public class MoveCursorUseCaseTest {
         Point point = new Point(100, 100);
         Board board = MockFactory.createBoard(boardId);
         boardRepository.add(board);
-        board.addCursor(new Cursor(userId, point));
+        board.addCursor(new Cursor(boardId, userId, point));
         input.setBoardId(boardId);
         input.setUserId(userId);
         input.setPoint(point);
