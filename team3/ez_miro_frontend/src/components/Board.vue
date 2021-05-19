@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { GetBoardContent } from '@/apis/Boards'
+import { GetBoardContent, EnterBoard } from '@/apis/Boards'
 import {
   CreateStickyNote,
   ReadStickyNoteBy,
@@ -87,8 +87,10 @@ export default {
     initWebSocketAndBingEventListener () {
       const me = this
       this.webSocket = new WebSocket(`${webSocketHost}/WebSocketServer/${this.boardId}/${this.user.name}`)
-      this.webSocket.onopen = function (e) {
+      this.webSocket.onopen = async function (e) {
         console.log('Successfully connected to the echo websocket server...')
+        console.log(me.boardId, me.user.name)
+        await EnterBoard(me.boardId, me.user.name)
       }
       this.webSocket.onmessage = async function (e) {
         const message = await JSON.parse(e.data)

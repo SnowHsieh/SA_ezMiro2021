@@ -1,9 +1,6 @@
 package ntut.csie.selab.adapter.websocket;
 
 import ntut.csie.selab.entity.model.board.Cursor;
-import ntut.csie.selab.usecase.board.enterboard.EnterBoardInput;
-import ntut.csie.selab.usecase.board.enterboard.EnterBoardOutput;
-import ntut.csie.selab.usecase.board.enterboard.EnterBoardUseCase;
 import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardInput;
 import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardOutput;
 import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardUseCase;
@@ -30,7 +27,6 @@ import java.util.Set;
 public class WebSocketController {
     private static ApplicationContext applicationContext ;
 
-    private EnterBoardUseCase enterBoardUseCase;
     private MoveCursorUseCase moveCursorUseCase;
     private LeaveBoardUseCase leaveBoardUseCase;
 
@@ -40,18 +36,10 @@ public class WebSocketController {
 
     @OnOpen
     public void onOpen(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String userId, Session session) throws JSONException {
-        enterBoardUseCase = applicationContext.getBean(EnterBoardUseCase.class);
-        EnterBoardInput input = new EnterBoardInput();
-        EnterBoardOutput output = new EnterBoardOutput();
-        input.setBoardId(boardId);
-        input.setUserId(userId);
-        enterBoardUseCase.execute(input, output);
 
         String msg = "有新成員[" + userId + "]加入看板!";
         System.out.println(msg);
         WebSocketUtil.addSessionIn(boardId, userId, session);
-
-        WebSocketUtil.sendMessageForAllUsersIn(boardId, convertCursorToMessage(output.getCursor()));
     }
 
     @OnMessage
