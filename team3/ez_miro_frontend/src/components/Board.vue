@@ -15,8 +15,8 @@
       <li class="list-group-item" @click="bringToFront">bring to front</li>
       <li class="list-group-item" @click="sendToback">send to back</li>
     </ul>
-    <div class="cursors" v-for="user in this.collaborator" v-bind:key="user.name" :style="{'top': user.y + 'px', 'left': user.x + 'px'}">
-      {{user.name}}
+    <div class="cursors" v-for="user in this.collaborator" v-bind:key="user.userId" :style="{'top': user.y + 'px', 'left': user.x + 'px'}">
+      {{user.userId}}
     </div>
   </div>
 </template>
@@ -65,33 +65,42 @@ export default {
     this.boardContent = await GetBoardContent(this.boardId)
     this.initCanvas()
     this.loadAllStickyNote(this.boardContent.widgetDtos)
-    this.initEventListener()
+    // this.initEventListener()
     this.user = {
       name: `匿名北極熊${Math.floor((Math.random() * 100) + 1)}`,
       x: 0,
       y: 0
     }
-    this.webSocket = new WebSocket(`${webSocketHost}/WebSocketServer/${this.user.name}`)
+    this.webSocket = new WebSocket(`${webSocketHost}/WebSocketServer/${this.boardId}/${this.user.name}`)
     this.webSocket.onopen = function (e) {
       console.log(e)
       console.log('Successfully connected to the echo websocket server...')
     }
     this.webSocket.onmessage = async function (e) {
-      const users = await JSON.parse(e.data)
-      for (let user = 0; user < users.length; user++) {
-        if (users[user].name === me.user.name) {
-          users.splice(user, 1)
+      console.log(e.data)
+      // const users = await JSON.parse(e.data)
+      const message = await JSON.parse(e.data)
+      console.log(message)
+      const cursors = message.cursors
+      for (let index = 0; index < cursors.length; index++) {
+        if (cursors[index].userId === me.user.name) {
+          cursors.splice(index, 1)
         }
       }
-      me.collaborator = users
+      me.collaborator = cursors
+      // for (let user = 0; user < users.length; user++) {
+      //   if (users[user].name === me.user.name) {
+      //     users.splice(user, 1)
+      //   }
+      // }
+      // me.collaborator = users
     }
     this.canvas.on('mouse:move', function (e) {
       if (me.isSamplingCursorDelayFinish) {
         me.isSamplingCursorDelayFinish = false
         setTimeout(function () {
           me.isSamplingCursorDelayFinish = true
-          const cursorPoint = { x: Math.floor(e.absolutePointer.x), y: Math.floor(e.absolutePointer.y) }
-          me.webSocket.send(JSON.stringify(cursorPoint))
+          me.webSocket.send(me._composeCursorInfo(e.absolutePointer.x, e.absolutePointer.y))
         }, 100)
       }
     })
@@ -274,6 +283,9 @@ export default {
     },
     getZOrderOf (widget) {
       return this.canvas.getObjects().indexOf(widget)
+    },
+    _composeCursorInfo (x, y) {
+      return JSON.stringify({ cursor: { x: Math.floor(x), y: Math.floor(y) } })
     }
   }
 }

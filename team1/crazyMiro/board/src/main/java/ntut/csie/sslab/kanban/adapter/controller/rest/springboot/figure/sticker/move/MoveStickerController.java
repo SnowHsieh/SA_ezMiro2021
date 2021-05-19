@@ -8,10 +8,7 @@ import ntut.csie.sslab.kanban.usecase.figure.sticker.move.MoveStickerUseCase;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
 
@@ -26,7 +23,8 @@ public class MoveStickerController {
     }
 
     @PutMapping(path = "${MIRO_PREFIX}/board/sticker/move", consumes = "application/json", produces = "application/json")
-    public CqrsCommandViewModel moveSticker(@QueryParam("stickerId") String stickerId,
+    public CqrsCommandViewModel moveSticker(@RequestParam("stickerId") String stickerId,
+                                                     @RequestParam("userId") String userId,
                                                      @RequestBody String stickerInfo) {
 
         Coordinate position = null;
@@ -42,6 +40,7 @@ public class MoveStickerController {
         MoveStickerInput input = moveStickerUseCase.newInput();
         input.setFigureId(stickerId);
         input.setPosition(position);
+        input.setUserId(userId);
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
         moveStickerUseCase.execute(input, presenter);
         return presenter.buildViewModel();

@@ -37,6 +37,7 @@ public class StickerTest {
     public void move_position() {
         String boardId = UUID.randomUUID().toString();
         String stickerId = UUID.randomUUID().toString();
+        String userId = UUID.randomUUID().toString();
         String content = "stickerCreated";
         int width = 10;
         int length = 10;
@@ -48,7 +49,7 @@ public class StickerTest {
         Sticker sticker = new Sticker(boardId, stickerId, content, width, length, color, position);
         Coordinate newPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
 
-        sticker.move(newPosition);
+        sticker.move(newPosition, userId);
 
         assertTrue(newPosition.equals(sticker.getPosition()));
     }

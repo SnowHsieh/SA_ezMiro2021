@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.CustomAutowireConfigurer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class NotifyBoardSessionBroadcaster {
 
@@ -49,6 +50,7 @@ public class NotifyBoardSessionBroadcaster {
         Figure figure = figureRepository.findById(stickerMoved.getFigureId()).get();
         Board board = boardRepository.findById(figure.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessions();
+        boardSessions = boardSessions.stream().filter(x->!x.getUserId().equals(stickerMoved.getUserId())).collect(Collectors.toList());
         boardSessions.forEach(each->broadcast(stickerMoved, each.getBoardSessionId()));
     }
 

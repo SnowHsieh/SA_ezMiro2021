@@ -4,14 +4,18 @@ import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.common.DateProvider;
 import ntut.csie.sslab.kanban.entity.model.Coordinate;
 
-public class StickerMoved extends DomainEvent {
-    private String figureId;
-    private Coordinate position;
+import java.util.Date;
 
-    public StickerMoved(String figureId, Coordinate position) {
+public class StickerMoved extends DomainEvent {
+    private final String figureId;
+    private final Coordinate position;
+    private final String userId;
+
+    public StickerMoved(String figureId, Coordinate position, String userId) {
         super(DateProvider.now());
         this.figureId = figureId;
         this.position = position;
+        this.userId = userId;
     }
 
     public String getFigureId() {
@@ -20,5 +24,9 @@ public class StickerMoved extends DomainEvent {
 
     public Coordinate getPosition() {
         return position;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }
