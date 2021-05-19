@@ -122,11 +122,21 @@ export default {
       }
     },
     updateWidgetInCanvas (widgetDto) {
+      const canvas = this.canvas
       const activeWidget = this.canvas.getActiveObject()
       this.canvas.getObjects().forEach(function (o) {
-        if (o.id === widgetDto.widgetId && (activeWidget === undefined || activeWidget.id !== widgetDto.widgetId)) {
-          o.set('left', widgetDto.topLeftX)
-          o.set('top', widgetDto.topLeftY)
+        console.log(activeWidget)
+        if (o.id === widgetDto.widgetId && (!activeWidget || activeWidget.id !== widgetDto.widgetId)) {
+          o.animate('left', widgetDto.topLeftX, {
+            duration: 200,
+            onChange: canvas.renderAll.bind(canvas),
+            easing: fabric.util.ease.easeInOutSine
+          })
+          o.animate('top', widgetDto.topLeftY, {
+            duration: 200,
+            onChange: canvas.renderAll.bind(canvas),
+            easing: fabric.util.ease.easeInOutSine
+          })
         }
       })
       this.canvas.renderAll()

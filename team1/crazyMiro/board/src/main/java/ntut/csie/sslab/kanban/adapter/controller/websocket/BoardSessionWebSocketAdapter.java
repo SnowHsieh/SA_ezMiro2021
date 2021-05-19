@@ -12,7 +12,6 @@ import ntut.csie.sslab.kanban.usecase.board.enter.EnterBoardInput;
 import ntut.csie.sslab.kanban.usecase.board.enter.EnterBoardUseCase;
 import ntut.csie.sslab.kanban.usecase.board.leave.LeaveBoardInput;
 import ntut.csie.sslab.kanban.usecase.board.leave.LeaveBoardUseCase;
-import ntut.csie.sslab.kanban.usecase.board.leave.LeaveBoardUseCaseImpl;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorInput;
 import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorUseCase;
 import org.json.JSONException;
@@ -114,19 +113,19 @@ public class BoardSessionWebSocketAdapter {
 
     private void handleCursorMoved(JSONObject info) {
         Coordinate newPosition = null;
-        String cursorId = "";
+        String userId = "";
         try {
             Long x = info.getJSONObject("position").getLong("x");
             Long y = info.getJSONObject("position").getLong("y");
             newPosition = new Coordinate(x, y);
-            cursorId = info.getString("cursorId");
+            userId = info.getString("userId");
         }catch (JSONException err){
             System.out.println(err);
             return;
         }
         MoveCursorInput input = moveCursorUseCase.newInput();
         CqrsCommandOutput output = CqrsCommandPresenter.newInstance();
-        input.setCursorId(cursorId);
+        input.setUserId(userId);
         input.setPosition(newPosition);
         moveCursorUseCase.execute(input, output);
     }

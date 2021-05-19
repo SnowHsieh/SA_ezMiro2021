@@ -56,6 +56,6 @@ public class Cursor extends AggregateRoot<String> {
 
     public void deleteCursor() {
         markAsDelete();
-        addDomainEvent(new CursorDeleted(cursorId));
+        addDomainEvent(new CursorDeleted(boardId, userId, cursorId));
     }
 }

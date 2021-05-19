@@ -67,7 +67,7 @@ public class UseCaseInjection {
 
     @Bean(name="createNotifyBoardSessionBroadcaster")
     public NotifyBoardSessionBroadcaster createNotifyBoardSessionBroadcaster() {
-        return new NotifyBoardSessionBroadcaster(boardSessionBroadcaster, boardRepository, figureRepository);
+        return new NotifyBoardSessionBroadcaster(boardSessionBroadcaster, boardRepository, figureRepository, cursorRepository);
     }
 
     @Bean(name="createStickerUseCase")

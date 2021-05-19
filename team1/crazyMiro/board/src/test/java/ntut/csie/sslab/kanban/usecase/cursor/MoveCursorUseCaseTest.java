@@ -11,7 +11,6 @@ import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorUseCaseImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,23 +19,22 @@ public class MoveCursorUseCaseTest extends AbstractSpringBootJpaTest {
 
     @Test
     public void move_a_cursor() {
-//        String boardId = UUID.randomUUID().toString();
-//        String ip = "123.123.0.1";
-//        String sessionId = "1";
-//        String cursorId = createCursor(boardId, ip, sessionId);
-//        eventListener.clearEventCount();
-//        Coordinate newPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
-//        MoveCursorUseCase moveCursorUseCase = new MoveCursorUseCaseImpl(cursorRepository, domainEventBus);
-//        MoveCursorInput input = moveCursorUseCase.newInput();
-//        CqrsCommandOutput output = CqrsCommandPresenter.newInstance();
-//        input.setCursorId(cursorId);
-//        input.setPosition(newPosition);
-//
-//        moveCursorUseCase.execute(input, output);
-//
-//        Cursor cursor = cursorRepository.findById(cursorId).get();
-//        assertTrue(cursor.getPosition().equals(newPosition));
-//        assertEquals(1,eventListener.getEventCount());
+        String boardId = createBoard("123", "boardName");
+        String userId = "userId";
+        enterBoard(boardId, userId);
+        eventListener.clearEventCount();
+        Coordinate newPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
+        MoveCursorUseCase moveCursorUseCase = new MoveCursorUseCaseImpl(cursorRepository, domainEventBus);
+        MoveCursorInput input = moveCursorUseCase.newInput();
+        CqrsCommandOutput output = CqrsCommandPresenter.newInstance();
+        input.setUserId(userId);
+        input.setPosition(newPosition);
+
+        moveCursorUseCase.execute(input, output);
+
+        Cursor cursor = cursorRepository.findById(output.getId()).get();
+        assertTrue(cursor.getPosition().equals(newPosition));
+        assertEquals(1,eventListener.getEventCount());
     }
 
 }
