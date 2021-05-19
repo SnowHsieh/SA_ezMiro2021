@@ -12,16 +12,13 @@ import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorCreated;
 import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorDeleted;
 import ntut.csie.sslab.kanban.entity.model.cursor.event.CursorMoved;
 import ntut.csie.sslab.kanban.entity.model.figure.Figure;
-import ntut.csie.sslab.kanban.entity.model.figure.Sticker;
 import ntut.csie.sslab.kanban.entity.model.figure.event.*;
 import ntut.csie.sslab.kanban.usecase.BoardSessionBroadcaster;
 import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
 import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.CustomAutowireConfigurer;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,12 +27,14 @@ public class NotifyBoardSessionBroadcaster {
     private BoardSessionBroadcaster boardSessionBroadcaster;
     private BoardRepository boardRepository;
     private FigureRepository figureRepository;
+    private CursorRepository cursorRepository;
 
     @Autowired
-    public NotifyBoardSessionBroadcaster(BoardSessionBroadcaster boardSessionBroadcasters, BoardRepository boardRepository, FigureRepository figureRepository) {
+    public NotifyBoardSessionBroadcaster(BoardSessionBroadcaster boardSessionBroadcasters, BoardRepository boardRepository, FigureRepository figureRepository, CursorRepository cursorRepository) {
         this.boardSessionBroadcaster = boardSessionBroadcasters;
         this.boardRepository = boardRepository;
         this.figureRepository = figureRepository;
+        this.cursorRepository = cursorRepository;
     }
 
     @Subscribe
@@ -108,7 +107,11 @@ public class NotifyBoardSessionBroadcaster {
 
     @Subscribe
     public void whenCursorMoved(CursorMoved cursorMoved) {
-
+        Cursor cursor = cursorRepository.findById(cursorMoved.getCursorId()).get();
+        Board board = boardRepository.findById(cursor.getBoardId()).get();
+        List<BoardSession> boardSessions = board.getBoardSessions();
+        boardSessions = boardSessions.stream().filter(x->!x.getUserId().equals(cursor.getUserId())).collect(Collectors.toList());
+        boardSessions.forEach(each->broadcast(cursorMoved, each.getBoardSessionId()));
     }
 
     @Subscribe

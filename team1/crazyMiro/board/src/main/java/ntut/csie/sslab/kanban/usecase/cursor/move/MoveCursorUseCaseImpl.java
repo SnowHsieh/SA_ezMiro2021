@@ -6,8 +6,6 @@ import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.kanban.entity.model.cursor.Cursor;
 import ntut.csie.sslab.kanban.entity.model.Coordinate;
 import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
-import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorInput;
-import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorUseCase;
 
 public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
 
@@ -22,7 +20,7 @@ public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
     @Override
     public void execute(MoveCursorInput input, CqrsCommandOutput output) {
         try{
-            Cursor cursor = cursorRepository.findById(input.getCursorId()).get();
+            Cursor cursor = cursorRepository.findCursorByUserId(input.getUserId()).get();
             if(cursor.getPosition().equals(input.getPosition()))
                 return;
 
@@ -31,7 +29,7 @@ public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
             cursorRepository.save(cursor);
             domainEventBus.postAll(cursor);
 
-            output.setId(input.getCursorId())
+            output.setId(input.getUserId())
                     .setExitCode(ExitCode.SUCCESS);
         }catch (Exception e){
             output.setMessage(e.getMessage())
@@ -45,17 +43,17 @@ public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
     }
 
     private class MoveCursorInputImpl implements MoveCursorInput {
-        private String cursorId;
+        private String userId;
         private Coordinate position;
 
         @Override
-        public String getCursorId() {
-            return cursorId;
+        public String getUserId() {
+            return userId;
         }
 
         @Override
-        public void setCursorId(String cursorId) {
-            this.cursorId = cursorId;
+        public void setUserId(String userId) {
+            this.userId = userId;
         }
 
         @Override

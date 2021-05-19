@@ -5,9 +5,9 @@ import ntut.csie.sslab.kanban.entity.model.Coordinate;
 
 public interface MoveCursorInput extends Input {
 
-    String getCursorId();
+    String getUserId();
 
-    void setCursorId(String cursorId);
+    void setUserId(String userId);
 
     Coordinate getPosition();
 
