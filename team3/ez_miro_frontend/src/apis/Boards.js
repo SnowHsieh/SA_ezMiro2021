@@ -27,3 +27,12 @@ export const CreateBoard = async () => {
     console.log(err)
   }
 }
+
+export const MoveCursor = async (boardId, cursorInfo) => {
+  try {
+    const res = await axios.put(`${host}/ez-miro/boards/${boardId}/cursor`, cursorInfo)
+    return res.data
+  } catch (err) {
+    console.log(err)
+  }
+}

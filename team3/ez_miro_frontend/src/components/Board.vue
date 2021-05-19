@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { GetBoardContent, EnterBoard } from '@/apis/Boards'
+import { GetBoardContent, EnterBoard, MoveCursor } from '@/apis/Boards'
 import {
   CreateStickyNote,
   ReadStickyNoteBy,
@@ -151,7 +151,7 @@ export default {
           me.isSamplingCursorDelayFinish = false
           setTimeout(function () {
             me.isSamplingCursorDelayFinish = true
-            me.webSocket.send(me.composeCursorInfo(e.absolutePointer.x, e.absolutePointer.y))
+            MoveCursor(me.boardId, me.composeCursorInfo(e.absolutePointer.x, e.absolutePointer.y))
           }, 100)
         }
       })
@@ -352,7 +352,7 @@ export default {
       return this.canvas.getObjects().indexOf(widget)
     },
     composeCursorInfo (x, y) {
-      return JSON.stringify({ cursor: { x: Math.floor(x), y: Math.floor(y) } })
+      return { x: Math.floor(x), y: Math.floor(y), userId: this.user.name }
     },
     composeWidgetInfo (widget) {
       return JSON.stringify({ widgets: [widget.widgetDto] })

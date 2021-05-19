@@ -1,47 +1,53 @@
-package ntut.csie.selab.adapter.controller.rest.springboot.board.enter;
+package ntut.csie.selab.adapter.controller.rest.springboot.board.move.cursor;
 
-import ntut.csie.selab.adapter.presenter.board.getcontent.BoardContentViewModel;
 import ntut.csie.selab.adapter.websocket.WebSocketUtil;
 import ntut.csie.selab.entity.model.board.Cursor;
-import ntut.csie.selab.usecase.board.enterboard.EnterBoardInput;
-import ntut.csie.selab.usecase.board.enterboard.EnterBoardOutput;
-import ntut.csie.selab.usecase.board.enterboard.EnterBoardUseCase;
+import ntut.csie.selab.usecase.board.movecursor.MoveCursorInput;
+import ntut.csie.selab.usecase.board.movecursor.MoveCursorOutput;
+import ntut.csie.selab.usecase.board.movecursor.MoveCursorUseCase;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "${CORS_URLS}")
-public class EnterBoardController {
-    private EnterBoardUseCase enterBoardUseCase;
+public class MoveCursorController {
+    private MoveCursorUseCase moveCursorUseCase;
 
     @Autowired
-    public EnterBoardController(EnterBoardUseCase enterBoardUseCase) {
-        this.enterBoardUseCase = enterBoardUseCase;
+    public MoveCursorController(MoveCursorUseCase moveCursorUseCase) {
+        this.moveCursorUseCase = moveCursorUseCase;
     }
 
-    @PostMapping(path = "/${EZ_MIRO_PREFIX}/boards/{boardId}", consumes = "application/json")
-    public void enterBoard(@PathVariable("boardId") String boardId,
-                                @RequestBody String userInfo) {
+    @PutMapping(path = "/${EZ_MIRO_PREFIX}/boards/{boardId}/cursor", produces = "application/json", consumes = "application/json")
+    public void moveCursor(@PathVariable("boardId") String boardId,
+                           @RequestBody String cursorInfo) {
+        MoveCursorInput input = new MoveCursorInput();
+        MoveCursorOutput output = new MoveCursorOutput();
+        int cursorX = 0;
+        int cursorY = 0;
         String userId = "";
+
         try {
-            JSONObject userInfoJSON = new JSONObject(userInfo);
-            userId = userInfoJSON.getString("userId");
+            JSONObject cursorInfoJSON = new JSONObject(cursorInfo);
+            cursorX = cursorInfoJSON.getInt("x");
+            cursorY = cursorInfoJSON.getInt("y");
+            userId = cursorInfoJSON.getString("userId");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        EnterBoardInput input = new EnterBoardInput();
-        EnterBoardOutput output = new EnterBoardOutput();
         input.setBoardId(boardId);
         input.setUserId(userId);
-        enterBoardUseCase.execute(input, output);
+        input.setPoint(new Point(cursorX, cursorY));
+        moveCursorUseCase.execute(input, output);
 
-        WebSocketUtil.sendMessageForAllUsersIn(boardId, convertCursorToMessage(output.getCursor()));
+        WebSocketUtil.sendMessageForAllUsersIn(boardId, convertCursorToMessage(output.getCursors()));
     }
 
     private JSONObject convertCursorToMessage(Set<Cursor> cursorSet) {
@@ -67,5 +73,4 @@ public class EnterBoardController {
 
         return message;
     }
-
 }

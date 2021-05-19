@@ -46,9 +46,7 @@ public class WebSocketController {
     public void OnMessage(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String userId, String message, Session session) {
         try {
             JSONObject messageJSON = new JSONObject(message);
-            if (!messageJSON.isNull("cursor")) {
-                processCursorMessage(messageJSON, boardId, userId);
-            } else if (!messageJSON.isNull("widgets")) {
+            if (!messageJSON.isNull("widgets")) {
                 processWidgetMessage(messageJSON, boardId, userId);
             }
         } catch (JSONException e) {
@@ -59,25 +57,6 @@ public class WebSocketController {
     private void processWidgetMessage(JSONObject message, String boardId, String usernick) {
         String info = "widget changed or created: 成員[" + usernick + "]：" + message + "in board：" + boardId;
         WebSocketUtil.sendMessageForAllUsersIn(boardId, message);
-        System.out.println(info);
-    }
-
-    private void processCursorMessage(JSONObject message, String boardId, String usernick) throws JSONException {
-        String info = "mouse moved: 成員[" + usernick + "]：" + message + "in board：" + boardId;
-        moveCursorUseCase = applicationContext.getBean(MoveCursorUseCase.class);
-        MoveCursorInput input = new MoveCursorInput();
-        MoveCursorOutput output = new MoveCursorOutput();
-
-        JSONObject cursor = message.getJSONObject("cursor");
-        int x = cursor.getInt("x");
-        int y = cursor.getInt("y");
-
-        input.setBoardId(boardId);
-        input.setUserId(usernick);
-        input.setPoint(new Point(x, y));
-        moveCursorUseCase.execute(input, output);
-
-        WebSocketUtil.sendMessageForAllUsersIn(boardId, convertCursorToMessage(output.getCursors()));
         System.out.println(info);
     }
 
