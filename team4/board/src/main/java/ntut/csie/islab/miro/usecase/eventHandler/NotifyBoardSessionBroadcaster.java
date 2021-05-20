@@ -14,6 +14,7 @@ import ntut.csie.islab.miro.entity.model.board.event.BoardLeftDomainEvent;
 import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteContentChangedDomainEvent;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteCreatedDomainEvent;
+import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteDeleteDomainEvent;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteMovedDomainEvent;
 import ntut.csie.islab.miro.usecase.webSocket.BoardSessionBroadcaster;
 import ntut.csie.sslab.ddd.model.DomainEvent;
@@ -79,12 +80,12 @@ public class NotifyBoardSessionBroadcaster {
 //        boardSessions.forEach(each->broadcast(stickerSizeChanged, each.getBoardSessionId()));
 //    }
 //
-//    @Subscribe
-//    public void whenStickerDeleted(StickerDeleted stickerDeleted){
-//        Board board = boardRepository.findById(stickerDeleted.getBoardId()).get();
-//        List<BoardSession> boardSessions = board.getBoardSessions();
-//        boardSessions.forEach(each->broadcast(stickerDeleted, each.getBoardSessionId()));
-//    }
+    @Subscribe
+    public void whenStickerDeleted(StickyNoteDeleteDomainEvent stickyNoteDeleteDomainEvent){
+        Board board = boardRepository.findById(stickyNoteDeleteDomainEvent.getBoardId()).get();
+        List<BoardSession> boardSessions = board.getBoardSessionList();
+        boardSessions.forEach(each->broadcast(stickyNoteDeleteDomainEvent, each.boardSessionId().id()));
+    }
 //
 //    @Subscribe
 //    public void whenFigureBroughtToFront(FigureBroughtToFront figureBroughtToFront){

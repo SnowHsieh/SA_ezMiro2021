@@ -48,7 +48,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      boardId: '6537abc5-64b0-431d-88c0-7cc935ee0b77',
+      boardId: '0ef25c78-d36f-4d09-8cca-7fe75e3beabd',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -65,7 +65,7 @@ export default {
       socketLoaded: null,
       userCursorList: [],
       myUserId: '7398cd26-da85-4c05-b04b-122e73888dfb',
-      hostIp: '140.124.181.8',
+      hostIp: '140.124.181.20',
       mouseData: null,
       updateCursorFlag: true,
       updateFigureFlag: true
@@ -312,8 +312,6 @@ export default {
               }
             }
             _this.sendMouseData(_this.mouseData)
-            // _this.sendMessage(JSON.stringify(data))
-            // _this.socket.emit('mouse-moved', data)
           },
           'mouse:dblclick': function (e) {
             if (e.target != null) {
@@ -577,6 +575,15 @@ export default {
           }
         }
         _this.addStickyNote(figure)
+      } else if (receivedData.event === 'StickyNoteDeleteDomainEvent') {
+        console.log(receivedData)
+        try {
+          const _this = this
+          const cursorObject = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
+          this.canvas.remove(cursorObject)
+        } catch (e) {
+          console.log(e)
+        }
       } else if (receivedData.event === 'StickyNoteMovedDomainEvent') {
         console.log(receivedData)
         _this.updateStickyPosition(receivedData)
