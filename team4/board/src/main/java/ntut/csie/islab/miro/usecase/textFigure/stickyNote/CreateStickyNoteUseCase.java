@@ -19,10 +19,10 @@ public class CreateStickyNoteUseCase {
         return new CreateStickyNoteInput();
     }
 
-    public void execute(CreateStickyNoteInput input, ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput output) {
+    public void execute(CreateStickyNoteInput input, CqrsCommandOutput output) {
         TextFigure stickyNote = new StickyNote(input.getBoardId(), input.getPosition(), input.getContent(), input.getStyle());
-
         stickyNoteRepository.save(stickyNote);
+
         domainEventBus.postAll(stickyNote);
         output.setId(stickyNote.getId().toString());
         output.setExitCode(ExitCode.SUCCESS);

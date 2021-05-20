@@ -1,5 +1,5 @@
 {
-  "name": "ez_miro_frontend",
+  "name": "team4_frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,9 +11,14 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
+    "express": "^4.17.1",
     "fabric": "^4.4.0",
+    "jquery": "^3.6.0",
+    "socket.io": "^4.0.2",
+    "socket.io-client": "^4.0.2",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
+    "vue-simple-context-menu": "^3.4.1",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
@@ -21,7 +26,7 @@
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli-service": "^4.5.13",
     "@vue/eslint-config-standard": "^5.1.2",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",

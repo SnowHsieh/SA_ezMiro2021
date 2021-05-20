@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(value = "http://localhost:8080")
+@CrossOrigin
 public class EditStickyNoteController {
     private EditStickyNoteUseCase editStickyNoteUseCase;
+
     @Autowired
     public void setEditStickyNoteUseCase(EditStickyNoteUseCase editStickyNoteUseCase) {
         this.editStickyNoteUseCase = editStickyNoteUseCase;
@@ -36,9 +37,11 @@ public class EditStickyNoteController {
             figureId = UUID.fromString(stickyNoteJSON.getString("figureId"));
             content = stickyNoteJSON.getString("content");
             styleJsonObject = stickyNoteJSON.getJSONObject("style");
+            System.out.println("styleJsonObject" + styleJsonObject);
             style = new Style(styleJsonObject.getInt("fontSize"),
-                    ShapeKindEnum.RECTANGLE,//todo
-                    styleJsonObject.getDouble("figureSize"),
+                    ShapeKindEnum.values()[styleJsonObject.getInt("shape")],
+                    styleJsonObject.getDouble("width"),
+                    styleJsonObject.getDouble("height"),
                     styleJsonObject.getString("color"));
         } catch (JSONException e) {
             e.printStackTrace();

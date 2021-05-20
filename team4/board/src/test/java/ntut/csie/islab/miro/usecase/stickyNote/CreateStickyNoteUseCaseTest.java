@@ -34,7 +34,7 @@ public class CreateStickyNoteUseCaseTest {
         input.setBoardId(boardId);
         input.setPosition(1.0,1.0);
         input.setContent("");
-        input.setStyle(new Style(12, ShapeKindEnum.CIRCLE, 87.87, "#948700"));
+        input.setStyle(new Style(12, ShapeKindEnum.CIRCLE, 87.87,100, "#948700"));
         createStickyNoteUseCase.execute(input, output);
 
         assertNotNull(output.getId());

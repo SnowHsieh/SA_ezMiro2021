@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(value = "http://localhost:8080")
+@CrossOrigin
 public class CreateBoardController {
     private CreateBoardUseCase createBoardUseCase;
 
