@@ -29,7 +29,7 @@ public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
             cursorRepository.save(cursor);
             domainEventBus.postAll(cursor);
 
-            output.setId(input.getUserId())
+            output.setId(cursor.getCursorId())
                     .setExitCode(ExitCode.SUCCESS);
         }catch (Exception e){
             output.setMessage(e.getMessage())
