@@ -6,6 +6,7 @@ import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.board.BoardR
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.cursor.CursorRepositoryImpl;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
+import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.figure.FigureRepositoryPeer;
 import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
 import ntut.csie.sslab.kanban.usecase.cursor.CursorRepository;
 import ntut.csie.sslab.kanban.usecase.figure.FigureRepository;
@@ -19,6 +20,8 @@ import org.springframework.context.annotation.PropertySource;
 public class RepositoryInjection {
 //
   private BoardRepositoryPeer boardRepositoryPeer;
+
+  private FigureRepositoryPeer figureRepositoryPeer;
 //
 //  private WorkflowRepositoryPeer workflowRepositoryPeer;
 //
@@ -28,6 +31,13 @@ public class RepositoryInjection {
   public void setBoardRepositoryPeer(BoardRepositoryPeer boardRepositoryPeer){
     this.boardRepositoryPeer = boardRepositoryPeer;
   }
+
+  @Autowired
+  public void setFigureRepositoryPeer(FigureRepositoryPeer figureRepositoryPeer){
+    this.figureRepositoryPeer = figureRepositoryPeer;
+  }
+
+
 //
 //  @Autowired
 //  public void setWorkflowRepositoryPeer(WorkflowRepositoryPeer workflowRepositoryPeer) {
@@ -42,7 +52,7 @@ public class RepositoryInjection {
 //
   @Bean(name="figureRepository")
   public FigureRepository figureRepository() {
-    return new FigureRepositoryImpl();
+    return new FigureRepositoryImpl(figureRepositoryPeer);
   }
 
   @Bean(name="boardRepository")

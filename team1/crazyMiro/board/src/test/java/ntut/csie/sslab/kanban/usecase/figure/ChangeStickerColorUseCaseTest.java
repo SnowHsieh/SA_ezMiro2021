@@ -20,6 +20,8 @@ public class ChangeStickerColorUseCaseTest extends AbstractSpringBootJpaTest {
     @Test
     public void change_sticker_color() {
         String boardId = UUID.randomUUID().toString();
+        createBoard(boardId, "test_board");
+        eventListener.clearEventCount();
         Coordinate stickerPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
         FigureDto stickerDto = new FigureDto(null, "sticker1", 10, 10, "black", stickerPosition);
         String stickerId = createSticker(boardId, stickerDto.getContent(), stickerDto.getWidth(), stickerDto.getLength(), stickerDto.getColor(), stickerDto.getPosition());
@@ -36,10 +38,11 @@ public class ChangeStickerColorUseCaseTest extends AbstractSpringBootJpaTest {
         assertEquals(input.getFigureId(), output.getId());
         Figure sticker = figureRepository.findById(output.getId()).get();
         assertEquals(newColor, sticker.getColor());
-        assertEquals(2, eventListener.getEventCount());
+        assertEquals(3, eventListener.getEventCount());
 
         changeStickerColorUseCase.execute(input, output);
-        assertEquals(2, eventListener.getEventCount());
+        eventListener.getEventCount();
+        assertEquals(3, eventListener.getEventCount());
     }
 
 }

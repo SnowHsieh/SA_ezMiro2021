@@ -19,7 +19,7 @@ public class ChangeStickerColorUseCaseImpl implements ChangeStickerColorUseCase 
     public void execute(ChangeStickerColorInput input, CqrsCommandOutput output) {
         try{
             Sticker sticker = (Sticker)figureRepository.findById(input.getFigureId()).get();
-            if(sticker.getColor() == input.getColor())
+            if(sticker.getColor().equals(input.getColor()))
                 return;
 
             sticker.changeColor(input.getColor());
