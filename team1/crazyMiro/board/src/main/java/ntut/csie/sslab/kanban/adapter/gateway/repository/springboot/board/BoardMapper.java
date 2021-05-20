@@ -19,6 +19,7 @@ public class BoardMapper {
                     boardSessionData.getBoardId(),
                     boardSessionData.getBoardSessionId()));
         }
+        board.clearDomainEvents();
         return board;
     }
 
@@ -34,6 +35,7 @@ public class BoardMapper {
                                                         boardSessionData.getBoardId(),
                                                         boardSessionData.getBoardSessionId()));
             }
+            board.clearDomainEvents();
             boards.add(board);
         }
         return boards;
@@ -47,6 +49,7 @@ public class BoardMapper {
                     boardSession.getBoardId(),
                     boardSession.getBoardSessionId()));
         }
+
         boardData.setBoardSessions(boardSessionDatas);
         List<CommittedFigureData> committedFigureDatas = new ArrayList<>();
         for (CommittedFigure committedFigure: board.getCommittedFigures()) {

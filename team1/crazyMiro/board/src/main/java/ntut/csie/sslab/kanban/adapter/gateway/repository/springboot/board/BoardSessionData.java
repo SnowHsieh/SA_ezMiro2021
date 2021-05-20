@@ -1,9 +1,11 @@
 package ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.board;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@Entity
 @Table(name="board_session")
 public class BoardSessionData {
 
@@ -16,6 +18,9 @@ public class BoardSessionData {
 
     @Column(name="board_id")
     private String boardId;
+
+    public BoardSessionData() {
+    }
 
     public BoardSessionData(String userId, String boardId, String boardSessionId) {
         this.userId = userId;

@@ -4,8 +4,7 @@ import ntut.csie.sslab.kanban.entity.model.board.BoardSession;
 import ntut.csie.sslab.kanban.entity.model.board.CommittedFigure;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name="board")
@@ -18,11 +17,12 @@ public class BoardData {
     @Column(name="board_name")
     private String boardName;
 
+    @OrderBy("zOrder")
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<CommittedFigureData> committedFigures;
+    private Set<CommittedFigureData> committedFigures;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<BoardSessionData> boardSessions;
+    private Set<BoardSessionData> boardSessions;
 
     public BoardData(String boardId, String boardName) {
         this.boardId = boardId;
@@ -30,8 +30,8 @@ public class BoardData {
     }
 
     public BoardData() {
-        this.committedFigures = new ArrayList<>();
-        this.boardSessions = new ArrayList<>();
+        this.committedFigures = new HashSet<>();
+        this.boardSessions = new HashSet<>();
     }
 
     public String getBoardId() {
@@ -51,18 +51,20 @@ public class BoardData {
     }
 
     public List<CommittedFigureData> getCommittedFigures() {
-        return committedFigures;
+        List<CommittedFigureData> committedFigureDatas = new ArrayList<>(committedFigures);
+        committedFigureDatas.sort(Comparator.comparing(CommittedFigureData::getzOrder));
+        return committedFigureDatas;
     }
 
     public void setCommittedFigures(List<CommittedFigureData> committedFigures) {
-        this.committedFigures = committedFigures;
+        this.committedFigures = new HashSet<>(committedFigures);
     }
 
     public List<BoardSessionData> getBoardSessions() {
-        return boardSessions;
+        return new ArrayList<>(boardSessions);
     }
 
     public void setBoardSessions(List<BoardSessionData> boardSessions) {
-        this.boardSessions = boardSessions;
+        this.boardSessions = new HashSet<>(boardSessions);
     }
 }
