@@ -578,7 +578,6 @@ export default {
       } else if (receivedData.event === 'StickyNoteDeleteDomainEvent') {
         console.log(receivedData)
         try {
-          const _this = this
           const cursorObject = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
           this.canvas.remove(cursorObject)
         } catch (e) {
