@@ -25,7 +25,6 @@
 import { GetBoardContent, EnterBoard, MoveCursor } from '@/apis/Boards'
 import {
   CreateStickyNote,
-  ReadStickyNoteBy,
   DeleteStickyNoteBy,
   MoveStickyNoteBy,
   ResizeStickyNoteBy,
@@ -94,7 +93,6 @@ export default {
       }
       this.webSocket.onmessage = async function (e) {
         const message = await JSON.parse(e.data)
-        // console.log(message)
         me.handleCursorMessage(message.cursors)
         me.handleWidgetMessage(message.widgets)
       }
@@ -125,7 +123,6 @@ export default {
       const canvas = this.canvas
       const activeWidget = this.canvas.getActiveObject()
       this.canvas.getObjects().forEach(function (o) {
-        console.log(activeWidget)
         if (o.id === widgetDto.widgetId && (!activeWidget || activeWidget.id !== widgetDto.widgetId)) {
           o.animate('left', widgetDto.topLeftX, {
             duration: 200,
@@ -155,7 +152,7 @@ export default {
           }, 100)
         }
       })
-      this.canvas.on('mouse:dblclick', async function (e) {
+      this.canvas.on('mouse:dblclick', function (e) {
         const info = {}
         const width = 100
         if (e.target !== null) {
@@ -169,11 +166,7 @@ export default {
           info.topLeftY = e.absolutePointer.y - width / 2
           info.bottomRightX = info.topLeftX + width
           info.bottomRightY = info.topLeftY + width
-          const stickyNoteId = await CreateStickyNote(me.boardId, info)
-          const stickyNote = await ReadStickyNoteBy(stickyNoteId, me.boardId)
-          me.boardContent.widgetDtos.push(stickyNote.widgetDto)
-          await me.loadStickyNoteIntoCanvas(stickyNote.widgetDto)
-          me.webSocket.send(me.composeWidgetInfo(stickyNote))
+          CreateStickyNote(me.boardId, info)
         }
       })
 

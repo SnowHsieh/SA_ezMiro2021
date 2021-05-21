@@ -4,9 +4,11 @@ import ntut.csie.selab.entity.model.board.Cursor;
 import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardInput;
 import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardOutput;
 import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardUseCase;
+import ntut.csie.selab.usecase.websocket.WebSocket;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -20,51 +22,53 @@ import java.util.Set;
 
 @Component
 @ServerEndpoint(value = "/WebSocketServer/{boardId}/{userId}")
-public class WebSocketController {
+public class BoardWebSocketController {
     private static ApplicationContext applicationContext ;
-
     private LeaveBoardUseCase leaveBoardUseCase;
+    private WebSocket boardWebSocket;
 
     public static void setApplicationContext (ApplicationContext applicationContext) {
-        WebSocketController. applicationContext = applicationContext ;
+        BoardWebSocketController.applicationContext = applicationContext;
     }
 
     @OnOpen
     public void onOpen(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String userId, Session session) throws JSONException {
-
+        boardWebSocket = applicationContext.getBean(BoardWebSocketImpl.class);
         String msg = "有新成員[" + userId + "]加入看板!";
         System.out.println(msg);
-        WebSocketUtil.addSessionIn(boardId, userId, session);
+        boardWebSocket.addSessionIn(boardId, userId, session);
     }
 
     @OnMessage
     public void OnMessage(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String userId, String message, Session session) {
-        try {
-            JSONObject messageJSON = new JSONObject(message);
-            if (!messageJSON.isNull("widgets")) {
-                processWidgetMessage(messageJSON, boardId, userId);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject messageJSON = new JSONObject(message);
+//            if (!messageJSON.isNull("widgets")) {
+//                processWidgetMessage(messageJSON, boardId, userId);
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void processWidgetMessage(JSONObject message, String boardId, String usernick) {
+        boardWebSocket = applicationContext.getBean(BoardWebSocketImpl.class);
         String info = "widget changed or created: 成員[" + usernick + "]：" + message + "in board：" + boardId;
-        WebSocketUtil.sendMessageForAllUsersIn(boardId, message);
+        boardWebSocket.sendMessageForAllUsersIn(boardId, message);
         System.out.println(info);
     }
 
     @OnClose
     public void OnClose(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String usernick, Session session) {
+        boardWebSocket = applicationContext.getBean(BoardWebSocketImpl.class);
         leaveBoardUseCase = applicationContext.getBean(LeaveBoardUseCase.class);
         LeaveBoardInput input= new LeaveBoardInput();
         LeaveBoardOutput output = new LeaveBoardOutput();
         input.setBoardId(boardId);
         input.setUserId(usernick);
         leaveBoardUseCase.execute(input, output);
-        WebSocketUtil.removeSessionFrom(boardId, session);
-        WebSocketUtil.sendMessageForAllUsersIn(boardId, convertCursorToMessage(output.getCursors()));
+        boardWebSocket.removeSessionFrom(boardId, session);
+        boardWebSocket.sendMessageForAllUsersIn(boardId, convertCursorToMessage(output.getCursors()));
         String info = "Board[" + boardId + "]中成員[" + usernick + "]的連線已斷開" ;
         System.out.println(info);
     }

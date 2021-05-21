@@ -2,18 +2,22 @@ package ntut.csie.selab.adapter.websocket;
 
 import org.json.JSONObject;
 
-import javax.websocket.RemoteEndpoint.Async;
+import javax.websocket.RemoteEndpoint;
 import javax.websocket.Session;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class WebSocketUtil {
+public class BoardWebSocketImpl implements ntut.csie.selab.usecase.websocket.WebSocket {
 
-    private static final Map<String, Map<Session, String>> ONLINE_SESSION = new ConcurrentHashMap<>();
+    private final Map<String, Map<Session, String>> ONLINE_SESSION;
+
+    public BoardWebSocketImpl() {
+        this.ONLINE_SESSION = new ConcurrentHashMap<>();
+    }
 
     // 新增紀錄Session
-    public static void addSessionIn(String boardId, String userId, Session session) {
+    public void addSessionIn(String boardId, String userId, Session session) {
         if (!ONLINE_SESSION.containsKey(boardId)) {
             ONLINE_SESSION.put(boardId, new HashMap<Session, String>() {{
                 put(session, userId);
@@ -24,21 +28,21 @@ public class WebSocketUtil {
         }
     }
 
-    public static void removeSessionFrom(String boardId, Session session) {
+    public void removeSessionFrom(String boardId, Session session) {
         Map<Session, String> selectedBoard = ONLINE_SESSION.get(boardId);
         selectedBoard.remove(session);
     }
 
-    public static void sendMessage(Session session, JSONObject message) {
+    public void sendMessage(Session session, JSONObject message) {
         if (session == null) {
             return;
         }
-        Async async = session.getAsyncRemote();
+        RemoteEndpoint.Async async = session.getAsyncRemote();
         async.sendText(message.toString());
     }
 
-    public static void sendMessageForAllUsersIn(String boardId, JSONObject message) {
-        Map<Session, String> boardUsers= ONLINE_SESSION.get(boardId);
+    public void sendMessageForAllUsersIn(String boardId, JSONObject message) {
+        Map<Session, String> boardUsers = ONLINE_SESSION.get(boardId);
         boardUsers.forEach((session, userId) -> {
             sendMessage(session, message);
         });

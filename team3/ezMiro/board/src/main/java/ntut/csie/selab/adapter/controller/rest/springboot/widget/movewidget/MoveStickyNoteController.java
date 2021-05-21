@@ -1,8 +1,8 @@
 package ntut.csie.selab.adapter.controller.rest.springboot.widget.movewidget;
 
-import ntut.csie.selab.adapter.websocket.WebSocketUtil;
+import ntut.csie.selab.adapter.websocket.BoardWebSocketImpl;
 import ntut.csie.selab.entity.model.widget.Coordinate;
-import ntut.csie.selab.entity.model.widget.Widget;
+import ntut.csie.selab.usecase.websocket.WebSocket;
 import ntut.csie.selab.usecase.widget.move.MoveStickyNoteInput;
 import ntut.csie.selab.usecase.widget.move.MoveStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.move.MoveStickyNoteUseCase;
@@ -20,10 +20,12 @@ import java.util.List;
 @CrossOrigin(origins = "${CORS_URLS}")
 public class MoveStickyNoteController {
     private MoveStickyNoteUseCase moveStickyNoteUseCase;
+    private WebSocket boardWebSocket;
 
     @Autowired
-    public MoveStickyNoteController(MoveStickyNoteUseCase moveStickyNoteUseCase) {
+    public MoveStickyNoteController(MoveStickyNoteUseCase moveStickyNoteUseCase, WebSocket boardWebSocket) {
         this.moveStickyNoteUseCase = moveStickyNoteUseCase;
+        this.boardWebSocket = boardWebSocket;
     }
 
     @PutMapping(path = "/${EZ_MIRO_PREFIX}/boards/{boardId}/widgets/sticky-notes/move", consumes = "application/json", produces = "application/json")
@@ -48,7 +50,7 @@ public class MoveStickyNoteController {
                 moveStickyNoteUseCase.execute(input, output);
                 stickyNoteIds.add(output.getStickyNoteId());
 
-                WebSocketUtil.sendMessageForAllUsersIn(boardId, convertWidgetToMessage(output.getStickyNoteId(), output.getCoordinate()));
+                boardWebSocket.sendMessageForAllUsersIn(boardId, convertWidgetToMessage(output.getStickyNoteId(), output.getCoordinate()));
             }
         } catch (JSONException e) {
             e.printStackTrace();

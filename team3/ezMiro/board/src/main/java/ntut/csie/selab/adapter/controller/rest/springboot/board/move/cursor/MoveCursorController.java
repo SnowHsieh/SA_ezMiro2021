@@ -1,10 +1,11 @@
 package ntut.csie.selab.adapter.controller.rest.springboot.board.move.cursor;
 
-import ntut.csie.selab.adapter.websocket.WebSocketUtil;
+import ntut.csie.selab.adapter.websocket.BoardWebSocketImpl;
 import ntut.csie.selab.entity.model.board.Cursor;
 import ntut.csie.selab.usecase.board.movecursor.MoveCursorInput;
 import ntut.csie.selab.usecase.board.movecursor.MoveCursorOutput;
 import ntut.csie.selab.usecase.board.movecursor.MoveCursorUseCase;
+import ntut.csie.selab.usecase.websocket.WebSocket;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,10 +19,12 @@ import java.util.Set;
 @CrossOrigin(origins = "${CORS_URLS}")
 public class MoveCursorController {
     private MoveCursorUseCase moveCursorUseCase;
+    private WebSocket boardWebSocket;
 
     @Autowired
-    public MoveCursorController(MoveCursorUseCase moveCursorUseCase) {
+    public MoveCursorController(MoveCursorUseCase moveCursorUseCase, WebSocket boardWebSocket) {
         this.moveCursorUseCase = moveCursorUseCase;
+        this.boardWebSocket = boardWebSocket;
     }
 
     @PutMapping(path = "/${EZ_MIRO_PREFIX}/boards/{boardId}/cursor", produces = "application/json", consumes = "application/json")
@@ -47,7 +50,7 @@ public class MoveCursorController {
         input.setPoint(new Point(cursorX, cursorY));
         moveCursorUseCase.execute(input, output);
 
-        WebSocketUtil.sendMessageForAllUsersIn(boardId, convertCursorToMessage(output.getCursors()));
+        boardWebSocket.sendMessageForAllUsersIn(boardId, convertCursorToMessage(output.getCursors()));
     }
 
     private JSONObject convertCursorToMessage(Set<Cursor> cursorSet) {
