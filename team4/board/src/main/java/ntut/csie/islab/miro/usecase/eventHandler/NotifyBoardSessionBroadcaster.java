@@ -64,42 +64,12 @@ public class NotifyBoardSessionBroadcaster {
         boardSessions.forEach(each->broadcast(stickyNoteContentChangedDomainEvent, each.boardSessionId().id()));
     }
 
-//    @Subscribe
-//    public void whenStickyNoteColorChanged(StickerColorChanged stickerColorChanged){
-//        Figure figure = figureRepository.findById(stickerColorChanged.getFigureId()).get();
-//        Board board = boardRepository.findById(figure.getBoardId()).get();
-//        List<BoardSession> boardSessions = board.getBoardSessions();
-//        boardSessions.forEach(each->broadcast(stickerColorChanged, each.getBoardSessionId()));
-//    }
-//
-//    @Subscribe
-//    public void whenStickerSizeChanged(StickerSizeChanged stickerSizeChanged){
-//        Figure figure = figureRepository.findById(stickerSizeChanged.getFigureId()).get();
-//        Board board = boardRepository.findById(figure.getBoardId()).get();
-//        List<BoardSession> boardSessions = board.getBoardSessions();
-//        boardSessions.forEach(each->broadcast(stickerSizeChanged, each.getBoardSessionId()));
-//    }
-//
     @Subscribe
     public void whenStickerDeleted(StickyNoteDeleteDomainEvent stickyNoteDeleteDomainEvent){
         Board board = boardRepository.findById(stickyNoteDeleteDomainEvent.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
         boardSessions.forEach(each->broadcast(stickyNoteDeleteDomainEvent, each.boardSessionId().id()));
     }
-//
-//    @Subscribe
-//    public void whenFigureBroughtToFront(FigureBroughtToFront figureBroughtToFront){
-//        Board board = boardRepository.findById(figureBroughtToFront.getBoardId()).get();
-//        List<BoardSession> boardSessions = board.getBoardSessions();
-//        boardSessions.forEach(each->broadcast(figureBroughtToFront, each.getBoardSessionId()));
-//    }
-//
-//    @Subscribe
-//    public void whenFigureSentToBack(FigureSentToBack figureSentToBack){
-//        Board board = boardRepository.findById(figureSentToBack.getBoardId()).get();
-//        List<BoardSession> boardSessions = board.getBoardSessions();
-//        boardSessions.forEach(each->broadcast(figureSentToBack, each.getBoardSessionId()));
-//    }
 
     @Subscribe
     public void whenCursorCreated(CursorCreatedDomainEvent cursorCreatedDomainEvent) {

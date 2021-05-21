@@ -1,6 +1,7 @@
 package ntut.csie.islab.miro.usecase.board.cursor;
 
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
+import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryImpl;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.usecase.board.EnterBoardInput;
 import ntut.csie.islab.miro.usecase.board.EnterBoardUseCase;
@@ -28,7 +29,7 @@ public class LeaveBoardUseCaseTest {
     @BeforeEach
     public void setUp(){
         domainEventBus = new GoogleEventBus();
-        boardRepository = new BoardRepository();
+//        boardRepository = new BoardRepositoryImpl(new BoardRepositoryListPeer());
         board = new Board(UUID.randomUUID(),"boardName");
         boardRepository.save(board);
         userId = UUID.randomUUID();

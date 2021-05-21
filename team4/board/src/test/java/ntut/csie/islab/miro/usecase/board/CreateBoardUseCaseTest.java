@@ -1,25 +1,38 @@
 package ntut.csie.islab.miro.usecase.board;
 
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
+import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryImpl;
+import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryPeer;
+import ntut.csie.islab.miro.application.springboot.web.EZMiroWebMain;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.UUID;
 
+@ContextConfiguration(classes= EZMiroWebMain.class)
+@TestPropertySource(locations = "classpath:test.properties")
+@SpringBootTest
 public class CreateBoardUseCaseTest {
     public DomainEventBus domainEventBus;
+
+    @Autowired
     public BoardRepository boardRepository;
+
     @BeforeEach
     public void setUp(){
         domainEventBus = new GoogleEventBus();
-        boardRepository = new BoardRepository();
     }
+
     @Test
     public void test_create_board(){
         CreateBoardUseCase createBoardUseCase= new CreateBoardUseCase(domainEventBus,boardRepository);

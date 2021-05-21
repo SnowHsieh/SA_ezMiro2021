@@ -48,7 +48,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      boardId: '0ef25c78-d36f-4d09-8cca-7fe75e3beabd',
+      boardId: 'd6c4491c-e073-4e9a-ac9e-7789977fb8ce',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -65,7 +65,7 @@ export default {
       socketLoaded: null,
       userCursorList: [],
       myUserId: '7398cd26-da85-4c05-b04b-122e73888dfb',
-      hostIp: '140.124.181.20',
+      hostIp: '140.124.181.8',
       mouseData: null,
       updateCursorFlag: true,
       updateFigureFlag: true
@@ -578,7 +578,6 @@ export default {
       } else if (receivedData.event === 'StickyNoteDeleteDomainEvent') {
         console.log(receivedData)
         try {
-          const _this = this
           const cursorObject = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
           this.canvas.remove(cursorObject)
         } catch (e) {

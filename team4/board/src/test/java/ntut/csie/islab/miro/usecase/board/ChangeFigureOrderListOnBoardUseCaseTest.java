@@ -1,12 +1,9 @@
 package ntut.csie.islab.miro.usecase.board;
 
-import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
-import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryImpl;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
-import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
-import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
@@ -29,7 +26,7 @@ public class ChangeFigureOrderListOnBoardUseCaseTest {
     @BeforeEach
     public void setUp(){
         domainEventBus = new GoogleEventBus();
-        boardRepository = new BoardRepository();
+//        boardRepository = new BoardRepositoryImpl(new BoardRepositoryListPeer());
         board = new Board(UUID.randomUUID(),"modifyFigureUseCaseBoard");
         boardRepository.save(board);
     }

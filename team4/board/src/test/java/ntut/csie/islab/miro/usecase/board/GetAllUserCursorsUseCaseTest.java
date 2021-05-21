@@ -4,6 +4,7 @@ import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.islab.miro.adapter.presenter.getAllCursors.AllCursorsViewModel;
 import ntut.csie.islab.miro.adapter.presenter.getAllCursors.GetAllUserCursorsPresenter;
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
+import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryImpl;
 import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
@@ -23,7 +24,7 @@ public class GetAllUserCursorsUseCaseTest {
     @BeforeEach
     public void setUp() {
         domainEventBus = new GoogleEventBus();
-        boardRepository = new BoardRepository();
+//        boardRepository = new BoardRepositoryImpl(new BoardRepositoryListPeer());
         notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
         domainEventBus.register(notifyBoardAdapter);
     }

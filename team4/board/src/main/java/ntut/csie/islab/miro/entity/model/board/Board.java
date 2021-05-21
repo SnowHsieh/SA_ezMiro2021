@@ -8,6 +8,8 @@ import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorMovedDomainEve
 import ntut.csie.islab.miro.entity.model.board.event.*;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

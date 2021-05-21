@@ -2,6 +2,7 @@ package ntut.csie.islab.miro.usecase.stickyNote;
 
 import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
+import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryImpl;
 import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.Position;
@@ -39,7 +40,7 @@ public class DeleteStickyNoteUseCaseTest {
     public void setUp(){
         domainEventBus = new GoogleEventBus();
         stickyNoteRepository = new TextFigureRepository();
-        boardRepository = new BoardRepository();
+//        boardRepository = new BoardRepositoryImpl(new BoardRepositoryListPeer());
         this.preGeneratedFactory();
         board = boardRepository.findById(UUID.fromString(preGeneratedBoard.getId())).get();
         board.commitFigure(UUID.fromString(preGeneratedStickyNote.getId()));

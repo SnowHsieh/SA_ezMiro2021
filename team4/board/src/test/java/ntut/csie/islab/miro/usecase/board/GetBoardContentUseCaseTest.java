@@ -4,6 +4,7 @@ import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.islab.miro.adapter.presenter.getContent.GetBoardContentPresenter;
 import ntut.csie.islab.miro.adapter.presenter.getContent.BoardContentViewModel;
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
+import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryImpl;
 import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.Position;
@@ -33,7 +34,7 @@ public class GetBoardContentUseCaseTest {
     @BeforeEach
     public void setUp() {
         domainEventBus = new GoogleEventBus();
-        boardRepository = new BoardRepository();
+//        boardRepository = new BoardRepositoryImpl(new BoardRepositoryListPeer());
         textFigureRepository = new TextFigureRepository();
         notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
         domainEventBus.register(notifyBoardAdapter);
