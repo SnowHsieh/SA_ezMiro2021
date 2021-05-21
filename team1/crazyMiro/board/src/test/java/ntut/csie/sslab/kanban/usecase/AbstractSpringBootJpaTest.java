@@ -79,8 +79,10 @@ import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.kanban.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.sslab.kanban.adapter.gateway.eventbus.google.NotifyCursorAdapter;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
+import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.cursor.CursorRepositoryImpl;
 import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
+import ntut.csie.sslab.kanban.adapter.gateway.repository.springboot.figure.FigureRepositoryPeer;
 import ntut.csie.sslab.kanban.entity.model.Coordinate;
 import ntut.csie.sslab.kanban.usecase.board.BoardRepository;
 import ntut.csie.sslab.kanban.usecase.board.create.CreateBoardInput;
@@ -106,6 +108,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -130,13 +133,19 @@ public abstract class AbstractSpringBootJpaTest {
     protected EventListener eventListener;
     protected BoardSessionBroadcaster boardSessionBroadcaster;
 
+    @Autowired
+    protected BoardRepositoryPeer boardRepositoryPeer;
+
+    @Autowired
+    protected FigureRepositoryPeer figureRepositoryPeer;
+
     public NotifyBoardAdapter notifyBoardAdapter;
     public NotifyCursorAdapter notifyCursorAdapter;
 
     @BeforeEach
     public void setUp() {
-        boardRepository = new BoardRepositoryImpl();
-        figureRepository = new FigureRepositoryImpl();
+        boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
+        figureRepository = new FigureRepositoryImpl(figureRepositoryPeer);
         cursorRepository = new CursorRepositoryImpl();
         domainEventBus = new GoogleEventBus();
         eventListener = new EventListener();

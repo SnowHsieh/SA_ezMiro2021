@@ -11,29 +11,36 @@ import java.util.Optional;
 
 public class BoardRepositoryImpl implements BoardRepository {
 
-    private List<Board> boards;
+//    private List<Board> boards;
+    private BoardRepositoryPeer peer;
 
-    public BoardRepositoryImpl() {
-        boards = new ArrayList<>();
+    public BoardRepositoryImpl(BoardRepositoryPeer boardRepositoryPeer) {
+//        boards = new ArrayList<>();
+        this.peer = boardRepositoryPeer;
     }
 
     @Override
     public List<Board> findAll() {
-        return Collections.unmodifiableList(boards);
+//        return Collections.unmodifiableList(boards);
+        List<BoardData> boardDatas = new ArrayList();
+        peer.findAll().forEach(boardDatas::add);
+        return BoardMapper.transformToDomain(boardDatas);
     }
 
     @Override
     public Optional<Board> findById(String boardId) {
-        return boards.stream().filter(x-> x.getBoardId().equals(boardId)).findFirst();
+//        return boards.stream().filter(x-> x.getBoardId().equals(boardId)).findFirst();
+        return peer.findById(boardId).map(BoardMapper::transformToDomain);
     }
 
     @Override
     public void save(Board board) {
-        boards.add(board);
+//        boards.add(board);
+        peer.save(BoardMapper.transformToData(board));
     }
 
     @Override
-    public void deleteById(String s) {
-
+    public void deleteById(String boardId) {
+        peer.deleteById(boardId);
     }
 }

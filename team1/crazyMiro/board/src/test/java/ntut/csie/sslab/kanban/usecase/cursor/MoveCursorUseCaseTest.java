@@ -11,6 +11,7 @@ import ntut.csie.sslab.kanban.usecase.cursor.move.MoveCursorUseCaseImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,7 +21,7 @@ public class MoveCursorUseCaseTest extends AbstractSpringBootJpaTest {
     @Test
     public void move_a_cursor() {
         String boardId = createBoard("123", "boardName");
-        String userId = "userId";
+        String userId = UUID.randomUUID().toString();
         enterBoard(boardId, userId);
         eventListener.clearEventCount();
         Coordinate newPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());

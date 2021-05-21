@@ -6,10 +6,10 @@ import ntut.csie.sslab.kanban.entity.model.board.event.*;
 import java.util.*;
 
 public class Board extends AggregateRoot<String> {
-    String boardId;
-    String boardName;
-    List<CommittedFigure> committedFigures;
-    List<BoardSession> boardSessions;
+    private String boardId;
+    private String boardName;
+    private List<CommittedFigure> committedFigures;
+    private List<BoardSession> boardSessions;
 
     public Board(String boardId, String boardName) {
         super(boardId);
