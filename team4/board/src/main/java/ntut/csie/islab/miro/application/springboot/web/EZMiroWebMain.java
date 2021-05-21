@@ -2,8 +2,7 @@ package ntut.csie.islab.miro.application.springboot.web;
 
 
 import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryPeer;
-import ntut.csie.islab.miro.usecase.board.BoardRepository;
+import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryPeer;
 import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoardSessionBroadcaster;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +46,10 @@ public class EZMiroWebMain extends SpringBootServletInitializer implements Comma
         this.notifyBoardSessionBroadcaster = notifyBoardSessionBroadcaster;
     }
 
-//    @Autowired
-//    public void setBoardRepositoryPeer(BoardRepositoryPeer boardRepositoryPeer) {
-//        this.boardRepositoryPeer = boardRepositoryPeer;
-//    }
+    @Autowired
+    public void setBoardRepositoryPeer(BoardRepositoryPeer boardRepositoryPeer) {
+        this.boardRepositoryPeer = boardRepositoryPeer;
+    }
 
 
     @Override

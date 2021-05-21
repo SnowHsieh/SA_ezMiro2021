@@ -1,4 +1,4 @@
-package ntut.csie.islab.miro.adapter.repository.textFigure;
+package ntut.csie.islab.miro.adapter.gateway.repository.textFigure;
 
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;

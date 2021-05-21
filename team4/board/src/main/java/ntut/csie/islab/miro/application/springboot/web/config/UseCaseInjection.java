@@ -1,7 +1,7 @@
 package ntut.csie.islab.miro.application.springboot.web.config;
 
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
-import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderListOnBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.cursor.MoveCursorUseCase;

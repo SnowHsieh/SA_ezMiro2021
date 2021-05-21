@@ -5,7 +5,7 @@ import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
 import ntut.csie.islab.miro.entity.model.board.event.BoardContentMightExpire;
-import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
 import ntut.csie.islab.miro.usecase.textFigure.TextFigureDto;
 import ntut.csie.sslab.ddd.model.DomainEventBus;

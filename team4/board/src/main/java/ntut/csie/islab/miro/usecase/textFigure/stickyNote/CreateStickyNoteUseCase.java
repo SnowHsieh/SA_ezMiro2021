@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.usecase.textFigure.stickyNote;
 
-import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
 import ntut.csie.islab.miro.entity.model.textFigure.stickynote.StickyNote;
 import ntut.csie.sslab.ddd.model.DomainEventBus;

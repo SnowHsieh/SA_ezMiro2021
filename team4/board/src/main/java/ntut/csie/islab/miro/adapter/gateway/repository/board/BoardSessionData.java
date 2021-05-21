@@ -1,4 +1,4 @@
-package ntut.csie.islab.miro.adapter.repository.board;
+package ntut.csie.islab.miro.adapter.gateway.repository.board;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

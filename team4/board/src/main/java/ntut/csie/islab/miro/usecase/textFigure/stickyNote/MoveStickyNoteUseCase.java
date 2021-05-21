@@ -5,7 +5,7 @@ import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
-import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
 
 public class MoveStickyNoteUseCase {
     private TextFigureRepository stickyNoteRepository;

@@ -2,7 +2,7 @@ package ntut.csie.islab.miro.usecase.eventHandler;
 
 import com.google.common.eventbus.Subscribe;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
-import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.BoardSession;
 import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorCreatedDomainEvent;
