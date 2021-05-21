@@ -1,4 +1,4 @@
-package ntut.csie.islab.miro.usecase.board;
+package ntut.csie.islab.miro.usecase.board.leaveboard;
 
 import java.util.UUID;
 

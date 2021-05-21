@@ -1,8 +1,8 @@
 package ntut.csie.islab.miro.adapter.controller.rest.springboot.board.create;
 
 
-import ntut.csie.islab.miro.usecase.board.CreateBoardInput;
-import ntut.csie.islab.miro.usecase.board.CreateBoardUseCase;
+import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardInput;
+import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import org.springframework.beans.factory.annotation.Autowired;

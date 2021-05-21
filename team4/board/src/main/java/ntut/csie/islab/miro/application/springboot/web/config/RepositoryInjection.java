@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.application.springboot.web.config;
 
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
+import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryImpl;
 import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryPeer;
 import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
@@ -9,9 +9,11 @@ import ntut.csie.sslab.ddd.model.DomainEventBus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.annotation.Order;
 
-
-
+@Order(1)
+@PropertySource(value = "classpath:/application.properties")
 @Configuration("EZMiroRepositoryInjection")
 public class RepositoryInjection {
     private BoardRepositoryPeer boardRepositoryPeer;
@@ -31,10 +33,10 @@ public class RepositoryInjection {
         return new GoogleEventBus();
     }
 
-    @Autowired
-    public void setBoardRepositoryPeer(BoardRepositoryPeer boardRepositoryPeer){
-        this.boardRepositoryPeer = boardRepositoryPeer;
-    }
+//    @Autowired
+//    public void setBoardRepositoryPeer(BoardRepositoryPeer boardRepositoryPeer) {
+//        this.boardRepositoryPeer = boardRepositoryPeer;
+//    }
 
 
 }

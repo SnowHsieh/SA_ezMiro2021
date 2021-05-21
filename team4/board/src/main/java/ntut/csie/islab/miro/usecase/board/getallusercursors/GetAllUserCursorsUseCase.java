@@ -1,7 +1,7 @@
-package ntut.csie.islab.miro.usecase.board;
+package ntut.csie.islab.miro.usecase.board.getallusercursors;
 
 import ntut.csie.islab.miro.adapter.presenter.getAllCursors.GetAllUserCursorsPresenter;
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
+import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.cursor.Cursor;
 import ntut.csie.islab.miro.entity.model.board.event.BoardContentMightExpire;

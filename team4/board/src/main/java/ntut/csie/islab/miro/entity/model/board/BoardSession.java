@@ -16,15 +16,15 @@ public class BoardSession extends ValueObject {
         this.boardSessionId = boardSessionId;
     }
 
-    public UUID boardId() {
+    public UUID getBoardId() {
         return boardId;
     }
 
-    public UUID userId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public BoardSessionId boardSessionId() {
+    public BoardSessionId getBoardSessionId() {
         return boardSessionId;
     }
 }

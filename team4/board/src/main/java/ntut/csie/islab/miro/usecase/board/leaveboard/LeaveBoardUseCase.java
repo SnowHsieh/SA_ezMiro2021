@@ -1,6 +1,6 @@
-package ntut.csie.islab.miro.usecase.board;
+package ntut.csie.islab.miro.usecase.board.leaveboard;
 
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
+import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.BoardSessionId;
 import ntut.csie.islab.miro.entity.model.board.event.BoardContentMightExpire;
@@ -35,7 +35,7 @@ public class LeaveBoardUseCase {
 
         board.acceptUserLeaving(boardSessionId, input.getUserId());
         this.domainEventBus.postAll(board);
-        output.setId(boardSessionId.id());
+        output.setId(boardSessionId.getId());
         output.setExitCode(ExitCode.SUCCESS);
 
     }

@@ -5,9 +5,14 @@ import ntut.csie.islab.miro.adapter.presenter.getAllCursors.GetAllUserCursorsPre
 import ntut.csie.islab.miro.application.springboot.web.config.websocket.EndpointConfigure;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorMovedDomainEvent;
-import ntut.csie.islab.miro.usecase.board.*;
 import ntut.csie.islab.miro.usecase.board.cursor.MoveCursorInput;
 import ntut.csie.islab.miro.usecase.board.cursor.MoveCursorUseCase;
+import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardInput;
+import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardUseCase;
+import ntut.csie.islab.miro.usecase.board.getallusercursors.GetAllUserCursorsInput;
+import ntut.csie.islab.miro.usecase.board.getallusercursors.GetAllUserCursorsUseCase;
+import ntut.csie.islab.miro.usecase.board.leaveboard.LeaveBoardInput;
+import ntut.csie.islab.miro.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.islab.miro.usecase.webSocket.BoardSessionBroadcaster;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;

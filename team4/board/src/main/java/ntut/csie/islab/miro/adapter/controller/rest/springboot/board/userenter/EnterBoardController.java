@@ -2,10 +2,10 @@
 //
 //import ntut.csie.islab.miro.adapter.presenter.getContent.GetBoardContentPresenter;
 //import ntut.csie.islab.miro.adapter.presenter.getContent.BoardContentViewModel;
-//import ntut.csie.islab.miro.usecase.board.EnterBoardInput;
-//import ntut.csie.islab.miro.usecase.board.EnterBoardUseCase;
-//import ntut.csie.islab.miro.usecase.board.GetBoardContentInput;
-//import ntut.csie.islab.miro.usecase.board.GetBoardContentUseCase;
+//import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardInput;
+//import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardUseCase;
+//import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentInput;
+//import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentUseCase;
 //import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 //import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 //import org.json.JSONException;

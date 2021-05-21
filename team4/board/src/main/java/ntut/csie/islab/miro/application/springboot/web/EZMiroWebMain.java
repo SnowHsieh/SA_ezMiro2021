@@ -2,13 +2,10 @@ package ntut.csie.islab.miro.application.springboot.web;
 
 
 import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
-import ntut.csie.islab.miro.usecase.board.CreateBoardInput;
-import ntut.csie.islab.miro.usecase.board.CreateBoardUseCase;
+import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryPeer;
+import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoardSessionBroadcaster;
-import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -21,8 +18,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
-import java.util.UUID;
-
 @ComponentScan(basePackages = {"ntut.csie.islab.miro"})
 @EntityScan(basePackages = {"ntut.csie.islab.miro.adapter"})
 @SpringBootApplication(exclude = {
@@ -34,7 +29,8 @@ public class EZMiroWebMain extends SpringBootServletInitializer implements Comma
     private NotifyBoardAdapter notifyBoardAdapter;
     private NotifyBoardSessionBroadcaster notifyBoardSessionBroadcaster;
     private DomainEventBus domainEventBus;
-    private BoardRepository boardRepository;
+    private BoardRepositoryPeer boardRepositoryPeer;
+
 
     @Autowired
     public void setDomainEventBus(DomainEventBus domainEventBus) {
@@ -42,17 +38,20 @@ public class EZMiroWebMain extends SpringBootServletInitializer implements Comma
     }
 
     @Autowired
-    public void setNotifyBoardAdapter(NotifyBoardAdapter notifyBoardAdapter) { this.notifyBoardAdapter = notifyBoardAdapter; }
+    public void setNotifyBoardAdapter(NotifyBoardAdapter notifyBoardAdapter) {
+        this.notifyBoardAdapter = notifyBoardAdapter;
+    }
 
     @Autowired
     public void setNotifyBoardSessionBroadcaster(NotifyBoardSessionBroadcaster notifyBoardSessionBroadcaster) {
         this.notifyBoardSessionBroadcaster = notifyBoardSessionBroadcaster;
     }
 
-    @Autowired
-    public void setBoardRepository(BoardRepository boardRepository) {
-        this.boardRepository = boardRepository;
-    }
+//    @Autowired
+//    public void setBoardRepositoryPeer(BoardRepositoryPeer boardRepositoryPeer) {
+//        this.boardRepositoryPeer = boardRepositoryPeer;
+//    }
+
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
@@ -70,6 +69,7 @@ public class EZMiroWebMain extends SpringBootServletInitializer implements Comma
         domainEventBus.register(notifyBoardAdapter);
         domainEventBus.register(notifyBoardSessionBroadcaster);
     }
+
     @Bean
     public ServerEndpointExporter serverEndpointExporter() {
         return new ServerEndpointExporter();

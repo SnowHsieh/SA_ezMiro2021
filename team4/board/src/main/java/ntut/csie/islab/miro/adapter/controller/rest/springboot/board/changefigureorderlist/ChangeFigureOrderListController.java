@@ -1,7 +1,7 @@
 package ntut.csie.islab.miro.adapter.controller.rest.springboot.board.changefigureorderlist;
 
-import ntut.csie.islab.miro.usecase.board.ChangeFigureOrderListOnBoardInput;
-import ntut.csie.islab.miro.usecase.board.ChangeFigureOrderListOnBoardUseCase;
+import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderListOnBoardInput;
+import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderListOnBoardUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import org.json.JSONArray;

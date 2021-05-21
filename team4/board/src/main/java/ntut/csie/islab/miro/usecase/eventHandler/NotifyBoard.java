@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.usecase.eventHandler;
 
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
+import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.event.FigureCommittedDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.event.FigureUncommittedDomainEvent;

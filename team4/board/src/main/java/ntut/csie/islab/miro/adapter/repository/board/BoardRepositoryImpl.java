@@ -1,12 +1,15 @@
 package ntut.csie.islab.miro.adapter.repository.board;
 
 import ntut.csie.islab.miro.entity.model.board.Board;
+import ntut.csie.islab.miro.usecase.board.BoardRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 
-public class BoardRepositoryImpl implements BoardRepository{
+public class BoardRepositoryImpl implements BoardRepository {
     private BoardRepositoryPeer peer;
 
     public BoardRepositoryImpl(BoardRepositoryPeer peer){
@@ -14,12 +17,24 @@ public class BoardRepositoryImpl implements BoardRepository{
     }
 
     @Override
+    public List<Board> findAll() {
+        List<BoardData> boardDatas = new ArrayList();
+        peer.findAll().forEach(x -> boardDatas.add(x));
+        return BoardMapper.transformToDomain(boardDatas);
+    }
+
+    @Override
     public Optional<Board> findById(UUID boardId) {
-        return this.peer.findById(boardId);
+        return peer.findById(boardId).map(BoardMapper::transformToDomain);
     }
 
     @Override
     public void save(Board board){
-        this.peer.save(board);
+        peer.save(BoardMapper.transformToData(board));
+    }
+
+    @Override
+    public void deleteById(UUID boardId) {
+        peer.deleteById(boardId);
     }
 }

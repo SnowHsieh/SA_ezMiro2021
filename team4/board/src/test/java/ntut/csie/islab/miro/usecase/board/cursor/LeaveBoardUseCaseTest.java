@@ -1,12 +1,11 @@
 package ntut.csie.islab.miro.usecase.board.cursor;
 
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryImpl;
+import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
-import ntut.csie.islab.miro.usecase.board.EnterBoardInput;
-import ntut.csie.islab.miro.usecase.board.EnterBoardUseCase;
-import ntut.csie.islab.miro.usecase.board.LeaveBoardInput;
-import ntut.csie.islab.miro.usecase.board.LeaveBoardUseCase;
+import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardInput;
+import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardUseCase;
+import ntut.csie.islab.miro.usecase.board.leaveboard.LeaveBoardInput;
+import ntut.csie.islab.miro.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;

@@ -8,7 +8,7 @@ public class BoardSessionId extends ValueObject {
 
     private final String id;
 
-    private BoardSessionId(String id) {
+    public BoardSessionId(String id) {
         this.id = id;
     }
 
@@ -20,7 +20,7 @@ public class BoardSessionId extends ValueObject {
         return new BoardSessionId(id);
     }
 
-    public String id() {
+    public String getId() {
         return id;
     }
 

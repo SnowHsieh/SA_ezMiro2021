@@ -10,5 +10,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface BoardRepositoryPeer extends CrudRepository<Board, UUID> {
+public interface BoardRepositoryPeer extends CrudRepository<BoardData, UUID> {
 }

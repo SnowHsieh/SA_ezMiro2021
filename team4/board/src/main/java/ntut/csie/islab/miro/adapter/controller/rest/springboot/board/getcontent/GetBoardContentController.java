@@ -2,8 +2,8 @@ package ntut.csie.islab.miro.adapter.controller.rest.springboot.board.getcontent
 
 import ntut.csie.islab.miro.adapter.presenter.getContent.GetBoardContentPresenter;
 import ntut.csie.islab.miro.adapter.presenter.getContent.BoardContentViewModel;
-import ntut.csie.islab.miro.usecase.board.GetBoardContentUseCase;
-import ntut.csie.islab.miro.usecase.board.GetBoardContentInput;
+import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentUseCase;
+import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

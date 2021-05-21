@@ -1,8 +1,7 @@
 package ntut.csie.islab.miro.usecase.eventHandler;
 
 import com.google.common.eventbus.Subscribe;
-import ntut.csie.islab.miro.adapter.controller.rest.springboot.webSocket.WebSocketBroadcaster;
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
+import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.BoardSession;
@@ -41,7 +40,7 @@ public class NotifyBoardSessionBroadcaster {
     public void whenStickyNoteCreated(StickyNoteCreatedDomainEvent stickyNoteCreatedDomainEvent){
         Board board = boardRepository.findById(stickyNoteCreatedDomainEvent.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
-        boardSessions.forEach(each->broadcast(stickyNoteCreatedDomainEvent, each.boardSessionId().id()));
+        boardSessions.forEach(each->broadcast(stickyNoteCreatedDomainEvent, each.getBoardSessionId().getId()));
     }
 
     @Subscribe
@@ -51,7 +50,7 @@ public class NotifyBoardSessionBroadcaster {
         TextFigure figure = figureRepository.findById(boardId,figureId).get();
         Board board = boardRepository.findById(figure.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
-        boardSessions.forEach(each->broadcast(stickyNoteMovedDomainEvent, each.boardSessionId().id()));
+        boardSessions.forEach(each->broadcast(stickyNoteMovedDomainEvent, each.getBoardSessionId().getId()));
     }
 
     @Subscribe
@@ -61,14 +60,14 @@ public class NotifyBoardSessionBroadcaster {
         TextFigure figure = figureRepository.findById(boardId,figureId).get();
         Board board = boardRepository.findById(figure.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
-        boardSessions.forEach(each->broadcast(stickyNoteContentChangedDomainEvent, each.boardSessionId().id()));
+        boardSessions.forEach(each->broadcast(stickyNoteContentChangedDomainEvent, each.getBoardSessionId().getId()));
     }
 
     @Subscribe
     public void whenStickerDeleted(StickyNoteDeleteDomainEvent stickyNoteDeleteDomainEvent){
         Board board = boardRepository.findById(stickyNoteDeleteDomainEvent.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
-        boardSessions.forEach(each->broadcast(stickyNoteDeleteDomainEvent, each.boardSessionId().id()));
+        boardSessions.forEach(each->broadcast(stickyNoteDeleteDomainEvent, each.getBoardSessionId().getId()));
     }
 
     @Subscribe
@@ -76,7 +75,7 @@ public class NotifyBoardSessionBroadcaster {
         Board board = boardRepository.findById(cursorCreatedDomainEvent.boardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
         System.out.println("whenCursorCreated notify:" + board);
-        boardSessions.forEach(each->broadcast(cursorCreatedDomainEvent, each.boardSessionId().id()));
+        boardSessions.forEach(each->broadcast(cursorCreatedDomainEvent, each.getBoardSessionId().getId()));
     }
 
     @Subscribe
@@ -84,14 +83,14 @@ public class NotifyBoardSessionBroadcaster {
         Board board = boardRepository.findById(cursorMovedDomainEvent.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
         System.out.println("whenCursorMoved notify:" + board);
-        boardSessions.forEach(each->broadcast(cursorMovedDomainEvent, each.boardSessionId().id()));
+        boardSessions.forEach(each->broadcast(cursorMovedDomainEvent, each.getBoardSessionId().getId()));
     }
 
     @Subscribe
     public void whenCursorDeleted(CursorDeletedDomainEvent cursorDeletedDomainEvent) {
         Board board = boardRepository.findById(cursorDeletedDomainEvent.boardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
-        boardSessions.forEach(each->broadcast(cursorDeletedDomainEvent, each.boardSessionId().id()));
+        boardSessions.forEach(each->broadcast(cursorDeletedDomainEvent, each.getBoardSessionId().getId()));
     }
 
     @Subscribe
@@ -99,14 +98,14 @@ public class NotifyBoardSessionBroadcaster {
         Board board = boardRepository.findById(boardEnteredDomainEvent.boardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
         System.out.println("whenBoardEntered notify:" + board);
-        boardSessions.forEach(each->broadcast(boardEnteredDomainEvent, each.boardSessionId().id()));
+        boardSessions.forEach(each->broadcast(boardEnteredDomainEvent, each.getBoardSessionId().getId()));
     }
 
     @Subscribe
     public void whenBoardLeft(BoardLeftDomainEvent boardLeftDomainEvent) {
         Board board = boardRepository.findById(boardLeftDomainEvent.boardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
-        boardSessions.forEach(each->broadcast(boardLeftDomainEvent, each.boardSessionId().id()));
+        boardSessions.forEach(each->broadcast(boardLeftDomainEvent, each.getBoardSessionId().getId()));
     }
 
     private void broadcast(DomainEvent domainEvent, String sessionId){

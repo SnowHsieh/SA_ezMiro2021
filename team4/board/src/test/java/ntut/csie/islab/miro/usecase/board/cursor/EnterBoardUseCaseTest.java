@@ -1,9 +1,8 @@
 package ntut.csie.islab.miro.usecase.board.cursor;
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryImpl;
+import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
-import ntut.csie.islab.miro.usecase.board.EnterBoardInput;
-import ntut.csie.islab.miro.usecase.board.EnterBoardUseCase;
+import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardInput;
+import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardUseCase;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
@@ -48,8 +47,8 @@ public class EnterBoardUseCaseTest {
 
         Board resolveBoard = boardRepository.findById(board.getBoardId()).get();
         Assert.assertEquals(1, resolveBoard.getBoardSessionList().size());
-        Assert.assertEquals(board.getBoardId(), resolveBoard.getBoardSessionList().get(0).boardId());
-        Assert.assertEquals(userId, resolveBoard.getBoardSessionList().get(0).userId());
+        Assert.assertEquals(board.getBoardId(), resolveBoard.getBoardSessionList().get(0).getBoardId());
+        Assert.assertEquals(userId, resolveBoard.getBoardSessionList().get(0).getUserId());
         Assert.assertEquals(1, resolveBoard.getCursorList().size());
     }
 

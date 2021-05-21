@@ -1,9 +1,8 @@
 package ntut.csie.islab.miro.usecase.board;
 
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryImpl;
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepositoryPeer;
 import ntut.csie.islab.miro.application.springboot.web.EZMiroWebMain;
+import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardInput;
+import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;

@@ -1,8 +1,7 @@
 package ntut.csie.islab.miro.adapter.presenter.getContent;
 
-import ntut.csie.islab.miro.adapter.presenter.getContent.BoardContentViewModel;
 import ntut.csie.islab.miro.usecase.textFigure.TextFigureDto;
-import ntut.csie.islab.miro.usecase.board.GetBoardContentOutput;
+import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentOutput;
 import ntut.csie.sslab.ddd.adapter.presenter.Presenter;
 import ntut.csie.sslab.ddd.usecase.Result;
 

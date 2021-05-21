@@ -1,11 +1,15 @@
 package ntut.csie.islab.miro.application.springboot.web.config;
 
-import ntut.csie.islab.miro.adapter.repository.board.BoardRepository;
+import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.adapter.repository.textFigure.TextFigureRepository;
-import ntut.csie.islab.miro.usecase.board.*;
+import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderListOnBoardUseCase;
+import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.cursor.MoveCursorUseCase;
+import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardUseCase;
+import ntut.csie.islab.miro.usecase.board.getallusercursors.GetAllUserCursorsUseCase;
+import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentUseCase;
+import ntut.csie.islab.miro.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
-import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoardSessionBroadcaster;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.*;
 import ntut.csie.islab.miro.usecase.webSocket.BoardSessionBroadcaster;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
