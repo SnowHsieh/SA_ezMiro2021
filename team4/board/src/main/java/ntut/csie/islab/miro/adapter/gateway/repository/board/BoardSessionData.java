@@ -21,7 +21,7 @@ public class BoardSessionData {
     public BoardSessionData() {
     }
 
-    public BoardSessionData(String userId, String boardId, String boardSessionId) {
+    public BoardSessionData(String boardId, String userId, String boardSessionId) {
         this.userId = userId;
         this.boardId = boardId;
         this.boardSessionId = boardSessionId;

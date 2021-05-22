@@ -26,7 +26,7 @@ public class BoardData {
     private Set<BoardSessionData> boardSessions;
 
 
-    public BoardData(String boardId, String teamId, String boardName) {
+    public BoardData(String teamId, String boardId, String boardName) {
         this.boardId = boardId;
         this.teamId = teamId;
         this.boardName = boardName;

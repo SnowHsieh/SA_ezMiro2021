@@ -4,6 +4,7 @@ import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryImpl;
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryPeer;
 import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+
+import java.util.UUID;
 
 @SpringBootTest
 @ContextConfiguration(classes= JpaApplicationTest.class)
@@ -26,6 +29,8 @@ public abstract class AbstractSpringBootJpaTest {
     public BoardRepository boardRepository;
     public TextFigureRepository textFigureRepository;
     public NotifyBoardAdapter notifyBoardAdapter;
+    public Board board;
+    public UUID userId;
 
     @Autowired
     private BoardRepositoryPeer boardRepositoryPeer;
@@ -36,6 +41,9 @@ public abstract class AbstractSpringBootJpaTest {
         boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
         textFigureRepository = new TextFigureRepository();
         notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
+        board = new Board(UUID.randomUUID(),"boardName");
+        boardRepository.save(board);
+        userId = UUID.randomUUID();
     }
 
 

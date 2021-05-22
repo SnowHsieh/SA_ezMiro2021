@@ -33,6 +33,7 @@ public class EnterBoardUseCase {
 
         BoardSessionId boardSessionId = BoardSessionId.create();
         board.acceptUserEntry(boardSessionId, input.getUserId());
+        boardRepository.save(board);
         this.domainEventBus.postAll(board);
         output.setId(boardSessionId.getId());
         output.setExitCode(ExitCode.SUCCESS);

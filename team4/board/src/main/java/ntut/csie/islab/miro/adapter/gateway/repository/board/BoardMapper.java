@@ -18,8 +18,8 @@ public class BoardMapper {
 //        }
         List<BoardSession> boardSessionList = new ArrayList<>();
         for (BoardSessionData boardSessionData : boardData.getBoardSessions()) {
-            boardSessionList.add(new BoardSession(UUID.fromString(boardSessionData.getUserId()),
-                            UUID.fromString(boardSessionData.getBoardId()),
+            boardSessionList.add(new BoardSession(UUID.fromString(boardSessionData.getBoardId()),
+                            UUID.fromString(boardSessionData.getUserId()),
                             new BoardSessionId(boardSessionData.getBoardSessionId())
                     )
             );
@@ -45,8 +45,8 @@ public class BoardMapper {
         );
         List<BoardSessionData> boardSessionDatas = new ArrayList<>();
         for (BoardSession boardSession : board.getBoardSessionList()) {
-            boardSessionDatas.add(new BoardSessionData(boardSession.getUserId().toString(),
-                    boardSession.getBoardId().toString(),
+            boardSessionDatas.add(new BoardSessionData(boardSession.getBoardId().toString(),
+                    boardSession.getUserId().toString(),
                     boardSession.getBoardSessionId().getId())
             );
         }
