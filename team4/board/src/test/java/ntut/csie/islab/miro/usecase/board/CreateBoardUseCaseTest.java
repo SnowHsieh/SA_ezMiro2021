@@ -23,7 +23,7 @@ public class CreateBoardUseCaseTest  extends AbstractSpringBootJpaTest {
         CreateBoardInput input =  createBoardUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setTeamId(UUID.randomUUID());
-        input.setBoardName("Board name1");
+        input.setBoardName("Board name will");
         createBoardUseCase.execute(input,output);
 
         assertNotNull(output.getId());

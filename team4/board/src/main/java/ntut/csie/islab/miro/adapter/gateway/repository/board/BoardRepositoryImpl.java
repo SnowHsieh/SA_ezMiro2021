@@ -25,6 +25,8 @@ public class BoardRepositoryImpl implements BoardRepository {
 
     @Override
     public Optional<Board> findById(UUID boardId) {
+        System.out.println("findById: ");
+        System.out.println(peer.findById("110b1535-dd79-406e-aada-91235e2af94d"));
         return peer.findById(boardId.toString()).map(BoardMapper::transformToDomain);
     }
 
