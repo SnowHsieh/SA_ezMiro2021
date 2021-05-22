@@ -1,10 +1,7 @@
 package ntut.csie.islab.miro.adapter.controller.rest.springboot.stickyNote.changecontent;
 
-import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.textFigure.Style;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.ChangeStickyNoteContentInput;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.ChangeStickyNoteContentUseCase;
-import ntut.csie.islab.miro.usecase.textFigure.stickyNote.EditStickyNoteInput;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import org.json.JSONException;

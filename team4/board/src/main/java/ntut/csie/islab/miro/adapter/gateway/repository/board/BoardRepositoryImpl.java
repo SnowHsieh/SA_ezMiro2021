@@ -25,16 +25,19 @@ public class BoardRepositoryImpl implements BoardRepository {
 
     @Override
     public Optional<Board> findById(UUID boardId) {
-        return peer.findById(boardId).map(BoardMapper::transformToDomain);
+        return peer.findById(boardId.toString()).map(BoardMapper::transformToDomain);
     }
 
     @Override
     public void save(Board board){
+        System.out.println("BoardRepositoryImpl save");
+        System.out.println("Name:" + board.getBoardName());
+        System.out.println(peer);
         peer.save(BoardMapper.transformToData(board));
     }
 
     @Override
     public void deleteById(UUID boardId) {
-        peer.deleteById(boardId);
+        peer.deleteById(boardId.toString());
     }
 }

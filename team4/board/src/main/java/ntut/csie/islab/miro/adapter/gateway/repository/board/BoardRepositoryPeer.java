@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface BoardRepositoryPeer extends CrudRepository<BoardData, UUID> {
+public interface BoardRepositoryPeer extends CrudRepository<BoardData, String> {
+
 }

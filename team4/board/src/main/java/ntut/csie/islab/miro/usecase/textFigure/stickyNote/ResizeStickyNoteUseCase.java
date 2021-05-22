@@ -28,7 +28,8 @@ public class ResizeStickyNoteUseCase {
                     .setMessage("Resize stickyNote failed: stickyNote not found, stickyNote id = " + input.getFigureId());
             return;
         }
-        stickyNoteRepository.resize(stickyNote, input.getWidth(), input.getHeight());
+        stickyNote.resize(input.getWidth(), input.getHeight());
+        stickyNoteRepository.save(stickyNote);
         domainEventBus.postAll(stickyNote);
         output.setId(stickyNote.getId().toString());
         output.setExitCode(ExitCode.SUCCESS);

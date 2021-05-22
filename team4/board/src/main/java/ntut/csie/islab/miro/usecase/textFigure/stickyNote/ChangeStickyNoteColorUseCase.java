@@ -27,7 +27,8 @@ public class ChangeStickyNoteColorUseCase {
                     .setMessage("change stickyNote color failed: stickyNote not found, stickyNote id = " + input.getFigureId());
             return;
         }
-        stickyNoteRepository.changeColor(stickyNote, input.getColor());
+        stickyNote.changeColor(input.getColor());
+        stickyNoteRepository.save(stickyNote);
         domainEventBus.postAll(stickyNote);
         output.setId(stickyNote.getId().toString());
         output.setExitCode(ExitCode.SUCCESS);

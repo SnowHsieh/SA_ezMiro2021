@@ -25,14 +25,17 @@ public class MIRODataSourceConfiguration {
 
     @Bean
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource")
+    @ConfigurationProperties(prefix = "spring.datasource.miro")
     public DataSourceProperties miroDataSourceProperties() {
+
+        System.out.println("miroDataSourceProperties flow");
         return new DataSourceProperties();
     }
 
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.miro.configuration")
     public DataSource miroDataSource() {
+        System.out.println("miroDataSource flow");
         return miroDataSourceProperties().initializeDataSourceBuilder()
                 .type(HikariDataSource.class).build();
 
@@ -40,6 +43,7 @@ public class MIRODataSourceConfiguration {
 
     @Bean(name = "miroEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean miroEntityManagerFactory(EntityManagerFactoryBuilder builder) {
+        System.out.println("miroEntityManagerFactory flow");
         return builder
                 .dataSource(miroDataSource())
                 .packages("ntut.csie.islab.miro.adapter.gateway.repository")
@@ -49,6 +53,8 @@ public class MIRODataSourceConfiguration {
     @Bean
     public PlatformTransactionManager miroTransactionManager(
             final @Qualifier("miroEntityManagerFactory") LocalContainerEntityManagerFactoryBean miroEntityManagerFactory) {
+        System.out.println("PlatformTransactionManager flow");
+
         return new JpaTransactionManager(miroEntityManagerFactory.getObject());
     }
 }

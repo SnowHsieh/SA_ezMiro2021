@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class BoardRepositoryPeerImpl implements BoardRepositoryPeer {
+
     @Override
     public <S extends BoardData> S save(S s) {
         return null;
@@ -15,12 +16,12 @@ public class BoardRepositoryPeerImpl implements BoardRepositoryPeer {
     }
 
     @Override
-    public Optional<BoardData> findById(UUID uuid) {
+    public Optional<BoardData> findById(String s) {
         return Optional.empty();
     }
 
     @Override
-    public boolean existsById(UUID uuid) {
+    public boolean existsById(String s) {
         return false;
     }
 
@@ -30,7 +31,7 @@ public class BoardRepositoryPeerImpl implements BoardRepositoryPeer {
     }
 
     @Override
-    public Iterable<BoardData> findAllById(Iterable<UUID> iterable) {
+    public Iterable<BoardData> findAllById(Iterable<String> iterable) {
         return null;
     }
 
@@ -40,7 +41,7 @@ public class BoardRepositoryPeerImpl implements BoardRepositoryPeer {
     }
 
     @Override
-    public void deleteById(UUID uuid) {
+    public void deleteById(String s) {
 
     }
 

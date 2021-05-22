@@ -30,7 +30,7 @@ public class MoveStickyNoteUseCase {
             return;
         }
         stickyNote.changePosition(input.getNewPosition());
-        stickyNoteRepository.move(stickyNote, input.getNewPosition());
+        stickyNoteRepository.save(stickyNote);
         domainEventBus.postAll(stickyNote);
         output.setId(stickyNote.getId().toString());
         output.setExitCode(ExitCode.SUCCESS);

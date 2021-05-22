@@ -28,8 +28,8 @@ public class ChangeStickyNoteContentUseCase {
                     .setMessage("Change stickyNoteContent failed: stickyNote not found, stickyNote id = " + input.getFigureId());
             return;
         }
-//        stickyNote.changeContent(input.getContent());
-        stickyNoteRepository.changeContent(stickyNote, input.getContent());
+        stickyNote.changeContent(input.getContent());
+        stickyNoteRepository.save(stickyNote);
         domainEventBus.postAll(stickyNote);
         output.setId(stickyNote.getId().toString());
         output.setExitCode(ExitCode.SUCCESS);

@@ -14,7 +14,9 @@ public class TextFigureRepository {
     }
 
     public void save(TextFigure stickyNote) {
-        this.stickyNoteList.add(stickyNote);
+        stickyNoteList.removeIf(figure -> figure.getFigureId().equals(stickyNote.getFigureId()));
+        stickyNoteList.add(stickyNote);
+
     }
 
     public Optional<TextFigure> findById(UUID boardId, UUID figureId) {
@@ -35,25 +37,4 @@ public class TextFigureRepository {
         stickyNoteList.remove(stickyNote);
     }
 
-    public void edit(UUID boardId, TextFigure stickyNote, String content, Style style) {
-        stickyNote.setContent(content);
-        stickyNote.setStyle(style);//todo boardId is not used ??
-    }
-
-    public void move(TextFigure stickyNote, Position newPosition) {
-        stickyNote.setPosition(newPosition);
-    }
-
-    public void changeContent(TextFigure stickyNote, String content) {
-        stickyNote.setContent(content);
-    }
-
-    public void changeColor(TextFigure stickyNote, String color) {
-        stickyNote.getStyle().setColor(color);
-    }
-
-    public void resize(TextFigure stickyNote, double width, double height){
-        stickyNote.getStyle().setWidth(width);
-        stickyNote.getStyle().setHeight(height);
-    }
 }

@@ -56,10 +56,7 @@ public class UseCaseInjection {
         return new CreateStickyNoteUseCase(textFigureRepository,eventBus);
     }
 
-    @Bean(name = "editStickyNoteUseCase")
-    public EditStickyNoteUseCase editStickyNoteUseCase() {
-        return new EditStickyNoteUseCase(textFigureRepository,eventBus);
-    }
+
 
     @Bean(name = "deleteStickyNoteUseCase")
     public DeleteStickyNoteUseCase deleteStickyNoteUseCase() {
