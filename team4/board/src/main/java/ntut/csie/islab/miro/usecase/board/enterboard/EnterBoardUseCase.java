@@ -38,4 +38,5 @@ public class EnterBoardUseCase {
         output.setId(boardSessionId.getId());
         output.setExitCode(ExitCode.SUCCESS);
     }
+    
 }

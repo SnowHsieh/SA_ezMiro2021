@@ -11,7 +11,6 @@ import java.util.UUID;
 
 public class BoardRepositoryImpl implements BoardRepository {
     private BoardRepositoryPeer peer;
-
     public BoardRepositoryImpl(BoardRepositoryPeer peer){
         this.peer = peer;
     }
@@ -25,14 +24,12 @@ public class BoardRepositoryImpl implements BoardRepository {
 
     @Override
     public Optional<Board> findById(UUID boardId) {
+        // whenever call this , it will rebuild board again.
         return peer.findById(boardId.toString()).map(BoardMapper::transformToDomain);
     }
 
     @Override
     public void save(Board board){
-        System.out.println("BoardRepositoryImpl save");
-        System.out.println("Name:" + board.getBoardName());
-        System.out.println(peer);
         peer.save(BoardMapper.transformToData(board));
     }
 

@@ -33,6 +33,7 @@ public class GetBoardContentUseCase {
 
     public void execute(GetBoardContentInput input, GetBoardContentPresenter presenter) {
         Board board = this.boardRepository.findById(input.getBoardId()).orElse(null);
+        System.out.println("board object:" + board);
         if (null == board) {
             presenter.setBoardId(input.getBoardId())
                     .setExitCode(ExitCode.FAILURE)

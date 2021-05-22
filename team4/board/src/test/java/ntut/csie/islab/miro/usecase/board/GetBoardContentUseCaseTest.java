@@ -37,14 +37,16 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
     public void setUp() {
         super.setUp();
         domainEventBus.register(notifyBoardAdapter);
+
     }
 
     @Test
     public void test_get_board_with_empty_content_with_exist_board_id() {
+
+
         GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(domainEventBus, boardRepository, textFigureRepository);
         GetBoardContentInput input = getBoardContentUseCase.newInput();
-        UUID boardId = UUID.randomUUID();
-        input.setBoardId(boardId);
+        input.setBoardId(board.getBoardId());
         GetBoardContentPresenter output = new GetBoardContentPresenter();
 
         GetBoardContentPresenter presenter = new GetBoardContentPresenter();
@@ -58,7 +60,28 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
         assertEquals(boardId, boardContentViewModel.getBoardId());
         assertEquals(0, boardContentViewModel.getFigureDtos().size());
 
+
+//  //TODO ISSUE : RECONSTRUCT OBJECT PROBLEM!
+//
+//        GetBoardContentUseCase getBoardContentUseCase2 = new GetBoardContentUseCase(domainEventBus, boardRepository, textFigureRepository);
+//        GetBoardContentInput input2 = getBoardContentUseCase.newInput();
+//        UUID boardId2= UUID.randomUUID();
+//        input2.setBoardId(boardId);
+//        GetBoardContentPresenter output2 = new GetBoardContentPresenter();
+//
+//        GetBoardContentPresenter presenter2 = new GetBoardContentPresenter();
+//        getBoardContentUseCase.execute(input2, presenter2);
+//
+//        assertEquals(boardId, presenter2.getBoardId());
+//        assertEquals(0, presenter2.getFigures().size());
+//
+//        BoardContentViewModel boardContentViewModel2 = presenter2.buildViewModel();
+//
+//        assertEquals(boardId, boardContentViewModel2.getBoardId());
+//        assertEquals(0, boardContentViewModel2.getFigureDtos().size());
+
     }
+
 
     @Test
     public void test_get_board_with_nonempty_content_with_exist_board_id() {

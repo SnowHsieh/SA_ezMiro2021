@@ -35,9 +35,9 @@ public class NotifyBoard {
         Optional<Board> board = boardRepository.findById(stickyNoteDeleteDomainEvent.getBoardId());
 
         if (board.isPresent()) {
+            //for board in db , not for board in memory
             board.get().uncommitFigure(stickyNoteDeleteDomainEvent.getFigureId());
             boardRepository.save(board.get());
-//            domainEventBus.postAll(board.get());
             domainEventBus.post(new FigureUncommittedDomainEvent(stickyNoteDeleteDomainEvent.getBoardId(), stickyNoteDeleteDomainEvent.getFigureId()));
         } else {
             throw new RuntimeException("Board not found, board id = " + stickyNoteDeleteDomainEvent.getBoardId());

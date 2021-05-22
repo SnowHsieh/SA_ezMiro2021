@@ -2,6 +2,7 @@ package ntut.csie.islab.miro.usecase.stickyNote;
 
 import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryImpl;
+import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
@@ -32,15 +33,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class DeleteStickyNoteUseCaseTest extends AbstractSpringBootJpaTest {
 
     private CqrsCommandPresenter preGeneratedStickyNote;
-    private CqrsCommandPresenter preGeneratedBoard;
+    private CqrsCommandPresenter preGeneratedStickyNoteAnother;
+
 
     @BeforeEach
     @Override
     public void setUp(){
         super.setUp();
         this.preGeneratedFactory();
-        board = boardRepository.findById(UUID.fromString(preGeneratedBoard.getId())).get();
+        board = boardRepository.findById(board.getBoardId()).get();
         board.commitFigure(UUID.fromString(preGeneratedStickyNote.getId()));
+        board.commitFigure(UUID.fromString(preGeneratedStickyNoteAnother.getId()));
+
+        boardRepository.save(board);
         domainEventBus.register(notifyBoardAdapter);
     }
     private CqrsCommandPresenter generateCreateStickyNoteUseCaseOutput(UUID id, Position position, String content, Style style){
@@ -57,32 +62,31 @@ public class DeleteStickyNoteUseCaseTest extends AbstractSpringBootJpaTest {
         return output;
     }
 
-    private CqrsCommandPresenter generateCreateBoardUseCaseOutput(String boardName){
-        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(domainEventBus, boardRepository);
-        CreateBoardInput createBoardInput = createBoardUseCase.newInput();
-        CqrsCommandPresenter createBoardUseCaseoutput = CqrsCommandPresenter.newInstance();
-        createBoardInput.setTeamId(UUID.randomUUID());
-        createBoardInput.setBoardName(boardName);
-        createBoardUseCase.execute(createBoardInput, createBoardUseCaseoutput);
-        return createBoardUseCaseoutput;
-    }
 
     private void preGeneratedFactory(){
-        preGeneratedBoard = generateCreateBoardUseCaseOutput("EventStorming");
         preGeneratedStickyNote = generateCreateStickyNoteUseCaseOutput(
-                UUID.fromString(preGeneratedBoard.getId()),
+                board.getBoardId(),
                 new Position(1.0,1.0),
-                "Content",
+                "Content1",
+                new Style(12, ShapeKindEnum.CIRCLE, 87.87,100, "#948700"));
+        preGeneratedStickyNoteAnother = generateCreateStickyNoteUseCaseOutput(
+                board.getBoardId(),
+                new Position(1.0,1.0),
+                "Content2",
                 new Style(12, ShapeKindEnum.CIRCLE, 87.87,100, "#948700"));
     }
 
     @Test
     public void test_delete_sticky_note(){
-        UUID boardId = UUID.fromString(preGeneratedBoard.getId());
+
         UUID preGeneratedStickyNoteId =  UUID.fromString(preGeneratedStickyNote.getId());
         assertNotNull(textFigureRepository.findById(boardId, preGeneratedStickyNoteId).get());
         //check stickynote created and committed to board.
-        assertEquals(1,board.getCommittedFigures().size());
+        assertEquals(2,board.getCommittedFigures().size());
+        for(CommittedFigure c : board.getCommittedFigures()){
+            System.out.println("bef del:" + c.getFigureId());
+        }
+        System.out.println(boardRepository.findById(board.getBoardId()).get().getCommittedFigures().size());
 
         DeleteStickyNoteUseCase deleteStickyNoteUseCase = new DeleteStickyNoteUseCase(textFigureRepository, domainEventBus);
         DeleteStickyNoteInput input = deleteStickyNoteUseCase.newInput();
@@ -94,11 +98,10 @@ public class DeleteStickyNoteUseCaseTest extends AbstractSpringBootJpaTest {
         deleteStickyNoteUseCase.execute(input, output);
         assertNotNull(output.getId());
         assertEquals(ExitCode.SUCCESS,output.getExitCode());
-        assertEquals(null, textFigureRepository.findById(boardId,UUID.fromString(output.getId())).orElse(null));
-        //check stickynote uncommitted to board.
-        // todo: revise it
-        // assertEquals(0,board.getCommittedFigures().size());
 
+        //get revised committedfigure on board which is in db
+        board = boardRepository.findById(board.getBoardId()).get();
+        assertEquals(1,board.getCommittedFigures().size());
     }
 
 }

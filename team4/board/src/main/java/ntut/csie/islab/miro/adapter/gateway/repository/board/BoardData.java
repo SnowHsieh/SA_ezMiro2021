@@ -19,8 +19,8 @@ public class BoardData {
 
 
 //    @OrderBy("zOrder")
-//    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
-//    private Set<CommittedFigureData> committedFigures;
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<CommittedFigureData> committedFigures;
 //
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<BoardSessionData> boardSessions;
@@ -61,16 +61,16 @@ public class BoardData {
         this.boardName = boardName;
     }
 
-//    public List<CommittedFigureData> getCommittedFigures() {
-//        List<CommittedFigureData> committedFigureDatas = new ArrayList<>(committedFigures);
-//        committedFigureDatas.sort(Comparator.comparing(CommittedFigureData::getzOrder));
-//        return committedFigureDatas;
-//    }
-//
-//    public void setCommittedFigures(List<CommittedFigureData> committedFigures) {
-//        this.committedFigures = new HashSet<>(committedFigures);
-//    }
-//
+    public List<CommittedFigureData> getCommittedFigures() {
+        List<CommittedFigureData> committedFigureDatas = new ArrayList<>(committedFigures);
+        committedFigureDatas.sort(Comparator.comparing(CommittedFigureData::getzOrder));
+        return committedFigureDatas;
+    }
+
+    public void setCommittedFigures(List<CommittedFigureData> committedFigures) {
+        this.committedFigures = new HashSet<>(committedFigures);
+    }
+
     public List<BoardSessionData> getBoardSessions() {
         return new ArrayList<>(boardSessions);
     }

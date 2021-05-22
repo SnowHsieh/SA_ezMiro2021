@@ -4,6 +4,7 @@ package ntut.csie.islab.miro.adapter.gateway.repository.board;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.BoardSession;
 import ntut.csie.islab.miro.entity.model.board.BoardSessionId;
+import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,11 @@ public class BoardMapper {
 
     public static Board transformToDomain(BoardData boardData) {
         Board board = new Board(UUID.fromString(boardData.getTeamId()), UUID.fromString(boardData.getBoardId()), boardData.getBoardName());
-//        for (CommittedFigureData committedFigureData : boardData.getCommittedFigures()) {
-//            board.commitFigure(committedFigureData.getFigureId());
-//        }
+
+        for (CommittedFigureData committedFigureData : boardData.getCommittedFigures()) {
+            board.commitFigure(UUID.fromString(committedFigureData.getFigureId()));
+        }
+
         List<BoardSession> boardSessionList = new ArrayList<>();
         for (BoardSessionData boardSessionData : boardData.getBoardSessions()) {
             boardSessionList.add(new BoardSession(UUID.fromString(boardSessionData.getBoardId()),
@@ -43,20 +46,23 @@ public class BoardMapper {
                 board.getBoardId().toString(),
                 board.getBoardName()
         );
-        List<BoardSessionData> boardSessionDatas = new ArrayList<>();
+        List<BoardSessionData> boardSessionDataList = new ArrayList<>();
         for (BoardSession boardSession : board.getBoardSessionList()) {
-            boardSessionDatas.add(new BoardSessionData(boardSession.getBoardId().toString(),
+            boardSessionDataList.add(new BoardSessionData(boardSession.getBoardId().toString(),
                     boardSession.getUserId().toString(),
                     boardSession.getBoardSessionId().getId())
             );
         }
 
-        boardData.setBoardSessions(boardSessionDatas);
-//        List<CommittedFigureData> committedFigureDatas = new ArrayList<>();
-//        for (CommittedFigure committedFigure: board.getCommittedFigures()) {
-//            committedFigureDatas.add(new CommittedFigureData(committedFigure.getFigureId(), committedFigure.getZOrder()));
-//        }
-//        boardData.setCommittedFigures(committedFigureDatas);
+        boardData.setBoardSessions(boardSessionDataList);
+        List<CommittedFigureData> committedFigureDatas = new ArrayList<>();
+
+        List<CommittedFigure> committedFigures = board.getCommittedFigures();
+        for (int i =0 ; i < committedFigures.size() ; i++) {
+            CommittedFigureData item = new CommittedFigureData(committedFigures.get(i).getFigureId().toString(),i);
+            committedFigureDatas.add(item);
+        }
+        boardData.setCommittedFigures(committedFigureDatas);
         return boardData;
     }
 }

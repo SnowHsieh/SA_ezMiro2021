@@ -30,6 +30,7 @@ public abstract class AbstractSpringBootJpaTest {
     public TextFigureRepository textFigureRepository;
     public NotifyBoardAdapter notifyBoardAdapter;
     public Board board;
+    public UUID boardId;
     public UUID userId;
 
     @Autowired
@@ -41,8 +42,9 @@ public abstract class AbstractSpringBootJpaTest {
         boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
         textFigureRepository = new TextFigureRepository();
         notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
-        board = new Board(UUID.randomUUID(),"boardName");
+        board = new Board(UUID.randomUUID(),"testBoard");
         boardRepository.save(board);
+        boardId = board.getBoardId();
         userId = UUID.randomUUID();
     }
 
