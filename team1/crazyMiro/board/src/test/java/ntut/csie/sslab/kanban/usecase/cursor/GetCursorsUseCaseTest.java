@@ -16,7 +16,7 @@ public class GetCursorsUseCaseTest extends AbstractSpringBootJpaTest {
     public void get_cursors() {
         String userId1 = UUID.randomUUID().toString();
         String userId2 = UUID.randomUUID().toString();
-        String boardId = createBoard("123", "boardName");
+        String boardId = createBoard(UUID.randomUUID().toString(), "boardName");
         Coordinate defaultPosition = new Coordinate(0, 0);
         enterBoard(boardId, userId1);
         enterBoard(boardId, userId2);

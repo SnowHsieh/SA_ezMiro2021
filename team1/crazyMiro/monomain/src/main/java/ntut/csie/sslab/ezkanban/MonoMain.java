@@ -6,7 +6,7 @@ import ntut.csie.sslab.account.application.springboot.web.config.AccountEventBus
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.kanban.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.sslab.kanban.application.springboot.web.EzKanbanWebMain;
-import ntut.csie.sslab.kanban.application.springboot.web.config.KanbanDataSourceConfiguration;
+import ntut.csie.sslab.kanban.application.springboot.web.config.MiroDataSourceConfiguration;
 import ntut.csie.sslab.team.application.springboot.web.TeamMain;
 import ntut.csie.sslab.team.application.springboot.web.config.TeamEventBusInjection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import org.springframework.context.annotation.FilterType;
         @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE, value= AccountWebMain.class),
         @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE, value= EzKanbanWebMain.class),
         @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE, value= TeamMain.class),
-        @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE, value= KanbanDataSourceConfiguration.class),
+        @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE, value= MiroDataSourceConfiguration.class),
         @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE, value= AccountDataSourceConfiguration.class),
 })
 

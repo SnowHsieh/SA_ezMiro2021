@@ -19,37 +19,37 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "ntut.csie.sslab.kanban.adapter.gateway.repository",
-        entityManagerFactoryRef = "kanbanEntityManagerFactory",
-        transactionManagerRef= "kanbanTransactionManager"
+        entityManagerFactoryRef = "miroEntityManagerFactory",
+        transactionManagerRef= "miroTransactionManager"
 )
-public class KanbanDataSourceConfiguration {
+public class MiroDataSourceConfiguration {
 
     @Bean
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource.kanban")
-    public DataSourceProperties kanbanDataSourceProperties() {
+    @ConfigurationProperties(prefix = "spring.datasource.miro")
+    public DataSourceProperties miroDataSourceProperties() {
         return new DataSourceProperties();
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.kanban.configuration")
-    public DataSource kanbanDataSource() {
-        return kanbanDataSourceProperties().initializeDataSourceBuilder()
+    @ConfigurationProperties(prefix = "spring.datasource.miro.configuration")
+    public DataSource miroDataSource() {
+        return miroDataSourceProperties().initializeDataSourceBuilder()
                 .type(HikariDataSource.class).build();
 
     }
 
-    @Bean(name = "kanbanEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean kanbanEntityManagerFactory(EntityManagerFactoryBuilder builder) {
+    @Bean(name = "miroEntityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean miroEntityManagerFactory(EntityManagerFactoryBuilder builder) {
         return builder
-                .dataSource(kanbanDataSource())
+                .dataSource(miroDataSource())
                 .packages("ntut.csie.sslab.kanban.adapter.gateway.repository")
                 .build();
     }
 
     @Bean
-    public PlatformTransactionManager kanbanTransactionManager(
-            final @Qualifier("kanbanEntityManagerFactory") LocalContainerEntityManagerFactoryBean kanbanEntityManagerFactory) {
-        return new JpaTransactionManager(kanbanEntityManagerFactory.getObject());
+    public PlatformTransactionManager miroTransactionManager(
+            final @Qualifier("miroEntityManagerFactory") LocalContainerEntityManagerFactoryBean miroEntityManagerFactory) {
+        return new JpaTransactionManager(miroEntityManagerFactory.getObject());
     }
 }

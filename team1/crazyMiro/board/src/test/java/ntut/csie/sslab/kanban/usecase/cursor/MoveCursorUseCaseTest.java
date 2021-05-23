@@ -20,7 +20,7 @@ public class MoveCursorUseCaseTest extends AbstractSpringBootJpaTest {
 
     @Test
     public void move_a_cursor() {
-        String boardId = createBoard("123", "boardName");
+        String boardId = createBoard(UUID.randomUUID().toString(), "boardName");
         String userId = UUID.randomUUID().toString();
         enterBoard(boardId, userId);
         eventListener.clearEventCount();
