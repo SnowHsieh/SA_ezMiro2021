@@ -20,6 +20,8 @@ public class CreateBoardUseCaseImpl implements CreateBoardUseCase{
     @Override
     public void execute(CreateBoardInput input, CqrsCommandOutput output) {
         try{
+            if(boardRepository.findById(input.getBoardId()).isPresent())
+                return;
             Board board = new Board(input.getBoardId(), input.getBoardName());
 
             boardRepository.save(board);
