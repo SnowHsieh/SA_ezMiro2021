@@ -4,6 +4,7 @@ import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.mongodb.BoardRepositoryMongoDbPeer;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.cursor.CursorRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryPeer;
@@ -22,6 +23,8 @@ public class RepositoryInjection {
   private BoardRepositoryPeer boardRepositoryPeer;
 
   private FigureRepositoryPeer figureRepositoryPeer;
+
+  private BoardRepositoryMongoDbPeer boardRepositoryMongoDbPeer;
 //
 //  private WorkflowRepositoryPeer workflowRepositoryPeer;
 //
@@ -36,6 +39,11 @@ public class RepositoryInjection {
   public void setFigureRepositoryPeer(FigureRepositoryPeer figureRepositoryPeer){
     this.figureRepositoryPeer = figureRepositoryPeer;
   }
+
+//  @Autowired
+//  public void setBoardMdbRepositoryPeer(BoardRepositoryMongoDbPeer boardRepositoryMongoDbPeer){
+//    this.boardRepositoryMongoDbPeer = boardRepositoryMongoDbPeer;
+//  }
 
 
 //

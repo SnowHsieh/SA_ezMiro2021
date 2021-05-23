@@ -80,6 +80,8 @@ import ntut.csie.sslab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.google.NotifyCursorAdapter;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.mongodb.BoardRepositoryMdbImpl;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.mongodb.BoardRepositoryMongoDbPeer;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.cursor.CursorRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryPeer;
@@ -132,9 +134,13 @@ public abstract class AbstractSpringBootJpaTest {
     protected DomainEventBus domainEventBus;
     protected EventListener eventListener;
     protected BoardSessionBroadcaster boardSessionBroadcaster;
+    protected BoardRepository boardMdbRepository;
 
     @Autowired
     protected BoardRepositoryPeer boardRepositoryPeer;
+
+//    @Autowired
+//    protected BoardRepositoryMongoDbPeer boardRepositoryMongoDbPeer;
 
     @Autowired
     protected FigureRepositoryPeer figureRepositoryPeer;
@@ -154,6 +160,7 @@ public abstract class AbstractSpringBootJpaTest {
         domainEventBus.register(notifyBoardAdapter);
         domainEventBus.register(notifyCursorAdapter);
         domainEventBus.register(eventListener);
+//        boardMdbRepository = new BoardRepositoryMdbImpl(boardRepositoryMongoDbPeer);
     }
 
 //    protected String createWorkspace() {
