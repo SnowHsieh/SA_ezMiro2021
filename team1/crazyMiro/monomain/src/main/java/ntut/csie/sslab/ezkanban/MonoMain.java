@@ -4,9 +4,9 @@ import ntut.csie.sslab.account.application.springboot.web.AccountWebMain;
 import ntut.csie.sslab.account.application.springboot.web.config.AccountDataSourceConfiguration;
 import ntut.csie.sslab.account.application.springboot.web.config.AccountEventBusInjection;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.sslab.kanban.adapter.gateway.eventbus.google.NotifyBoardAdapter;
-import ntut.csie.sslab.kanban.application.springboot.web.EzKanbanWebMain;
-import ntut.csie.sslab.kanban.application.springboot.web.config.MiroDataSourceConfiguration;
+import ntut.csie.sslab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
+import ntut.csie.sslab.miro.application.springboot.web.EzKanbanWebMain;
+import ntut.csie.sslab.miro.application.springboot.web.config.MiroDataSourceConfiguration;
 import ntut.csie.sslab.team.application.springboot.web.TeamMain;
 import ntut.csie.sslab.team.application.springboot.web.config.TeamEventBusInjection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
 @ComponentScan(
-        basePackages = {"ntut.csie.sslab.kanban", "ntut.csie.sslab.account", "ntut.csie.sslab.team","ntut.csie.sslab.ezkanban"}, excludeFilters = {
+        basePackages = {"ntut.csie.sslab.miro", "ntut.csie.sslab.account", "ntut.csie.sslab.team","ntut.csie.sslab.ezkanban"}, excludeFilters = {
         @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE, value= AccountEventBusInjection.class),
         @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE, value= TeamEventBusInjection.class),
         @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE, value= AccountWebMain.class),

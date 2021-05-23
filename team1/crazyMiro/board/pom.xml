@@ -22,7 +22,7 @@
     </properties>
 
     <build>
-        <finalName>kanban</finalName>
+        <finalName>miro</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -64,7 +64,7 @@
                 <executions>
                     <execution>
                         <configuration>
-                            <mainClass>ntut.csie.sslab.kanban.application.springboot.web.EzKanbanWebMain</mainClass>
+                            <mainClass>ntut.csie.sslab.miro.application.springboot.web.EzKanbanWebMain</mainClass>
                         </configuration>
                     </execution>
                 </executions>
