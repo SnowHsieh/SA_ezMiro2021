@@ -36,7 +36,7 @@ public class CreateStickyNoteUseCaseTest extends AbstractSpringBootJpaTest {
         assertEquals(ExitCode.SUCCESS,output.getExitCode());
         assertEquals(boardId,stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getBoardId());
         assertNotNull(stickyNoteRepository.findById(UUID.fromString(output.getId())).get());
-        assertEquals("", stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getContent());
+        assertEquals("123", stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getContent());
     }
 
 }

@@ -34,7 +34,7 @@ public class StickyNoteRepositoryImpl implements StickyNoteRepository {
     @Override
     public void save(StickyNote stickyNote) {
         System.out.println("stickyNote:" + stickyNote.getStyle().getColor());
-//        System.out.println(StickyNoteMapper.transformToData(stickyNote).getColor());
+        System.out.println(peer);
         peer.save(StickyNoteMapper.transformToData(stickyNote));
     }
 

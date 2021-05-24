@@ -22,31 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ChangeStickyNoteColorUseCaseTest extends AbstractSpringBootJpaTest {
-    private CqrsCommandPresenter preGeneratedStickyNote;
 
-    @BeforeEach
-    public void setUp() {
-        preGeneratedStickyNote = generateCreateStickyNoteUseCaseOutput(
-                boardId,
-                new Position(0, 0),
-                "",
-                new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-
-    }
-
-    private CqrsCommandPresenter generateCreateStickyNoteUseCaseOutput(UUID id, Position position, String content, Style style) {
-        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(stickyNoteRepository, domainEventBus);
-        CreateStickyNoteInput input = createStickyNoteUseCase.newInput();
-        input.setBoardId(id);
-        input.setPosition(position.getX(), position.getY());
-        input.setContent(content);
-        input.setStyle(style);
-
-        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-        createStickyNoteUseCase.execute(input, output);
-
-        return output;
-    }
 
     @Test
     public void test_change_sticky_note_color() {
@@ -55,11 +31,11 @@ public class ChangeStickyNoteColorUseCaseTest extends AbstractSpringBootJpaTest 
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);
         input.setFigureId(UUID.fromString(preGeneratedStickyNote.getId()));
-        input.setColor("#f9f900");
+        input.setColor("#010100");
         changeStickyNoteColorUseCase.execute(input,output);
 
         assertNotNull(output.getId());
         assertEquals(ExitCode.SUCCESS,output.getExitCode());
-        assertEquals("#f9f900",stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getStyle().getColor());
+        assertEquals("#010100",stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getStyle().getColor());
     }
 }

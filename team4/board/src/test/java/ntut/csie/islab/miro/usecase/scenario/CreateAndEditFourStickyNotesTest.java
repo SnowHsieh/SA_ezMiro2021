@@ -17,35 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CreateAndEditFourStickyNotesTest extends AbstractSpringBootJpaTest {
 
-    private CqrsCommandPresenter generateCreateStickyNoteUseCaseOutput(UUID id, Position position, String content, Style style){
-        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(stickyNoteRepository, domainEventBus);
-        CreateStickyNoteInput input = createStickyNoteUseCase.newInput();
-        input.setBoardId(id);
-        input.setPosition(position.getX(),position.getY());
-        input.setContent(content);
-        input.setStyle(style);
-
-        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-        createStickyNoteUseCase.execute(input, output);
-
-        return output;
-    }
-
-//    private CqrsCommandPresenter editStickyNoteUseCaseOutput(UUID boardId,String figureId, String content,Style style){
-//        EditStickyNoteUseCase editStickyNoteUseCase = new EditStickyNoteUseCase(stickyNoteRepository, domainEventBus);
-//        EditStickyNoteInput editStickyNoteUseCaseInput = editStickyNoteUseCase.newInput();
-//        CqrsCommandPresenter editStickyNoteUseCaseOutput = CqrsCommandPresenter.newInstance();
-//
-//        editStickyNoteUseCaseInput.setBoardId (boardId);
-//        editStickyNoteUseCaseInput.setFigureId(UUID.fromString(figureId));
-//        editStickyNoteUseCaseInput.setContent(content);
-//        editStickyNoteUseCaseInput.setStyle(style);
-//        editStickyNoteUseCase.execute(editStickyNoteUseCaseInput, editStickyNoteUseCaseOutput);
-//
-//        return editStickyNoteUseCaseOutput;
-//    }
-
-
     @Test
     public void create_four_yellow_stickyNotes_and_edit_four_stickyNotes_test() {
         UUID boardId = UUID.randomUUID();

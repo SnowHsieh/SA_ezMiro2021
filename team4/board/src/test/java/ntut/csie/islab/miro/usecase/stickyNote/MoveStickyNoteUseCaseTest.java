@@ -23,30 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MoveStickyNoteUseCaseTest extends AbstractSpringBootJpaTest {
-    private CqrsCommandPresenter preGeneratedStickyNote;
-    @BeforeEach
-    public void setUp(){
-        preGeneratedStickyNote = generateCreateStickyNoteUseCaseOutput(
-                boardId,
-                new Position(0,0),
-                "",
-                new Style(12, ShapeKindEnum.RECTANGLE, 100,100, "#f9f900"));
-
-    }
-
-    private CqrsCommandPresenter generateCreateStickyNoteUseCaseOutput(UUID id, Position position, String content, Style style){
-        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(stickyNoteRepository, domainEventBus);
-        CreateStickyNoteInput input = createStickyNoteUseCase.newInput();
-        input.setBoardId(id);
-        input.setPosition(position.getX(),position.getY());
-        input.setContent(content);
-        input.setStyle(style);
-
-        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-        createStickyNoteUseCase.execute(input, output);
-
-        return output;
-    }
 
     @Test
     public void test_move_sticky_note(){

@@ -523,20 +523,6 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
         return createBoardUseCaseoutput;
     }
 
-    private CqrsCommandPresenter generateCreateStickyNoteUseCaseOutput(UUID id, Position position, String content, Style style) {
-        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(stickyNoteRepository, domainEventBus);
-        CreateStickyNoteInput input = createStickyNoteUseCase.newInput();
-        input.setBoardId(id);
-        input.setPosition(position.getX(), position.getY());
-        input.setContent(content);
-        input.setStyle(style);
-
-        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-        createStickyNoteUseCase.execute(input, output);
-
-        return output;
-    }
-
     private GetBoardContentPresenter generateGetBoardContentUseCaseOutput(UUID boardId) {
 
         GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(domainEventBus, boardRepository, stickyNoteRepository);

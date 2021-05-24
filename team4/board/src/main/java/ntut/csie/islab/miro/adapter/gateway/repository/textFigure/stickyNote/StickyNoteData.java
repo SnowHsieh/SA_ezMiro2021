@@ -139,19 +139,4 @@ public class StickyNoteData {
         this.color = color;
     }
 
-    @Override
-    public String toString() {
-        return "StickyNoteData{" +
-                "stickynoteId='" + stickynoteId + '\'' +
-                ", boardId='" + boardId + '\'' +
-                ", content='" + content + '\'' +
-                ", positionX=" + positionX +
-                ", positionY=" + positionY +
-                ", fontSize=" + fontSize +
-                ", shapeKind=" + shapeKind +
-                ", width=" + width +
-                ", height=" + height +
-                ", color='" + color + '\'' +
-                '}';
-    }
 }

@@ -5,12 +5,17 @@ import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryImpl
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryPeer;
 import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.stickyNote.StickyNoteRepositoryImpl;
 import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.stickyNote.StickyNoteRepositoryPeer;
+import ntut.csie.islab.miro.entity.model.Position;
+import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.textFigure.Style;
 import ntut.csie.islab.miro.usecase.textFigure.StickyNoteRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardInput;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteInput;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteUseCase;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
@@ -43,8 +48,11 @@ public abstract class AbstractSpringBootJpaTest {
     public UUID boardId;
     public UUID userId;
     public CqrsCommandPresenter createBoardUseCaseOutput;
+    public CqrsCommandPresenter preGeneratedStickyNote;
+
     @Autowired
     private BoardRepositoryPeer boardRepositoryPeer;
+    @Autowired
     private StickyNoteRepositoryPeer stickyNoteRepositoryPeer;
 
     @BeforeEach
@@ -64,6 +72,13 @@ public abstract class AbstractSpringBootJpaTest {
         board = boardRepository.findById(UUID.fromString(createBoardUseCaseOutput.getId())).get();
         boardId = board.getBoardId();
 
+        preGeneratedStickyNote = generateCreateStickyNoteUseCaseOutput(
+                boardId,
+                new Position(0, 0),
+                "",
+                new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
+
+
     }
 
     public CqrsCommandPresenter setCreateBoard (UUID teamId, String boardName){
@@ -76,5 +91,18 @@ public abstract class AbstractSpringBootJpaTest {
         return createBoardUseCaseOutput;
     }
 
+    public CqrsCommandPresenter generateCreateStickyNoteUseCaseOutput(UUID boardId, Position position, String content, Style style) {
+        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(stickyNoteRepository, domainEventBus);
+        CreateStickyNoteInput input = createStickyNoteUseCase.newInput();
+        input.setBoardId(boardId);
+        input.setPosition(position.getX(), position.getY());
+        input.setContent(content);
+        input.setStyle(style);
+
+        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
+        createStickyNoteUseCase.execute(input, output);
+
+        return output;
+    }
 
 }

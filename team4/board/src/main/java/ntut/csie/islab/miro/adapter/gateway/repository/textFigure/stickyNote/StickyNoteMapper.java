@@ -49,13 +49,11 @@ public class StickyNoteMapper {
                 stickyNote.getPosition().getY(),
                 stickyNote.getContent(),
                 stickyNote.getStyle().getFontSize(),
-                1,
+                stickyNote.getStyle().getShape().ordinal(),
                 stickyNote.getStyle().getWidth(),
                 stickyNote.getStyle().getHeight(),
                 stickyNote.getStyle().getColor()
         );
-        System.out.println(stickyNoteData);
         return stickyNoteData;
-
     }
 }
