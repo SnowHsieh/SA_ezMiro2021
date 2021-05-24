@@ -3,6 +3,7 @@ package ntut.csie.islab.miro.usecase.board;
 import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.islab.miro.adapter.presenter.getAllCursors.AllCursorsViewModel;
 import ntut.csie.islab.miro.adapter.presenter.getAllCursors.GetAllUserCursorsPresenter;
+import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.islab.miro.usecase.board.getallusercursors.GetAllUserCursorsInput;
 import ntut.csie.islab.miro.usecase.board.getallusercursors.GetAllUserCursorsUseCase;
 import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
@@ -16,16 +17,12 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class GetAllUserCursorsUseCaseTest {
-    public DomainEventBus domainEventBus;
-    public BoardRepository boardRepository;
-    public NotifyBoardAdapter notifyBoardAdapter;
+public class GetAllUserCursorsUseCaseTest extends AbstractSpringBootJpaTest {
 
     @BeforeEach
+    @Override
     public void setUp() {
-        domainEventBus = new GoogleEventBus();
-//        boardRepository = new BoardRepositoryImpl(new BoardRepositoryListPeer());
-        notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
+        super.setUp();
         domainEventBus.register(notifyBoardAdapter);
     }
 
@@ -33,7 +30,6 @@ public class GetAllUserCursorsUseCaseTest {
     public void test_get_all_user_cursors() {
         GetAllUserCursorsUseCase getAllUserCursorsUseCase = new GetAllUserCursorsUseCase(domainEventBus, boardRepository);
         GetAllUserCursorsInput input = getAllUserCursorsUseCase.newInput();
-        UUID boardId = UUID.randomUUID();
         input.setBoardId(boardId);
         GetAllUserCursorsPresenter presenter = new GetAllUserCursorsPresenter();
 
