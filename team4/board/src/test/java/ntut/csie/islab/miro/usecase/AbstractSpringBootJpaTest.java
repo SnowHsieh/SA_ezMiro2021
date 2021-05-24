@@ -6,9 +6,13 @@ import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryPeer
 import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
+import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardInput;
+import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
+import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
+import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +20,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @ContextConfiguration(classes= JpaApplicationTest.class)
@@ -30,9 +37,10 @@ public abstract class AbstractSpringBootJpaTest {
     public TextFigureRepository textFigureRepository;
     public NotifyBoardAdapter notifyBoardAdapter;
     public Board board;
+    public UUID teamId;
     public UUID boardId;
     public UUID userId;
-
+    public CqrsCommandPresenter createBoardUseCaseOutput;
     @Autowired
     private BoardRepositoryPeer boardRepositoryPeer;
 
@@ -42,12 +50,28 @@ public abstract class AbstractSpringBootJpaTest {
         boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
         textFigureRepository = new TextFigureRepository();
         notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
-        board = new Board(UUID.randomUUID(),"testBoard");
-        boardRepository.save(board);
-        boardId = board.getBoardId();
+
+        teamId = UUID.randomUUID();
         userId = UUID.randomUUID();
+
+
+        createBoardUseCaseOutput = setCreateBoard(teamId,"testBoard");
+        assertNotNull(createBoardUseCaseOutput.getId()); //
+        assertEquals(ExitCode.SUCCESS, createBoardUseCaseOutput.getExitCode());
+        board = boardRepository.findById(UUID.fromString(createBoardUseCaseOutput.getId())).get();
+        boardId = board.getBoardId();
+
     }
 
+    public CqrsCommandPresenter setCreateBoard (UUID teamId, String boardName){
+        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(domainEventBus, boardRepository);
+        CreateBoardInput createBoardInput = createBoardUseCase.newInput();
+        CqrsCommandPresenter createBoardUseCaseOutput = CqrsCommandPresenter.newInstance();
+        createBoardInput.setTeamId(teamId);
+        createBoardInput.setBoardName(boardName);
+        createBoardUseCase.execute(createBoardInput, createBoardUseCaseOutput);
+        return createBoardUseCaseOutput;
+    }
 
 
 }

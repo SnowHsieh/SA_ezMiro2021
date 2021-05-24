@@ -2,6 +2,7 @@ package ntut.csie.islab.miro.usecase.board;
 
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
+import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderListOnBoardInput;
 import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderListOnBoardUseCase;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
@@ -18,19 +19,13 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ChangeFigureOrderListOnBoardUseCaseTest {
-    public DomainEventBus domainEventBus;
-    public BoardRepository boardRepository;
-    private Board board;
+public class ChangeFigureOrderListOnBoardUseCaseTest extends AbstractSpringBootJpaTest {
 
     @BeforeEach
+    @Override
     public void setUp(){
-        domainEventBus = new GoogleEventBus();
-//        boardRepository = new BoardRepositoryImpl(new BoardRepositoryListPeer());
-        board = new Board(UUID.randomUUID(),"modifyFigureUseCaseBoard");
-        boardRepository.save(board);
+        super.setUp();
     }
-
 
     @Test
     public void test_modifyFigureUseCase(){
