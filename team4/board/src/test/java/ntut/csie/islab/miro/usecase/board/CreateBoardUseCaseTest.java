@@ -14,7 +14,7 @@ import java.util.UUID;
 
 
 
-public class CreateBoardUseCaseTest  extends AbstractSpringBootJpaTest {
+public class CreateBoardUseCaseTest extends AbstractSpringBootJpaTest {
 //setUp in AbstractSpringBootJpaTest
 
     @Test

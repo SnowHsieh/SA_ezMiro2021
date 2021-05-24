@@ -1,6 +1,7 @@
 package ntut.csie.islab.miro.usecase.stickyNote;
 
-import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
+import ntut.csie.islab.miro.usecase.textFigure.StickyNoteRepository;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
 import ntut.csie.islab.miro.entity.model.textFigure.Style;
@@ -21,16 +22,10 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class MoveStickyNoteUseCaseTest {
-    public DomainEventBus domainEventBus;
-    public TextFigureRepository stickyNoteRepository;
-    private UUID boardId;
+public class MoveStickyNoteUseCaseTest extends AbstractSpringBootJpaTest {
     private CqrsCommandPresenter preGeneratedStickyNote;
     @BeforeEach
     public void setUp(){
-        domainEventBus = new GoogleEventBus();
-        stickyNoteRepository = new TextFigureRepository();
-        boardId = UUID.randomUUID();
         preGeneratedStickyNote = generateCreateStickyNoteUseCaseOutput(
                 boardId,
                 new Position(0,0),
@@ -68,7 +63,7 @@ public class MoveStickyNoteUseCaseTest {
         assertNotNull(output.getId());
         assertEquals(ExitCode.SUCCESS,output.getExitCode());
 
-        TextFigure executedStickyNote = stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get();
+        TextFigure executedStickyNote = stickyNoteRepository.findById(UUID.fromString(output.getId())).get();
         assertNotNull(executedStickyNote);
         assertEquals(boardId,executedStickyNote.getBoardId());
         assertEquals(UUID.fromString(preGeneratedStickyNote.getId()),executedStickyNote.getFigureId());

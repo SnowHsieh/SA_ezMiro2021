@@ -1,7 +1,6 @@
 package ntut.csie.islab.miro.application.springboot.web.config;
 
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
-import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderListOnBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.cursor.MoveCursorUseCase;
@@ -10,6 +9,7 @@ import ntut.csie.islab.miro.usecase.board.getallusercursors.GetAllUserCursorsUse
 import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentUseCase;
 import ntut.csie.islab.miro.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
+import ntut.csie.islab.miro.usecase.textFigure.StickyNoteRepository;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.*;
 import ntut.csie.islab.miro.usecase.webSocket.BoardSessionBroadcaster;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration("EzMiroUserCaseInjection")
 public class UseCaseInjection {
     private BoardRepository boardRepository;
-    private TextFigureRepository textFigureRepository;
+    private StickyNoteRepository stickyNoteRepository;
     private DomainEventBus eventBus;
 
     @Autowired
@@ -43,7 +43,7 @@ public class UseCaseInjection {
 
     @Bean(name = "getBoardContentUseCase")
     public GetBoardContentUseCase getBoardContentUseCase() {
-        return new GetBoardContentUseCase(eventBus,boardRepository, textFigureRepository);
+        return new GetBoardContentUseCase(eventBus,boardRepository, stickyNoteRepository);
     }
     @Bean(name = "getAllUserCursorsUseCase")
     public GetAllUserCursorsUseCase getAllUserCursorsUseCase() {
@@ -53,33 +53,33 @@ public class UseCaseInjection {
 
     @Bean(name = "createStickyNoteUseCase")
     public CreateStickyNoteUseCase createStickyNoteUseCase() {
-        return new CreateStickyNoteUseCase(textFigureRepository,eventBus);
+        return new CreateStickyNoteUseCase(stickyNoteRepository,eventBus);
     }
 
 
 
     @Bean(name = "deleteStickyNoteUseCase")
     public DeleteStickyNoteUseCase deleteStickyNoteUseCase() {
-        return new DeleteStickyNoteUseCase(textFigureRepository,eventBus);
+        return new DeleteStickyNoteUseCase(stickyNoteRepository,eventBus);
     }
     @Bean(name = "moveStickyNoteUseCase")
     public MoveStickyNoteUseCase moveStickyNoteUseCase() {
-        return new MoveStickyNoteUseCase(textFigureRepository,eventBus);
+        return new MoveStickyNoteUseCase(stickyNoteRepository,eventBus);
     }
 
     @Bean(name = "changeStickyNoteContentUseCase")
     public ChangeStickyNoteContentUseCase changeStickyNoteContentUseCase() {
-        return new ChangeStickyNoteContentUseCase(textFigureRepository,eventBus);
+        return new ChangeStickyNoteContentUseCase(stickyNoteRepository,eventBus);
     }
 
     @Bean(name = "changeStickyNoteColorUseCase")
     public ChangeStickyNoteColorUseCase changeStickyNoteColorUseCase() {
-        return new ChangeStickyNoteColorUseCase(textFigureRepository,eventBus);
+        return new ChangeStickyNoteColorUseCase(stickyNoteRepository,eventBus);
     }
 
     @Bean(name = "resizeStickyNoteUseCase")
     public ResizeStickyNoteUseCase resizeStickyNoteUseCase() {
-        return new ResizeStickyNoteUseCase(textFigureRepository,eventBus);
+        return new ResizeStickyNoteUseCase(stickyNoteRepository,eventBus);
     }
     @Bean(name="moveCursorUseCase")
     public MoveCursorUseCase moveCursorUseCase() {
@@ -107,8 +107,8 @@ public class UseCaseInjection {
     }
 
     @Autowired
-    public void setFigureRepository(TextFigureRepository textFigureRepository) {
-        this.textFigureRepository = textFigureRepository;
+    public void setFigureRepository(StickyNoteRepository stickyNoteRepository) {
+        this.stickyNoteRepository = stickyNoteRepository;
     }
 
     @Autowired

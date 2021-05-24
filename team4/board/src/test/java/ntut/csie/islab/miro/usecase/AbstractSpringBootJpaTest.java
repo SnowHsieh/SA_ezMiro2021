@@ -3,7 +3,9 @@ package ntut.csie.islab.miro.usecase;
 import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryImpl;
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryPeer;
-import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.stickyNote.StickyNoteRepositoryImpl;
+import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.stickyNote.StickyNoteRepositoryPeer;
+import ntut.csie.islab.miro.usecase.textFigure.StickyNoteRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardInput;
@@ -34,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public abstract class AbstractSpringBootJpaTest {
     public DomainEventBus domainEventBus;
     public BoardRepository boardRepository;
-    public TextFigureRepository textFigureRepository;
+    public StickyNoteRepository stickyNoteRepository;
     public NotifyBoardAdapter notifyBoardAdapter;
     public Board board;
     public UUID teamId;
@@ -43,12 +45,13 @@ public abstract class AbstractSpringBootJpaTest {
     public CqrsCommandPresenter createBoardUseCaseOutput;
     @Autowired
     private BoardRepositoryPeer boardRepositoryPeer;
+    private StickyNoteRepositoryPeer stickyNoteRepositoryPeer;
 
     @BeforeEach
     public void setUp() {
         domainEventBus = new GoogleEventBus();
         boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
-        textFigureRepository = new TextFigureRepository();
+        stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
 
         teamId = UUID.randomUUID();

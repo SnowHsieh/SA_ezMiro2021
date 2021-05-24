@@ -18,7 +18,7 @@ public class BoardData {
     private String boardName;
 
 
-//    @OrderBy("zOrder")
+    @OrderBy("zOrder")
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<CommittedFigureData> committedFigures;
 //
@@ -26,16 +26,19 @@ public class BoardData {
     private Set<BoardSessionData> boardSessions;
 
 
+    public BoardData() {
+        this.committedFigures = new HashSet<>();
+        this.boardSessions = new HashSet<>();
+    }
+
     public BoardData(String teamId, String boardId, String boardName) {
+        this.committedFigures = new HashSet<>();
+        this.boardSessions = new HashSet<>();
         this.boardId = boardId;
         this.teamId = teamId;
         this.boardName = boardName;
     }
 
-    public BoardData() {
-//        this.committedFigures = new HashSet<>();
-        this.boardSessions = new HashSet<>();
-    }
 
     public String getBoardId() {
         return boardId;

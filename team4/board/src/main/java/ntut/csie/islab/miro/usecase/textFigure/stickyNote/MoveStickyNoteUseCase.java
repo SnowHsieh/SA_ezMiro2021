@@ -2,16 +2,17 @@ package ntut.csie.islab.miro.usecase.textFigure.stickyNote;
 
 
 import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
+import ntut.csie.islab.miro.entity.model.textFigure.stickynote.StickyNote;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
-import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.usecase.textFigure.StickyNoteRepository;
 
 public class MoveStickyNoteUseCase {
-    private TextFigureRepository stickyNoteRepository;
+    private StickyNoteRepository stickyNoteRepository;
     private DomainEventBus domainEventBus;
 
-    public MoveStickyNoteUseCase(TextFigureRepository stickyNoteRepository, DomainEventBus domainEventBus) {
+    public MoveStickyNoteUseCase(StickyNoteRepository stickyNoteRepository, DomainEventBus domainEventBus) {
         this.stickyNoteRepository = stickyNoteRepository;
         this.domainEventBus = domainEventBus;
     }
@@ -21,7 +22,7 @@ public class MoveStickyNoteUseCase {
     }
 
     public void execute(MoveStickyNoteInput input, CqrsCommandPresenter output) {
-        TextFigure stickyNote = stickyNoteRepository.findById(input.getBoardId(),input.getFigureId()).orElse(null);
+        TextFigure stickyNote = stickyNoteRepository.findById(input.getFigureId()).orElse(null);
 
         if (null == stickyNote){
             output.setId(input.getFigureId().toString())
@@ -30,7 +31,7 @@ public class MoveStickyNoteUseCase {
             return;
         }
         stickyNote.changePosition(input.getNewPosition());
-        stickyNoteRepository.save(stickyNote);
+        stickyNoteRepository.save((StickyNote) stickyNote);
         domainEventBus.postAll(stickyNote);
         output.setId(stickyNote.getId().toString());
         output.setExitCode(ExitCode.SUCCESS);

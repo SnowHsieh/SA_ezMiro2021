@@ -5,7 +5,7 @@ import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
 import ntut.csie.islab.miro.entity.model.board.event.BoardContentMightExpire;
-import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.usecase.textFigure.StickyNoteRepository;
 import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
 import ntut.csie.islab.miro.usecase.textFigure.TextFigureDto;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
@@ -18,12 +18,12 @@ public class GetBoardContentUseCase {
 
     private DomainEventBus domainEventBus;
     private BoardRepository boardRepository;
-    private TextFigureRepository textFigureRepository;
+    private StickyNoteRepository stickyNoteRepository;
 
-    public GetBoardContentUseCase(DomainEventBus domainEventBus, BoardRepository boardRepository, TextFigureRepository textFigureRepository) {
+    public GetBoardContentUseCase(DomainEventBus domainEventBus, BoardRepository boardRepository, StickyNoteRepository stickyNoteRepository) {
         this.domainEventBus = domainEventBus;
         this.boardRepository = boardRepository;
-        this.textFigureRepository = textFigureRepository;
+        this.stickyNoteRepository = stickyNoteRepository;
     }
 
     public GetBoardContentInput newInput() {
@@ -46,7 +46,7 @@ public class GetBoardContentUseCase {
         List<TextFigure> textFigureList = new ArrayList<TextFigure>();
 
         for(CommittedFigure f :CommittedFigureList ){
-            textFigureList.add(this.textFigureRepository.findById(board.getBoardId(),f.getFigureId()).get());
+            textFigureList.add(this.stickyNoteRepository.findById(f.getFigureId()).get());
         }
 
         List<TextFigureDto> textFigureDtos = ConvertFigureToDto.transform(textFigureList);

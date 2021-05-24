@@ -13,7 +13,8 @@ import java.util.UUID;
 public class BoardMapper {
 
     public static Board transformToDomain(BoardData boardData) {
-        Board board = new Board(UUID.fromString(boardData.getTeamId()), UUID.fromString(boardData.getBoardId()), boardData.getBoardName());
+        Board board = new Board(UUID.fromString(boardData.getTeamId()),
+                UUID.fromString(boardData.getBoardId()), boardData.getBoardName());
 
         for (CommittedFigureData committedFigureData : boardData.getCommittedFigures()) {
             board.commitFigure(UUID.fromString(committedFigureData.getFigureId()));

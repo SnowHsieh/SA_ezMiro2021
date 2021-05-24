@@ -1,10 +1,7 @@
 package ntut.csie.islab.miro.usecase.board;
 
-import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
-import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryImpl;
 import ntut.csie.islab.miro.adapter.presenter.getContent.GetBoardContentPresenter;
 import ntut.csie.islab.miro.adapter.presenter.getContent.BoardContentViewModel;
-import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
@@ -14,12 +11,9 @@ import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardInput;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentInput;
 import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentUseCase;
-import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
 import ntut.csie.islab.miro.usecase.textFigure.TextFigureDto;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.*;
-import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +38,7 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
     public void test_get_board_with_empty_content_with_exist_board_id() {
 
 
-        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(domainEventBus, boardRepository, textFigureRepository);
+        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(domainEventBus, boardRepository, stickyNoteRepository);
         GetBoardContentInput input = getBoardContentUseCase.newInput();
         input.setBoardId(board.getBoardId());
         GetBoardContentPresenter output = new GetBoardContentPresenter();
@@ -105,15 +99,15 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
         assertNotNull(domainEventStickyNote.getId());
         assertEquals(ExitCode.SUCCESS, domainEventStickyNote.getExitCode());
 
-        assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getBoardId());
-        assertEquals(20, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getX());
-        assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getY());
-        assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getContent());
-        assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getFontSize());
-        assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getShape());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getWidth());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
-        assertEquals("#f9f900", textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getColor());
+        assertEquals(boardId, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getBoardId());
+        assertEquals(20, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getX());
+        assertEquals(10, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getY());
+        assertEquals("", stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getContent());
+        assertEquals(12, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getFontSize());
+        assertEquals(ShapeKindEnum.RECTANGLE, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getShape());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getWidth());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
+        assertEquals("#f9f900", stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getColor());
 
         //Check BoardContent = 1
         GetBoardContentPresenter oneFigureInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
@@ -130,15 +124,15 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
                 new Position(10, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-        assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getBoardId());
-        assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getPosition().getX());
-        assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getPosition().getY());
-        assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getContent());
-        assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getStyle().getFontSize());
-        assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getStyle().getShape());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getStyle().getWidth());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
-        assertEquals("#f9f900", textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getStyle().getColor());
+        assertEquals(boardId, stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getBoardId());
+        assertEquals(10, stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getPosition().getX());
+        assertEquals(10, stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getPosition().getY());
+        assertEquals("", stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getContent());
+        assertEquals(12, stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getStyle().getFontSize());
+        assertEquals(ShapeKindEnum.RECTANGLE, stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getStyle().getShape());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getStyle().getWidth());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
+        assertEquals("#f9f900", stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getStyle().getColor());
 
         //Check BoardContent = 2
         GetBoardContentPresenter twoFiguresInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
@@ -155,15 +149,15 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
                 new Position(0, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-        assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getBoardId());
-        assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getPosition().getX());
-        assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getPosition().getY());
-        assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getContent());
-        assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getStyle().getFontSize());
-        assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getStyle().getShape());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getStyle().getWidth());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
-        assertEquals("#f9f900", textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getStyle().getColor());
+        assertEquals(boardId, stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getBoardId());
+        assertEquals(0, stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getPosition().getX());
+        assertEquals(10, stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getPosition().getY());
+        assertEquals("", stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getContent());
+        assertEquals(12, stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getStyle().getFontSize());
+        assertEquals(ShapeKindEnum.RECTANGLE, stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getStyle().getShape());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getStyle().getWidth());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
+        assertEquals("#f9f900", stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getStyle().getColor());
 
         //Check BoardContent = 3
         GetBoardContentPresenter threeFiguresInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
@@ -179,15 +173,15 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
                 new Position(15, 0),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-        assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getBoardId());
-        assertEquals(15, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getX());
-        assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getY());
-        assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getContent());
-        assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getFontSize());
-        assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getShape());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getWidth());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
-        assertEquals("#f9f900", textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getColor());
+        assertEquals(boardId, stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getBoardId());
+        assertEquals(15, stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getX());
+        assertEquals(0, stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getY());
+        assertEquals("", stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getContent());
+        assertEquals(12, stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getFontSize());
+        assertEquals(ShapeKindEnum.RECTANGLE, stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getShape());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getWidth());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
+        assertEquals("#f9f900", stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getColor());
 
         //Check BoardContent = 4
         GetBoardContentPresenter fourFiguresInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
@@ -227,15 +221,15 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
         assertNotNull(domainEventStickyNote.getId());
         assertEquals(ExitCode.SUCCESS, domainEventStickyNote.getExitCode());
 
-        assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getBoardId());
-        assertEquals(20, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getX());
-        assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getY());
-        assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getContent());
-        assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getFontSize());
-        assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getShape());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getWidth());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
-        assertEquals("#f9f900", textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getColor());
+        assertEquals(boardId, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getBoardId());
+        assertEquals(20, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getX());
+        assertEquals(10, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getY());
+        assertEquals("", stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getContent());
+        assertEquals(12, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getFontSize());
+        assertEquals(ShapeKindEnum.RECTANGLE, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getShape());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getWidth());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
+        assertEquals("#f9f900", stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getColor());
 
         //Check BoardContent = 1
         GetBoardContentPresenter oneFigureInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
@@ -253,8 +247,8 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
 //                new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f28500")
 //        );
 
-//        assertEquals("sticky\n note \n created", textFigureRepository.findById(boardId, UUID.fromString(editDomainEventStickyNoteOutput.getId())).get().getContent());
-//        assertEquals("#f28500", textFigureRepository.findById(boardId, UUID.fromString(editDomainEventStickyNoteOutput.getId())).get().getStyle().getColor());
+//        assertEquals("sticky\n note \n created", textFigureRepository.findById(UUID.fromString(editDomainEventStickyNoteOutput.getId())).get().getContent());
+//        assertEquals("#f28500", textFigureRepository.findById(UUID.fromString(editDomainEventStickyNoteOutput.getId())).get().getStyle().getColor());
 
         //Check BoardContent = 1
         GetBoardContentPresenter oneFigureEditedInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
@@ -300,15 +294,15 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
         assertNotNull(domainEventStickyNote.getId());
         assertEquals(ExitCode.SUCCESS, domainEventStickyNote.getExitCode());
 
-        assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getBoardId());
-        assertEquals(20, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getX());
-        assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getY());
-        assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getContent());
-        assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getFontSize());
-        assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getShape());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getWidth());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
-        assertEquals("#f9f900", textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getColor());
+        assertEquals(boardId, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getBoardId());
+        assertEquals(20, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getX());
+        assertEquals(10, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getY());
+        assertEquals("", stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getContent());
+        assertEquals(12, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getFontSize());
+        assertEquals(ShapeKindEnum.RECTANGLE, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getShape());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getWidth());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
+        assertEquals("#f9f900", stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getColor());
 
         //Check BoardContent = 1
         GetBoardContentPresenter oneFigureInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
@@ -324,15 +318,15 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
                 new Position(10, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-        assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getBoardId());
-        assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getPosition().getX());
-        assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getPosition().getY());
-        assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getContent());
-        assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getStyle().getFontSize());
-        assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getStyle().getShape());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getStyle().getWidth());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
-        assertEquals("#f9f900", textFigureRepository.findById(boardId, UUID.fromString(commandStickyNote.getId())).get().getStyle().getColor());
+        assertEquals(boardId, stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getBoardId());
+        assertEquals(10, stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getPosition().getX());
+        assertEquals(10, stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getPosition().getY());
+        assertEquals("", stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getContent());
+        assertEquals(12, stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getStyle().getFontSize());
+        assertEquals(ShapeKindEnum.RECTANGLE, stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getStyle().getShape());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getStyle().getWidth());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
+        assertEquals("#f9f900", stickyNoteRepository.findById(UUID.fromString(commandStickyNote.getId())).get().getStyle().getColor());
 
         //Check BoardContent = 2
         GetBoardContentPresenter twoFiguresInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
@@ -349,15 +343,15 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
                 new Position(0, 10),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-        assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getBoardId());
-        assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getPosition().getX());
-        assertEquals(10, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getPosition().getY());
-        assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getContent());
-        assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getStyle().getFontSize());
-        assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getStyle().getShape());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getStyle().getWidth());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
-        assertEquals("#f9f900", textFigureRepository.findById(boardId, UUID.fromString(readModelStickyNote.getId())).get().getStyle().getColor());
+        assertEquals(boardId, stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getBoardId());
+        assertEquals(0, stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getPosition().getX());
+        assertEquals(10, stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getPosition().getY());
+        assertEquals("", stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getContent());
+        assertEquals(12, stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getStyle().getFontSize());
+        assertEquals(ShapeKindEnum.RECTANGLE, stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getStyle().getShape());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getStyle().getWidth());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
+        assertEquals("#f9f900", stickyNoteRepository.findById(UUID.fromString(readModelStickyNote.getId())).get().getStyle().getColor());
 
         //Check BoardContent = 3
         GetBoardContentPresenter threeFiguresInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
@@ -373,15 +367,15 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
                 new Position(15, 0),
                 "",
                 new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
-        assertEquals(boardId, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getBoardId());
-        assertEquals(15, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getX());
-        assertEquals(0, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getY());
-        assertEquals("", textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getContent());
-        assertEquals(12, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getFontSize());
-        assertEquals(ShapeKindEnum.RECTANGLE, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getShape());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getWidth());
-        assertEquals(100, textFigureRepository.findById(boardId, UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
-        assertEquals("#f9f900", textFigureRepository.findById(boardId, UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getColor());
+        assertEquals(boardId, stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getBoardId());
+        assertEquals(15, stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getX());
+        assertEquals(0, stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getPosition().getY());
+        assertEquals("", stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getContent());
+        assertEquals(12, stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getFontSize());
+        assertEquals(ShapeKindEnum.RECTANGLE, stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getShape());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getWidth());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
+        assertEquals("#f9f900", stickyNoteRepository.findById(UUID.fromString(aggregateStickyNote.getId())).get().getStyle().getColor());
 
         //Check BoardContent = 4
         GetBoardContentPresenter fourFiguresInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
@@ -399,8 +393,8 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
 //                new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f28500")
 //        );
 
-//        assertEquals("sticky\n note \n created", textFigureRepository.findById(boardId, UUID.fromString(editDomainEventStickyNoteOutput.getId())).get().getContent());
-//        assertEquals("#f28500", textFigureRepository.findById(boardId, UUID.fromString(editDomainEventStickyNoteOutput.getId())).get().getStyle().getColor());
+//        assertEquals("sticky\n note \n created", textFigureRepository.findById(UUID.fromString(editDomainEventStickyNoteOutput.getId())).get().getContent());
+//        assertEquals("#f28500", textFigureRepository.findById(UUID.fromString(editDomainEventStickyNoteOutput.getId())).get().getStyle().getColor());
 
         //Check BoardContent = 4
         GetBoardContentPresenter oneFigureEditedInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
@@ -424,8 +418,8 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
 //                new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#0080ff")
 //        );
 //
-//        assertEquals("create sticky note", textFigureRepository.findById(boardId, UUID.fromString(editCommandStickyNoteOutput.getId())).get().getContent());
-//        assertEquals("#0080ff", textFigureRepository.findById(boardId, UUID.fromString(editCommandStickyNoteOutput.getId())).get().getStyle().getColor());
+//        assertEquals("create sticky note", textFigureRepository.findById(UUID.fromString(editCommandStickyNoteOutput.getId())).get().getContent());
+//        assertEquals("#0080ff", textFigureRepository.findById(UUID.fromString(editCommandStickyNoteOutput.getId())).get().getStyle().getColor());
 
         //Check BoardContent = 4
         GetBoardContentPresenter commandStickyNoteEditedInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
@@ -459,8 +453,8 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
 //                "\n" +
 //                "content,\n" +
 //                "\n" +
-//                "style(font,shape,size,color)", textFigureRepository.findById(boardId, UUID.fromString(editReadModelStickyNoteOutput.getId())).get().getContent());
-//        assertEquals("#28ff28", textFigureRepository.findById(boardId, UUID.fromString(editReadModelStickyNoteOutput.getId())).get().getStyle().getColor());
+//                "style(font,shape,size,color)", textFigureRepository.findById(UUID.fromString(editReadModelStickyNoteOutput.getId())).get().getContent());
+//        assertEquals("#28ff28", textFigureRepository.findById(UUID.fromString(editReadModelStickyNoteOutput.getId())).get().getStyle().getColor());
 
 
         //Check BoardContent = 4
@@ -490,8 +484,8 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
 //                "sticky note",
 //                new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900")
 //        );
-//        assertEquals("sticky note", textFigureRepository.findById(boardId, UUID.fromString(editAggregateStickyNoteOutput.getId())).get().getContent());
-//        assertEquals("#f9f900", textFigureRepository.findById(boardId, UUID.fromString(editAggregateStickyNoteOutput.getId())).get().getStyle().getColor());
+//        assertEquals("sticky note", textFigureRepository.findById(UUID.fromString(editAggregateStickyNoteOutput.getId())).get().getContent());
+//        assertEquals("#f9f900", textFigureRepository.findById(UUID.fromString(editAggregateStickyNoteOutput.getId())).get().getStyle().getColor());
 
 
         //Check BoardContent = 4
@@ -530,7 +524,7 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
     }
 
     private CqrsCommandPresenter generateCreateStickyNoteUseCaseOutput(UUID id, Position position, String content, Style style) {
-        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(textFigureRepository, domainEventBus);
+        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         CreateStickyNoteInput input = createStickyNoteUseCase.newInput();
         input.setBoardId(id);
         input.setPosition(position.getX(), position.getY());
@@ -545,7 +539,7 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
 
     private GetBoardContentPresenter generateGetBoardContentUseCaseOutput(UUID boardId) {
 
-        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(domainEventBus, boardRepository, textFigureRepository);
+        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(domainEventBus, boardRepository, stickyNoteRepository);
         GetBoardContentInput input = getBoardContentUseCase.newInput();
         input.setBoardId(boardId);
         GetBoardContentPresenter presenter = new GetBoardContentPresenter();

@@ -17,9 +17,9 @@ public class BoardRepositoryImpl implements BoardRepository {
 
     @Override
     public List<Board> findAll() {
-        List<BoardData> boardDatas = new ArrayList();
-        peer.findAll().forEach(x -> boardDatas.add(x));
-        return BoardMapper.transformToDomain(boardDatas);
+        List<BoardData> boardDataList = new ArrayList();
+        peer.findAll().forEach(x -> boardDataList.add(x));
+        return BoardMapper.transformToDomain(boardDataList);
     }
 
     @Override

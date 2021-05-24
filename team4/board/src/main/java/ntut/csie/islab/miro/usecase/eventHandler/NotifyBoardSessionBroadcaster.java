@@ -2,7 +2,7 @@ package ntut.csie.islab.miro.usecase.eventHandler;
 
 import com.google.common.eventbus.Subscribe;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
-import ntut.csie.islab.miro.adapter.gateway.repository.textFigure.TextFigureRepository;
+import ntut.csie.islab.miro.usecase.textFigure.StickyNoteRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.BoardSession;
 import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorCreatedDomainEvent;
@@ -27,10 +27,10 @@ public class NotifyBoardSessionBroadcaster {
 
     private BoardSessionBroadcaster boardSessionBroadcaster;
     private BoardRepository boardRepository;
-    private TextFigureRepository figureRepository;
+    private StickyNoteRepository figureRepository;
 
     @Autowired
-    public NotifyBoardSessionBroadcaster(BoardSessionBroadcaster boardSessionBroadcasters, BoardRepository boardRepository, TextFigureRepository figureRepository) {
+    public NotifyBoardSessionBroadcaster(BoardSessionBroadcaster boardSessionBroadcasters, BoardRepository boardRepository, StickyNoteRepository figureRepository) {
         this.boardSessionBroadcaster = boardSessionBroadcasters;
         this.boardRepository = boardRepository;
         this.figureRepository = figureRepository;
@@ -47,7 +47,7 @@ public class NotifyBoardSessionBroadcaster {
     public void whenStickyNoteMoved(StickyNoteMovedDomainEvent stickyNoteMovedDomainEvent){
         UUID boardId = stickyNoteMovedDomainEvent.getBoardId();
         UUID figureId = stickyNoteMovedDomainEvent.getFigureId();
-        TextFigure figure = figureRepository.findById(boardId,figureId).get();
+        TextFigure figure = figureRepository.findById(figureId).get();
         Board board = boardRepository.findById(figure.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
         boardSessions.forEach(each->broadcast(stickyNoteMovedDomainEvent, each.getBoardSessionId().getId()));
@@ -57,7 +57,7 @@ public class NotifyBoardSessionBroadcaster {
     public void whenStickyNoteContentChanged(StickyNoteContentChangedDomainEvent stickyNoteContentChangedDomainEvent){
         UUID boardId = stickyNoteContentChangedDomainEvent.getBoardId();
         UUID figureId = stickyNoteContentChangedDomainEvent.getFigureId();
-        TextFigure figure = figureRepository.findById(boardId,figureId).get();
+        TextFigure figure = figureRepository.findById(figureId).get();
         Board board = boardRepository.findById(figure.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
         boardSessions.forEach(each->broadcast(stickyNoteContentChangedDomainEvent, each.getBoardSessionId().getId()));
