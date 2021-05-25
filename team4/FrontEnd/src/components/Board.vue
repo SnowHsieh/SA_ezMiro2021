@@ -242,16 +242,9 @@ export default {
       this.getBoardContent()
       this.drawAllUserCursors()
     },
-    listenEventsOnCanvas () {
+    listenToMouseMove () {
       var _this = this
-      _this.addListenerOfChangeTextFigureColor()
-      _this.addListenerOfDeleteTextFigure()
-      _this.addListenerOfBringToFront()
-      _this.addListenerOfBringForward()
-      _this.addListenerOfSendBackward()
-      _this.addListenerOfSendToBack()
-      var canvas = this.canvas
-      canvas.on(
+      _this.canvas.on(
         {
           'mouse:move': function (e) {
             var mouse = this.getPointer(e)
@@ -269,7 +262,21 @@ export default {
               }
             }
             _this.sendMouseData(_this.mouseData)
-          },
+          }
+        })
+    },
+    listenEventsOnCanvas () {
+      var _this = this
+      _this.addListenerOfChangeTextFigureColor()
+      _this.addListenerOfDeleteTextFigure()
+      _this.addListenerOfBringToFront()
+      _this.addListenerOfBringForward()
+      _this.addListenerOfSendBackward()
+      _this.addListenerOfSendToBack()
+      var canvas = this.canvas
+      _this.listenToMouseMove()
+      canvas.on(
+        {
           'mouse:dblclick': function (e) {
             if (e.target != null) {
               var oldleft = e.target.left
@@ -305,10 +312,7 @@ export default {
           },
           'object:scaled': function (e) {
             if (e.target.type === 'group') {
-              const f = JSON.parse(JSON.stringify(e.target))
-              console.log(f, e.target)
               _this.resizeStickyNote(e.target)
-              _this.moveStickyNote(f)
             }
           },
           'object:moving': function (e) {

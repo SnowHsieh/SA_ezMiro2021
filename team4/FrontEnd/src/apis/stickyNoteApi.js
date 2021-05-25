@@ -55,14 +55,22 @@ export const changeStickyNoteColorApi = async (boardId, figure) => {
 
 export const resizeStickyNoteApi = async (boardId, figure) => {
   try {
-    const res = await axios.post(`${hostIp}/board/${boardId}/resizeStickyNote`,
+    const res1 = await axios.post(`${hostIp}/board/${boardId}/resizeStickyNote`,
       {
         figureId: figure.get('id'),
         width: parseFloat(figure.width) * parseFloat(figure.get('scaleX')),
         height: parseFloat(figure.height) * parseFloat(figure.get('scaleY'))
       }
     )
-    return res
+    await axios.post(`${hostIp}/board/${boardId}/moveStickyNote`,
+      {
+        figureId: figure.get('id'),
+        top: figure.get('top'),
+        left: figure.get('left')
+      }
+    )
+    // todo : Need to check if the time received DomainEvent may cause position changed?
+    return res1
   } catch (err) {
     console.log(err)
   }
