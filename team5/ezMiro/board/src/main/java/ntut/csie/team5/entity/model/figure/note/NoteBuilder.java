@@ -9,7 +9,9 @@ public class NoteBuilder {
 
     private String noteId;
     private String boardId;
-    private Point leftTopPosition;
+//    private Point leftTopPosition;
+    private int leftTopPositionX;
+    private int leftTopPositionY;
     private int height;
     private int width;
     private String color;
@@ -24,8 +26,13 @@ public class NoteBuilder {
         return this;
     }
 
-    public NoteBuilder leftTopPosition(Point leftTopPosition) {
-        this.leftTopPosition = leftTopPosition;
+    public NoteBuilder leftTopPositionX(int leftTopPositionX) {
+        this.leftTopPositionX = leftTopPositionX;
+        return this;
+    }
+
+    public NoteBuilder leftTopPositionY(int leftTopPositionY) {
+        this.leftTopPositionY = leftTopPositionY;
         return this;
     }
 
@@ -51,7 +58,7 @@ public class NoteBuilder {
 
     public Note build() {
         noteId = UUID.randomUUID().toString();
-        Note note = new Note(noteId, boardId, leftTopPosition, height, width, color, figureType);
+        Note note = new Note(noteId, boardId, leftTopPositionX, leftTopPositionY, height, width, color, figureType);
         return note;
     }
 }

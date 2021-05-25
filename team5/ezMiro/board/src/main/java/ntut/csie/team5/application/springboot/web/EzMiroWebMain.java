@@ -23,7 +23,6 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 @SpringBootApplication(exclude = {
         org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class
 })
-@EnableWebSocket
 public class EzMiroWebMain extends SpringBootServletInitializer implements CommandLineRunner {
 
     private DomainEventBus domainEventBus;
@@ -52,7 +51,6 @@ public class EzMiroWebMain extends SpringBootServletInitializer implements Comma
 
     public static void main(String[] args) {
         ConfigurableApplicationContext configurableApplicationContext = SpringApplication.run(EzMiroWebMain.class, args);
-        WebSocketController.setApplicationContext(configurableApplicationContext);
     }
 
     @Override
@@ -60,10 +58,5 @@ public class EzMiroWebMain extends SpringBootServletInitializer implements Comma
         System.out.println("EzMiroWebMain run");
         domainEventBus.register(notifyBoard);
         domainEventBus.register(notifyBoardSessionBroadcaster);
-    }
-
-    @Bean
-    public ServerEndpointExporter serverEndpointExporter() {
-        return new ServerEndpointExporter();
     }
 }

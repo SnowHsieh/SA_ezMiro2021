@@ -1,72 +1,57 @@
-package ntut.csie.team5.adapter.websocket;
+package ntut.csie.team5.adapter.controller.websocket;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.team5.usecase.board.BoardRepository;
+import ntut.csie.team5.application.springboot.web.config.websocket.DomainEventEncoder;
+import ntut.csie.team5.application.springboot.web.config.websocket.EndPointConfiguration;
+import ntut.csie.team5.usecase.board.BoardSessionBroadcaster;
 import ntut.csie.team5.usecase.board.enter.EnterBoardInput;
 import ntut.csie.team5.usecase.board.enter.EnterBoardUseCase;
 import ntut.csie.team5.usecase.board.leave.LeaveBoardInput;
 import ntut.csie.team5.usecase.board.leave.LeaveBoardUseCase;
 import ntut.csie.team5.usecase.board.move_cursor.MoveCursorInput;
 import ntut.csie.team5.usecase.board.move_cursor.MoveCursorUseCase;
-import ntut.csie.team5.usecase.websocket.WebSocketBroadcaster;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 
-//@Component
-//@ServerEndpoint(value = "/WebSocketServer/{boardId}/{userId}")
+@Component
+@ServerEndpoint(value = "/WebSocketServer/{boardId}/{userId}",
+                encoders = {DomainEventEncoder.class},
+                configurator = EndPointConfiguration.class)
 public class WebSocketController {
 
-    private static ApplicationContext applicationContext;
-
-    private BoardRepository boardRepository;
     private EnterBoardUseCase enterBoardUseCase;
     private LeaveBoardUseCase leaveBoardUseCase;
     private MoveCursorUseCase moveCursorUseCase;
-    private WebSocketBroadcaster webSocketBroadcaster;
+    private BoardSessionBroadcaster boardSessionBroadcaster;
 
-    public static void setApplicationContext(ApplicationContext applicationContext) {
-        WebSocketController.applicationContext = applicationContext;
-    }
-
-    public WebSocketController() {
-    }
-
-    public void setBoardRepository(BoardRepository boardRepository) {
-        this.boardRepository = boardRepository;
-    }
-
+    @Autowired
     public void setEnterBoardUseCase(EnterBoardUseCase enterBoardUseCase) {
         this.enterBoardUseCase = enterBoardUseCase;
     }
-
+    @Autowired
     public void setLeaveBoardUseCase(LeaveBoardUseCase leaveBoardUseCase) {
         this.leaveBoardUseCase = leaveBoardUseCase;
     }
 
+    @Autowired
     public void setMoveCursorUseCase(MoveCursorUseCase moveCursorUseCase) {
         this.moveCursorUseCase = moveCursorUseCase;
     }
 
-    public void setWebSocketBroadcaster(WebSocketBroadcaster webSocketBroadcaster) {
-        this.webSocketBroadcaster = webSocketBroadcaster;
+    @Autowired
+    public void setBoardSessionBroadcaster(BoardSessionBroadcaster boardSessionBroadcaster) {
+        this.boardSessionBroadcaster = boardSessionBroadcaster;
     }
 
     @OnOpen
     public void onOpen(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String userId, Session session) {
-        enterBoardUseCase = applicationContext.getBean(EnterBoardUseCase.class);
-        webSocketBroadcaster = applicationContext.getBean(WebSocketBroadcaster.class);
-
         EnterBoardInput input = enterBoardUseCase.newInput();
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
@@ -77,18 +62,15 @@ public class WebSocketController {
 
         String message = "有新成員[" + userId + "]加入畫布!";
         System.out.println(message);
-        webSocketBroadcaster.addSession(boardId, presenter.getId(), session);
-        webSocketBroadcaster.sendMessageToAllUser(boardId, message);
+        ((WebSocketBroadcaster) boardSessionBroadcaster).addSession(presenter.getId(), session);
+//        webSocketBroadcaster.sendMessageToAllUser(boardId, message);
     }
 
     @OnClose
     public void onClose(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String userId, Session session) {
-        leaveBoardUseCase = applicationContext.getBean(LeaveBoardUseCase.class);
-        webSocketBroadcaster = applicationContext.getBean(WebSocketBroadcaster.class);
-
         LeaveBoardInput input = leaveBoardUseCase.newInput();
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
-        String boardSessionId = ((BoardSessionBroadcaster2) webSocketBroadcaster).getBoardSessionIdBySessionId(boardId, session.getId());
+        String boardSessionId = ((WebSocketBroadcaster) boardSessionBroadcaster).getBoardSessionIdBySessionId(session.getId());
 
         input.setBoardId(boardId);
         input.setUserId(userId);
@@ -98,16 +80,12 @@ public class WebSocketController {
 
         String message = "成員[" + userId + "]退出畫布!";
         System.out.println(message);
-        webSocketBroadcaster.removeSession(boardId, session);
-        webSocketBroadcaster.sendMessageToAllUser(boardId, message);
+        ((WebSocketBroadcaster) boardSessionBroadcaster).removeSession(presenter.getId());
+//        ((WebSocketBroadcaster) boardSessionBroadcaster).sendMessageToAllUser(boardId, message);
     }
 
     @OnMessage
     public void onMessage(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String userId, String message, Session session) {
-        moveCursorUseCase = applicationContext.getBean(MoveCursorUseCase.class);
-        boardRepository = applicationContext.getBean(BoardRepository.class);
-        webSocketBroadcaster = applicationContext.getBean(WebSocketBroadcaster.class);
-
         MoveCursorInput input = moveCursorUseCase.newInput();
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 

@@ -37,7 +37,7 @@ public class MoveNoteUseCaseImpl implements MoveNoteUseCase {
         }
 
         Note note = (Note)figure;
-        note.changePosition(input.getLeftTopPosition());
+        note.changePosition(input.getLeftTopPositionX(), input.getLeftTopPositionY());
         figureRepository.save(note);
         domainEventBus.postAll(note);
 
@@ -48,7 +48,9 @@ public class MoveNoteUseCaseImpl implements MoveNoteUseCase {
     private class MoveNoteInputImpl implements MoveNoteInput {
 
         private String figureId;
-        private Point leftTopPosition;
+//        private Point leftTopPosition;
+        private int leftTopPositionX;
+        private int leftTopPositionY;
 
         @Override
         public String getFigureId() {
@@ -61,13 +63,22 @@ public class MoveNoteUseCaseImpl implements MoveNoteUseCase {
         }
 
         @Override
-        public Point getLeftTopPosition() {
-            return leftTopPosition;
+        public int getLeftTopPositionX() {
+            return leftTopPositionX;
         }
 
         @Override
-        public void setLeftTopPosition(Point leftTopPosition) {
-            this.leftTopPosition = leftTopPosition;
+        public void setLeftTopPositionX(int leftTopPositionX) {
+            this.leftTopPositionX = leftTopPositionX;
+        }
+
+        @Override
+        public int getLeftTopPositionY() {
+            return leftTopPositionY;
+        }
+
+        public void setLeftTopPositionY(int leftTopPositionY) {
+            this.leftTopPositionY = leftTopPositionY;
         }
     }
 }

@@ -8,6 +8,8 @@ import ntut.csie.team5.entity.model.board.BoardSessionId;
 import ntut.csie.team5.usecase.ClientBoardContentMightExpire;
 import ntut.csie.team5.usecase.board.BoardRepository;
 
+import java.util.UUID;
+
 public class EnterBoardUseCaseImpl implements EnterBoardUseCase {
 
     private BoardRepository boardRepository;
@@ -36,14 +38,12 @@ public class EnterBoardUseCaseImpl implements EnterBoardUseCase {
             return;
         }
 
-        BoardSessionId boardSessionId = BoardSessionId.create();
-
-        board.acceptUserEntry(boardSessionId, input.getUserId());
+        String boardSessionId = board.acceptUserEntry(input.getUserId());
 
         boardRepository.save(board);
         domainEventBus.postAll(board);
 
-        output.setId(boardSessionId.id());
+        output.setId(boardSessionId);
         output.setExitCode(ExitCode.SUCCESS);
     }
 

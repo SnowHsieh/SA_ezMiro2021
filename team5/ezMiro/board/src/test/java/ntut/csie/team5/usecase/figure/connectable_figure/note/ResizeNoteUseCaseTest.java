@@ -20,7 +20,7 @@ public class ResizeNoteUseCaseTest extends AbstractTest {
         ResizeNoteInput resizeNoteInput = resizeNoteUseCase.newInput();
         CqrsCommandPresenter resizeNoteOutput = CqrsCommandPresenter.newInstance();
 
-        String noteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, defaultColor);
+        String noteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
         int newHeight = defaultHeight + 10;
         int newWidth = defaultWidth + 10;
 

@@ -1,105 +1,95 @@
 package ntut.csie.team5.usecase.eventhandler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.eventbus.Subscribe;
+import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.team5.adapter.presenter.board.getcontent.BoardContentViewModel;
-import ntut.csie.team5.adapter.presenter.board.getcontent.GetBoardContentPresenter;
-import ntut.csie.team5.adapter.websocket.BoardSessionBroadcaster;
-import ntut.csie.team5.entity.model.figure.Figure;
+import ntut.csie.team5.entity.model.board.Board;
+import ntut.csie.team5.entity.model.board.BoardSession;
+import ntut.csie.team5.entity.model.board.event.CursorCreated;
+import ntut.csie.team5.entity.model.board.event.CursorDeleted;
+import ntut.csie.team5.entity.model.board.event.CursorMoved;
 import ntut.csie.team5.entity.model.figure.event.FigureCreated;
 import ntut.csie.team5.entity.model.figure.event.FigureDeleted;
 import ntut.csie.team5.entity.model.figure.note.event.NoteColorChanged;
 import ntut.csie.team5.entity.model.figure.note.event.NoteMoved;
 import ntut.csie.team5.entity.model.figure.note.event.NoteResized;
 import ntut.csie.team5.entity.model.figure.note.event.NoteTextEdited;
-import ntut.csie.team5.entity.model.websocket.MessageType;
-import ntut.csie.team5.usecase.board.getcontent.GetBoardContentInput;
+import ntut.csie.team5.usecase.board.BoardRepository;
+import ntut.csie.team5.usecase.board.BoardSessionBroadcaster;
 import ntut.csie.team5.usecase.board.getcontent.GetBoardContentUseCase;
-import ntut.csie.team5.usecase.figure.FigureDto;
-import ntut.csie.team5.usecase.websocket.WebSocketBroadcaster;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 
 public class NotifyBoardSessionBroadcaster {
 
+    private final BoardRepository boardRepository;
     private final DomainEventBus domainEventBus;
     private final GetBoardContentUseCase getBoardContentUseCase;
-    private final WebSocketBroadcaster webSocketBroadcaster;
+    private final BoardSessionBroadcaster boardSessionBroadcaster;
 
-    public NotifyBoardSessionBroadcaster(DomainEventBus domainEventBus, GetBoardContentUseCase getBoardContentUseCase,
-                                         WebSocketBroadcaster webSocketBroadcaster) {
+    public NotifyBoardSessionBroadcaster(BoardRepository boardRepository, DomainEventBus domainEventBus,
+                                         GetBoardContentUseCase getBoardContentUseCase,
+                                         BoardSessionBroadcaster boardSessionBroadcaster) {
+        this.boardRepository = boardRepository;
         this.domainEventBus = domainEventBus;
         this.getBoardContentUseCase = getBoardContentUseCase;
-        this.webSocketBroadcaster = webSocketBroadcaster;
+        this.boardSessionBroadcaster = boardSessionBroadcaster;
     }
 
     @Subscribe
     public void whenFigureCreated(FigureCreated figureCreated) {
-        sendMessage(figureCreated.boardId());
+        broadcastEvent(figureCreated.boardId(), figureCreated);
     }
 
     @Subscribe
     public void whenFigureDeleted(FigureDeleted figureDeleted) {
-        sendMessage(figureDeleted.boardId());
+        broadcastEvent(figureDeleted.boardId(), figureDeleted);
     }
 
     @Subscribe
     public void whenNoteMoved(NoteMoved noteMoved) {
-        sendMessage(noteMoved.boardId());
+        broadcastEvent(noteMoved.boardId(), noteMoved);
     }
 
     @Subscribe
     public void whenNoteColorChanged(NoteColorChanged noteColorChanged) {
-        sendMessage(noteColorChanged.boardId());
+        broadcastEvent(noteColorChanged.boardId(), noteColorChanged);
     }
 
     @Subscribe
     public void whenNoteResized(NoteResized noteResized) {
-        sendMessage(noteResized.boardId());
+        broadcastEvent(noteResized.boardId(), noteResized);
     }
 
     @Subscribe
     public void whenNoteTextEdited(NoteTextEdited noteTextEdited) {
-        sendMessage(noteTextEdited.boardId());
+        broadcastEvent(noteTextEdited.boardId(), noteTextEdited);
     }
 
-    private BoardContentViewModel getBoardContent(String boardId) {
-        GetBoardContentInput getBoardContentInput = (GetBoardContentInput) getBoardContentUseCase;
-        GetBoardContentPresenter getBoardContentOutput = new GetBoardContentPresenter();
-
-        getBoardContentInput.setBoardId(boardId);
-
-        getBoardContentUseCase.execute(getBoardContentInput, getBoardContentOutput);
-
-        return getBoardContentOutput.buildViewModel();
+    @Subscribe
+    public void whenCursorCreated(CursorCreated cursorCreated) {
+        broadcastEvent(cursorCreated.boardId(), cursorCreated);
     }
 
-    private JSONObject createMessageJSON(List<FigureDto> figureDtos) throws JSONException, JsonProcessingException {
-        JSONObject messageJSON = new JSONObject();
-        messageJSON.put("type", MessageType.BOARD_CONTENT);
-        JSONArray figureDtosJSONArray = new JSONArray();
-        ObjectMapper objectMapper = new ObjectMapper();
-        for (FigureDto figureDto: figureDtos) {
-            figureDtosJSONArray.put(new JSONObject(objectMapper.writeValueAsString(figureDto)));
+    @Subscribe
+    public void whenCursorMoved(CursorMoved cursorMoved) {
+        broadcastEvent(cursorMoved.boardId(), cursorMoved);
+    }
+
+    @Subscribe
+    public void whenCursorDelete(CursorDeleted CursorDeleted) {
+        broadcastEvent(CursorDeleted.boardId(), CursorDeleted);
+    }
+
+    private void broadcastEvent(String boardId, DomainEvent domainEvent) {
+        Board board = boardRepository.findById(boardId).orElse(null);
+        if (null == board) {
+            return;
         }
-        messageJSON.put("figures", figureDtosJSONArray);
-        return messageJSON;
-    }
 
-    private void sendMessage(String boardId) {
-        try {
-            BoardContentViewModel boardContentViewModel = getBoardContent(boardId);
-            JSONObject messageJSON = createMessageJSON(boardContentViewModel.getFigureDtos());
-            webSocketBroadcaster.sendMessageToAllUser(boardId, messageJSON.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        List<BoardSession> boardSessions = board.getBoardSessions();
+        boardSessions.forEach(boardSession -> {
+            boardSessionBroadcaster.broadcast(boardSession.boardSessionId(), domainEvent);
+        });
     }
 }

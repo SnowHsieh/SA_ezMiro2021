@@ -20,7 +20,7 @@ public class ChangeNoteColorUseCaseTest extends AbstractTest {
         ChangeNoteColorInput changeNoteColorInput = changeNoteColorUseCase.newInput();
         CqrsCommandPresenter changeNoteColorOutput = CqrsCommandPresenter.newInstance();
 
-        String noteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, defaultColor);
+        String noteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
         String newColor = "#000000";
 
         changeNoteColorInput.setFigureId(noteId);

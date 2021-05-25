@@ -50,7 +50,8 @@ public class PostNoteController {
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
         input.setBoardId(boardId);
-        input.setLeftTopPosition(new Point(leftTopPositionX, leftTopPositionY));
+        input.setLeftTopPositionX(leftTopPositionX);
+        input.setLeftTopPositionY(leftTopPositionY);
         input.setHeight(height);
         input.setWidth(width);
         input.setColor(color);

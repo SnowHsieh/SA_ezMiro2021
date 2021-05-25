@@ -14,7 +14,7 @@ public abstract class Figure extends AggregateRoot<String> {
         this.boardId = boardId;
         this.figureType = figureType;
 
-        addDomainEvent(new FigureCreated(figureId, boardId, figureType));
+//        addDomainEvent(new FigureCreated(figureId, boardId, figureType));
     }
 
     public void markAsRemoved() {

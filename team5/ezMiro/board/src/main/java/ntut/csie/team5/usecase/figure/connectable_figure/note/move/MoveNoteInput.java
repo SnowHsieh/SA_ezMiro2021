@@ -10,7 +10,11 @@ public interface MoveNoteInput extends Input {
 
     void setFigureId(String figureId);
 
-    Point getLeftTopPosition();
+    int getLeftTopPositionX();
 
-    void setLeftTopPosition(Point leftTopPosition);
+    void setLeftTopPositionX(int leftTopPositionX);
+
+    int getLeftTopPositionY();
+
+    void setLeftTopPositionY(int leftTopPositionY);
 }

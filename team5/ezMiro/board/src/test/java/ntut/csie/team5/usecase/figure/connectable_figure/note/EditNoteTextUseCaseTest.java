@@ -26,7 +26,7 @@ public class EditNoteTextUseCaseTest extends AbstractTest {
         EditNoteTextInput editNoteTextInput = editNoteTextUseCase.newInput();
         CqrsCommandPresenter editNoteTextOutput = CqrsCommandPresenter.newInstance();
 
-        String noteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, defaultColor);
+        String noteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
         String newText = "hi";
 
         editNoteTextInput.setFigureId(noteId);

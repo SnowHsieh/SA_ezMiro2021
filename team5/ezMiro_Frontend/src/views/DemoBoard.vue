@@ -45,6 +45,7 @@ export default {
         return {
             boardId: '',
             canvas: null,
+            figures: {},
             activeObject: null,
             activeTextBox: null,
             isOverText: false,
@@ -52,7 +53,7 @@ export default {
             isActive: false,
             webSocket: null,
             user: null,
-            users: []
+            users: {}
         }
     },
     async mounted () {
@@ -78,12 +79,120 @@ export default {
         }
         this.webSocket.onmessage = async (e) => {
             const data = await JSON.parse(e.data)
-            if (data.type === 'CURSOR') {
-                this.users = data.cursors
-            } else if (data.type === 'BOARD_CONTENT') {
-                this.drawNotes(data.figures)
-                console.log(data)
+            if (this.user.name === data.userId) {
+                return;
             }
+            // console.log(data)
+            if (data.type === 'CursorCreated') {
+                this.users[data.userId] = {
+                    name: data.userId,
+                    x: 100,
+                    y: 100
+                }
+            } else if (data.type === 'CursorMoved') {
+                let user = this.users[data.userId]
+
+                if (user === undefined) {
+                    this.users[data.userId] = {
+                        name: data.userId,
+                        x: 100,
+                        y: 100
+                    }
+                    user = this.users[data.userId]
+                }
+
+                user.x = data.positionX
+                user.y = data.positionY
+            } else if (data.type === 'CursorDeleted') {
+                delete this.users[data.userId]
+            } else if (data.type === 'NotePosted') {
+                if(this.activeObject !== null && this.activeObject.figureId === data.figureId)
+                    return
+                
+                data.text = ''
+                this.drawNote(data);
+                this.canvas.renderAll()
+            } else if (data.type === 'NoteMoved') {
+                if(this.activeObject !== null && this.activeObject.figureId === data.figureId)
+                    return
+                
+                let note = this.figures[data.figureId]
+
+                if (note === undefined)
+                    return
+
+                note.set({
+                    left: data.newLeftTopPositionY,
+                    top: data.newLeftTopPositionX
+                })
+                
+                this.canvas.renderAll()
+            } else if (data.type === 'NoteColorChanged') {
+                if(this.activeObject !== null && this.activeObject.figureId === data.figureId)
+                    return
+                
+                let note = this.figures[data.figureId]
+
+                if (note === undefined)
+                    return
+
+                note.item(0).set({
+                    'fill': data.newColor,
+                    'stroke': data.newColor
+                })
+
+                this.canvas.renderAll()
+            } else if (data.type === 'NoteResized') {
+                if(this.activeObject !== null && this.activeObject.figureId === data.figureId)
+                    return
+                
+                let note = this.figures[data.figureId]
+
+                if (note === undefined)
+                    return
+
+                note.set({
+                    height: data.newHeight,
+                    width: data.newWidth
+                })
+
+                note.item(0).set({
+                    height: data.newHeight,
+                    width: data.newWidth
+                })
+
+                this.setTextBoxFontSize(note.item(1), note)
+
+                this.canvas.renderAll()
+            } else if (data.type === 'NoteTextEdited') {
+                if(this.activeObject !== null && this.activeObject.figureId === data.figureId)
+                    return
+                
+                let note = this.figures[data.figureId]
+
+                if (note === undefined)
+                    return
+                
+                note.item(1).set({
+                    text: data.newText
+                })
+
+                this.setTextBoxFontSize(note.item(1), note)
+
+                this.canvas.renderAll()
+            } else if (data.type === 'FigureDeleted') {
+                let figure = this.canvas.getObjects().find(o => {
+                    return o.figureId === data.figureId
+                })
+                this.canvas.remove(figure)
+                delete this.figures[data.figureId]
+            }
+            // if (data.type === 'CURSOR') {
+            //     this.users = data.cursors
+            // } else if (data.type === 'BOARD_CONTENT') {
+            //     this.drawNotes(data.figures)
+            //     console.log(data)
+            // }
             // const users = await JSON.parse(e.data)
             // console.log(users)
             // this.users = users
@@ -144,39 +253,49 @@ export default {
             }
         },
         drawNotes (notes) {
-            this.canvas.clear()
-            notes.forEach(note => {
-                const parseNote = this.parseNote(note)
-                const rect = new fabric.Rect({
-                    height: parseNote.height,
-                    width: parseNote.width,
-                    stroke: parseNote.stroke,
-                    fill: parseNote.fill,
-                    originX: 'center',
-                    originY: 'center'
+            if (notes !== null) {
+                this.canvas.clear()
+                notes.forEach(note => {
+                    this.drawNote(note)
                 })
-
-                const text = new fabric.Textbox(parseNote.text, {
-                    originX: 'center',
-                    originY: 'center'
-                })
-
-                const group = new fabric.Group([ rect, text ], {
-                    left: parseNote.left,
-                    top: parseNote.top,
-                    height: parseNote.height,
-                    width: parseNote.width,
-                    selectable: true,
-                    evented: true,
-                })
-                group.figureId = note.figureId
-
-                this.addNoteSettings(group)
-                this.addTextBoxSettings(text, group)
-
-                this.canvas.add(group)
+                this.canvas.renderAll()
+            }
+        },
+        drawNote (note) {
+            console.log(note)
+            const parseNote = this.parseNote(note)
+            console.log(parseNote)
+            const rect = new fabric.Rect({
+                height: parseNote.height,
+                width: parseNote.width,
+                stroke: parseNote.stroke,
+                fill: parseNote.fill,
+                originX: 'center',
+                originY: 'center'
             })
-            this.canvas.renderAll()
+
+            const text = new fabric.Textbox(parseNote.text, {
+                originX: 'center',
+                originY: 'center'
+            })
+
+            const group = new fabric.Group([ rect, text ], {
+                left: parseNote.left,
+                top: parseNote.top,
+                height: parseNote.height,
+                width: parseNote.width,
+                selectable: true,
+                evented: true,
+            })
+            group.figureId = note.figureId
+
+            this.addNoteSettings(group)
+            this.addTextBoxSettings(text, group)
+
+            this.canvas.add(group)
+            console.log(this.canvas)
+
+            this.figures[group.figureId] = group
         },
         async createNotes (color) {
             await this.$api.note.postNote(this.boardId, 200, 200, 100, 100, color)
