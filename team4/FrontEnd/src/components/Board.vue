@@ -42,12 +42,19 @@
 
 <script>
 import { fabric } from 'fabric'
+import { getBoardContentApi } from '@/apis/boardApi'
+import {
+  createStickyNoteApi,
+  changeStickyNoteContentApi,
+  changeStickyNoteColorApi,
+  resizeStickyNoteApi, moveStickyNoteApi, deleteStickyNoteApi
+} from '@/apis/stickyNoteApi'
 import uuidGenerator from '../utils/uuidGenerator.js'
 import axios from 'axios'
 export default {
   data () {
     return {
-      boardId: 'c1632263-0ae9-4864-9c8f-fa119386abfb',
+      boardId: '9b616d54-fa2c-4d82-ace0-e7eb505c248c',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -64,7 +71,7 @@ export default {
       socketLoaded: null,
       userCursorList: [],
       myUserId: '7398cd26-da85-4c05-b04b-122e73888dfb',
-      hostIp: '140.124.181.2',
+      hostIp: '127.0.0.1',
       mouseData: null,
       updateCursorFlag: true,
       updateFigureFlag: true
@@ -77,7 +84,7 @@ export default {
     this.websocketclose()
   },
   async mounted () {
-    this.boardContent = this.getBoardContent()
+    this.getBoardContent()
     this.initCanvas()
     this.canvas.renderAll()
     this.contextMenu = document.getElementById('contextMenu')
@@ -107,7 +114,7 @@ export default {
     },
     async getBoardContent () {
       try {
-        const res = await axios.get('http://' + this.hostIp + ':8081/boards/' + this.boardId + '/content')
+        const res = await getBoardContentApi(this.boardId)
         this.drawStickyNote(res.data.figureDtos)
       } catch (err) {
         console.log(err)
@@ -115,36 +122,15 @@ export default {
     },
     async createStickyNote () {
       try {
-        const res = await axios.post('http://' + this.hostIp + ':8081/board/' + this.boardId + '/createStickyNote',
-          {
-            content: '',
-            position: {
-              x: 100,
-              y: 100
-            },
-            style: {
-              fontSize: 20,
-              shape: 2,
-              width: 150.0,
-              height: 150.0,
-              color: '#ffa150'
-            }
-          }
-        )
+        const res = await createStickyNoteApi(this.boardId)
         console.log(res.data.message)
       } catch (err) {
         console.log(err)
       }
-      // this.refreshCanvas()
     },
     async changeStickyNoteContent (figure) {
       try {
-        const res = await axios.post('http://' + this.hostIp + ':8081/board/' + this.boardId + '/changeStickyNoteContent',
-          {
-            figureId: figure.get('id'),
-            content: figure.item(1).get('text')
-          }
-        )
+        const res = await changeStickyNoteContentApi(this.boardId, figure)
         console.log(res.data.message)
       } catch (err) {
         console.log(err)
@@ -153,12 +139,7 @@ export default {
     },
     async changeStickyNoteColor (figure) {
       try {
-        const res = await axios.post('http://' + this.hostIp + ':8081/board/' + this.boardId + '/changeStickyNoteColor',
-          {
-            figureId: figure.get('id'),
-            color: figure.item(0).get('fill')
-          }
-        )
+        const res = await changeStickyNoteColorApi(this.boardId, figure)
         console.log(res.data.message)
       } catch (err) {
         console.log(err)
@@ -167,13 +148,7 @@ export default {
     },
     async resizeStickyNote (figure) {
       try {
-        const res = await axios.post('http://' + this.hostIp + ':8081/board/' + this.boardId + '/resizeStickyNote',
-          {
-            figureId: figure.get('id'),
-            width: parseFloat(figure.width) * parseFloat(figure.get('scaleX')),
-            height: parseFloat(figure.height) * parseFloat(figure.get('scaleY'))
-          }
-        )
+        const res = await resizeStickyNoteApi(this.boardId, figure)
         console.log(res.data.message)
       } catch (err) {
         console.log(err)
@@ -182,13 +157,7 @@ export default {
     },
     async moveStickyNote (figure) {
       try {
-        const res = await axios.post('http://' + this.hostIp + ':8081/board/' + this.boardId + '/moveStickyNote',
-          {
-            figureId: figure.get('id'),
-            top: figure.get('top'),
-            left: figure.get('left')
-          }
-        )
+        const res = await moveStickyNoteApi(this.boardId, figure)
         console.log(res.data.message)
       } catch (err) {
         console.log(err)
@@ -197,11 +166,7 @@ export default {
     },
     async deleteStickyNote (figure) {
       try {
-        const res = await axios.post('http://' + this.hostIp + ':8081/board/' + this.boardId + '/deleteStickyNote',
-          {
-            figureId: figure.get('id')
-          }
-        )
+        const res = await deleteStickyNoteApi(this.boardId, figure)
         this.canvas.remove(figure)
         console.log(res.data.message)
       } catch (err) {
@@ -346,7 +311,7 @@ export default {
           'object:scaled': function (e) {
             if (e.target.type === 'group') {
               _this.resizeStickyNote(e.target)
-              _this.moveStickyNote(e.target)
+              // _this.moveStickyNote(e.target)
             }
           },
           'object:moving': function (e) {
