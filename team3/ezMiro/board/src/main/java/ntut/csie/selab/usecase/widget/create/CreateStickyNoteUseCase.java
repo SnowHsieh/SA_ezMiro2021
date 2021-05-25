@@ -2,12 +2,10 @@ package ntut.csie.selab.usecase.widget.create;
 
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
-import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 
 
-import java.util.Date;
 import java.util.UUID;
 
 public class CreateStickyNoteUseCase {
@@ -23,7 +21,7 @@ public class CreateStickyNoteUseCase {
         String stickyNoteId = UUID.randomUUID().toString();
         Widget widget = new StickyNote(stickyNoteId, input.getBoardId(), input.getCoordinate());
 
-        widgetRepository.add(widget);
+        widgetRepository.save(widget);
         domainEventBus.postAll(widget);
 
         output.setStickyNoteId(widget.getId());

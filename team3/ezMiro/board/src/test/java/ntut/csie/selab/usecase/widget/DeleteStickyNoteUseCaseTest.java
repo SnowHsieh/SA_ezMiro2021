@@ -1,6 +1,7 @@
 package ntut.csie.selab.usecase.widget;
 
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.board.CommittedWidget;
@@ -8,6 +9,7 @@ import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
+import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.widget.delete.DeleteStickyNoteInput;
@@ -15,17 +17,30 @@ import ntut.csie.selab.usecase.widget.delete.DeleteStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.delete.DeleteStickyNoteUseCase;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
+@ContextConfiguration(classes= JpaApplicationTest.class)
+@Rollback(false)
 public class DeleteStickyNoteUseCaseTest {
+
+    @Autowired
+    private WidgetRepositoryPeer widgetRepositoryPeer;
 
     @Test
     public void delete_sticky_not_should_successd() {
         // Arrange
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl();
+        WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         String stickyNoteId = "1";
         Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
         Widget stickyNote = new StickyNote(stickyNoteId, "0", stickyNoteCoordinate);
-        widgetRepository.add(stickyNote);
+        widgetRepository.save(stickyNote);
 
         DomainEventBus domainEventBus = new DomainEventBus();
         DeleteStickyNoteUseCase deleteStickyNoteUseCase = new DeleteStickyNoteUseCase(widgetRepository, domainEventBus);
@@ -50,10 +65,10 @@ public class DeleteStickyNoteUseCaseTest {
 
         boardRepository.add(createBoardHasStickNoteWith(boardId, stickyNoteId));
 
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl();
+        WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
         Widget stickyNote = new StickyNote(stickyNoteId, "boardId", stickyNoteCoordinate);
-        widgetRepository.add(stickyNote);
+        widgetRepository.save(stickyNote);
         stickyNote.clearDomainEvents();
 
         DomainEventBus domainEventBus = new DomainEventBus();
