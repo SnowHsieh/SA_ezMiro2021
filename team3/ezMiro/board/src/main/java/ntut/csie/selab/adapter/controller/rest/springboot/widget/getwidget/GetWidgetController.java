@@ -1,11 +1,8 @@
 package ntut.csie.selab.adapter.controller.rest.springboot.widget.getwidget;
 
-import ntut.csie.selab.adapter.presenter.board.getcontent.BoardContentViewModel;
 import ntut.csie.selab.adapter.presenter.widget.getwidget.WidgetViewModel;
-import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentInput;
-import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentOutput;
 import ntut.csie.selab.usecase.widget.WidgetDto;
-import ntut.csie.selab.usecase.widget.WidgetMapper;
+import ntut.csie.selab.usecase.widget.WidgetDtoMapper;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetInput;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetOutput;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetUseCase;
@@ -14,9 +11,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @CrossOrigin( origins = "${CORS_URLS}")
@@ -34,11 +28,11 @@ public class GetWidgetController {
         GetWidgetOutput output = new GetWidgetOutput();
         input.setWidgetId(widgetId);
 
-        WidgetMapper widgetMapper = new WidgetMapper();
+        WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
         WidgetDto widgetDto;
 
         getWidgetUseCase.execute(input, output);
-        widgetDto = widgetMapper.domainToDto(output.getWidget());
+        widgetDto = widgetDtoMapper.domainToDto(output.getWidget());
 
         return new WidgetViewModel(widgetDto);
     }

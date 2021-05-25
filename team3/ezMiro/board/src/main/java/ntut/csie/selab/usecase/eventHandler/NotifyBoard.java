@@ -28,7 +28,7 @@ public class NotifyBoard {
 
         if (board.isPresent()) {
             board.get().commitWidgetCreation(widgetCreated.getBoardId(), widgetCreated.getWidgetId());
-            boardRepository.add(board.get());
+            boardRepository.save(board.get());
             domainEventBus.post(new WidgetCreationCommitted(new Date(), widgetCreated.getBoardId(), widgetCreated.getWidgetId()));
         } else {
             throw new RuntimeException("Board not found, board id = " + widgetCreated.getBoardId());
@@ -41,7 +41,7 @@ public class NotifyBoard {
 
         if (board.isPresent()) {
             board.get().commitWidgetDeletion(widgetDeleted.getBoardId(), widgetDeleted.getWidgetId());
-            boardRepository.add(board.get());
+            boardRepository.save(board.get());
             domainEventBus.post(new WidgetDeletionCommitted(new Date()));
         } else {
             throw new RuntimeException("Board not found, board id = " + widgetDeleted.getBoardId());

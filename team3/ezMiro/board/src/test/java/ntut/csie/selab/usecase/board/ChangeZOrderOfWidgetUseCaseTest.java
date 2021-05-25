@@ -1,6 +1,6 @@
 package ntut.csie.selab.usecase.board;
 
-import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
+import ntut.csie.selab.adapter.board.BoardRepositoryInMemoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
 import ntut.csie.selab.domain.MockFactory;
@@ -32,10 +32,10 @@ public class ChangeZOrderOfWidgetUseCaseTest {
     @Test
     public void change_z_order_of_sticky_note_should_succeed() {
         // Arrange
-        BoardRepository boardRepository = new BoardRepositoryImpl();
+        BoardRepository boardRepository = new BoardRepositoryInMemoryImpl();
         String boardId = "boardId";
         Board board = MockFactory.createBoard(boardId);
-        boardRepository.add(board);
+        boardRepository.save(board);
 
         WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         String widgetId1 = "widgetId1";
@@ -79,10 +79,10 @@ public class ChangeZOrderOfWidgetUseCaseTest {
     @Test
     public void change_z_order_of_sticky_note_to_neighbor_should_succeed() {
         // Arrange
-        BoardRepository boardRepository = new BoardRepositoryImpl();
+        BoardRepository boardRepository = new BoardRepositoryInMemoryImpl();
         String boardId = "boardId";
         Board board = MockFactory.createBoard(boardId);
-        boardRepository.add(board);
+        boardRepository.save(board);
 
         WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         String widgetId1 = "widgetId1";
@@ -114,10 +114,10 @@ public class ChangeZOrderOfWidgetUseCaseTest {
     @Test
     public void change_z_order_of_sticky_note_revert_should_succeed() {
         // Arrange
-        BoardRepository boardRepository = new BoardRepositoryImpl();
+        BoardRepository boardRepository = new BoardRepositoryInMemoryImpl();
         String boardId = "boardId";
         Board board = MockFactory.createBoard(boardId);
-        boardRepository.add(board);
+        boardRepository.save(board);
 
         WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         String widgetId1 = "widgetId1";
@@ -147,10 +147,10 @@ public class ChangeZOrderOfWidgetUseCaseTest {
     @Test
     public void change_z_order_of_sticky_note_to_neighbor_revert_should_succeed() {
         // Arrange
-        BoardRepository boardRepository = new BoardRepositoryImpl();
+        BoardRepository boardRepository = new BoardRepositoryInMemoryImpl();
         String boardId = "boardId";
         Board board = MockFactory.createBoard(boardId);
-        boardRepository.add(board);
+        boardRepository.save(board);
 
         WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         String widgetId1 = "widgetId1";

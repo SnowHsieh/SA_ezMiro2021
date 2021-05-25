@@ -6,7 +6,7 @@ import ntut.csie.selab.entity.model.widget.Widget;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WidgetMapper {
+public class WidgetDtoMapper {
 
     public WidgetDto domainToDto(Widget widget) {
         Coordinate coordinate = widget.getCoordinate();

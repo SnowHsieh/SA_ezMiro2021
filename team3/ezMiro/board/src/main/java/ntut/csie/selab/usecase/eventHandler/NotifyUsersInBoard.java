@@ -2,7 +2,6 @@ package ntut.csie.selab.usecase.eventHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.eventbus.Subscribe;
-import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.board.event.WidgetCreationCommitted;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
@@ -10,10 +9,9 @@ import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.websocket.WebSocket;
 import ntut.csie.selab.usecase.widget.WidgetDto;
-import ntut.csie.selab.usecase.widget.WidgetMapper;
+import ntut.csie.selab.usecase.widget.WidgetDtoMapper;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
@@ -39,8 +37,8 @@ public class NotifyUsersInBoard {
 
         if (widget.isPresent()) {
             Widget selectedWidget = widget.get();
-            WidgetMapper widgetMapper = new WidgetMapper();
-            WidgetDto widgetDto = widgetMapper.domainToDto(selectedWidget);
+            WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
+            WidgetDto widgetDto = widgetDtoMapper.domainToDto(selectedWidget);
 
             JSONObject message = new JSONObject();
 

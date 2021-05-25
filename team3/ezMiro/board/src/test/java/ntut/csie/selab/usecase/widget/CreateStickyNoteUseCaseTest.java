@@ -1,6 +1,6 @@
 package ntut.csie.selab.usecase.widget;
 
-import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
+import ntut.csie.selab.adapter.board.BoardRepositoryInMemoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
 import ntut.csie.selab.entity.model.board.Board;
@@ -27,10 +27,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.websocket.Session;
 import java.awt.*;
 
-//@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-//@ExtendWith(SpringExtension.class)
-//@TestPropertySource(locations = "classpath:test.properties")
-//@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes= JpaApplicationTest.class)
@@ -66,11 +62,11 @@ public class CreateStickyNoteUseCaseTest {
     @Test
     public void create_sticky_note_in_board_should_notify_board_successfully() {
         // Arrange
-        BoardRepository boardRepository = new BoardRepositoryImpl();
+        BoardRepository boardRepository = new BoardRepositoryInMemoryImpl();
         WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         WebSocket webSocket = new FakeBoardWebSocket();
         String boardId = "1";
-        boardRepository.add(createSimpleBoardWith(boardId));
+        boardRepository.save(createSimpleBoardWith(boardId));
 
         DomainEventBus domainEventBus = new DomainEventBus();
         NotifyBoard notifyBoard = new NotifyBoard(boardRepository, domainEventBus);

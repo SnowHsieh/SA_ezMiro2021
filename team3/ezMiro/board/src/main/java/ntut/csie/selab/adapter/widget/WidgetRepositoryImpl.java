@@ -1,7 +1,6 @@
 package ntut.csie.selab.adapter.widget;
 
-import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetData;
-import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetMapper;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetDataMapper;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
@@ -23,7 +22,7 @@ public class WidgetRepositoryImpl implements WidgetRepository {
 
     @Override
     public void save(Widget widget) {
-        peer.save(WidgetMapper.domainToData(widget));
+        peer.save(WidgetDataMapper.domainToData(widget));
         widgets.add(widget);
     }
 

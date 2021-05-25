@@ -7,7 +7,7 @@ import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentInput;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentOutput;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
 import ntut.csie.selab.usecase.widget.WidgetDto;
-import ntut.csie.selab.usecase.widget.WidgetMapper;
+import ntut.csie.selab.usecase.widget.WidgetDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,12 +29,12 @@ public class GetBoardContentController {
         GetBoardContentOutput output = new GetBoardContentOutput();
         List<WidgetDto> widgetDtos;
         List<CommittedWidgetDto> committedWidgetDtos;
-        WidgetMapper widgetMapper = new WidgetMapper();
+        WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
         CommittedWidgetMapper committedWidgetMapper = new CommittedWidgetMapper();
         input.setBoardId(boardId);
 
         getBoardContentUseCase.execute(input, output);
-        widgetDtos = widgetMapper.domainToDto(output.getWidgets());
+        widgetDtos = widgetDtoMapper.domainToDto(output.getWidgets());
         committedWidgetDtos = committedWidgetMapper.domainToDto(output.getCommittedWidgets());
         return new BoardContentViewModel(output.getBoardId(), widgetDtos, committedWidgetDtos);
     }

@@ -1,6 +1,7 @@
 package ntut.csie.selab.application.springboot.web.config;
 
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
 import ntut.csie.selab.model.DomainEventBus;
@@ -17,13 +18,20 @@ public class RepositoryInjection {
 
     private WidgetRepositoryPeer widgetRepositoryPeer;
 
+    private BoardRepositoryPeer boardRepositoryPeer;
+
     @Autowired
     public void setWidgetRepositoryPeer(WidgetRepositoryPeer widgetRepositoryPeer) {
         this.widgetRepositoryPeer = widgetRepositoryPeer;
     }
 
+    @Autowired
+    public void setBoardRepositoryPeer(BoardRepositoryPeer boardRepositoryPeer) {
+        this.boardRepositoryPeer = boardRepositoryPeer;
+    }
+
     @Bean(name="boardRepository")
-    public BoardRepository boardRepository() { return new BoardRepositoryImpl(); }
+    public BoardRepository boardRepository() { return new BoardRepositoryImpl(boardRepositoryPeer); }
 
     @Bean(name="widgetRepository")
     public WidgetRepository widgetRepository() { return new WidgetRepositoryImpl(widgetRepositoryPeer); }

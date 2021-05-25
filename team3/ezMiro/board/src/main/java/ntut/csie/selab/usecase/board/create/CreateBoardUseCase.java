@@ -22,7 +22,7 @@ public class CreateBoardUseCase {
         String boardId = UUID.randomUUID().toString();
         Board board = new Board(boardId, input.getTeamId(), input.getBoardName());
 
-        boardRepository.add(board);
+        boardRepository.save(board);
         domainEventBus.postAll(board);
 
         output.setBoardId(board.getId());

@@ -1,6 +1,6 @@
 package ntut.csie.selab.usecase.widget;
 
-import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
+import ntut.csie.selab.adapter.board.BoardRepositoryInMemoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
 import ntut.csie.selab.entity.model.board.Board;
@@ -59,11 +59,11 @@ public class DeleteStickyNoteUseCaseTest {
     @Test
     public void delete_sticky_note_in_board_should_notify_board_successfully() {
         // Arrange
-        BoardRepository boardRepository = new BoardRepositoryImpl();
+        BoardRepository boardRepository = new BoardRepositoryInMemoryImpl();
         String boardId = "boardId";
         String stickyNoteId = "stickyNoteId";
 
-        boardRepository.add(createBoardHasStickNoteWith(boardId, stickyNoteId));
+        boardRepository.save(createBoardHasStickNoteWith(boardId, stickyNoteId));
 
         WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
