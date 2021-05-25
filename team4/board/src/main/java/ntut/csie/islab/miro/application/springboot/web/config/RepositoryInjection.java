@@ -8,6 +8,7 @@ import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryPeer
 import ntut.csie.islab.miro.usecase.textFigure.StickyNoteRepository;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -18,6 +19,17 @@ public class RepositoryInjection {
 
     private BoardRepositoryPeer boardRepositoryPeer ;
     private StickyNoteRepositoryPeer stickyNoteRepositoryPeer ;
+
+    @Autowired
+    public void setBoardRepositoryPeer(BoardRepositoryPeer boardRepositoryPeer){
+        this.boardRepositoryPeer = boardRepositoryPeer;
+    }
+
+    @Autowired
+    public void setStickyNoteRepositoryPeer(StickyNoteRepositoryPeer stickyNoteRepositoryPeer){
+        this.stickyNoteRepositoryPeer = stickyNoteRepositoryPeer;
+    }
+
 
     @Bean(name = "boardRepository")
     public BoardRepository boardRepository() {

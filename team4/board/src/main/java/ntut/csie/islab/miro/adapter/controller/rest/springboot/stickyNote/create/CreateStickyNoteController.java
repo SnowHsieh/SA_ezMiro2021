@@ -10,10 +10,11 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
-
 @RestController
 @CrossOrigin
 public class CreateStickyNoteController {
