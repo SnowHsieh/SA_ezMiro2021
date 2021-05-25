@@ -1,6 +1,5 @@
 package ntut.csie.selab.usecase.widget.move;
 
-import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.widget.WidgetRepository;

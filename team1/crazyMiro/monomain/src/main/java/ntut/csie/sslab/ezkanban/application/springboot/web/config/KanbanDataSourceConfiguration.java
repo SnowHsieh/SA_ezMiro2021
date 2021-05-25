@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "ntut.csie.sslab.kanban",
+@EnableJpaRepositories(basePackages = "ntut.csie.sslab.miro",
         entityManagerFactoryRef = "kanbanEntityManagerFactory",
         transactionManagerRef= "kanbanTransactionManager"
 )

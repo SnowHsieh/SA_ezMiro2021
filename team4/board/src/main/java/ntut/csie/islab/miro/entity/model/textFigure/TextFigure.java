@@ -1,6 +1,7 @@
 package ntut.csie.islab.miro.entity.model.textFigure;
 
 
+import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 
 import java.util.UUID;
@@ -60,6 +61,9 @@ public abstract class TextFigure extends AggregateRoot<UUID> {
 
     public abstract void changeContent(String newContent);
 
+    public abstract void changePosition(Position newPosition);
 
+    public abstract void changeColor(String newColor);
 
+    public abstract void resize(Double newWidth, Double newHeight);
 }

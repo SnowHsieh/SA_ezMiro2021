@@ -10,6 +10,7 @@
         <!--suppress MavenPropertyInParent -->
         <version>1.0.0-SNAPSHOT</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>board</artifactId>
@@ -22,7 +23,7 @@
     </properties>
 
     <build>
-        <finalName>kanban</finalName>
+        <finalName>miro</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -64,7 +65,7 @@
                 <executions>
                     <execution>
                         <configuration>
-                            <mainClass>ntut.csie.sslab.kanban.application.springboot.web.EzKanbanWebMain</mainClass>
+                            <mainClass>ntut.csie.sslab.miro.application.springboot.web.EzKanbanWebMain</mainClass>
                         </configuration>
                     </execution>
                 </executions>
@@ -313,5 +314,12 @@
         <!--            <version>1.6.0</version>-->
         <!--            <scope>test</scope>-->
         <!--        </dependency>-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <version>2.3.2.RELEASE</version>
+        </dependency>
+
     </dependencies>
 </project>

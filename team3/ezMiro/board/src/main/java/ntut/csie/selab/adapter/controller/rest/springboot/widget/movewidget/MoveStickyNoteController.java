@@ -1,6 +1,8 @@
 package ntut.csie.selab.adapter.controller.rest.springboot.widget.movewidget;
 
+import ntut.csie.selab.adapter.websocket.BoardWebSocketImpl;
 import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.usecase.websocket.WebSocket;
 import ntut.csie.selab.usecase.widget.move.MoveStickyNoteInput;
 import ntut.csie.selab.usecase.widget.move.MoveStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.move.MoveStickyNoteUseCase;
@@ -18,14 +20,16 @@ import java.util.List;
 @CrossOrigin(origins = "${CORS_URLS}")
 public class MoveStickyNoteController {
     private MoveStickyNoteUseCase moveStickyNoteUseCase;
+    private WebSocket boardWebSocket;
 
     @Autowired
-    public MoveStickyNoteController(MoveStickyNoteUseCase moveStickyNoteUseCase) {
+    public MoveStickyNoteController(MoveStickyNoteUseCase moveStickyNoteUseCase, WebSocket boardWebSocket) {
         this.moveStickyNoteUseCase = moveStickyNoteUseCase;
+        this.boardWebSocket = boardWebSocket;
     }
 
     @PutMapping(path = "/${EZ_MIRO_PREFIX}/boards/{boardId}/widgets/sticky-notes/move", consumes = "application/json", produces = "application/json")
-    public List<String> moveStickyNote(@RequestBody String stickyNoteInfo) {
+    public List<String> moveStickyNote(@PathVariable("boardId") String boardId, @RequestBody String stickyNoteInfo) {
         MoveStickyNoteInput input = new MoveStickyNoteInput();
         MoveStickyNoteOutput output = new MoveStickyNoteOutput();
         List<String> stickyNoteIds = new ArrayList<>();
@@ -45,11 +49,35 @@ public class MoveStickyNoteController {
                 input.setCoordinate(new Coordinate(topLeftX, topLeftY, bottomRightX, bottomRightY));
                 moveStickyNoteUseCase.execute(input, output);
                 stickyNoteIds.add(output.getStickyNoteId());
+
+                boardWebSocket.sendMessageForAllUsersIn(boardId, convertWidgetToMessage(output.getStickyNoteId(), output.getCoordinate()));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return stickyNoteIds;
+    }
+
+    private JSONObject convertWidgetToMessage(String stickyNoteId, Coordinate coordinate) {
+        JSONArray parsedWidgets = new JSONArray();
+        JSONObject parsedWidget = new JSONObject();
+        try {
+            parsedWidget.put("widgetId", stickyNoteId);
+            parsedWidget.put("topLeftX", coordinate.getTopLeft().x);
+            parsedWidget.put("topLeftY", coordinate.getTopLeft().y);
+            parsedWidget.put("bottomRightX", coordinate.getBottomRight().x);
+            parsedWidget.put("bottomRightY", coordinate.getBottomRight().y);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        parsedWidgets.put(parsedWidget);
+
+        JSONObject message = new JSONObject();
+        try {
+            message.put("widgets", parsedWidgets);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return message;
     }
 }

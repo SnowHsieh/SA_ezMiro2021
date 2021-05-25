@@ -62,7 +62,7 @@ public class CreateStickyNoteUseCaseTest {
 
         // Assert
         Assert.assertEquals(1, boardRepository.findById(boardId).get().getWidgetIds().size());
-        Assert.assertEquals(2, domainEventBus.getCount());
+        Assert.assertEquals(3, domainEventBus.getCount());
     }
 
     private Board createSimpleBoardWith(String boardId) {

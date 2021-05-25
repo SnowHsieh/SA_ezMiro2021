@@ -1,8 +1,8 @@
 package ntut.csie.selab.application.springboot.web;
-import ntut.csie.selab.adapter.controller.rest.springboot.board.getcontent.GetBoardContentController;
-import ntut.csie.selab.adapter.websocket.WebSocketController;
+import ntut.csie.selab.adapter.websocket.BoardWebSocketController;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
+import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,6 +20,7 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 public class EzMiroWebMain implements CommandLineRunner {
     private DomainEventBus domainEventBus;
     private NotifyBoard notifyBoard;
+    private NotifyUsersInBoard notifyUsersInBoard;
 
     @Autowired
     public void setDomainEventBus(DomainEventBus domainEventBus) {
@@ -27,12 +28,15 @@ public class EzMiroWebMain implements CommandLineRunner {
     }
 
     @Autowired
-    public void setNotifyBoard(NotifyBoard notifyBoard) { this.notifyBoard = notifyBoard; }
+    public void setNotifyBoard(NotifyBoard notifyBoard, NotifyUsersInBoard notifyUsersInBoard) {
+        this.notifyBoard = notifyBoard;
+        this.notifyUsersInBoard = notifyUsersInBoard;
+    }
 
     public static void main(String[] args) {
         SpringApplication springApplication = new SpringApplication(EzMiroWebMain.class) ;
         ConfigurableApplicationContext configurableApplicationContext = springApplication.run(args);
-        WebSocketController.setApplicationContext(configurableApplicationContext);
+        BoardWebSocketController.setApplicationContext(configurableApplicationContext);
     }
 
     @Override
@@ -40,6 +44,7 @@ public class EzMiroWebMain implements CommandLineRunner {
         System.out.println("EzMiroWebMain run");
 
         domainEventBus.register(notifyBoard);
+        domainEventBus.register(notifyUsersInBoard);
     }
 
     @Bean

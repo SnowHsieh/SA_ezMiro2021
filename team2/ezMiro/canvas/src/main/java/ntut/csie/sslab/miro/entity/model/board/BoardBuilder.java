@@ -6,6 +6,7 @@ public class BoardBuilder {
     private String teamId;
     private String boardId;
     private String boardName;
+    private String boardChannel;
 
     public static BoardBuilder newInstance() { return new BoardBuilder(); }
 
@@ -24,9 +25,14 @@ public class BoardBuilder {
         return this;
     }
 
+    public BoardBuilder boardChannel(String boardChannel) {
+        this.boardChannel = boardChannel;
+        return this;
+    }
+
     public Board build() {
         boardId = UUID.randomUUID().toString();
-        Board board = new Board(teamId, boardId, boardName);
+        Board board = new Board(teamId, boardId, boardName, new BoardChannel(boardChannel));
         return board;
     }
 }

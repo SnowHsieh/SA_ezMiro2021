@@ -47,5 +47,4 @@ public class NotifyBoard {
             throw new RuntimeException("Board not found, board id = " + widgetDeleted.getBoardId());
         }
     }
-
 }

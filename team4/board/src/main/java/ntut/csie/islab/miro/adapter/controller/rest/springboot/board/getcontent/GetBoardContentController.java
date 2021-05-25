@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.adapter.controller.rest.springboot.board.getcontent;
 
-import ntut.csie.islab.miro.adapter.presenter.GetBoardContentPresenter;
+import ntut.csie.islab.miro.adapter.presenter.getContent.GetBoardContentPresenter;
 import ntut.csie.islab.miro.adapter.presenter.getContent.BoardContentViewModel;
 import ntut.csie.islab.miro.usecase.board.GetBoardContentUseCase;
 import ntut.csie.islab.miro.usecase.board.GetBoardContentInput;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(value = "http://localhost:8080")
+@CrossOrigin
 public class GetBoardContentController {
     private GetBoardContentUseCase getBoardContentUseCase;
 

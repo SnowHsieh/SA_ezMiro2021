@@ -1,19 +1,22 @@
 package ntut.csie.sslab.miro.entity.model.board;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
-import ntut.csie.sslab.miro.entity.model.board.event.BoardCreated;
+import ntut.csie.sslab.miro.entity.model.board.event.*;
+
 import java.util.*;
 
 public class Board extends AggregateRoot<String> {
     private String teamId;
     private String boardName;
     private Map<String, CommittedFigure> committedFigures;
+    private BoardChannel boardChannel;
 
-    public Board(String teamId, String boardId, String boardName) {
+    public Board(String teamId, String boardId, String boardName, BoardChannel boardChannel) {
         super(boardId);
         this.teamId = teamId;
         this.boardName = boardName;
         this.committedFigures = new HashMap<>();
+        this.boardChannel = boardChannel;
 
         addDomainEvent(new BoardCreated(teamId, boardId, boardName));
     }
@@ -38,8 +41,13 @@ public class Board extends AggregateRoot<String> {
         return committedFigures;
     }
 
+    public String getBoardChannel() {
+        return boardChannel.getChannel();
+    }
+
     public void commitFigure(String boardId, String noteId, int zOrder) {
         committedFigures.put(noteId, new CommittedFigure(boardId, noteId, zOrder));
+        addDomainEvent(new FigureCommitted(boardId, noteId));
     }
 
     public void commitNoteToFront(String boardId, String noteId) {
@@ -51,6 +59,7 @@ public class Board extends AggregateRoot<String> {
             }
         }
         committedFigures.put(noteId, new CommittedFigure(boardId, noteId, committedFigures.size() - 1));
+        addDomainEvent(new FigureCommittedToFront(boardId, noteId));
     }
 
     public void commitNoteToBack(String boardId, String noteId) {
@@ -62,9 +71,19 @@ public class Board extends AggregateRoot<String> {
             }
         }
         committedFigures.put(noteId, new CommittedFigure(boardId, noteId, 0));
+        addDomainEvent(new FigureCommittedToBack(boardId, noteId));
     }
 
     public void removeNoteFromBoard(String boardId, String noteId) {
         committedFigures.remove(noteId);
+        addDomainEvent(new NoteRemovedFromBoard(boardId, noteId));
+    }
+
+    public void enter(String userId) {
+        addDomainEvent(new BoardEntered(getId(), userId));
+    }
+
+    public void leave(String userId) {
+        addDomainEvent(new BoardLeft(getId(), userId));
     }
 }

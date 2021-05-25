@@ -8,6 +8,8 @@ import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.selab.usecase.board.movecursor.MoveCursorUseCase;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
+import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
+import ntut.csie.selab.usecase.websocket.WebSocket;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import ntut.csie.selab.usecase.widget.create.CreateStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.delete.DeleteStickyNoteUseCase;
@@ -27,10 +29,16 @@ public class UseCaseInjection {
     private BoardRepository boardRepository;
     private WidgetRepository widgetRepository;
     private DomainEventBus eventBus;
+    private WebSocket boardWebSocket;
 
     @Bean(name="createNotifyBoard")
     public NotifyBoard createNotifyBoard() {
         return new NotifyBoard(boardRepository, eventBus);
+    }
+
+    @Bean(name="createNotifyUsersInBoard")
+    public NotifyUsersInBoard createNotifyUsersInBoard() {
+        return new NotifyUsersInBoard(boardRepository, widgetRepository, eventBus, boardWebSocket);
     }
 
     @Bean(name="GetBoardContentUseCase")
@@ -107,4 +115,9 @@ public class UseCaseInjection {
 
     @Autowired
     public void setEventBus(DomainEventBus eventBus) { this.eventBus = eventBus; }
+
+    @Autowired
+    public void setBoardWebSocket(WebSocket boardWebSocket) {
+        this.boardWebSocket = boardWebSocket;
+    }
 }

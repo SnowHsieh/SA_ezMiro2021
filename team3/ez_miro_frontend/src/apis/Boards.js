@@ -1,6 +1,15 @@
 import axios from 'axios'
 import { host } from '@/config/config'
 
+export const EnterBoard = async (boardId, userId) => {
+  try {
+    const res = await axios.post(`${host}/ez-miro/boards/${boardId}`, { userId })
+    return res.data
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export const GetBoardContent = async (boardId) => {
   try {
     const res = await axios.get(`${host}/ez-miro/boards/${boardId}/content`)
@@ -13,6 +22,15 @@ export const GetBoardContent = async (boardId) => {
 export const CreateBoard = async () => {
   try {
     const res = await axios.post(`${host}/ez-miro/boards/`)
+    return res.data
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export const MoveCursor = async (boardId, cursorInfo) => {
+  try {
+    const res = await axios.put(`${host}/ez-miro/boards/${boardId}/cursor`, cursorInfo)
     return res.data
   } catch (err) {
     console.log(err)

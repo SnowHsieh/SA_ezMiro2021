@@ -25,7 +25,7 @@ public class LeaveBoardUseCaseTest {
         Board board = MockFactory.createBoard(boardId);
         BoardRepository boardRepository = new BoardRepositoryImpl();
         DomainEventBus domainEventBus = new DomainEventBus();
-        board.addCursor(new Cursor(userId, new Point(100, 100)));
+        board.addCursor(new Cursor(boardId, userId, new Point(100, 100)));
         LeaveBoardUseCase leaveBoardUseCase = new LeaveBoardUseCase(boardRepository, domainEventBus);
         LeaveBoardInput input = new LeaveBoardInput();
         LeaveBoardOutput output = new LeaveBoardOutput();

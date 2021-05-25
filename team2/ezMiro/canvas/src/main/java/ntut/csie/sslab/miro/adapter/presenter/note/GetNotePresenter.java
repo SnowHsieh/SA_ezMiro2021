@@ -2,7 +2,7 @@ package ntut.csie.sslab.miro.adapter.presenter.note;
 
 import ntut.csie.sslab.ddd.adapter.presenter.Presenter;
 import ntut.csie.sslab.ddd.usecase.Result;
-import ntut.csie.sslab.miro.usecase.note.NoteDto;
+import ntut.csie.sslab.miro.usecase.note.NoteDTO;
 import ntut.csie.sslab.miro.usecase.note.get.GetNoteOutput;
 import java.util.List;
 
@@ -19,22 +19,22 @@ public class GetNotePresenter extends Result implements Presenter<NoteViewModel>
     }
 
     @Override
-    public NoteDto getNote() {
+    public NoteDTO getNote() {
         return viewModel.getNote();
     }
 
     @Override
-    public void setNote(NoteDto noteDto) {
+    public void setNote(NoteDTO noteDto) {
         viewModel.setNote(noteDto);
     }
 
     @Override
-    public List<NoteDto> getNotes() {
+    public List<NoteDTO> getNotes() {
         return viewModel.getNotes();
     }
 
     @Override
-    public void setNotes(List<NoteDto> noteDtos) {
-        viewModel.setNotes(noteDtos);
+    public void setNotes(List<NoteDTO> noteDTOS) {
+        viewModel.setNotes(noteDTOS);
     }
 }

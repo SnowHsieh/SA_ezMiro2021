@@ -29,7 +29,7 @@ public class EditStickyNoteUseCase {
                     .setMessage("Edit stickyNote failed: stickyNote not found, stickyNote id = " + input.getFigureId());
             return;
         }
-
+//        stickyNote.changeContent(input.getContent());
         stickyNoteRepository.edit(input.getBoardId(),stickyNote, input.getContent(), input.getStyle());
         domainEventBus.postAll(stickyNote);
         output.setId(stickyNote.getId().toString());

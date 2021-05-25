@@ -38,7 +38,7 @@ public class EditStickyNoteUseCaseTest {
         createStickyNoteInput.setBoardId(boardId);
         createStickyNoteInput.setPosition(1.0,1.0);
         createStickyNoteInput.setContent("Content");
-        createStickyNoteInput.setStyle(new Style(12, ShapeKindEnum.CIRCLE, 87.87, "#948700"));
+        createStickyNoteInput.setStyle(new Style(12, ShapeKindEnum.CIRCLE, 87.87,100, "#948700"));
         createStickyNoteUseCase.execute(createStickyNoteInput, createStickyNoteOutput);
 
         EditStickyNoteUseCase editStickyNoteUseCase = new EditStickyNoteUseCase(stickyNoteRepository, domainEventBus);
@@ -48,7 +48,7 @@ public class EditStickyNoteUseCaseTest {
         input.setBoardId(boardId);
         input.setFigureId(UUID.fromString(createStickyNoteOutput.getId()));
         input.setContent("new content");
-        input.setStyle(new Style(10, ShapeKindEnum.TRIANGLE, 0.87, "#009487"));
+        input.setStyle(new Style(10, ShapeKindEnum.TRIANGLE, 0.87,100, "#009487"));
         editStickyNoteUseCase.execute(input, output);
 
         assertNotNull(output.getId());
@@ -61,7 +61,7 @@ public class EditStickyNoteUseCaseTest {
         assertEquals("new content", stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get().getContent());
         assertEquals(10, stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get().getStyle().getFontSize());
         assertEquals(ShapeKindEnum.TRIANGLE, stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get().getStyle().getShape());
-        assertEquals(0.87, stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get().getStyle().getFigureSize(), 0.001);
+        assertEquals(0.87, stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get().getStyle().getWidth(), 0.001);
         assertEquals("#009487", stickyNoteRepository.findById(boardId, UUID.fromString(output.getId())).get().getStyle().getColor());
     }
 

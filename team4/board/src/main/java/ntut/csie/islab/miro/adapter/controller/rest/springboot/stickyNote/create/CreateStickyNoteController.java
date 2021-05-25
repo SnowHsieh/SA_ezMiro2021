@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.adapter.controller.rest.springboot.stickyNote.create;
 
-import ntut.csie.islab.miro.entity.model.textFigure.Position;
+import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
 import ntut.csie.islab.miro.entity.model.textFigure.Style;
 import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteInput;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(value = "http://localhost:8080")
+@CrossOrigin
 public class CreateStickyNoteController {
     private CreateStickyNoteUseCase createStickyNoteUseCase;
 
@@ -40,8 +40,9 @@ public class CreateStickyNoteController {
             position = new Position(stickyNoteJSON.getJSONObject("position").getDouble("x"), stickyNoteJSON.getJSONObject("position").getDouble("y"));
             styleJsonObject = stickyNoteJSON.getJSONObject("style");
             style = new Style(styleJsonObject.getInt("fontSize"),
-                    ShapeKindEnum.CIRCLE,//todo
-                    styleJsonObject.getDouble("figureSize"),
+                    ShapeKindEnum.values()[styleJsonObject.getInt("shape")],
+                    styleJsonObject.getDouble("width"),
+                    styleJsonObject.getDouble("height"),
                     styleJsonObject.getString("color"));
         } catch (JSONException e) {
             e.printStackTrace();

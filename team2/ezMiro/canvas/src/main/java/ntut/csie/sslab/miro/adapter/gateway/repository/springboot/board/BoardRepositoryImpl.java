@@ -1,6 +1,7 @@
 package ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board;
 
 import ntut.csie.sslab.miro.entity.model.board.Board;
+import ntut.csie.sslab.miro.entity.model.board.BoardChannel;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ public class BoardRepositoryImpl implements BoardRepository {
     private List<Board> boards = new ArrayList<>();
 
     public BoardRepositoryImpl() {
-        Board board = new Board("team2", "boardId", "ezMiro");
+        Board board = new Board("team2", "boardId", "ezMiro", new BoardChannel("boardChannel"));
         boards.add(board);
     }
 
