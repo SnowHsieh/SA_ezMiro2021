@@ -42,15 +42,15 @@
 
 <script>
 import { fabric } from 'fabric'
-import { getBoardContentApi } from '@/apis/boardApi'
+import { changeFigureOrderApi, getBoardContentApi } from '@/apis/boardApi'
 import {
   createStickyNoteApi,
   changeStickyNoteContentApi,
   changeStickyNoteColorApi,
   resizeStickyNoteApi, moveStickyNoteApi, deleteStickyNoteApi
 } from '@/apis/stickyNoteApi'
+import { webSocketHostIp } from '../config/config.js'
 import uuidGenerator from '../utils/uuidGenerator.js'
-import axios from 'axios'
 export default {
   data () {
     return {
@@ -71,7 +71,6 @@ export default {
       socketLoaded: null,
       userCursorList: [],
       myUserId: '7398cd26-da85-4c05-b04b-122e73888dfb',
-      hostIp: '127.0.0.1',
       mouseData: null,
       updateCursorFlag: true,
       updateFigureFlag: true
@@ -176,26 +175,22 @@ export default {
     },
     async changeFigureOrder () {
       try {
-        var objects = this.canvas.getObjects()
-        var flist = []
-        for (var i = 0; i < objects.length; i++) {
+        const objects = this.canvas.getObjects()
+        const figureList = []
+        for (let i = 0; i < objects.length; i++) {
           if (objects[i].get('objectType') !== 'cursor') {
-            flist.push(objects[i].get('id'))
+            figureList.push(objects[i].get('id'))
           }
         }
-        const res = await axios.post('http://' + this.hostIp + ':8081/boards/' + this.boardId + '/changeFigureOrder',
-          {
-            figureOrderList: flist
-          }
-        )
+        const res = await changeFigureOrderApi(this.boardId, figureList)
         console.log(res.data.message)
       } catch (err) {
         console.log(err)
       }
     },
     initCanvas () {
-      var width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-      var height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+      const width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+      const height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
       this.canvas = new fabric.Canvas('canvas', {
         width: width,
         height: height,
@@ -310,8 +305,10 @@ export default {
           },
           'object:scaled': function (e) {
             if (e.target.type === 'group') {
+              const f = JSON.parse(JSON.stringify(e.target))
+              console.log(f, e.target)
               _this.resizeStickyNote(e.target)
-              // _this.moveStickyNote(e.target)
+              _this.moveStickyNote(f)
             }
           },
           'object:moving': function (e) {
@@ -514,13 +511,13 @@ export default {
       } else if (receivedData.event === 'BoardEnteredDomainEvent') {
         // console.log(receivedData)
       } else if (receivedData.event === 'CursorCreatedDomainEvent') {
-        console.log(receivedData)
+        // console.log(receivedData)
         _this.addUserCursor(receivedData)
       } else if (receivedData.event === 'CursorDeletedDomainEvent') {
-        console.log(receivedData)
+        // console.log(receivedData)
         _this.delUserCursor(receivedData.userId)
       } else if (receivedData.event === 'StickyNoteCreatedDomainEvent') {
-        console.log(receivedData)
+        // console.log(receivedData)
         const figure = {
           figureId: receivedData.figureId,
           content: '',
@@ -538,7 +535,7 @@ export default {
         }
         _this.addStickyNote(figure)
       } else if (receivedData.event === 'StickyNoteDeleteDomainEvent') {
-        console.log(receivedData)
+        // console.log(receivedData)
         try {
           const cursorObject = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
           this.canvas.remove(cursorObject)
@@ -546,7 +543,7 @@ export default {
           console.log(e)
         }
       } else if (receivedData.event === 'StickyNoteMovedDomainEvent') {
-        console.log(receivedData)
+        // console.log(receivedData)
         _this.updateStickyPosition(receivedData)
       } else if (receivedData.event === 'GetAllCursorList') {
         _this.userCursorList = receivedData.cursorList.cursorDtos
@@ -558,7 +555,7 @@ export default {
     },
     socketInit () {
       this.myUserId = uuidGenerator.generateUUID()
-      this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/' + this.boardId + '/' + this.myUserId + '/')
+      this.socket = new WebSocket(`${webSocketHostIp}/websocket/${this.boardId}/${this.myUserId}/`)
     },
     sendGetAllCursors () {
       if (this.socket.readyState === 1) {
