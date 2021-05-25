@@ -42,12 +42,12 @@
 
 <script>
 import { fabric } from 'fabric'
-import uuidGenerator from '../utils/uuidGenerator'
+import uuidGenerator from '../utils/uuidGenerator.js'
 import axios from 'axios'
 export default {
   data () {
     return {
-      boardId: '71f4de64-862e-4b2e-a66f-e5e9a26473c5',
+      boardId: 'c1632263-0ae9-4864-9c8f-fa119386abfb',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -92,7 +92,6 @@ export default {
     this.socket.onerror = this.websocketonerror
     this.socket.onmessage = this.websocketonmessage
     this.socket.onclose = this.websocketclose
-    // this.timer = setInterval(this.refreshCanvas, 10000)
     this.timer = setInterval(this.updateFlag, 100)
   },
   methods: {
@@ -101,7 +100,6 @@ export default {
       this.updateFigureFlag = true
     },
     sendMouseData () {
-      // console.log(this.mouseData)
       if (this.updateCursorFlag) {
         this.sendMessage(JSON.stringify(this.mouseData))
         this.updateCursorFlag = false
@@ -589,22 +587,11 @@ export default {
         _this.userCursorList = receivedData.cursorList.cursorDtos
         _this.drawAllUserCursors()
       }
-      // if (JSON.parse(e.data).event === 'CursorCreatedDomainEvent') {
-      //   console.log(JSON.parse(e.data))
-
-      // if (JSON.parse(e.data).event === 'CursorCreatedDomainEvent') {
-      //   console.log(JSON.parse(e.data))
-      // }
-      // console.log('收到來自後端的訊息2', e.message.event)
-      // console.log('收到來自後端的訊息3', e.message.info)
-      // console.log('收到來自後端的訊息4', e.message.position)
-      // console.log(JSON.parse(e.data)) // console.log(e);
     },
     websocketclose: function (e) {
       console.log('connection closed ()')
     },
     socketInit () {
-      // this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/' + this.myUserId + '/')
       this.myUserId = uuidGenerator.generateUUID()
       this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/' + this.boardId + '/' + this.myUserId + '/')
     },
@@ -623,22 +610,10 @@ export default {
       }
     },
     sendMessage: function (data) {
-      // console.log('sendMsg:', data)
       if (this.socket.readyState === 1) {
         this.socket.send(data)
       }
     }
-    // generateUUID () {
-    //   var d = Date.now()
-    //   if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-    //     d += performance.now() // use high-precision timer if available
-    //   }
-    //   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    //     var r = (d + Math.random() * 16) % 16 | 0
-    //     d = Math.floor(d / 16)
-    //     return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
-    //   })
-    // }
   }
 
 }

@@ -12,4 +12,4 @@ const uuidGenerator = {
     })
   }
 }
-export default { uuidGenerator }
+export default uuidGenerator
