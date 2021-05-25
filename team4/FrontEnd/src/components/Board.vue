@@ -5,7 +5,6 @@
           <div>
             <button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
             <input v-model="myUserId" placeholder="input userName">
-            <button id="sendUserName" @click="socketInit()">sendUserName</button>
             <canvas id="canvas" ref='board' >
             </canvas>
           </div>
@@ -43,12 +42,12 @@
 
 <script>
 import { fabric } from 'fabric'
-// import io from 'socket.io-client'
+import uuidGenerator from '../utils/uuidGenerator'
 import axios from 'axios'
 export default {
   data () {
     return {
-      boardId: 'd6c4491c-e073-4e9a-ac9e-7789977fb8ce',
+      boardId: '71f4de64-862e-4b2e-a66f-e5e9a26473c5',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -65,7 +64,7 @@ export default {
       socketLoaded: null,
       userCursorList: [],
       myUserId: '7398cd26-da85-4c05-b04b-122e73888dfb',
-      hostIp: '140.124.181.8',
+      hostIp: '140.124.181.2',
       mouseData: null,
       updateCursorFlag: true,
       updateFigureFlag: true
@@ -606,7 +605,7 @@ export default {
     },
     socketInit () {
       // this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/' + this.myUserId + '/')
-      this.myUserId = this.generateUUID()
+      this.myUserId = uuidGenerator.generateUUID()
       this.socket = new WebSocket('ws://' + this.hostIp + ':8081/websocket/' + this.boardId + '/' + this.myUserId + '/')
     },
     sendGetAllCursors () {
@@ -628,18 +627,18 @@ export default {
       if (this.socket.readyState === 1) {
         this.socket.send(data)
       }
-    },
-    generateUUID () {
-      var d = Date.now()
-      if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-        d += performance.now() // use high-precision timer if available
-      }
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = (d + Math.random() * 16) % 16 | 0
-        d = Math.floor(d / 16)
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
-      })
     }
+    // generateUUID () {
+    //   var d = Date.now()
+    //   if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+    //     d += performance.now() // use high-precision timer if available
+    //   }
+    //   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    //     var r = (d + Math.random() * 16) % 16 | 0
+    //     d = Math.floor(d / 16)
+    //     return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+    //   })
+    // }
   }
 
 }
