@@ -8,13 +8,11 @@ public class BoardEntered extends DomainEvent {
 
     private final String boardId;
     private final String userId;
-    private final BoardSessionId boardSessionId;
 
-    public BoardEntered(String boardId, String userId, BoardSessionId boardSessionId) {
+    public BoardEntered(String boardId, String userId) {
         super(DateProvider.now());
         this.boardId = boardId;
         this.userId = userId;
-        this.boardSessionId = boardSessionId;
     }
 
     public String boardId() {
@@ -23,9 +21,5 @@ public class BoardEntered extends DomainEvent {
 
     public String userId() {
         return userId;
-    }
-
-    public BoardSessionId boardSessionId() {
-        return boardSessionId;
     }
 }

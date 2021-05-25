@@ -163,15 +163,16 @@ public class Board extends AggregateRoot<String> {
         }
     }
 
-    public void acceptUserEntry(BoardSessionId boardSessionId, String userId) {
-        BoardSession boardSession = new BoardSession(getBoardId(), userId, boardSessionId);
+    public String acceptUserEntry(String userId) {
+        BoardSession boardSession = new BoardSession(getBoardId(), userId);
         boardSessions.add(boardSession);
         createCursor(userId);
 
-        addDomainEvent(new BoardEntered(boardSession.boardId(), boardSession.userId(), boardSession.boardSessionId()));
+        addDomainEvent(new BoardEntered(boardSession.boardId(), boardSession.userId()));
+        return boardSession.boardSessionId();
     }
 
-    public void acceptUserLeaving(BoardSessionId boardSessionId, String userId) {
+    public void acceptUserLeaving(String boardSessionId, String userId) {
         for(int i = 0; i < boardSessions.size(); i++){
             if(boardSessions.get(i).boardSessionId().equals(boardSessionId)) {
                 boardSessions.remove(i);

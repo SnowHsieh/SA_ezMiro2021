@@ -22,11 +22,13 @@ public class MoveNoteUseCaseTest extends AbstractTest {
         MoveNoteInput moveNoteInput = moveNoteUseCase.newInput();
         CqrsCommandPresenter moveNoteOutput = CqrsCommandPresenter.newInstance();
 
-        String noteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, defaultColor);
-        Point nextLeftTopPosition = new Point(defaultLeftTopPosition.x + 100, defaultLeftTopPosition.y + 100);
+        String noteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
+        int nextLeftTopPositionX = defaultLeftTopPositionX + 100;
+        int nextLeftTopPositionY = defaultLeftTopPositionY + 100;
 
         moveNoteInput.setFigureId(noteId);
-        moveNoteInput.setLeftTopPosition(nextLeftTopPosition);
+        moveNoteInput.setLeftTopPositionX(nextLeftTopPositionX);
+        moveNoteInput.setLeftTopPositionY(nextLeftTopPositionY);
 
         moveNoteUseCase.execute(moveNoteInput, moveNoteOutput);
         assertNotNull(moveNoteOutput.getId());
@@ -37,6 +39,7 @@ public class MoveNoteUseCaseTest extends AbstractTest {
         Note note = (Note) figure;
         assertEquals(moveNoteOutput.getId(), note.getId());
         assertEquals(boardId, note.getBoardId());
-        assertEquals(nextLeftTopPosition, note.getLeftTopPosition());
+        assertEquals(nextLeftTopPositionX, note.getLeftTopPositionX());
+        assertEquals(nextLeftTopPositionY, note.getLeftTopPositionY());
     }
 }

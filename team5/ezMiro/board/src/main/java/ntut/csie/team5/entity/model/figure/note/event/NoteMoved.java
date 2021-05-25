@@ -9,17 +9,25 @@ import java.awt.*;
 public class NoteMoved extends DomainEvent {
 
     private final String figureId;
-    private final Point oldPosition;
-    private final Point newPosition;
+//    private final Point oldPosition;
+//    private final Point newPosition;
+    private final int oldLeftTopPositionX;
+    private final int oldLeftTopPositionY;
+    private final int newLeftTopPositionX;
+    private final int newLeftTopPositionY;
     private final String boardId;
     private final FigureType figureType;
 
-    public NoteMoved(String figureId, Point oldPosition, Point newPosition, String boardId, FigureType figureType) {
+    public NoteMoved(String figureId, int oldLeftTopPositionX, int oldLeftTopPositionY, int newLeftTopPositionX, int newLeftTopPositionY, String boardId, FigureType figureType) {
         super(DateProvider.now());
         this.figureId = figureId;
         this.boardId = boardId;
-        this.oldPosition = oldPosition;
-        this.newPosition = newPosition;
+//        this.oldPosition = oldPosition;
+//        this.newPosition = newPosition;
+        this.oldLeftTopPositionX = oldLeftTopPositionX;
+        this.oldLeftTopPositionY = oldLeftTopPositionY;
+        this.newLeftTopPositionX = newLeftTopPositionX;
+        this.newLeftTopPositionY = newLeftTopPositionY;
         this.figureType = figureType;
     }
 
@@ -27,12 +35,28 @@ public class NoteMoved extends DomainEvent {
         return figureId;
     }
 
-    public Point oldPosition() {
-        return oldPosition;
+//    public Point oldPosition() {
+//        return oldPosition;
+//    }
+//
+//    public Point newPosition() {
+//        return newPosition;
+//    }
+
+    public int oldLeftTopPositionX() {
+        return oldLeftTopPositionX;
     }
 
-    public Point newPosition() {
-        return newPosition;
+    public int oldLeftTopPositionY() {
+        return oldLeftTopPositionY;
+    }
+
+    public int newLeftTopPositionX() {
+        return newLeftTopPositionX;
+    }
+
+    public int newLeftTopPositionY() {
+        return newLeftTopPositionY;
     }
 
     public String boardId() {

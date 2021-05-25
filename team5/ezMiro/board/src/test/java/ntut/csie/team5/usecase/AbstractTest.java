@@ -46,7 +46,8 @@ public abstract class AbstractTest {
     public String userId;
     public String boardId;
     public String boardName;
-    public Point defaultLeftTopPosition;
+    public int defaultLeftTopPositionX;
+    public int defaultLeftTopPositionY;
     public int defaultHeight;
     public int defaultWidth;
     public String defaultColor;
@@ -66,7 +67,8 @@ public abstract class AbstractTest {
         userId = UUID.randomUUID().toString();
         boardId = UUID.randomUUID().toString();
         boardName = "ezmiro board";
-        defaultLeftTopPosition = new Point(0,0);
+        defaultLeftTopPositionX = 0;
+        defaultLeftTopPositionY = 0;
         defaultHeight = 10;
         defaultWidth = 10;
         defaultColor = "#000000";
@@ -97,13 +99,14 @@ public abstract class AbstractTest {
         return createBoardOutput.getId();
     }
 
-    public String postNote(String boardId, Point leftTopPosition, int height, int width, String color) {
+    public String postNote(String boardId, int leftTopPositionX, int leftTopPositionY, int height, int width, String color) {
         PostNoteUseCase postNoteUseCase = new PostNoteUseCaseImpl(figureRepository, domainEventBus);
         PostNoteInput postNoteInput = postNoteUseCase.newInput();
         CqrsCommandPresenter postNoteOutput = CqrsCommandPresenter.newInstance();
 
         postNoteInput.setBoardId(boardId);
-        postNoteInput.setLeftTopPosition(leftTopPosition);
+        postNoteInput.setLeftTopPositionX(leftTopPositionX);
+        postNoteInput.setLeftTopPositionY(leftTopPositionY);
         postNoteInput.setHeight(height);
         postNoteInput.setWidth(width);
         postNoteInput.setColor(color);

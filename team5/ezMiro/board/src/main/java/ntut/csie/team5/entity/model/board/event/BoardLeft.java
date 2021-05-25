@@ -7,10 +7,10 @@ import ntut.csie.team5.entity.model.board.BoardSessionId;
 public class BoardLeft extends DomainEvent {
 
     private final String boardId;
-    private final BoardSessionId boardSessionId;
+    private final String boardSessionId;
     private final String userId;
 
-    public BoardLeft(String boardId, BoardSessionId boardSessionId, String userId) {
+    public BoardLeft(String boardId, String boardSessionId, String userId) {
         super(DateProvider.now());
         this.boardId = boardId;
         this.boardSessionId = boardSessionId;
@@ -21,7 +21,7 @@ public class BoardLeft extends DomainEvent {
         return boardId;
     }
 
-    public BoardSessionId boardSessionId() {
+    public String boardSessionId() {
         return boardSessionId;
     }
 

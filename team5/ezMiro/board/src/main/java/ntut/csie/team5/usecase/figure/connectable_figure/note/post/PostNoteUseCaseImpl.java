@@ -29,7 +29,8 @@ public class PostNoteUseCaseImpl implements PostNoteUseCase {
     public void execute(PostNoteInput input, CqrsCommandOutput output) {
         Note note = NoteBuilder.newInstance()
                 .boardId(input.getBoardId())
-                .leftTopPosition(input.getLeftTopPosition())
+                .leftTopPositionX(input.getLeftTopPositionX())
+                .leftTopPositionY(input.getLeftTopPositionY())
                 .height(input.getHeight())
                 .width(input.getWidth())
                 .color(input.getColor())
@@ -46,7 +47,9 @@ public class PostNoteUseCaseImpl implements PostNoteUseCase {
     private class PostNoteInputImpl implements PostNoteInput {
 
         private String boardId;
-        private Point leftTopPosition;
+//        private Point leftTopPosition;
+        private int leftTopPositionX;
+        private int leftTopPositionY;
         private int height;
         private int width;
         private String color;
@@ -63,13 +66,23 @@ public class PostNoteUseCaseImpl implements PostNoteUseCase {
         }
 
         @Override
-        public Point getLeftTopPosition() {
-            return leftTopPosition;
+        public int getLeftTopPositionX() {
+            return leftTopPositionX;
         }
 
         @Override
-        public void setLeftTopPosition(Point leftTopPosition) {
-            this.leftTopPosition = leftTopPosition;
+        public void setLeftTopPositionX(int leftTopPositionX) {
+            this.leftTopPositionX = leftTopPositionX;
+        }
+
+        @Override
+        public int getLeftTopPositionY() {
+            return leftTopPositionY;
+        }
+
+        @Override
+        public void setLeftTopPositionY(int leftTopPositionY) {
+            this.leftTopPositionY = leftTopPositionY;
         }
 
         @Override

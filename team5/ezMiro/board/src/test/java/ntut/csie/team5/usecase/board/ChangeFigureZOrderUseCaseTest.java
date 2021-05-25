@@ -30,8 +30,8 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         CqrsCommandPresenter changeFigureOrderOutput = CqrsCommandPresenter.newInstance();
 
         String boardId = createBoard(projectId, boardName);
-        String firstNoteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, defaultColor);
-        String secondNoteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, defaultColor);
+        String firstNoteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
+        String secondNoteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
 
         changeFigureZOrderInput.setBoardId(boardId);
         changeFigureZOrderInput.setFigureId(firstNoteId);
@@ -57,8 +57,8 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         CqrsCommandPresenter changeFigureOrderOutput = CqrsCommandPresenter.newInstance();
 
         String boardId = createBoard(projectId, boardName);
-        String firstNoteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, defaultColor);
-        String secondNoteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, defaultColor);
+        String firstNoteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
+        String secondNoteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
 
         changeFigureZOrderInput.setBoardId(boardId);
         changeFigureZOrderInput.setFigureId(secondNoteId);
@@ -84,9 +84,9 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         CqrsCommandPresenter changeFigureOrderOutput = CqrsCommandPresenter.newInstance();
 
         String boardId = createBoard(projectId, boardName);
-        String firstNoteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, defaultColor);
-        String secondNoteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, defaultColor);
-        String thirdNoteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, defaultColor);
+        String firstNoteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
+        String secondNoteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
+        String thirdNoteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
 
         changeFigureZOrderInput.setBoardId(boardId);
         changeFigureZOrderInput.setFigureId(firstNoteId);
@@ -114,9 +114,9 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         CqrsCommandPresenter changeFigureOrderOutput = CqrsCommandPresenter.newInstance();
 
         String boardId = createBoard(projectId, boardName);
-        String firstNoteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, defaultColor);
-        String secondNoteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, defaultColor);
-        String thirdNoteId = postNote(boardId, defaultLeftTopPosition, defaultHeight, defaultWidth, defaultColor);
+        String firstNoteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
+        String secondNoteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
+        String thirdNoteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
 
         changeFigureZOrderInput.setBoardId(boardId);
         changeFigureZOrderInput.setFigureId(thirdNoteId);

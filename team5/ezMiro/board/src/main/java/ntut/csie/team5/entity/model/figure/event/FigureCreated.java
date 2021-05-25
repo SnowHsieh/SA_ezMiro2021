@@ -6,7 +6,7 @@ import ntut.csie.team5.entity.model.figure.FigureType;
 
 import java.util.Date;
 
-public class FigureCreated extends DomainEvent {
+public abstract class FigureCreated extends DomainEvent {
 
     private final String figureId;
     private final String boardId;

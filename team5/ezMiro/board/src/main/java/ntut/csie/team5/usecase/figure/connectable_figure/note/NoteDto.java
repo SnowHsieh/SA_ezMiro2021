@@ -30,9 +30,12 @@ public class NoteDto extends FigureDto {
         return width;
     }
 
-    public void setLeftTopPosition(Point leftTopPosition) {
-        this.leftTopPositionX = leftTopPosition.x;
-        this.leftTopPositionY = leftTopPosition.y;
+    public void setLeftTopPositionX(int leftTopPositionX) {
+        this.leftTopPositionX = leftTopPositionX;
+    }
+
+    public void setLeftTopPositionY(int leftTopPositionY) {
+        this.leftTopPositionY = leftTopPositionY;
     }
 
     public void setHeight(int height) {

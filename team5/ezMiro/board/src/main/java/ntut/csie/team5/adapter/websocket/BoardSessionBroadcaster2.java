@@ -8,11 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class BoardSessionBroadcaster implements WebSocketBroadcaster {
+public class BoardSessionBroadcaster2 implements WebSocketBroadcaster {
 
     private final Map<String, Map<Session, String>> boardSessionMap;
 
-    public BoardSessionBroadcaster() {
+    public BoardSessionBroadcaster2() {
         this.boardSessionMap = new HashMap<>();
     }
 

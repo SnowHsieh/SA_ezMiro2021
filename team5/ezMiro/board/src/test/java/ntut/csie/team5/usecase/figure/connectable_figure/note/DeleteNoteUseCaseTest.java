@@ -25,7 +25,8 @@ public class DeleteNoteUseCaseTest extends AbstractTest {
         CqrsCommandPresenter postNoteOutput = CqrsCommandPresenter.newInstance();
 
         postNoteInput.setBoardId(boardId);
-        postNoteInput.setLeftTopPosition(defaultLeftTopPosition);
+        postNoteInput.setLeftTopPositionX(defaultLeftTopPositionX);
+        postNoteInput.setLeftTopPositionY(defaultLeftTopPositionY);
         postNoteInput.setColor(defaultColor);
 
         postNoteUseCase.execute(postNoteInput, postNoteOutput);
@@ -50,7 +51,7 @@ public class DeleteNoteUseCaseTest extends AbstractTest {
         String boardId = createBoard(projectId, boardName);
         Board board = boardRepository.findById(boardId).get();
 
-        String firstNodeId = postNote(boardId, new Point(1,1), 11, 11, "#ff0000");
+        String firstNodeId = postNote(boardId, 1, 1, 11, 11, "#ff0000");
 
         board.commitFigure(firstNodeId);
         boardRepository.save(board);

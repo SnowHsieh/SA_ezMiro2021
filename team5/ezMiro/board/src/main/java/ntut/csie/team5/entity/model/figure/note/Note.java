@@ -2,10 +2,7 @@ package ntut.csie.team5.entity.model.figure.note;
 
 import ntut.csie.team5.entity.model.figure.ConnectableFigure;
 import ntut.csie.team5.entity.model.figure.FigureType;
-import ntut.csie.team5.entity.model.figure.note.event.NoteColorChanged;
-import ntut.csie.team5.entity.model.figure.note.event.NoteMoved;
-import ntut.csie.team5.entity.model.figure.note.event.NoteResized;
-import ntut.csie.team5.entity.model.figure.note.event.NoteTextEdited;
+import ntut.csie.team5.entity.model.figure.note.event.*;
 
 import java.awt.*;
 
@@ -14,10 +11,11 @@ public class Note extends ConnectableFigure {
     private String color;
     private String text;
 
-    public Note(String noteId, String boardId, Point leftTopPosition, int height, int width, String color, FigureType figureType) {
-        super(noteId, boardId, leftTopPosition, height, width, figureType);
+    public Note(String noteId, String boardId, int leftTopPositionX, int leftTopPositionY, int height, int width, String color, FigureType figureType) {
+        super(noteId, boardId, leftTopPositionX, leftTopPositionY, height, width, figureType);
         this.color = color;
         this.text = "";
+        addDomainEvent(new NotePosted(noteId, boardId, leftTopPositionX, leftTopPositionY, height, width, color, figureType));
     }
 
     public void changeColor(String newColor) {
@@ -28,11 +26,13 @@ public class Note extends ConnectableFigure {
         }
     }
 
-    public void changePosition(Point newPosition) {
-        if(!this.getLeftTopPosition().equals(newPosition)) {
-            Point oldPosition = this.getLeftTopPosition();
-            this.setLeftTopPosition(newPosition);
-            addDomainEvent(new NoteMoved(getId(), oldPosition, newPosition, getBoardId(), getFigureType()));
+    public void changePosition(int newLeftTopPositionX, int newLeftTopPositionY) {
+        if(this.getLeftTopPositionX() != newLeftTopPositionX || this.getLeftTopPositionY() != newLeftTopPositionY) {
+            int oldLeftTopPositionX = this.getLeftTopPositionX();
+            int oldLeftTopPositionY = this.getLeftTopPositionY();
+            this.setLeftTopPositionX(newLeftTopPositionX);
+            this.setLeftTopPositionY(newLeftTopPositionY);
+            addDomainEvent(new NoteMoved(getId(), oldLeftTopPositionX, oldLeftTopPositionY, newLeftTopPositionX, newLeftTopPositionY, getBoardId(), getFigureType()));
         }
     }
 
