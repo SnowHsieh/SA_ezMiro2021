@@ -6,7 +6,6 @@ import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.model.DomainEventBus;
-import ntut.csie.selab.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
@@ -36,7 +35,7 @@ import java.awt.*;
 @SpringBootTest
 @ContextConfiguration(classes= JpaApplicationTest.class)
 @Rollback(false)
-public class CreateStickyNoteUseCaseTest extends AbstractSpringBootJpaTest{
+public class CreateStickyNoteUseCaseTest {
 
     @Autowired
     private WidgetRepositoryPeer widgetRepositoryPeer;
