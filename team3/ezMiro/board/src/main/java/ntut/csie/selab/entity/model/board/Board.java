@@ -57,8 +57,8 @@ public class Board extends AggregateRoot<String> {
     }
 
     public void moveCursorOf(String userId, Point point) {
-        Objects.requireNonNull(cursorSet.stream().filter(e -> e.getUserId().equals(userId)).findFirst().orElse(null)).setPoint(point);
-
+        cursorSet.remove(cursorSet.stream().filter(e -> e.getUserId().equals(userId)).findFirst().orElse(null));
+        cursorSet.add(new Cursor(this.id, userId, point));
         addDomainEvent(new BoardCursorMoved(new Date(), id, cursorSet));
     }
 

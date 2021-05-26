@@ -1,8 +1,8 @@
 package ntut.csie.selab.entity.model.board;
 
-import java.util.List;
+import ntut.csie.selab.model.ValueObject;
 
-public class CommittedWidget {
+public class CommittedWidget extends ValueObject {
     private String boardId;
     private String widgetId;
     private int zOrder;
