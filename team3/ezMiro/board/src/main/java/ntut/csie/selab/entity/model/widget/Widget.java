@@ -52,7 +52,7 @@ public abstract class Widget extends AggregateRoot<String> {
     public void setText(String text) {
         this.text = text;
 
-        addDomainEvent(new TextOfWidgetEdited(new Date()));
+        addDomainEvent(new TextOfWidgetEdited(new Date(), boardId, id));
     }
 
     public String getText() {

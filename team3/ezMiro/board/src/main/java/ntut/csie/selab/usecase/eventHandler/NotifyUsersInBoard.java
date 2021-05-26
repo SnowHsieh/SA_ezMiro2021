@@ -5,6 +5,7 @@ import com.google.common.eventbus.Subscribe;
 import ntut.csie.selab.entity.model.board.event.WidgetCreationCommitted;
 import ntut.csie.selab.entity.model.board.event.WidgetDeletionCommitted;
 import ntut.csie.selab.entity.model.widget.Widget;
+import ntut.csie.selab.entity.model.widget.event.TextOfWidgetEdited;
 import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
 import ntut.csie.selab.entity.model.widget.event.WidgetDeleted;
 import ntut.csie.selab.model.DomainEventBus;
@@ -83,6 +84,33 @@ public class NotifyUsersInBoard {
         }
         domainEventBus.post(new WidgetDeletionCommitted(new Date()));
         webSocket.sendMessageForAllUsersIn(widgetDeleted.getBoardId(), message);
+    }
+
+    @Subscribe
+    public void whenTextOfWidgetEdited(TextOfWidgetEdited textOfWidgetEdited) {
+        Optional<Widget> widget = widgetRepository.findById(textOfWidgetEdited.getWidgetId());
+
+        if (widget.isPresent()) {
+            Widget selectedWidget = widget.get();
+            WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
+            WidgetDto widgetDto = widgetDtoMapper.domainToDto(selectedWidget);
+
+            JSONObject message = new JSONObject();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JSONArray widgetsInfo = new JSONArray();
+
+            try {
+                widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(widgetDto)));
+                message.put("widgets", widgetsInfo);
+                message.put("domainEvent", "whenTextOfWidgetEdited");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            webSocket.sendMessageForAllUsersIn(textOfWidgetEdited.getBoardId(), message);
+        } else {
+            throw new RuntimeException("Widget not found, widget id = " + textOfWidgetEdited.getWidgetId());
+        }
     }
 }
 
