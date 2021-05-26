@@ -15,7 +15,6 @@ import ntut.csie.selab.usecase.widget.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
