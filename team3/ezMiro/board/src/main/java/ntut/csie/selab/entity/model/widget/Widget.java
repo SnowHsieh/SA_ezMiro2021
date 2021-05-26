@@ -46,7 +46,7 @@ public abstract class Widget extends AggregateRoot<String> {
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
 
-        addDomainEvent(new WidgetMoved(new Date(), id));
+        addDomainEvent(new WidgetMoved(new Date(), boardId, id));
     }
 
     public void setText(String text) {

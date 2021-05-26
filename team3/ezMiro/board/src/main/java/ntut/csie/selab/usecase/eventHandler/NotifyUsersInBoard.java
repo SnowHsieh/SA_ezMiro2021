@@ -11,6 +11,7 @@ import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.entity.model.widget.event.TextOfWidgetEdited;
 import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
 import ntut.csie.selab.entity.model.widget.event.WidgetDeleted;
+import ntut.csie.selab.entity.model.widget.event.WidgetMoved;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.websocket.WebSocket;
@@ -69,7 +70,7 @@ public class NotifyUsersInBoard {
     public void whenWidgetDeleted(WidgetDeleted widgetDeleted) {
         Optional<Widget> widget = widgetRepository.findById(widgetDeleted.getWidgetId());
 
-        if (widget.isPresent()) {
+        if (!widget.isPresent()) {
             throw new RuntimeException("Widget not deleted, widget id = " + widgetDeleted.getWidgetId());
         }
 
@@ -90,6 +91,31 @@ public class NotifyUsersInBoard {
         }
         domainEventBus.post(new WidgetDeletionCommitted(new Date()));
         webSocket.sendMessageForAllUsersIn(widgetDeleted.getBoardId(), message);
+    }
+
+    @Subscribe
+    public void whenWidgetMoved(WidgetMoved widgetMoved) {
+        Optional<Widget> widget = widgetRepository.findById(widgetMoved.getWidgetId());
+
+        if (!widget.isPresent()) {
+            throw new RuntimeException("Widget not deleted, widget id = " + widgetMoved.getWidgetId());
+        }
+
+        WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
+        WidgetDto widgetDto = widgetDtoMapper.domainToDto(widget.get());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JSONObject message = new JSONObject();
+        JSONArray widgetsInfo = new JSONArray();
+
+        try {
+            widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(widgetDto)));
+            message.put("widgets", widgetsInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        domainEventBus.post(new WidgetDeletionCommitted(new Date()));
+        webSocket.sendMessageForAllUsersIn(widgetMoved.getBoardId(), message);
     }
 
     @Subscribe
