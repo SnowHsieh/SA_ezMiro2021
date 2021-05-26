@@ -14,8 +14,7 @@ import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardInput;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
-import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteInput;
-import ntut.csie.islab.miro.usecase.textFigure.stickyNote.CreateStickyNoteUseCase;
+import ntut.csie.islab.miro.usecase.textFigure.stickyNote.*;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
@@ -101,7 +100,27 @@ public abstract class AbstractSpringBootJpaTest {
 
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         createStickyNoteUseCase.execute(input, output);
+        return output;
+    }
+    public CqrsCommandPresenter generateChangeStickyNoteContentUseCaseOutput(UUID boardId, UUID figureId, String newContent ) {
+        ChangeStickyNoteContentUseCase changeStickyNoteContentUseCase = new ChangeStickyNoteContentUseCase(stickyNoteRepository, domainEventBus);
+        ChangeStickyNoteContentInput input = changeStickyNoteContentUseCase.newInput();
+        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
+        input.setBoardId(boardId);
+        input.setFigureId(figureId);
+        input.setContent(newContent);
+        changeStickyNoteContentUseCase.execute(input, output);
+        return output;
+    }
 
+    public CqrsCommandPresenter generateChangeStickyNoteColorUseCaseOutput(UUID boardId, UUID figureId, String newColor ) {
+        ChangeStickyNoteColorUseCase changeStickyNoteColorUseCase = new ChangeStickyNoteColorUseCase(stickyNoteRepository,  domainEventBus);
+        ChangeStickyNoteColorInput input = changeStickyNoteColorUseCase.newInput();
+        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
+        input.setBoardId(boardId);
+        input.setFigureId(figureId);
+        input.setColor(newColor);
+        changeStickyNoteColorUseCase.execute(input,output);
         return output;
     }
 

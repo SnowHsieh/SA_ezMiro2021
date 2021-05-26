@@ -242,29 +242,6 @@ export default {
       this.getBoardContent()
       this.drawAllUserCursors()
     },
-    listenToMouseMove () {
-      var _this = this
-      _this.canvas.on(
-        {
-          'mouse:move': function (e) {
-            var mouse = this.getPointer(e)
-            _this.mouseData = {
-              message: {
-                event: 'CursorMovedDomainEvent',
-                info: {
-                  userId: _this.myUserId,
-                  boardId: _this.boardId,
-                  position: {
-                    x: mouse.x,
-                    y: mouse.y
-                  }
-                }
-              }
-            }
-            _this.sendMouseData(_this.mouseData)
-          }
-        })
-    },
     listenEventsOnCanvas () {
       var _this = this
       _this.addListenerOfChangeTextFigureColor()
@@ -328,6 +305,32 @@ export default {
             }
           }
         })
+    },
+    listenToMouseMove () {
+      var _this = this
+      _this.canvas.on(
+        {
+          'mouse:move': function (e) {
+            var mouse = this.getPointer(e)
+            _this.mouseData = {
+              message: {
+                event: 'CursorMovedDomainEvent',
+                info: {
+                  userId: _this.myUserId,
+                  boardId: _this.boardId,
+                  position: {
+                    x: mouse.x,
+                    y: mouse.y
+                  }
+                }
+              }
+            }
+            _this.sendMouseData(_this.mouseData)
+          }
+        })
+    },
+    listenToObjectScaled () {
+
     },
     ungroup (group) {
       var _this = this
