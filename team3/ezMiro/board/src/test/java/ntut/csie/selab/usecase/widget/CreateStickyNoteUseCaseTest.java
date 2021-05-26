@@ -93,15 +93,17 @@ public class CreateStickyNoteUseCaseTest {
         String boardName = "first";
         return new Board(boardId, teamId, boardName);
     }
+
+    class FakeBoardWebSocket implements ntut.csie.selab.usecase.websocket.WebSocket {
+
+        public void addSessionIn(String boardId, String userId, Session session) { }
+
+        public void removeSessionFrom(String boardId, Session session) { }
+
+        public void sendMessage(Session session, JSONObject message) { }
+
+        public void sendMessageForAllUsersIn(String boardId, JSONObject message) { }
+    }
 }
 
-class FakeBoardWebSocket implements ntut.csie.selab.usecase.websocket.WebSocket {
 
-    public void addSessionIn(String boardId, String userId, Session session) { }
-
-    public void removeSessionFrom(String boardId, Session session) { }
-
-    public void sendMessage(Session session, JSONObject message) { }
-
-    public void sendMessageForAllUsersIn(String boardId, JSONObject message) { }
-}
