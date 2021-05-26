@@ -22,6 +22,7 @@ public class MoveCursorUseCase {
         if (board.isPresent()) {
             Board selectedBoard = board.get();
             selectedBoard.moveCursorOf(input.getUserId(), input.getPoint());
+            boardRepository.save(selectedBoard);
             output.setCursors(selectedBoard.getCursors());
             output.setBoardId(input.getBoardId());
         } else {

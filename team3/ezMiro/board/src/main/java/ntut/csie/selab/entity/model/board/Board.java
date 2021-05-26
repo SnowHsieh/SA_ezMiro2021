@@ -1,7 +1,6 @@
 package ntut.csie.selab.entity.model.board;
 
 import ntut.csie.selab.entity.model.board.event.BoardCreated;
-import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.AggregateRoot;
 
 import java.awt.*;
@@ -44,6 +43,10 @@ public class Board extends AggregateRoot<String> {
 
     public Cursor getCursorBy(String userId) {
         return cursorSet.stream().filter(e -> e.getUserId().equals(userId)).findFirst().orElse(null);
+    }
+
+    public void setCursors(Set<Cursor> cursorSet) {
+        this.cursorSet = cursorSet;
     }
 
     public void moveCursorOf(String userId, Point point) {

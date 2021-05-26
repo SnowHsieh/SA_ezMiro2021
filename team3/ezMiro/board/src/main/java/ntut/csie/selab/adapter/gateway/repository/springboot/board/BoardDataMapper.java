@@ -1,15 +1,19 @@
 package ntut.csie.selab.adapter.gateway.repository.springboot.board;
 
 import ntut.csie.selab.entity.model.board.Board;
+import ntut.csie.selab.entity.model.board.Cursor;
 
-import java.util.Optional;
+import java.util.Set;
 
 public class BoardDataMapper {
     public static BoardData domainToData(Board board) {
-        return new BoardData(board.getId(), board.getTeamId(), board.getBoardName());
+        Set<Cursor> cursors = board.getCursors();
+        return new BoardData(board.getId(), board.getTeamId(), board.getBoardName(), CursorDataMapper.domainToData(cursors));
     }
 
     public static Board DataToDomain(BoardData selectedBoardData) {
-        return new Board(selectedBoardData.getBoardId(), selectedBoardData.getTeamId(), selectedBoardData.getBoardName());
+        Board board = new Board(selectedBoardData.getBoardId(), selectedBoardData.getTeamId(), selectedBoardData.getBoardName());
+        board.setCursors(CursorDataMapper.dataToDomain(selectedBoardData.getCursors()));
+        return board;
     }
 }
