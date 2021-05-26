@@ -1,14 +1,13 @@
 package ntut.csie.selab.adapter.board;
 
-import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardData;
-import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardDataMapper;
-import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
-import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
+import ntut.csie.selab.adapter.gateway.repository.springboot.board.*;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.CommittedWidgetData;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.CommittedWidgetDataKey;
 import ntut.csie.selab.entity.model.board.Board;
+import ntut.csie.selab.entity.model.board.CommittedWidget;
 import ntut.csie.selab.usecase.board.BoardAssociationRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public class BoardAssociationRepositoryImpl implements BoardAssociationRepository {
@@ -31,10 +30,16 @@ public class BoardAssociationRepositoryImpl implements BoardAssociationRepositor
         Optional<BoardData> boardData = boardRepositoryPeer.findById(boardId);
         if (boardData.isPresent()) {
             BoardData selectedBoard = boardData.get();
-            Long zOrder = commitedWidgetRepositoryPeer.countByBoard(selectedBoard) + 1;
+            Long zOrder = commitedWidgetRepositoryPeer.countByBoard(selectedBoard);
             CommittedWidgetData committedWidgetData = new CommittedWidgetData(selectedBoard.getBoardId(), widgetId, zOrder.intValue());
             commitedWidgetRepositoryPeer.save(committedWidgetData);
         }
+    }
+
+    @Override
+    public void saveAllCommittedWidget(List<CommittedWidget> committedWidgets) {
+        List<CommittedWidgetData> widgetDatas = CommittedWidgetDataMapper.domainToData(committedWidgets);
+        commitedWidgetRepositoryPeer.saveAll(widgetDatas);
     }
 
     @Override

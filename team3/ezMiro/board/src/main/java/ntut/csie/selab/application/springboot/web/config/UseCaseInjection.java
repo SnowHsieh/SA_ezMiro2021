@@ -89,7 +89,7 @@ public class UseCaseInjection {
 
     @Bean(name="ChangeZOrderOfWidgetUseCase")
     public ChangeZOrderOfWidgetUseCase changeZOrderOfWidgetUseCase() {
-        return new ChangeZOrderOfWidgetUseCase(boardRepository, eventBus);
+        return new ChangeZOrderOfWidgetUseCase(boardAssociationRepository, eventBus);
     }
 
     @Bean("EditFontSizeOfStickyNoteUseCase")

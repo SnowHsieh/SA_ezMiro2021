@@ -24,7 +24,7 @@ public class BoardData {
     private String boardName;
 
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
-    private List<CommittedWidgetData> committedWidgets;
+    private Set<CommittedWidgetData> committedWidgets;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
     @JoinColumn(name = "board_id")
@@ -61,7 +61,7 @@ public class BoardData {
         return cursors;
     }
 
-    public List<CommittedWidgetData> getCommittedWidgets() {
+    public Set<CommittedWidgetData> getCommittedWidgets() {
         return committedWidgets;
     }
 }

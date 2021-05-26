@@ -4,7 +4,9 @@ import ntut.csie.selab.adapter.gateway.repository.springboot.widget.CommittedWid
 import ntut.csie.selab.entity.model.board.CommittedWidget;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CommittedWidgetDataMapper {
     public static CommittedWidgetData domainToData(CommittedWidget committedWidget) {
@@ -21,8 +23,8 @@ public class CommittedWidgetDataMapper {
         return new CommittedWidget(committedWidgetData.getId().getBoardId(), committedWidgetData.getId().getWidgetId(), committedWidgetData.getzOrder());
     }
 
-    public static List<CommittedWidget> dataToDomain(List<CommittedWidgetData> committedWidgetDatas) {
-        List<CommittedWidget> committedWidgets = new ArrayList<>();
+    public static Set<CommittedWidget> dataToDomain(Set<CommittedWidgetData> committedWidgetDatas) {
+        Set<CommittedWidget> committedWidgets = new HashSet<>();
         committedWidgetDatas.forEach(committedWidgetData -> committedWidgets.add(dataToDomain(committedWidgetData)));
         return committedWidgets;
     }
