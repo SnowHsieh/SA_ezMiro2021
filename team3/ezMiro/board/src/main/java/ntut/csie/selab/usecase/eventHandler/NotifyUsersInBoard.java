@@ -66,7 +66,7 @@ public class NotifyUsersInBoard {
     public void notifyWidgetDeletionToAllUser(WidgetDeleted widgetDeleted) {
         Optional<Widget> widget = widgetRepository.findById(widgetDeleted.getWidgetId());
 
-        if (widget.isPresent()) {
+        if (!widget.isPresent()) {
             throw new RuntimeException("Widget not deleted, widget id = " + widgetDeleted.getWidgetId());
         }
 
