@@ -38,4 +38,12 @@ public class CommittedWidgetData {
         this.id = new CommittedWidgetDataKey(boardId, widgetId);
         this.zOrder = zOrder;
     }
+
+    public CommittedWidgetDataKey getId() {
+        return id;
+    }
+
+    public int getzOrder() {
+        return zOrder;
+    }
 }

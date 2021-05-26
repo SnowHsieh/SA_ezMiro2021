@@ -44,6 +44,10 @@ public class Board extends AggregateRoot<String> {
         return committedWidgets;
     }
 
+    public void setCommittedWidgets(List<CommittedWidget> committedWidgets) {
+        this.committedWidgets = committedWidgets;
+    }
+
     public Cursor getCursorBy(String userId) {
         return cursorSet.stream().filter(e -> e.getUserId().equals(userId)).findFirst().orElse(null);
     }

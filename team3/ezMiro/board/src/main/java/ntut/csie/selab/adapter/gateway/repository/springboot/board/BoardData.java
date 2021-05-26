@@ -23,7 +23,7 @@ public class BoardData {
     @Column(name="board_name")
     private String boardName;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
     private List<CommittedWidgetData> committedWidgets;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
@@ -59,5 +59,9 @@ public class BoardData {
 
     public Set<CursorData> getCursors() {
         return cursors;
+    }
+
+    public List<CommittedWidgetData> getCommittedWidgets() {
+        return committedWidgets;
     }
 }

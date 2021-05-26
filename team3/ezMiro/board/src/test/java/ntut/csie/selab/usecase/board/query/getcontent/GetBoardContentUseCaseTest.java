@@ -11,7 +11,7 @@ import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.board.CommittedWidgetDto;
-import ntut.csie.selab.usecase.board.CommittedWidgetMapper;
+import ntut.csie.selab.usecase.board.CommittedWidgetDtoMapper;
 import ntut.csie.selab.usecase.widget.WidgetDto;
 import ntut.csie.selab.usecase.widget.WidgetDtoMapper;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
@@ -46,7 +46,7 @@ public class GetBoardContentUseCaseTest {
         create_single_board_with_event_storming(boardRepository, widgetRepository);
         input.setBoardId("firstId");
         WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
-        CommittedWidgetMapper committedWidgetMapper = new CommittedWidgetMapper();
+        CommittedWidgetDtoMapper committedWidgetDtoMapper = new CommittedWidgetDtoMapper();
         List<WidgetDto> widgetDtos;
         List<CommittedWidgetDto> committedWidgetDtos;
 
@@ -54,7 +54,7 @@ public class GetBoardContentUseCaseTest {
         getBoardContentUseCase.execute(input, output);
 
         widgetDtos = widgetDtoMapper.domainToDto(output.getWidgets());
-        committedWidgetDtos = committedWidgetMapper.domainToDto(output.getCommittedWidgets());
+        committedWidgetDtos = committedWidgetDtoMapper.domainToDto(output.getCommittedWidgets());
         BoardContentViewModel boardContentViewModel = new BoardContentViewModel(output.getBoardId(), widgetDtos, committedWidgetDtos);
 
         // Assert

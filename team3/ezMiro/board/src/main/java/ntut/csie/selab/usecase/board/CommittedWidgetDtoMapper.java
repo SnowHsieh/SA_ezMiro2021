@@ -5,7 +5,7 @@ import ntut.csie.selab.entity.model.board.CommittedWidget;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommittedWidgetMapper {
+public class CommittedWidgetDtoMapper {
 
     public CommittedWidgetDto domainToDto(CommittedWidget committedWidget) {
         return new CommittedWidgetDto(committedWidget.getWidgetId(), committedWidget.getZOrder());

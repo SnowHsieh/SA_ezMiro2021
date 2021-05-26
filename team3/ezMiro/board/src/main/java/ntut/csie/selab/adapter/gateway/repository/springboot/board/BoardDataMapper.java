@@ -14,6 +14,7 @@ public class BoardDataMapper {
     public static Board DataToDomain(BoardData selectedBoardData) {
         Board board = new Board(selectedBoardData.getBoardId(), selectedBoardData.getTeamId(), selectedBoardData.getBoardName());
         board.setCursors(CursorDataMapper.dataToDomain(selectedBoardData.getCursors()));
+        board.setCommittedWidgets(CommittedWidgetDataMapper.dataToDomain(selectedBoardData.getCommittedWidgets()));
         return board;
     }
 }
