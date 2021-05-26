@@ -72,6 +72,7 @@ public abstract class Widget extends AggregateRoot<String> {
 
     public void setColor(String color) {
         this.color = color;
+        addDomainEvent(new ColorOfWidgetChanged(new Date(), boardId, id));
     }
 
     public String getTextColor() {

@@ -34,6 +34,10 @@ public class WidgetDataMapper {
         Coordinate coordinate = new Coordinate(widgetData.getTopLeftX(), widgetData.getTopLeftY(), widgetData.getBottomRightX(), widgetData.getBottomRightY());
         // TODO 要把widget型態(sticky note, line, etc.)存入資料庫，用Mapper時用Factory生不同的instance，這邊先stickynote寫死
         Widget widget = new StickyNote(widgetData.getWidgetId(), widgetData.getBoardId(), coordinate);
+        widget.setColor(widgetData.getColor());
+        widget.setTextColor(widgetData.getTextColor());
+        widget.setText(widgetData.getText());
+        widget.setFontSize(widgetData.getFontSize());
         return widget;
     }
 }

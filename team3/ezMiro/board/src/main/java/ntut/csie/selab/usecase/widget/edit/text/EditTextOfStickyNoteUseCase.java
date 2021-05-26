@@ -18,8 +18,10 @@ public class EditTextOfStickyNoteUseCase {
 
     public void execute(EditTextOfStickyNoteInput input, EditTextOfStickyNoteOutput output) {
         Optional<Widget> stickyNote = widgetRepository.findById(input.getStickyNoteId());
+
         if(stickyNote.isPresent()) {
             Widget selectedStickyNote = stickyNote.get();
+            selectedStickyNote.clearDomainEvents();
             selectedStickyNote.setText(input.getText());
 
             widgetRepository.save(selectedStickyNote);
