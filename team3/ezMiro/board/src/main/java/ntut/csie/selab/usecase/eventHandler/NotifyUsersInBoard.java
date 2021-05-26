@@ -116,7 +116,7 @@ public class NotifyUsersInBoard {
     }
 
     @Subscribe
-    public void whenWidgetResized(WidgetResized widgetResized) {
+    public void notifyWidgetResizeToAllUser(WidgetResized widgetResized) {
         Optional<Widget> widget = widgetRepository.findById(widgetResized.getWidgetId());
 
         if (!widget.isPresent()) {
@@ -132,11 +132,12 @@ public class NotifyUsersInBoard {
 
         try {
             widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(widgetDto)));
+            message.put("domainEvent", "notifyWidgetResizeToAllUser");
             message.put("widgets", widgetsInfo);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        domainEventBus.post(new WidgetDeletionCommitted(new Date()));
+        domainEventBus.post(new WidgetResizeNotifiedToAllUser(new Date()));
         webSocket.sendMessageForAllUsersIn(widgetResized.getBoardId(), message);
     }
 
