@@ -1,9 +1,6 @@
 package ntut.csie.selab.entity.model.widget;
 
-import ntut.csie.selab.entity.model.widget.event.TextOfWidgetEdited;
-import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
-import ntut.csie.selab.entity.model.widget.event.WidgetDeleted;
-import ntut.csie.selab.entity.model.widget.event.WidgetMoved;
+import ntut.csie.selab.entity.model.widget.event.*;
 import ntut.csie.selab.model.AggregateRoot;
 
 import java.util.Date;
@@ -45,8 +42,18 @@ public abstract class Widget extends AggregateRoot<String> {
 
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
+    }
+
+    public void move(Coordinate coordinate) {
+        setCoordinate(coordinate);
 
         addDomainEvent(new WidgetMoved(new Date(), boardId, id));
+    }
+
+    public void resize(Coordinate coordinate) {
+        setCoordinate(coordinate);
+
+        addDomainEvent(new WidgetResized(new Date(), boardId, id));
     }
 
     public void setText(String text) {

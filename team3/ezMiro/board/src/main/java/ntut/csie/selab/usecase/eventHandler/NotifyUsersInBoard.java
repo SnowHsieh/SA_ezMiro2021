@@ -8,10 +8,7 @@ import ntut.csie.selab.entity.model.board.event.BoardEntered;
 import ntut.csie.selab.entity.model.board.event.WidgetCreationCommitted;
 import ntut.csie.selab.entity.model.board.event.WidgetDeletionCommitted;
 import ntut.csie.selab.entity.model.widget.Widget;
-import ntut.csie.selab.entity.model.widget.event.TextOfWidgetEdited;
-import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
-import ntut.csie.selab.entity.model.widget.event.WidgetDeleted;
-import ntut.csie.selab.entity.model.widget.event.WidgetMoved;
+import ntut.csie.selab.entity.model.widget.event.*;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.websocket.WebSocket;
@@ -98,7 +95,7 @@ public class NotifyUsersInBoard {
         Optional<Widget> widget = widgetRepository.findById(widgetMoved.getWidgetId());
 
         if (!widget.isPresent()) {
-            throw new RuntimeException("Widget not deleted, widget id = " + widgetMoved.getWidgetId());
+            throw new RuntimeException("Widget not found, widget id = " + widgetMoved.getWidgetId());
         }
 
         WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
@@ -116,6 +113,31 @@ public class NotifyUsersInBoard {
         }
         domainEventBus.post(new WidgetDeletionCommitted(new Date()));
         webSocket.sendMessageForAllUsersIn(widgetMoved.getBoardId(), message);
+    }
+
+    @Subscribe
+    public void whenWidgetResized(WidgetResized widgetResized) {
+        Optional<Widget> widget = widgetRepository.findById(widgetResized.getWidgetId());
+
+        if (!widget.isPresent()) {
+            throw new RuntimeException("Widget not found, widget id = " + widgetResized.getWidgetId());
+        }
+
+        WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
+        WidgetDto widgetDto = widgetDtoMapper.domainToDto(widget.get());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JSONObject message = new JSONObject();
+        JSONArray widgetsInfo = new JSONArray();
+
+        try {
+            widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(widgetDto)));
+            message.put("widgets", widgetsInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        domainEventBus.post(new WidgetDeletionCommitted(new Date()));
+        webSocket.sendMessageForAllUsersIn(widgetResized.getBoardId(), message);
     }
 
     @Subscribe
