@@ -2,6 +2,10 @@ package ntut.csie.selab.usecase.eventHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.eventbus.Subscribe;
+import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetDataMapper;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.CommittedWidgetData;
+import ntut.csie.selab.entity.model.board.Board;
+import ntut.csie.selab.entity.model.board.CommittedWidget;
 import ntut.csie.selab.entity.model.board.Cursor;
 import ntut.csie.selab.entity.model.board.event.BoardCursorMoved;
 import ntut.csie.selab.entity.model.board.event.BoardEntered;
@@ -10,12 +14,15 @@ import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.entity.model.widget.event.*;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
+import ntut.csie.selab.usecase.board.CommittedWidgetDto;
+import ntut.csie.selab.usecase.board.CommittedWidgetDtoMapper;
 import ntut.csie.selab.usecase.websocket.WebSocket;
 import ntut.csie.selab.usecase.widget.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -109,6 +116,31 @@ public class NotifyUsersInBoard {
         }
         domainEventBus.post(new WidgetMovementNotifiedToAllUser(new Date()));
         webSocket.sendMessageForAllUsersIn(widgetMoved.getBoardId(), message);
+    }
+
+    @Subscribe
+    public void notifyWidgetZOrderRearrangedToAllUser(WidgetZOrderChanged widgetZOrderChanged) {
+        Optional<Board> board = boardRepository.findById(widgetZOrderChanged.getBoardId());
+        if (board.isPresent()) {
+            Board selectedBoard = board.get();
+            CommittedWidgetDtoMapper mapper = new CommittedWidgetDtoMapper();
+//            List<CommittedWidgetDto> committedWidgetDtos = mapper.domainToDto((selectedBoard.getCommittedWidgets()));
+            CommittedWidgetDto committedWidgetDto = mapper.domainToDto(selectedBoard.getCommittedWidgetBy(widgetZOrderChanged.getWidgetId()).get());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JSONObject message = new JSONObject();
+            JSONArray widgetsInfo = new JSONArray();
+
+            try {
+                widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(committedWidgetDto)));
+                message.put("domainEvent", "notifyWidgetZOrderRearrangedToAllUser");
+                message.put("widgets", widgetsInfo);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            domainEventBus.post(new WidgetResizeNotifiedToAllUser(new Date()));
+            webSocket.sendMessageForAllUsersIn(widgetZOrderChanged.getBoardId(), message);
+        }
     }
 
     @Subscribe

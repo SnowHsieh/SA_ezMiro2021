@@ -100,7 +100,9 @@ export default {
         } else if (message.domainEvent === 'notifyWidgetResizedToAllUser') {
           me.whenWidgetResized(message.widgets)
         } else if (message.domainEvent === 'notifyColorOfWidgetModifiedToAllUser') {
-          me.whenColorOfWidgetChange(message.widgets)
+          me.whenColorOfWidgetChanged(message.widgets)
+        } else if (message.domainEvent === 'notifyWidgetZOrderRearrangedToAllUser') {
+          me.whenZOrderOfWidgetChanged(message.widgets)
         } else {
           me.handleCursorMessage(message.cursors)
           me.handleWidgetMessage(message.widgets)
@@ -157,10 +159,17 @@ export default {
       })
       canvas.renderAll()
     },
-    whenColorOfWidgetChange (widgets) {
+    whenColorOfWidgetChanged (widgets) {
       for (let index = 0; index < widgets.length; index++) {
         if (this.boardContent.widgetDtos.some(widgetDto => widgetDto.widgetId === widgets[index].widgetId)) {
           this.colorOfWidgetChanged(widgets[index])
+        }
+      }
+    },
+    whenZOrderOfWidgetChanged (widgets) {
+      for (let index = 0; index < widgets.length; index++) {
+        if (this.boardContent.widgetDtos.some(widgetDto => widgetDto.widgetId === widgets[index].widgetId)) {
+          this.zOrderOfWidgetChanged(widgets[index])
         }
       }
     },
@@ -172,6 +181,14 @@ export default {
         }
       })
       canvas.renderAll()
+    },
+    zOrderOfWidgetChanged (widgetDto) {
+      const canvas = this.canvas
+      canvas.getObjects().forEach(function (o) {
+        if (o.id === widgetDto.widgetId) {
+          canvas.moveTo(o, widgetDto.zorder)
+        }
+      })
     },
     handleCursorMessage (cursors) {
       if (cursors !== undefined) {
