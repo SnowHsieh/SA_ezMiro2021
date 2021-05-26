@@ -45,7 +45,8 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         assertNotNull(changeFigureOrderOutput.getId());
         assertEquals(ExitCode.SUCCESS, changeFigureOrderOutput.getExitCode());
 
-        board = boardRepository.findById(changeFigureOrderOutput.getId()).get();
+        board = boardRepository.findById(changeFigureOrderOutput.getId()).orElse(null);
+        assertNotNull(board);
         assertEquals(0, board.getCommittedFigures().get(0).zOrder());
         assertEquals(1, board.getCommittedFigures().get(1).zOrder());
     }

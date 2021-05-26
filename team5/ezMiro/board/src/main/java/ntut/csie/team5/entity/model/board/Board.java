@@ -5,6 +5,7 @@ import ntut.csie.team5.entity.model.board.event.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Board extends AggregateRoot<String> {
 
@@ -45,20 +46,27 @@ public class Board extends AggregateRoot<String> {
         this.projectId = projectId;
     }
 
-    public void commitFigure(String figureId) {
-        committedFigures.add(new CommittedFigure(figureId, getBoardId(), committedFigures.size()));
+    public void addFigure(String figureId) {
+        CommittedFigure committedFigure = new CommittedFigure(figureId, getBoardId(), committedFigures.size());
+        committedFigures.add(committedFigure);
+    }
 
+    public void commitFigure(String figureId) {
+        addFigure(figureId);
         addDomainEvent(new FigureCommitted(figureId, getBoardId()));
     }
 
-    public void uncommitFigure(String figureId) {
+    public void removeFigure(String figureId) {
         for(int i = 0; i < committedFigures.size(); i++){
             if(committedFigures.get(i).figureId().equals(figureId)) {
                 committedFigures.remove(i);
                 break;
             }
         }
+    }
 
+    public void uncommitFigure(String figureId) {
+        removeFigure(figureId);
         addDomainEvent(new FigureUncommitted(figureId, getBoardId()));
     }
 
@@ -163,13 +171,18 @@ public class Board extends AggregateRoot<String> {
         }
     }
 
-    public String acceptUserEntry(String userId) {
-        BoardSession boardSession = new BoardSession(getBoardId(), userId);
+    public void addBoardSession(String boardSessionId, String userId) {
+        BoardSession boardSession = new BoardSession(boardSessionId, getBoardId(), userId);
         boardSessions.add(boardSession);
-        createCursor(userId);
+    }
 
-        addDomainEvent(new BoardEntered(boardSession.boardId(), boardSession.userId()));
-        return boardSession.boardSessionId();
+    public String acceptUserEntry(String userId) {
+//        boardSessions.add(boardSession);
+        String boardSessionId = UUID.randomUUID().toString();
+        addBoardSession(boardSessionId, userId);
+        createCursor(userId);
+        addDomainEvent(new BoardEntered(getBoardId(), userId));
+        return boardSessionId;
     }
 
     public void acceptUserLeaving(String boardSessionId, String userId) {
@@ -188,10 +201,13 @@ public class Board extends AggregateRoot<String> {
         return boardSessions;
     }
 
-    private void createCursor(String userId) {
-        Cursor cursor = new Cursor(userId, 0, 0);
+    public void addCursor(String userId, int positionX, int positionY) {
+        Cursor cursor = new Cursor(userId, positionX, positionY);
         cursors.add(cursor);
+    }
 
+    private void createCursor(String userId) {
+        addCursor(userId, 0, 0);
         addDomainEvent(new CursorCreated(getBoardId(), userId));
     }
 

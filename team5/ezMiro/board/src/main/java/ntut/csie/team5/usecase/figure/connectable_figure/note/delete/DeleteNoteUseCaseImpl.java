@@ -4,15 +4,15 @@ import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.entity.model.figure.Figure;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.NoteRepository;
 
 public class DeleteNoteUseCaseImpl implements DeleteNoteUseCase {
 
-    private FigureRepository figureRepository;
+    private NoteRepository noteRepository;
     private DomainEventBus domainEventBus;
 
-    public DeleteNoteUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
-        this.figureRepository = figureRepository;
+    public DeleteNoteUseCaseImpl(NoteRepository noteRepository, DomainEventBus domainEventBus) {
+        this.noteRepository = noteRepository;
         this.domainEventBus = domainEventBus;
     }
 
@@ -23,7 +23,7 @@ public class DeleteNoteUseCaseImpl implements DeleteNoteUseCase {
 
     @Override
     public void execute(DeleteNoteInput input, CqrsCommandOutput output) {
-        Figure note = figureRepository.findById(input.getFigureId()).orElse(null);
+        Figure note = noteRepository.findById(input.getFigureId()).orElse(null);
 
         if(null == note)
         {
@@ -35,7 +35,7 @@ public class DeleteNoteUseCaseImpl implements DeleteNoteUseCase {
 
         note.markAsRemoved();
 
-        figureRepository.deleteById(note.getId());
+        noteRepository.deleteById(note.getId());
         domainEventBus.postAll(note);
 
         output.setId(note.getId());
