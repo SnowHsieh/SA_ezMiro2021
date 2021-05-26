@@ -12,15 +12,13 @@ import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCa
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCaseImpl;
 import org.junit.Test;
 
-import java.awt.*;
-
 import static org.junit.Assert.*;
 
 public class PostNoteUseCaseTest extends AbstractTest {
 
     @Test
     public void should_succeed_when_post_note() {
-        PostNoteUseCase postNoteUseCase = new PostNoteUseCaseImpl(figureRepository, domainEventBus);
+        PostNoteUseCase postNoteUseCase = new PostNoteUseCaseImpl(noteRepository, domainEventBus);
         PostNoteInput postNoteInput = postNoteUseCase.newInput();
         CqrsCommandPresenter postNoteOutput = CqrsCommandPresenter.newInstance();
 
@@ -37,9 +35,8 @@ public class PostNoteUseCaseTest extends AbstractTest {
         assertNotNull(postNoteOutput.getId());
         assertEquals(ExitCode.SUCCESS, postNoteOutput.getExitCode());
 
-        Figure figure = figureRepository.findById(postNoteOutput.getId()).get();
-        assertTrue(figure instanceof Note);
-        Note note = (Note) figure;
+        Note note = noteRepository.findById(postNoteOutput.getId()).orElse(null);
+        assertNotNull(note);
         assertEquals(postNoteOutput.getId(), note.getId());
         assertEquals(boardId, note.getBoardId());
         assertEquals(defaultLeftTopPositionX, note.getLeftTopPositionX());

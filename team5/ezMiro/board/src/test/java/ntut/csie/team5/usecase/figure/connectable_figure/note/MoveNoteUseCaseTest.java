@@ -10,15 +10,13 @@ import ntut.csie.team5.usecase.figure.connectable_figure.note.move.MoveNoteUseCa
 import ntut.csie.team5.usecase.figure.connectable_figure.note.move.MoveNoteUseCaseImpl;
 import org.junit.Test;
 
-import java.awt.*;
-
 import static org.junit.Assert.*;
 
 public class MoveNoteUseCaseTest extends AbstractTest {
 
     @Test
     public void should_success_when_note_moved() {
-        MoveNoteUseCase moveNoteUseCase = new MoveNoteUseCaseImpl(figureRepository, domainEventBus);
+        MoveNoteUseCase moveNoteUseCase = new MoveNoteUseCaseImpl(noteRepository, domainEventBus);
         MoveNoteInput moveNoteInput = moveNoteUseCase.newInput();
         CqrsCommandPresenter moveNoteOutput = CqrsCommandPresenter.newInstance();
 
@@ -34,9 +32,8 @@ public class MoveNoteUseCaseTest extends AbstractTest {
         assertNotNull(moveNoteOutput.getId());
         assertEquals(ExitCode.SUCCESS, moveNoteOutput.getExitCode());
 
-        Figure figure = figureRepository.findById(moveNoteOutput.getId()).get();
-        assertTrue(figure instanceof Note);
-        Note note = (Note) figure;
+        Note note = noteRepository.findById(moveNoteOutput.getId()).orElse(null);
+        assertNotNull(note);
         assertEquals(moveNoteOutput.getId(), note.getId());
         assertEquals(boardId, note.getBoardId());
         assertEquals(nextLeftTopPositionX, note.getLeftTopPositionX());

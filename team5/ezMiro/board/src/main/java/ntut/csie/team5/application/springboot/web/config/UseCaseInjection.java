@@ -14,7 +14,7 @@ import ntut.csie.team5.usecase.board.leave.LeaveBoardUseCase;
 import ntut.csie.team5.usecase.board.leave.LeaveBoardUseCaseImpl;
 import ntut.csie.team5.usecase.board.move_cursor.MoveCursorUseCase;
 import ntut.csie.team5.usecase.board.move_cursor.MoveCursorUseCaseImpl;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.NoteRepository;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.change_color.ChangeNoteColorUseCase;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.change_color.ChangeNoteColorUseCaseImpl;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.delete.DeleteNoteUseCase;
@@ -35,7 +35,7 @@ import org.springframework.context.annotation.Configuration;
 public class UseCaseInjection {
 
     private BoardRepository boardRepository;
-    private FigureRepository figureRepository;
+    private NoteRepository noteRepository;
     private DomainEventBus eventBus;
 
     @Bean(name = "createBoardUseCase")
@@ -45,7 +45,7 @@ public class UseCaseInjection {
 
     @Bean(name = "getBoardContentUseCase")
     public GetBoardContentUseCase getBoardContentUseCase() {
-        return new GetBoardContentUseCaseImpl(boardRepository, figureRepository, eventBus);
+        return new GetBoardContentUseCaseImpl(boardRepository, noteRepository, eventBus);
     }
 
     @Bean(name = "enterBoardUseCase")
@@ -65,32 +65,32 @@ public class UseCaseInjection {
 
     @Bean(name = "postNoteUseCase")
     public PostNoteUseCase postNoteUseCase() {
-        return new PostNoteUseCaseImpl(figureRepository, eventBus);
+        return new PostNoteUseCaseImpl(noteRepository, eventBus);
     }
 
     @Bean(name = "moveNoteUseCase")
     public MoveNoteUseCase moveNoteUseCase() {
-        return new MoveNoteUseCaseImpl(figureRepository, eventBus);
+        return new MoveNoteUseCaseImpl(noteRepository, eventBus);
     }
 
     @Bean(name = "changeNoteColorUseCase")
     public ChangeNoteColorUseCase changeNoteColorUseCase() {
-        return new ChangeNoteColorUseCaseImpl(figureRepository, eventBus);
+        return new ChangeNoteColorUseCaseImpl(noteRepository, eventBus);
     }
 
     @Bean(name = "editNoteTextUseCase")
     public EditNoteTextUseCase editNoteTextUseCase() {
-        return new EditNoteTextUseCaseImpl(figureRepository, eventBus);
+        return new EditNoteTextUseCaseImpl(noteRepository, eventBus);
     }
 
     @Bean(name = "resizeNoteUseCase")
     public ResizeNoteUseCase resizeNoteUseCase() {
-        return new ResizeNoteUseCaseImpl(figureRepository, eventBus);
+        return new ResizeNoteUseCaseImpl(noteRepository, eventBus);
     }
 
     @Bean(name = "deleteNoteUseCase")
     public DeleteNoteUseCase deleteNoteUseCase() {
-        return new DeleteNoteUseCaseImpl(figureRepository, eventBus);
+        return new DeleteNoteUseCaseImpl(noteRepository, eventBus);
     }
 
     @Bean(name = "changeFigureZOrderUseCase")
@@ -104,8 +104,8 @@ public class UseCaseInjection {
     }
 
     @Autowired
-    public void setFigureRepository(FigureRepository figureRepository) {
-        this.figureRepository = figureRepository;
+    public void setFigureRepository(NoteRepository noteRepository) {
+        this.noteRepository = noteRepository;
     }
 
     @Autowired

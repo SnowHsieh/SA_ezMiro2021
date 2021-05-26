@@ -12,15 +12,13 @@ import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCa
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCaseImpl;
 import org.junit.Test;
 
-import java.awt.*;
-
 import static org.junit.Assert.*;
 
 public class DeleteNoteUseCaseTest extends AbstractTest {
 
     @Test
     public void should_succeed_when_delete_note() {
-        PostNoteUseCase postNoteUseCase = new PostNoteUseCaseImpl(figureRepository, domainEventBus);
+        PostNoteUseCase postNoteUseCase = new PostNoteUseCaseImpl(noteRepository, domainEventBus);
         PostNoteInput postNoteInput = postNoteUseCase.newInput();
         CqrsCommandPresenter postNoteOutput = CqrsCommandPresenter.newInstance();
 
@@ -33,7 +31,7 @@ public class DeleteNoteUseCaseTest extends AbstractTest {
 
         String figureId = postNoteOutput.getId();
 
-        DeleteNoteUseCase deleteNoteUseCase = new DeleteNoteUseCaseImpl(figureRepository, domainEventBus);
+        DeleteNoteUseCase deleteNoteUseCase = new DeleteNoteUseCaseImpl(noteRepository, domainEventBus);
         DeleteNoteInput deleteNoteInput = deleteNoteUseCase.newInput();
         CqrsCommandPresenter deleteNoteOutput = CqrsCommandPresenter.newInstance();
 
@@ -43,7 +41,7 @@ public class DeleteNoteUseCaseTest extends AbstractTest {
 
         assertNotNull(deleteNoteOutput.getId());
         assertEquals(ExitCode.SUCCESS, deleteNoteOutput.getExitCode());
-        assertFalse(figureRepository.findById(deleteNoteOutput.getId()).isPresent());
+        assertFalse(noteRepository.findById(deleteNoteOutput.getId()).isPresent());
     }
 
     @Test

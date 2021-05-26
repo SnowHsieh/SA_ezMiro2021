@@ -16,7 +16,7 @@ public class ResizeNoteUseCaseTest extends AbstractTest {
 
     @Test
     public void should_success_when_note_resized() {
-        ResizeNoteUseCase resizeNoteUseCase = new ResizeNoteUseCaseImpl(figureRepository, domainEventBus);
+        ResizeNoteUseCase resizeNoteUseCase = new ResizeNoteUseCaseImpl(noteRepository, domainEventBus);
         ResizeNoteInput resizeNoteInput = resizeNoteUseCase.newInput();
         CqrsCommandPresenter resizeNoteOutput = CqrsCommandPresenter.newInstance();
 
@@ -32,9 +32,8 @@ public class ResizeNoteUseCaseTest extends AbstractTest {
         assertNotNull(resizeNoteOutput.getId());
         assertEquals(ExitCode.SUCCESS, resizeNoteOutput.getExitCode());
 
-        Figure figure = figureRepository.findById(resizeNoteOutput.getId()).get();
-        assertTrue(figure instanceof Note);
-        Note note = (Note) figure;
+        Note note = noteRepository.findById(resizeNoteOutput.getId()).orElse(null);
+        assertNotNull(note);
         assertEquals(resizeNoteOutput.getId(), note.getId());
         assertEquals(boardId, note.getBoardId());
         assertEquals(newHeight, note.getHeight());

@@ -6,7 +6,7 @@ import ntut.csie.team5.usecase.board.BoardSessionBroadcaster;
 import ntut.csie.team5.usecase.board.getcontent.GetBoardContentUseCase;
 import ntut.csie.team5.usecase.eventhandler.NotifyBoard;
 import ntut.csie.team5.usecase.eventhandler.NotifyBoardSessionBroadcaster;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class NotifyInjection {
 
     private BoardRepository boardRepository;
-    private FigureRepository figureRepository;
+    private NoteRepository noteRepository;
     private DomainEventBus eventBus;
     private GetBoardContentUseCase getBoardContentUseCase;
     private BoardSessionBroadcaster boardSessionBroadcaster;
@@ -36,8 +36,8 @@ public class NotifyInjection {
     }
 
     @Autowired
-    public void setFigureRepository(FigureRepository figureRepository) {
-        this.figureRepository = figureRepository;
+    public void setFigureRepository(NoteRepository noteRepository) {
+        this.noteRepository = noteRepository;
     }
 
     @Autowired
