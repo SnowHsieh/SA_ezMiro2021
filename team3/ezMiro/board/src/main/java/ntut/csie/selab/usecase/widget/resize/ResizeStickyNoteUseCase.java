@@ -1,6 +1,5 @@
 package ntut.csie.selab.usecase.widget.resize;
 
-import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
@@ -17,11 +16,12 @@ public class ResizeStickyNoteUseCase {
         this.eventBus = eventBus;
     }
 
-    public void execute(ResizeStickyNoteUseCaseInput input, ResizeStickyNoteUseCaseOutput output) {
+    public void execute(ResizeStickyNoteInput input, ResizeStickyNoteOutput output) {
         Optional<Widget> widget = widgetRepository.findById(input.getStickyNoteId());
         if (widget.isPresent()) {
             Widget stickyNote = widget.get();
-            stickyNote.setCoordinate(input.getCoordinate());
+            stickyNote.resize(input.getCoordinate());
+            widgetRepository.save(stickyNote);
 
             eventBus.postAll(stickyNote);
             output.setStickyNoteId(input.getStickyNoteId());

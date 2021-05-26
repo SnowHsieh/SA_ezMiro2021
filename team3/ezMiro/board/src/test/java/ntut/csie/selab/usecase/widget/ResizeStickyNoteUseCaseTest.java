@@ -8,8 +8,8 @@ import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.widget.resize.ResizeStickyNoteUseCase;
-import ntut.csie.selab.usecase.widget.resize.ResizeStickyNoteUseCaseInput;
-import ntut.csie.selab.usecase.widget.resize.ResizeStickyNoteUseCaseOutput;
+import ntut.csie.selab.usecase.widget.resize.ResizeStickyNoteInput;
+import ntut.csie.selab.usecase.widget.resize.ResizeStickyNoteOutput;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,8 +41,8 @@ public class ResizeStickyNoteUseCaseTest {
         Widget stickyNote = new StickyNote(stickyNoteId, "0", coordinate);
         widgetRepository.save(stickyNote);
         ResizeStickyNoteUseCase resizeStickyNoteUseCase = new ResizeStickyNoteUseCase(widgetRepository, eventBus);
-        ResizeStickyNoteUseCaseInput input = new ResizeStickyNoteUseCaseInput();
-        ResizeStickyNoteUseCaseOutput output = new ResizeStickyNoteUseCaseOutput();
+        ResizeStickyNoteInput input = new ResizeStickyNoteInput();
+        ResizeStickyNoteOutput output = new ResizeStickyNoteOutput();
         input.setStickyNoteId(stickyNoteId);
         input.setCoordinate(new Coordinate(10, 10, 50, 50));
 
