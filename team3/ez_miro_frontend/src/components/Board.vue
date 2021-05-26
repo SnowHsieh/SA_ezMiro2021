@@ -93,9 +93,9 @@ export default {
       }
       this.webSocket.onmessage = async function (e) {
         const message = await JSON.parse(e.data)
-        if (message.domainEvent === 'whenWidgetDeleted') {
+        if (message.domainEvent === 'widgetDeletionNotifiedToAllUser') {
           me.whenWidgetDeleted(message.widgets)
-        } else if (message.domainEvent === 'whenTextOfWidgetEdited') {
+        } else if (message.domainEvent === 'notifyTextOfWidgetModifiedToAllUser') {
           me.whenTextOfWidgetEdited(message.widgets)
         } else {
           me.handleCursorMessage(message.cursors)

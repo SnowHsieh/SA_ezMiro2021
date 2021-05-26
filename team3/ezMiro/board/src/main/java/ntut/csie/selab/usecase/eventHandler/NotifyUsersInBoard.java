@@ -5,13 +5,9 @@ import com.google.common.eventbus.Subscribe;
 import ntut.csie.selab.entity.model.board.Cursor;
 import ntut.csie.selab.entity.model.board.event.BoardCursorMoved;
 import ntut.csie.selab.entity.model.board.event.BoardEntered;
-import ntut.csie.selab.entity.model.board.event.WidgetCreationCommitted;
-import ntut.csie.selab.entity.model.board.event.WidgetDeletionCommitted;
+import ntut.csie.selab.entity.model.board.event.WidgetCreationNotifiedToAllUser;
 import ntut.csie.selab.entity.model.widget.Widget;
-import ntut.csie.selab.entity.model.widget.event.TextOfWidgetEdited;
-import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
-import ntut.csie.selab.entity.model.widget.event.WidgetDeleted;
-import ntut.csie.selab.entity.model.widget.event.WidgetMoved;
+import ntut.csie.selab.entity.model.widget.event.*;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.websocket.WebSocket;
@@ -20,7 +16,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.beans.Customizer;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
@@ -40,7 +35,7 @@ public class NotifyUsersInBoard {
     }
 
     @Subscribe
-    public void whenWidgetCreated(WidgetCreated widgetCreated) {
+    public void notifyWidgetCreationToAllUser(WidgetCreated widgetCreated) {
         Optional<Widget> widget = widgetRepository.findById(widgetCreated.getWidgetId());
 
         if (widget.isPresent()) {
@@ -59,7 +54,7 @@ public class NotifyUsersInBoard {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            domainEventBus.post(new WidgetCreationCommitted(new Date(), widgetCreated.getBoardId(), widgetCreated.getWidgetId()));
+            domainEventBus.post(new WidgetCreationNotifiedToAllUser(new Date(), widgetCreated.getBoardId(), widgetCreated.getWidgetId()));
             webSocket.sendMessageForAllUsersIn(widgetCreated.getBoardId(), message);
         } else {
             throw new RuntimeException("Widget not found, widget id = " + widgetCreated.getWidgetId());
@@ -67,10 +62,10 @@ public class NotifyUsersInBoard {
     }
 
     @Subscribe
-    public void whenWidgetDeleted(WidgetDeleted widgetDeleted) {
+    public void notifyWidgetDeletionToAllUser(WidgetDeleted widgetDeleted) {
         Optional<Widget> widget = widgetRepository.findById(widgetDeleted.getWidgetId());
 
-        if (!widget.isPresent()) {
+        if (widget.isPresent()) {
             throw new RuntimeException("Widget not deleted, widget id = " + widgetDeleted.getWidgetId());
         }
 
@@ -83,22 +78,21 @@ public class NotifyUsersInBoard {
 
         try {
             widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(widgetDeletedDto)));
-
-            message.put("domainEvent", "whenWidgetDeleted");
+            message.put("domainEvent", "widgetDeletionNotifiedToAllUser");
             message.put("widgets", widgetsInfo);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        domainEventBus.post(new WidgetDeletionCommitted(new Date()));
+        domainEventBus.post(new WidgetDeletionNotifiedToAllUser(new Date()));
         webSocket.sendMessageForAllUsersIn(widgetDeleted.getBoardId(), message);
     }
 
     @Subscribe
-    public void whenWidgetMoved(WidgetMoved widgetMoved) {
+    public void notifyWidgetMovementToAllUser(WidgetMoved widgetMoved) {
         Optional<Widget> widget = widgetRepository.findById(widgetMoved.getWidgetId());
 
         if (!widget.isPresent()) {
-            throw new RuntimeException("Widget not deleted, widget id = " + widgetMoved.getWidgetId());
+            throw new RuntimeException("Widget not found, widget id = " + widgetMoved.getWidgetId());
         }
 
         WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
@@ -114,12 +108,12 @@ public class NotifyUsersInBoard {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        domainEventBus.post(new WidgetDeletionCommitted(new Date()));
+        domainEventBus.post(new WidgetMovementNotifiedToAllUser(new Date()));
         webSocket.sendMessageForAllUsersIn(widgetMoved.getBoardId(), message);
     }
 
     @Subscribe
-    public void whenTextOfWidgetEdited(TextOfWidgetEdited textOfWidgetEdited) {
+    public void notifyTextOfWidgetModifiedToAllUser(TextOfWidgetEdited textOfWidgetEdited) {
         Optional<Widget> widget = widgetRepository.findById(textOfWidgetEdited.getWidgetId());
 
         if (widget.isPresent()) {
@@ -135,10 +129,11 @@ public class NotifyUsersInBoard {
             try {
                 widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(widgetDto)));
                 message.put("widgets", widgetsInfo);
-                message.put("domainEvent", "whenTextOfWidgetEdited");
+                message.put("domainEvent", "notifyTextOfWidgetModifiedToAllUser");
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            domainEventBus.post(new WidgetTextOfWidgetModifiedToAllUser(new Date()));
             webSocket.sendMessageForAllUsersIn(textOfWidgetEdited.getBoardId(), message);
         } else {
             throw new RuntimeException("Widget not found, widget id = " + textOfWidgetEdited.getWidgetId());

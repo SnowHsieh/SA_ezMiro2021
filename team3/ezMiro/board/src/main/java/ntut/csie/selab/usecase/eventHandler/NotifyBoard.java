@@ -2,7 +2,7 @@ package ntut.csie.selab.usecase.eventHandler;
 
 import com.google.common.eventbus.Subscribe;
 import ntut.csie.selab.entity.model.board.Board;
-import ntut.csie.selab.entity.model.board.event.WidgetCreationCommitted;
+import ntut.csie.selab.entity.model.board.event.WidgetCreationNotifiedToAllUser;
 import ntut.csie.selab.entity.model.board.event.WidgetDeletionCommitted;
 import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
 import ntut.csie.selab.entity.model.widget.event.WidgetDeleted;
@@ -30,7 +30,7 @@ public class NotifyBoard {
             Board selectedBoard = board.get();
             boardAssociationRepository.save(selectedBoard);
             boardAssociationRepository.saveCommittedWidget(selectedBoard.getId(), widgetCreated.getWidgetId());
-            domainEventBus.post(new WidgetCreationCommitted(new Date(), widgetCreated.getBoardId(), widgetCreated.getWidgetId()));
+            domainEventBus.post(new WidgetCreationNotifiedToAllUser(new Date(), widgetCreated.getBoardId(), widgetCreated.getWidgetId()));
         } else {
             throw new RuntimeException("Board not found, board id = " + widgetCreated.getBoardId());
         }
@@ -43,7 +43,7 @@ public class NotifyBoard {
         if (board.isPresent()) {
             Board selectedBoard = board.get();
             boardAssociationRepository.save(selectedBoard);
-            boardAssociationRepository.deleteCommittedWidget(selectedBoard.getId(), widgetDeleted.getWidgetId());
+//            boardAssociationRepository.deleteCommittedWidget(selectedBoard.getId(), widgetDeleted.getWidgetId());
             domainEventBus.post(new WidgetDeletionCommitted(new Date()));
         } else {
             throw new RuntimeException("Board not found, board id = " + widgetDeleted.getBoardId());

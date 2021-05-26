@@ -20,7 +20,7 @@ public class MoveStickyNoteUseCase {
         if (stickyNote.isPresent()) {
             Widget selectedStickyNote = stickyNote.get();
             selectedStickyNote.setCoordinate(input.getCoordinate());
-
+            widgetRepository.save(selectedStickyNote);
             domainEventBus.postAll(selectedStickyNote);
             output.setStickyNoteId(selectedStickyNote.getId());
             output.setCoordinate(selectedStickyNote.getCoordinate());

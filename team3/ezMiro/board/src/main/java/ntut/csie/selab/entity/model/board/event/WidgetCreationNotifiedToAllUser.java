@@ -4,12 +4,12 @@ import ntut.csie.selab.model.DomainEvent;
 
 import java.util.Date;
 
-public class WidgetCreationCommitted extends DomainEvent {
+public class WidgetCreationNotifiedToAllUser extends DomainEvent {
 
     private String boardId;
     private String widgetId;
 
-    public WidgetCreationCommitted(Date occurredOn, String boardId, String widgetId) {
+    public WidgetCreationNotifiedToAllUser(Date occurredOn, String boardId, String widgetId) {
         super(occurredOn);
         this.boardId = boardId;
         this.widgetId = widgetId;
