@@ -5,17 +5,15 @@ import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.entity.model.figure.Figure;
 import ntut.csie.team5.entity.model.figure.note.Note;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
-
-import java.awt.*;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.NoteRepository;
 
 public class MoveNoteUseCaseImpl implements MoveNoteUseCase {
 
-    private FigureRepository figureRepository;
+    private NoteRepository noteRepository;
     private DomainEventBus domainEventBus;
 
-    public MoveNoteUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
-        this.figureRepository = figureRepository;
+    public MoveNoteUseCaseImpl(NoteRepository noteRepository, DomainEventBus domainEventBus) {
+        this.noteRepository = noteRepository;
         this.domainEventBus = domainEventBus;
     }
 
@@ -26,7 +24,7 @@ public class MoveNoteUseCaseImpl implements MoveNoteUseCase {
 
     @Override
     public void execute(MoveNoteInput input, CqrsCommandOutput output) {
-        Figure figure = figureRepository.findById(input.getFigureId()).orElse(null);
+        Figure figure = noteRepository.findById(input.getFigureId()).orElse(null);
 
         if(null == figure)
         {
@@ -38,7 +36,7 @@ public class MoveNoteUseCaseImpl implements MoveNoteUseCase {
 
         Note note = (Note)figure;
         note.changePosition(input.getLeftTopPositionX(), input.getLeftTopPositionY());
-        figureRepository.save(note);
+        noteRepository.save(note);
         domainEventBus.postAll(note);
 
         output.setId(figure.getId());

@@ -2,9 +2,10 @@ package ntut.csie.team5.usecase;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
-import ntut.csie.team5.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
+import ntut.csie.team5.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
+import ntut.csie.team5.adapter.gateway.repository.springboot.figure.note.NoteRepositoryImpl;
+import ntut.csie.team5.adapter.gateway.repository.springboot.figure.note.NoteRepositoryPeer;
 import ntut.csie.team5.adapter.project.ProjectRepositoryImpl;
 import ntut.csie.team5.entity.model.figure.FigureType;
 import ntut.csie.team5.usecase.board.BoardRepository;
@@ -15,7 +16,7 @@ import ntut.csie.team5.usecase.board.enter.EnterBoardInput;
 import ntut.csie.team5.usecase.board.enter.EnterBoardUseCase;
 import ntut.csie.team5.usecase.board.enter.EnterBoardUseCaseImpl;
 import ntut.csie.team5.usecase.eventhandler.NotifyBoard;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.NoteRepository;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteInput;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCase;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCaseImpl;
@@ -24,18 +25,29 @@ import ntut.csie.team5.usecase.project.create.CreateProjectInput;
 import ntut.csie.team5.usecase.project.create.CreateProjectUseCase;
 import ntut.csie.team5.usecase.project.create.CreateProjectUseCaseImpl;
 import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import java.awt.*;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes= JpaApplicationTest.class)
+@TestPropertySource(locations = "classpath:test.properties")
+@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
 public abstract class AbstractTest {
 
     public ProjectRepository projectRepository;
     public BoardRepository boardRepository;
-    public FigureRepository figureRepository;
+    public NoteRepository noteRepository;
     public DomainEventBus domainEventBus;
 
     public NotifyBoard notifyBoard;
@@ -52,11 +64,17 @@ public abstract class AbstractTest {
     public int defaultWidth;
     public String defaultColor;
 
+    @Autowired
+    private BoardRepositoryPeer boardRepositoryPeer;
+
+    @Autowired
+    private NoteRepositoryPeer noteRepositoryPeer;
+
     @Before
     public void setUp() throws Exception {
         projectRepository = new ProjectRepositoryImpl();
-        boardRepository = new BoardRepositoryImpl();
-        figureRepository = new FigureRepositoryImpl();
+        boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
+        noteRepository = new NoteRepositoryImpl(noteRepositoryPeer);
         domainEventBus = new DomainEventBus();
 
         notifyBoard = new NotifyBoard(boardRepository, domainEventBus);
@@ -100,7 +118,7 @@ public abstract class AbstractTest {
     }
 
     public String postNote(String boardId, int leftTopPositionX, int leftTopPositionY, int height, int width, String color) {
-        PostNoteUseCase postNoteUseCase = new PostNoteUseCaseImpl(figureRepository, domainEventBus);
+        PostNoteUseCase postNoteUseCase = new PostNoteUseCaseImpl(noteRepository, domainEventBus);
         PostNoteInput postNoteInput = postNoteUseCase.newInput();
         CqrsCommandPresenter postNoteOutput = CqrsCommandPresenter.newInstance();
 

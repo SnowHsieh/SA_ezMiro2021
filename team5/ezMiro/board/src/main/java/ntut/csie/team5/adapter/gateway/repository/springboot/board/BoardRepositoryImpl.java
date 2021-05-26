@@ -9,10 +9,10 @@ import java.util.Optional;
 
 public class BoardRepositoryImpl implements BoardRepository {
 
-    private List<Board> boards;
+    private BoardRepositoryPeer peer;
 
-    public BoardRepositoryImpl(){
-        boards = new ArrayList<>();
+    public BoardRepositoryImpl(BoardRepositoryPeer peer){
+        this.peer = peer;
     }
 
     @Override
@@ -22,21 +22,24 @@ public class BoardRepositoryImpl implements BoardRepository {
 
     @Override
     public List<Board> findAll() {
-        return null;
+        List<BoardData> boardDatas = new ArrayList<>();
+        peer.findAll().forEach(boardDatas::add);
+        return BoardMapper.transformToDomain(boardDatas);
     }
 
     @Override
     public Optional<Board> findById(String id) {
-        return boards.stream().filter(board -> board.getBoardId().equals(id)).findAny();
+        return peer.findById(id).map(BoardMapper::transformToDomain);
     }
 
     @Override
     public void save(Board board) {
-        boards.add(board);
+        BoardData data = BoardMapper.transformToData(board);
+        peer.save(data);
     }
 
     @Override
     public void deleteById(String id) {
-
+        peer.deleteById(id);
     }
 }

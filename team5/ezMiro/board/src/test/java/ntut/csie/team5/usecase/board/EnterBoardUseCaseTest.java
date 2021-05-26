@@ -33,6 +33,7 @@ public class EnterBoardUseCaseTest extends AbstractTest {
 
         Board board = boardRepository.findById(boardId).get();
         assertEquals(1, board.getBoardSessions().size());
+        assertEquals(enterBoardOutput.getId(), board.getBoardSessions().get(0).boardSessionId());
         assertEquals(boardId, board.getBoardSessions().get(0).boardId());
         assertEquals(userId, board.getBoardSessions().get(0).userId());
         assertEquals(1, board.getCursors().size());

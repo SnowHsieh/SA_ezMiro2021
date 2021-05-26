@@ -9,7 +9,7 @@ import ntut.csie.team5.usecase.ClientBoardContentMightExpire;
 import ntut.csie.team5.usecase.board.BoardRepository;
 import ntut.csie.team5.usecase.figure.ConvertFiguresToDto;
 import ntut.csie.team5.usecase.figure.FigureDto;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.NoteRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +18,14 @@ public class GetBoardContentUseCaseImpl implements GetBoardContentUseCase, GetBo
 
     private String boardId;
     private BoardRepository boardRepository;
-    private FigureRepository figureRepository;
+    private NoteRepository noteRepository;
     private DomainEventBus domainEventBus;
 
     public GetBoardContentUseCaseImpl(BoardRepository boardRepository,
-                                      FigureRepository figureRepository,
+                                      NoteRepository noteRepository,
                                       DomainEventBus domainEventBus) {
         this.boardRepository = boardRepository;
-        this.figureRepository = figureRepository;
+        this.noteRepository = noteRepository;
         this.domainEventBus = domainEventBus;
     }
 
@@ -42,7 +42,7 @@ public class GetBoardContentUseCaseImpl implements GetBoardContentUseCase, GetBo
 
         List<FigureDto> figureDtos = new ArrayList<>();
         for (CommittedFigure committedFigure : board.getCommittedFigures()) {
-            Figure figure = figureRepository.findById(committedFigure.figureId()).orElse(null);
+            Figure figure = noteRepository.findById(committedFigure.figureId()).orElse(null);
             if (null == figure) {
                 output.setBoardId(input.getBoardId())
                         .setExitCode(ExitCode.FAILURE)

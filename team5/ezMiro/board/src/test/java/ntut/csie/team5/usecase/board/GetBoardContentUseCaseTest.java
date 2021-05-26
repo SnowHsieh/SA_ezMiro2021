@@ -28,7 +28,7 @@ public class GetBoardContentUseCaseTest extends AbstractTest {
 
         String firstNoteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, "#ff0000");
 
-        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCaseImpl(boardRepository, figureRepository, domainEventBus);
+        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCaseImpl(boardRepository, noteRepository, domainEventBus);
         GetBoardContentInput getBoardContentInput = (GetBoardContentInput) getBoardContentUseCase;
         GetBoardContentPresenter getBoardContentOutput = new GetBoardContentPresenter();
 

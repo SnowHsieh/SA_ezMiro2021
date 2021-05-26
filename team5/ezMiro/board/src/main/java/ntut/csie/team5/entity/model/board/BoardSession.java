@@ -6,14 +6,14 @@ import java.util.UUID;
 
 public class BoardSession extends ValueObject {
 
+    private final String boardSessionId;
     private final String boardId;
     private final String userId;
-    private final String boardSessionId;
 
-    public BoardSession(String boardId, String userId) {
+    public BoardSession(String boardSessionId, String boardId, String userId) {
+        this.boardSessionId = boardSessionId;
         this.boardId = boardId;
         this.userId = userId;
-        this.boardSessionId = UUID.randomUUID().toString();
     }
 
     public String boardId() {
