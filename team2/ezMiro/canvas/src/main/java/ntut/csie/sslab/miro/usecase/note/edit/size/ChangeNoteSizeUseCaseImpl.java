@@ -17,13 +17,11 @@ public class ChangeNoteSizeUseCaseImpl implements ChangeNoteSizeUseCase {
 
     @Override
     public void execute(ChangeNoteSizeInput input, CqrsCommandOutput output) {
-        Note note = (Note)figureRepository.findById(input.getNoteId()).orElse(null);
-        // TODO: Type cast need to fix.
+        Note note = figureRepository.findNoteById(input.getNoteId()).orElse(null);
         if (note == null){
            output.setId(input.getNoteId())
-                   .setMessage("Change note size failed: note not found, note id = " + input.getNoteId());
-//           domainEventBus.post()
-            return;
+                 .setMessage("Change note size failed: note not found, note id = " + input.getNoteId());
+           return;
         }
 
         note.changeSize(input.getHeight(), input.getWidth());

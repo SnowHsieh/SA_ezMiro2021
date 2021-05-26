@@ -1,33 +1,17 @@
 package ntut.csie.sslab.miro.usecase.board;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
-import ntut.csie.sslab.miro.usecase.DomainEventListener;
+import ntut.csie.sslab.miro.usecase.AbstractUseCaseTest;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardInput;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCase;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCaseImpl;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CreateBoardUseCaseTest {
-    private BoardRepository boardRepository;
-    private DomainEventBus domainEventBus;
-    private DomainEventListener eventListener;
-
-    @Before
-    public void setUp() {
-        boardRepository = new BoardRepositoryImpl();
-        domainEventBus = new DomainEventBus();
-        eventListener = new DomainEventListener();
-
-        domainEventBus.register(eventListener);
-    }
-
+public class CreateBoardUseCaseTest extends AbstractUseCaseTest {
     @Test
-    public void create_board() {
+    public void create_a_board() {
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCaseImpl(boardRepository, domainEventBus);
         CreateBoardInput input = createBoardUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
@@ -41,5 +25,6 @@ public class CreateBoardUseCaseTest {
         assertEquals("TeamId", boardRepository.findById(output.getId()).get().getTeamId());
         assertEquals("Team2sBoard", boardRepository.findById(output.getId()).get().getBoardName());
         assertNotNull(boardRepository.findById(output.getId()).get().getBoardChannel());
+        assertEquals(1, eventListener.getEventCount());
     }
 }

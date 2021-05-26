@@ -16,12 +16,10 @@ public class BringNoteToFrontUseCaseImpl implements BringNoteToFrontUseCase {
 
     @Override
     public void execute(BringNoteToFrontInput input, CqrsCommandOutput output) {
-        Note note = (Note)figureRepository.findById(input.getNoteId()).orElse(null);
-        // TODO: Type cast need to fix.
+        Note note = figureRepository.findNoteById(input.getNoteId()).orElse(null);
         if (note == null) {
             output.setId(input.getNoteId())
                     .setMessage("Bring note to front failed: note not found, note id = " + input.getNoteId());
-//           domainEventBus.post()
             return;
         }
 

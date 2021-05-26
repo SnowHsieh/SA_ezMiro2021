@@ -2,8 +2,12 @@ package ntut.csie.sslab.miro.application.springboot.web.config;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.note.FigureRepositoryImpl;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.cursor.CursorRepositoryImpl;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.NoteRepositoryPeer;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
+import ntut.csie.sslab.miro.usecase.cursor.CursorRepository;
 import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,22 +18,25 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration("MiroRepositoryInjection")
 public class RepositoryInjection {
 
-    private BoardRepository boardRepository;
-    private FigureRepository figureRepository;
+    @Autowired
+    private BoardRepositoryPeer boardRepositoryPeer;
 
     @Autowired
-    public void setBoardRepository(BoardRepository boardRepository){
-        this.boardRepository = boardRepository;
-    }
+    private NoteRepositoryPeer noteRepositoryPeer;
 
     @Bean(name="boardRepository")
     public BoardRepository boardRepository() {
-        return new BoardRepositoryImpl();
+        return new BoardRepositoryImpl(boardRepositoryPeer);
     }
 
     @Bean(name="figureRepository")
     public FigureRepository figureRepository() {
-        return new FigureRepositoryImpl();
+        return new FigureRepositoryImpl(noteRepositoryPeer);
+    }
+
+    @Bean(name="cursorRepository")
+    public CursorRepository cursorRepository() {
+        return new CursorRepositoryImpl();
     }
 
     @Bean(name="miroEventBus")
