@@ -156,6 +156,33 @@ public class NotifyUsersInBoard {
         webSocket.sendMessageForAllUsersIn(boardId, convertCursorToMessage(cursors));
     }
 
+    @Subscribe
+    public void notifyColorOfWidgetModifiedToAllUser(ColorOfWidgetChanged colorOfWidgetChanged) {
+        Optional<Widget> widget = widgetRepository.findById(colorOfWidgetChanged.getWidgetId());
+
+        if (widget.isPresent()) {
+            Widget selectedWidget = widget.get();
+            WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
+            WidgetDto widgetDto = widgetDtoMapper.domainToDto(selectedWidget);
+
+            JSONObject message = new JSONObject();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JSONArray widgetsInfo = new JSONArray();
+
+            try {
+                widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(widgetDto)));
+                message.put("widgets", widgetsInfo);
+                message.put("domainEvent", "notifyColorOfWidgetModifiedToAllUser");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            webSocket.sendMessageForAllUsersIn(colorOfWidgetChanged.getBoardId(), message);
+        } else {
+            throw new RuntimeException("Widget not found, widget id = " + colorOfWidgetChanged.getWidgetId());
+        }
+    }
+
     private JSONObject convertCursorToMessage(Set<Cursor> cursorSet) {
         JSONArray parsedCursors = new JSONArray();
         cursorSet.forEach(cursor -> {

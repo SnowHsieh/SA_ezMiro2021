@@ -97,6 +97,10 @@ export default {
           me.whenWidgetDeleted(message.widgets)
         } else if (message.domainEvent === 'notifyTextOfWidgetModifiedToAllUser') {
           me.whenTextOfWidgetEdited(message.widgets)
+        } else if (message.domainEvent === 'notifyWidgetResizeToAllUser') {
+          me.whenWidgetResized(message.widgets)
+        } else if (message.domainEvent === 'notifyColorOfWidgetModifiedToAllUser') {
+          me.whenColorOfWidgetChange(message.widgets)
         } else {
           me.handleCursorMessage(message.cursors)
           me.handleWidgetMessage(message.widgets)
@@ -131,6 +135,40 @@ export default {
       canvas.getObjects().forEach(function (o) {
         if (o.id === widgetDto.widgetId) {
           o.textObject.set('text', widgetDto.text)
+        }
+      })
+      canvas.renderAll()
+    },
+    whenWidgetResized (widgets) {
+      for (let index = 0; index < widgets.length; index++) {
+        if (this.boardContent.widgetDtos.some(widgetDto => widgetDto.widgetId === widgets[index].widgetId)) {
+          this.resizeWidget(widgets[index])
+        }
+      }
+    },
+    resizeWidget (widgetDto) {
+      const canvas = this.canvas
+      const me = this
+      canvas.getObjects().forEach(function (o) {
+        if (o.id === widgetDto.widgetId) {
+          canvas.remove(o)
+          me.loadStickyNoteIntoCanvas(widgetDto)
+        }
+      })
+      canvas.renderAll()
+    },
+    whenColorOfWidgetChange (widgets) {
+      for (let index = 0; index < widgets.length; index++) {
+        if (this.boardContent.widgetDtos.some(widgetDto => widgetDto.widgetId === widgets[index].widgetId)) {
+          this.colorOfWidgetChanged(widgets[index])
+        }
+      }
+    },
+    colorOfWidgetChanged (widgetDto) {
+      const canvas = this.canvas
+      canvas.getObjects().forEach(function (o) {
+        if (o.id === widgetDto.widgetId) {
+          o.rectObject.set('fill', widgetDto.color)
         }
       })
       canvas.renderAll()

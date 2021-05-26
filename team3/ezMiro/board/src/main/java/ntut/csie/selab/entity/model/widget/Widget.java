@@ -1,9 +1,6 @@
 package ntut.csie.selab.entity.model.widget;
 
-import ntut.csie.selab.entity.model.widget.event.TextOfWidgetEdited;
-import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
-import ntut.csie.selab.entity.model.widget.event.WidgetDeleted;
-import ntut.csie.selab.entity.model.widget.event.WidgetMoved;
+import ntut.csie.selab.entity.model.widget.event.*;
 import ntut.csie.selab.model.AggregateRoot;
 
 import java.util.Date;
@@ -65,6 +62,7 @@ public abstract class Widget extends AggregateRoot<String> {
 
     public void setColor(String color) {
         this.color = color;
+        addDomainEvent(new ColorOfWidgetChanged(new Date(), boardId, id));
     }
 
     public String getTextColor() {
