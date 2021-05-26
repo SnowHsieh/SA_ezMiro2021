@@ -97,7 +97,7 @@ export default {
           me.whenWidgetDeleted(message.widgets)
         } else if (message.domainEvent === 'notifyTextOfWidgetModifiedToAllUser') {
           me.whenTextOfWidgetEdited(message.widgets)
-        } else if (message.domainEvent === 'notifyWidgetResizeToAllUser') {
+        } else if (message.domainEvent === 'notifyWidgetResizedToAllUser') {
           me.whenWidgetResized(message.widgets)
         } else if (message.domainEvent === 'notifyColorOfWidgetModifiedToAllUser') {
           me.whenColorOfWidgetChange(message.widgets)

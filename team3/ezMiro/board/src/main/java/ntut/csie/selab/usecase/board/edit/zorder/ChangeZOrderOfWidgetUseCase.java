@@ -20,9 +20,6 @@ public class ChangeZOrderOfWidgetUseCase {
         this.domainEventBus = domainEventBus;
     }
 
-    // a, b, c, d, e
-    // e -> c
-    // a, b, e, c, d
     public void execute(ChangeZOrderOfWidgetInput input, ChangeZOrderOfWidgetOutput output) {
         Optional<Board> board = boardRepository.findById(input.getBoardId());
         if(board.isPresent()) {
