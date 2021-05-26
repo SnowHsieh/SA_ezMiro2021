@@ -8,12 +8,7 @@ import ntut.csie.team5.usecase.AbstractTest;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.edit_text.EditNoteTextInput;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.edit_text.EditNoteTextUseCase;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.edit_text.EditNoteTextUseCaseImpl;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.move.MoveNoteInput;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.move.MoveNoteUseCase;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.move.MoveNoteUseCaseImpl;
 import org.junit.Test;
-
-import java.awt.*;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
@@ -22,7 +17,7 @@ public class EditNoteTextUseCaseTest extends AbstractTest {
 
     @Test
     public void should_success_when_note_text_edited() {
-        EditNoteTextUseCase editNoteTextUseCase = new EditNoteTextUseCaseImpl(figureRepository, domainEventBus);
+        EditNoteTextUseCase editNoteTextUseCase = new EditNoteTextUseCaseImpl(noteRepository, domainEventBus);
         EditNoteTextInput editNoteTextInput = editNoteTextUseCase.newInput();
         CqrsCommandPresenter editNoteTextOutput = CqrsCommandPresenter.newInstance();
 
@@ -36,9 +31,8 @@ public class EditNoteTextUseCaseTest extends AbstractTest {
         assertNotNull(editNoteTextOutput.getId());
         assertEquals(ExitCode.SUCCESS, editNoteTextOutput.getExitCode());
 
-        Figure figure = figureRepository.findById(editNoteTextOutput.getId()).get();
-        assertTrue(figure instanceof Note);
-        Note note = (Note) figure;
+        Note note = noteRepository.findById(editNoteTextOutput.getId()).orElse(null);
+        assertNotNull(note);
         assertEquals(editNoteTextOutput.getId(), note.getId());
         assertEquals(boardId, note.getBoardId());
         assertEquals(newText, note.getText());

@@ -16,7 +16,7 @@ public class ChangeNoteColorUseCaseTest extends AbstractTest {
 
     @Test
     public void should_success_when_note_color_changed() {
-        ChangeNoteColorUseCase changeNoteColorUseCase = new ChangeNoteColorUseCaseImpl(figureRepository, domainEventBus);
+        ChangeNoteColorUseCase changeNoteColorUseCase = new ChangeNoteColorUseCaseImpl(noteRepository, domainEventBus);
         ChangeNoteColorInput changeNoteColorInput = changeNoteColorUseCase.newInput();
         CqrsCommandPresenter changeNoteColorOutput = CqrsCommandPresenter.newInstance();
 
@@ -30,9 +30,8 @@ public class ChangeNoteColorUseCaseTest extends AbstractTest {
         assertNotNull(changeNoteColorOutput.getId());
         assertEquals(ExitCode.SUCCESS, changeNoteColorOutput.getExitCode());
 
-        Figure figure = figureRepository.findById(changeNoteColorOutput.getId()).get();
-        assertTrue(figure instanceof Note);
-        Note note = (Note) figure;
+        Note note = noteRepository.findById(changeNoteColorOutput.getId()).orElse(null);
+        assertNotNull(note);
         assertEquals(changeNoteColorOutput.getId(), note.getId());
         assertEquals(boardId, note.getBoardId());
         assertEquals(newColor, note.getColor());

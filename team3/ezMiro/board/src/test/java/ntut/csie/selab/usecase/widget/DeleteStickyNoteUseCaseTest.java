@@ -105,8 +105,8 @@ public class DeleteStickyNoteUseCaseTest {
         // Assert
         Assert.assertNotNull(output.getStickyNoteId());
         Assert.assertFalse(widgetRepository.findById(output.getStickyNoteId()).isPresent());
-        Assert.assertEquals(0, committedWidgetRepositoryPeer.countByBoard(BoardDataMapper.domainToData(boardRepository.findById(boardId).get())));
-        Assert.assertEquals(2, domainEventBus.getCount());
+        Assert.assertEquals(0, boardRepository.findById(boardId).get().getWidgetIds().size());
+        Assert.assertEquals(3, domainEventBus.getCount());
     }
 
     private Board createBoardHasStickNoteWith(String boardId, String stickyNoteId) {

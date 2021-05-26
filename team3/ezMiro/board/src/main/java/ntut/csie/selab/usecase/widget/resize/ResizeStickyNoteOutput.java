@@ -2,7 +2,7 @@ package ntut.csie.selab.usecase.widget.resize;
 
 import ntut.csie.selab.entity.model.widget.Coordinate;
 
-public class ResizeStickyNoteUseCaseOutput {
+public class ResizeStickyNoteOutput {
     private String stickyNoteId;
     private Coordinate coordinate;
 

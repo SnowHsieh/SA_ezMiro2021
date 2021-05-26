@@ -37,6 +37,7 @@ public class MoveCursorUseCaseTest extends AbstractTest {
         assertNotNull(moveCursorOutput.getId());
         assertEquals(ExitCode.SUCCESS, moveCursorOutput.getExitCode());
 
+        board = boardRepository.findById(boardId).get();
         Cursor cursor = board.getUserCursor(userId);
         assertEquals(userId, cursor.userId());
         assertEquals(10, cursor.positionX());

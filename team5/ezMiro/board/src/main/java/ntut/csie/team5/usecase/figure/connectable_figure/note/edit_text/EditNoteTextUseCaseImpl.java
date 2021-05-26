@@ -5,15 +5,15 @@ import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.entity.model.figure.Figure;
 import ntut.csie.team5.entity.model.figure.note.Note;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.NoteRepository;
 
 public class EditNoteTextUseCaseImpl implements EditNoteTextUseCase {
 
-    private FigureRepository figureRepository;
+    private NoteRepository noteRepository;
     private DomainEventBus domainEventBus;
 
-    public EditNoteTextUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
-        this.figureRepository = figureRepository;
+    public EditNoteTextUseCaseImpl(NoteRepository noteRepository, DomainEventBus domainEventBus) {
+        this.noteRepository = noteRepository;
         this.domainEventBus = domainEventBus;
     }
 
@@ -24,9 +24,9 @@ public class EditNoteTextUseCaseImpl implements EditNoteTextUseCase {
 
     @Override
     public void execute(EditNoteTextInput input, CqrsCommandOutput output) {
-        Figure figure = figureRepository.findById(input.getFigureId()).orElse(null);
+        Note note = noteRepository.findById(input.getFigureId()).orElse(null);
 
-        if(null == figure)
+        if(null == note)
         {
             output.setId(input.getFigureId())
                     .setExitCode(ExitCode.FAILURE)
@@ -34,12 +34,11 @@ public class EditNoteTextUseCaseImpl implements EditNoteTextUseCase {
             return;
         }
 
-        Note note = (Note)figure;
         note.editText(input.getText());
-        figureRepository.save(note);
+        noteRepository.save(note);
         domainEventBus.postAll(note);
 
-        output.setId(figure.getId());
+        output.setId(note.getId());
         output.setExitCode(ExitCode.SUCCESS);
     }
 

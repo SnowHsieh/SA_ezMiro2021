@@ -6,17 +6,15 @@ import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.entity.model.figure.FigureType;
 import ntut.csie.team5.entity.model.figure.note.Note;
 import ntut.csie.team5.entity.model.figure.note.NoteBuilder;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
-
-import java.awt.*;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.NoteRepository;
 
 public class PostNoteUseCaseImpl implements PostNoteUseCase {
 
-    private FigureRepository figureRepository;
+    private NoteRepository noteRepository;
     private DomainEventBus domainEventBus;
 
-    public PostNoteUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
-        this.figureRepository = figureRepository;
+    public PostNoteUseCaseImpl(NoteRepository noteRepository, DomainEventBus domainEventBus) {
+        this.noteRepository = noteRepository;
         this.domainEventBus = domainEventBus;
     }
 
@@ -37,7 +35,7 @@ public class PostNoteUseCaseImpl implements PostNoteUseCase {
                 .figureType(input.getFigureType())
                 .build();
 
-        figureRepository.save(note);
+        noteRepository.save(note);
         domainEventBus.postAll(note);
 
         output.setId(note.getId());

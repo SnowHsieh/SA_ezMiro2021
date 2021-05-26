@@ -5,15 +5,15 @@ import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.entity.model.figure.Figure;
 import ntut.csie.team5.entity.model.figure.note.Note;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.FigureRepository;
+import ntut.csie.team5.usecase.figure.connectable_figure.note.NoteRepository;
 
 public class ResizeNoteUseCaseImpl implements ResizeNoteUseCase {
 
-    private FigureRepository figureRepository;
+    private NoteRepository noteRepository;
     private DomainEventBus domainEventBus;
 
-    public ResizeNoteUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
-        this.figureRepository = figureRepository;
+    public ResizeNoteUseCaseImpl(NoteRepository noteRepository, DomainEventBus domainEventBus) {
+        this.noteRepository = noteRepository;
         this.domainEventBus = domainEventBus;
     }
 
@@ -24,7 +24,7 @@ public class ResizeNoteUseCaseImpl implements ResizeNoteUseCase {
 
     @Override
     public void execute(ResizeNoteInput input, CqrsCommandOutput output) {
-        Figure figure = figureRepository.findById(input.getFigureId()).orElse(null);
+        Figure figure = noteRepository.findById(input.getFigureId()).orElse(null);
 
         if(null == figure)
         {
@@ -36,7 +36,7 @@ public class ResizeNoteUseCaseImpl implements ResizeNoteUseCase {
 
         Note note = (Note)figure;
         note.changeSize(input.getHeight(), input.getWidth());
-        figureRepository.save(note);
+        noteRepository.save(note);
         domainEventBus.postAll(note);
 
         output.setId(figure.getId());

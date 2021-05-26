@@ -24,7 +24,9 @@ public class WidgetRepositoryImpl implements WidgetRepository {
     }
 
     @Override
-    public void delete(Widget widget) { peer.deleteById(widget.getId()); }
+    public void delete(Widget widget) {
+        peer.delete(WidgetDataMapper.domainToData(widget));
+    }
 
     @Override
     public Optional<Widget> findById(final String widgetId) {

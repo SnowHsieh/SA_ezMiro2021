@@ -113,6 +113,32 @@ public class NotifyUsersInBoard {
     }
 
     @Subscribe
+    public void notifyWidgetResizedToAllUser(WidgetResized widgetResized) {
+        Optional<Widget> widget = widgetRepository.findById(widgetResized.getWidgetId());
+
+        if (!widget.isPresent()) {
+            throw new RuntimeException("Widget not found, widget id = " + widgetResized.getWidgetId());
+        }
+
+        WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
+        WidgetDto widgetDto = widgetDtoMapper.domainToDto(widget.get());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JSONObject message = new JSONObject();
+        JSONArray widgetsInfo = new JSONArray();
+
+        try {
+            widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(widgetDto)));
+            message.put("domainEvent", "notifyWidgetResizedToAllUser");
+            message.put("widgets", widgetsInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        domainEventBus.post(new WidgetResizeNotifiedToAllUser(new Date()));
+        webSocket.sendMessageForAllUsersIn(widgetResized.getBoardId(), message);
+    }
+
+    @Subscribe
     public void notifyTextOfWidgetModifiedToAllUser(TextOfWidgetEdited textOfWidgetEdited) {
         Optional<Widget> widget = widgetRepository.findById(textOfWidgetEdited.getWidgetId());
 
