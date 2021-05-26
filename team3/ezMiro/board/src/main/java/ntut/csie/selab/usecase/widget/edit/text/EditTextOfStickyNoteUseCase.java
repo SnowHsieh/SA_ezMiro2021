@@ -22,7 +22,9 @@ public class EditTextOfStickyNoteUseCase {
             Widget selectedStickyNote = stickyNote.get();
             selectedStickyNote.setText(input.getText());
 
+            widgetRepository.save(selectedStickyNote);
             domainEventBus.postAll(selectedStickyNote);
+
             output.setStickyNoteId(input.getStickyNoteId());
             output.setText(selectedStickyNote.getText());
         } else {
