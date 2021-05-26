@@ -1,8 +1,5 @@
 package ntut.csie.selab.adapter.gateway.repository.springboot.widget;
 
-import ntut.csie.selab.entity.model.board.CommittedWidget;
-import ntut.csie.selab.entity.model.widget.Coordinate;
-
 import javax.persistence.*;
 import java.util.List;
 

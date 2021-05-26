@@ -8,7 +8,6 @@ import ntut.csie.selab.adapter.gateway.repository.springboot.widget.CommittedWid
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.CommittedWidgetDataKey;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.usecase.board.BoardAssociationRepository;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.Optional;
 

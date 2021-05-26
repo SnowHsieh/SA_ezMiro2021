@@ -1,8 +1,5 @@
 package ntut.csie.selab.adapter.gateway.repository.springboot.widget;
 
-
-
-import ntut.csie.selab.entity.model.board.CommittedWidget;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

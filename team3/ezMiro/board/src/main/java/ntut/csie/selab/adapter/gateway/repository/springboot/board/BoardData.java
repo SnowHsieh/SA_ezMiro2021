@@ -5,6 +5,7 @@ import ntut.csie.selab.entity.model.board.CommittedWidget;
 import ntut.csie.selab.entity.model.board.Cursor;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,6 +26,10 @@ public class BoardData {
     @OneToMany(mappedBy = "board")
     private List<CommittedWidgetData> committedWidgets;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
+    @JoinColumn(name = "board_id")
+    private Set<CursorData> cursors;
+
     public BoardData() {
     }
 
@@ -32,10 +37,12 @@ public class BoardData {
         this.boardId = boardId;
     }
 
-    public BoardData(String boardId, String teamId, String boardName) {
+    public BoardData(String boardId, String teamId, String boardName, Set<CursorData> cursors) {
         this.boardId = boardId;
         this.teamId = teamId;
         this.boardName = boardName;
+        this.cursors = new HashSet<>();
+        this.cursors.addAll(cursors);
     }
 
     public String getBoardId() {
@@ -48,5 +55,9 @@ public class BoardData {
 
     public String getBoardName() {
         return boardName;
+    }
+
+    public Set<CursorData> getCursors() {
+        return cursors;
     }
 }
