@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommittedWidgetRepositoryPeer extends CrudRepository<CommittedWidgetData, ImmutablePair<String, String>> {
-//    long countByBoardData(BoardData boardData);
+    long countByBoard(BoardData board);
 }

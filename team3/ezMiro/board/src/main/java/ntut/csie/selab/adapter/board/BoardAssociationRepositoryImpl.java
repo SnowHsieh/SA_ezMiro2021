@@ -30,9 +30,8 @@ public class BoardAssociationRepositoryImpl implements BoardAssociationRepositor
         Optional<BoardData> boardData = boardRepositoryPeer.findById(boardId);
         if (boardData.isPresent()) {
             BoardData selectedBoard = boardData.get();
-//            Long zOrder = commitedWidgetRepositoryPeer.countByBoardData(selectedBoard) + 1;
-//            CommittedWidgetData committedWidgetData = new CommittedWidgetData(selectedBoard.getBoardId(), widgetId, zOrder.intValue());
-            CommittedWidgetData committedWidgetData = new CommittedWidgetData(selectedBoard.getBoardId(), widgetId, 1);
+            Long zOrder = commitedWidgetRepositoryPeer.countByBoard(selectedBoard) + 1;
+            CommittedWidgetData committedWidgetData = new CommittedWidgetData(selectedBoard.getBoardId(), widgetId, zOrder.intValue());
             commitedWidgetRepositoryPeer.save(committedWidgetData);
         }
     }
