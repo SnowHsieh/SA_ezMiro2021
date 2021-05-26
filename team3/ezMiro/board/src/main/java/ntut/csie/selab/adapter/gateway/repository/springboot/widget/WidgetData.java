@@ -52,6 +52,10 @@ public class WidgetData {
     public WidgetData() {
     }
 
+    public WidgetData(String widgetId) {
+        this.widgetId = widgetId;
+    }
+
     public WidgetData(
             String widgetId,
             String boardId,
@@ -74,5 +78,9 @@ public class WidgetData {
         this.textColor = textColor;
         this.text = text;
         this.fontSize = fontSize;
+    }
+
+    public String getWidgetId() {
+        return widgetId;
     }
 }

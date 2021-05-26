@@ -1,12 +1,17 @@
 package ntut.csie.selab.usecase.widget;
 
+import ntut.csie.selab.adapter.board.BoardAssociationRepositoryImpl;
+import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.adapter.board.BoardRepositoryInMemoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
+import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.JpaApplicationTest;
+import ntut.csie.selab.usecase.board.BoardAssociationRepository;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
@@ -36,6 +41,12 @@ public class CreateStickyNoteUseCaseTest {
     @Autowired
     private WidgetRepositoryPeer widgetRepositoryPeer;
 
+    @Autowired
+    private BoardRepositoryPeer boardRepositoryPeer;
+
+    @Autowired
+    private CommittedWidgetRepositoryPeer committedWidgetRepositoryPeer;
+
     @Test
     public void create_sticky_note_should_succeed() {
         // Arrange
@@ -62,7 +73,7 @@ public class CreateStickyNoteUseCaseTest {
     @Test
     public void create_sticky_note_in_board_should_notify_board_successfully() {
         // Arrange
-        BoardRepository boardRepository = new BoardRepositoryInMemoryImpl();
+        BoardAssociationRepository boardRepository = new BoardAssociationRepositoryImpl(boardRepositoryPeer, committedWidgetRepositoryPeer);
         WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         WebSocket webSocket = new FakeBoardWebSocket();
         String boardId = "1";

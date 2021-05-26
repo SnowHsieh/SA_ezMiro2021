@@ -1,28 +1,31 @@
 package ntut.csie.selab.adapter.board;
 
-import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardData;
-import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardDataMapper;
-import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
+import ntut.csie.selab.adapter.gateway.repository.springboot.board.*;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.CommittedWidgetData;
 import ntut.csie.selab.entity.model.board.Board;
+import ntut.csie.selab.entity.model.board.CommittedWidget;
+import ntut.csie.selab.entity.model.widget.Widget;
+import ntut.csie.selab.usecase.board.BoardAssociationRepository;
 import ntut.csie.selab.usecase.board.BoardRepository;
+
 import java.util.Optional;
 
 public class BoardRepositoryImpl implements BoardRepository {
-    private BoardRepositoryPeer peer;
+    private BoardRepositoryPeer boardRepositoryPeer;
 
     public BoardRepositoryImpl(BoardRepositoryPeer boardRepositoryPeer) {
-        this.peer = boardRepositoryPeer;
+        this.boardRepositoryPeer = boardRepositoryPeer;
     }
 
     @Override
     public void save(Board board) {
         BoardData boardData = BoardDataMapper.domainToData(board);
-        peer.save(boardData);
+        boardRepositoryPeer.save(boardData);
     }
 
     @Override
     public Optional<Board> findById(String boardId) {
-        Optional<BoardData> boardData = peer.findById(boardId);
+        Optional<BoardData> boardData = boardRepositoryPeer.findById(boardId);
         if (boardData.isPresent()) {
             BoardData selectedBoardData = boardData.get();
             Board result = BoardDataMapper.DataToDomain(selectedBoardData);

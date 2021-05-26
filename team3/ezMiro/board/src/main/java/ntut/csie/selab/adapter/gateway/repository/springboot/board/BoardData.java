@@ -26,7 +26,10 @@ public class BoardData {
     private List<CommittedWidgetData> committedWidgets;
 
     public BoardData() {
+    }
 
+    public BoardData(String boardId) {
+        this.boardId = boardId;
     }
 
     public BoardData(String boardId, String teamId, String boardName) {
