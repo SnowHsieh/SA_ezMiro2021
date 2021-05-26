@@ -4,6 +4,7 @@ import ntut.csie.selab.entity.model.board.event.BoardCreated;
 import ntut.csie.selab.entity.model.board.event.BoardCursorMoved;
 import ntut.csie.selab.entity.model.board.event.BoardEntered;
 import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
+import ntut.csie.selab.entity.model.widget.event.WidgetZOrderChanged;
 import ntut.csie.selab.model.AggregateRoot;
 
 import java.awt.*;
@@ -54,6 +55,36 @@ public class Board extends AggregateRoot<String> {
 
     public void setCursors(Set<Cursor> cursorSet) {
         this.cursorSet = cursorSet;
+    }
+
+    public void changeZOrder(int originZOrder, int newZOrder) {
+        sortAscendByZOrder(committedWidgets);
+        if (originZOrder < newZOrder) {
+            shiftZOrderInRange(originZOrder, newZOrder, newZOrder, committedWidgets, -1);
+        } else {
+            shiftZOrderInRange(newZOrder, originZOrder, newZOrder, committedWidgets, 1);
+        }
+        sortAscendByZOrder(committedWidgets);
+        addDomainEvent(new WidgetZOrderChanged(new Date(), id));
+    }
+
+    private void sortAscendByZOrder(List<CommittedWidget> widgets) {
+        widgets.sort((w1, w2) -> w1.getZOrder() - w2.getZOrder());
+    }
+
+    private void shiftZOrderInRange(int startIndex, int endIndex, int targetZOrder, List<CommittedWidget> committedWidgets, int offset) {
+        List<CommittedWidget> subList = new ArrayList<>(committedWidgets.subList(startIndex, endIndex + 1));
+        committedWidgets.removeAll(subList);
+        CommittedWidget target;
+        if (offset > 0) {
+            target = subList.remove(subList.size() - 1);
+        } else {
+            target = subList.remove(0);
+        }
+        for (int i = 0; i < subList.size(); i++) {
+            committedWidgets.add(startIndex + i, new CommittedWidget(subList.get(i).getBoardId(), subList.get(i).getWidgetId(), subList.get(i).getZOrder() + offset));
+        }
+        committedWidgets.add(endIndex, new CommittedWidget(target.getBoardId(), target.getWidgetId(), targetZOrder));
     }
 
     public void moveCursorOf(String userId, Point point) {

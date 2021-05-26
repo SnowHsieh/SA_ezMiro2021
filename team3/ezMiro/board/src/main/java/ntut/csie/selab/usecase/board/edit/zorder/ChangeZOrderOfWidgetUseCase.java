@@ -29,7 +29,7 @@ public class ChangeZOrderOfWidgetUseCase {
             if(committedWidget.isPresent()) {
                 CommittedWidget selectedCommittedWidget = committedWidget.get();
                 selectedBoard.clearDomainEvents();
-                reArrangeZOrderIn(selectedBoard, selectedCommittedWidget.getZOrder(), input.getZOrder());
+                selectedBoard.changeZOrder(selectedCommittedWidget.getZOrder(), input.getZOrder());
 
                 boardAssociationRepository.saveAllCommittedWidget(selectedBoard.getCommittedWidgets());
                 domainEventBus.postAll(selectedBoard);
@@ -42,36 +42,5 @@ public class ChangeZOrderOfWidgetUseCase {
         } else {
             throw new RuntimeException("Board not found, board id = " + input.getBoardId());
         }
-
-    }
-
-    private void reArrangeZOrderIn(Board board, int originZOrder, int newZOrder) {
-        sortAscendByZOrder(board.getCommittedWidgets());
-        List<CommittedWidget> committedWidgets = board.getCommittedWidgets();
-        if (originZOrder < newZOrder) {
-            shiftZOrderInRange(originZOrder, newZOrder, newZOrder, committedWidgets, -1);
-        } else {
-            shiftZOrderInRange(newZOrder, originZOrder, newZOrder, committedWidgets, 1);
-        }
-        sortAscendByZOrder(board.getCommittedWidgets());
-    }
-
-    private void sortAscendByZOrder(List<CommittedWidget> widgets) {
-        widgets.sort((w1, w2) -> w1.getZOrder() - w2.getZOrder());
-    }
-
-    private void shiftZOrderInRange(int startIndex, int endIndex, int targetZOrder, List<CommittedWidget> committedWidgets, int offset) {
-        List<CommittedWidget> subList = new ArrayList<>(committedWidgets.subList(startIndex, endIndex + 1));
-        committedWidgets.removeAll(subList);
-        CommittedWidget target;
-        if (offset > 0) {
-            target = subList.remove(subList.size() - 1);
-        } else {
-            target = subList.remove(0);
-        }
-        for (int i = 0; i < subList.size(); i++) {
-            committedWidgets.add(startIndex + i, new CommittedWidget(subList.get(i).getBoardId(), subList.get(i).getWidgetId(), subList.get(i).getZOrder() + offset));
-        }
-        committedWidgets.add(endIndex, new CommittedWidget(target.getBoardId(), target.getWidgetId(), targetZOrder));
     }
 }
