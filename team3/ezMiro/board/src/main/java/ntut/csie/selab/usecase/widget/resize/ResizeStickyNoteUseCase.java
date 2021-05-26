@@ -20,10 +20,11 @@ public class ResizeStickyNoteUseCase {
         Optional<Widget> widget = widgetRepository.findById(input.getStickyNoteId());
         if (widget.isPresent()) {
             Widget stickyNote = widget.get();
+            stickyNote.clearDomainEvents();
             stickyNote.resize(input.getCoordinate());
             widgetRepository.save(stickyNote);
-
             eventBus.postAll(stickyNote);
+
             output.setStickyNoteId(input.getStickyNoteId());
             output.setCoordinate(input.getCoordinate());
         } else {
