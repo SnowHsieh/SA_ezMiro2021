@@ -1,6 +1,7 @@
 package ntut.csie.islab.miro.usecase.eventHandler;
 
 import com.google.common.eventbus.Subscribe;
+import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.*;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.usecase.textFigure.StickyNoteRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
@@ -11,10 +12,6 @@ import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorMovedDomainEve
 import ntut.csie.islab.miro.entity.model.board.event.BoardEnteredDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.event.BoardLeftDomainEvent;
 import ntut.csie.islab.miro.entity.model.textFigure.TextFigure;
-import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteContentChangedDomainEvent;
-import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteCreatedDomainEvent;
-import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteDeleteDomainEvent;
-import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteMovedDomainEvent;
 import ntut.csie.islab.miro.usecase.webSocket.BoardSessionBroadcaster;
 import ntut.csie.sslab.ddd.model.DomainEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +41,14 @@ public class NotifyBoardSessionBroadcaster {
     }
 
     @Subscribe
+    public void whenStickyNoteResized(StickyNoteResizedDomainEvent stickyNoteResizedDomainEvent){
+        TextFigure figure = figureRepository.findById(stickyNoteResizedDomainEvent.getFigureId()).get();
+        Board board = boardRepository.findById(figure.getBoardId()).get();
+        List<BoardSession> boardSessions = board.getBoardSessionList();
+        boardSessions.forEach(each->broadcast(stickyNoteResizedDomainEvent, each.getBoardSessionId().getId()));
+    }
+
+    @Subscribe
     public void whenStickyNoteMoved(StickyNoteMovedDomainEvent stickyNoteMovedDomainEvent){
         UUID boardId = stickyNoteMovedDomainEvent.getBoardId();
         UUID figureId = stickyNoteMovedDomainEvent.getFigureId();
@@ -61,6 +66,14 @@ public class NotifyBoardSessionBroadcaster {
         Board board = boardRepository.findById(figure.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
         boardSessions.forEach(each->broadcast(stickyNoteContentChangedDomainEvent, each.getBoardSessionId().getId()));
+    }
+
+    @Subscribe
+    public void whenStickerColorChanged(StickyNoteColorChangedDomainEvent  stickyNoteColorChangedDomainEvent){
+        TextFigure figure = figureRepository.findById(stickyNoteColorChangedDomainEvent.getFigureId()).get();
+        Board board = boardRepository.findById(figure.getBoardId()).get();
+        List<BoardSession> boardSessions = board.getBoardSessionList();
+        boardSessions.forEach(each->broadcast(stickyNoteColorChangedDomainEvent, each.getBoardSessionId().getId()));
     }
 
     @Subscribe

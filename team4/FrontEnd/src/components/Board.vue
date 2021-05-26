@@ -54,7 +54,7 @@ import uuidGenerator from '../utils/uuidGenerator.js'
 export default {
   data () {
     return {
-      boardId: '9b616d54-fa2c-4d82-ace0-e7eb505c248c',
+      boardId: 'ac22e8f1-851f-4154-bd4a-c2acccd1815c',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -152,7 +152,7 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      this.refreshCanvas()
+      // this.refreshCanvas()
     },
     async moveStickyNote (figure) {
       try {
@@ -330,7 +330,6 @@ export default {
         })
     },
     listenToObjectScaled () {
-
     },
     ungroup (group) {
       var _this = this
@@ -433,6 +432,24 @@ export default {
         console.log(e)
       }
     },
+    updateStickySize (figure) {
+      try {
+        this.canvas.getObjects().forEach(function (group) {
+          if (group.get('id') === figure.figureId) {
+            group.item(0).set('width', figure.newWidth)// rect
+            group.item(0).set('height', figure.newHeight)
+            group.set('width', figure.newWidth)
+            group.set('height', figure.newHeight)
+            group.set('scaleX', 1)
+            group.set('scaleY', 1)
+            // set scale as 1 to using absolute size
+          }
+        })
+        this.canvas.renderAll()
+      } catch (e) {
+        console.log(e)
+      }
+    },
     drawAllUserCursors () {
       var _this = this
       this.userCursorList.forEach(function (item) {
@@ -513,18 +530,14 @@ export default {
       const _this = this
       const receivedData = JSON.parse(e.data)
       if (receivedData.event === 'CursorMovedDomainEvent') {
-        // console.log(receivedData)
         _this.updateUserCursor(receivedData)
       } else if (receivedData.event === 'BoardEnteredDomainEvent') {
         // console.log(receivedData)
       } else if (receivedData.event === 'CursorCreatedDomainEvent') {
-        // console.log(receivedData)
         _this.addUserCursor(receivedData)
       } else if (receivedData.event === 'CursorDeletedDomainEvent') {
-        // console.log(receivedData)
         _this.delUserCursor(receivedData.userId)
       } else if (receivedData.event === 'StickyNoteCreatedDomainEvent') {
-        // console.log(receivedData)
         const figure = {
           figureId: receivedData.figureId,
           content: '',
@@ -542,15 +555,18 @@ export default {
         }
         _this.addStickyNote(figure)
       } else if (receivedData.event === 'StickyNoteDeleteDomainEvent') {
-        // console.log(receivedData)
         try {
           const cursorObject = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
           this.canvas.remove(cursorObject)
         } catch (e) {
           console.log(e)
         }
-      } else if (receivedData.event === 'StickyNoteMovedDomainEvent') {
+      } else if (receivedData.event === 'StickyNoteResizedDomainEvent') {
         // console.log(receivedData)
+        _this.updateStickySize(receivedData)
+      } else if (receivedData.event === 'StickyNoteColorChangedDomainEvent') {
+
+      } else if (receivedData.event === 'StickyNoteMovedDomainEvent') {
         _this.updateStickyPosition(receivedData)
       } else if (receivedData.event === 'GetAllCursorList') {
         _this.userCursorList = receivedData.cursorList.cursorDtos
