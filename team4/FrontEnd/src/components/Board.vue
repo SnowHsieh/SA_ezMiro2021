@@ -54,7 +54,7 @@ import uuidGenerator from '../utils/uuidGenerator.js'
 export default {
   data () {
     return {
-      boardId: 'ac22e8f1-851f-4154-bd4a-c2acccd1815c',
+      boardId: '22559c39-d9af-4868-9077-5ce72e7e4074',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -70,7 +70,7 @@ export default {
       socket: null,
       socketLoaded: null,
       userCursorList: [],
-      myUserId: '7398cd26-da85-4c05-b04b-122e73888dfb',
+      myUserId: '7398cd26-da85-4c05-b04b-122e73888dfc',
       mouseData: null,
       updateCursorFlag: true,
       updateFigureFlag: true
@@ -134,7 +134,6 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      this.refreshCanvas()
     },
     async changeStickyNoteColor (figure) {
       try {
@@ -143,7 +142,6 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      this.refreshCanvas()
     },
     async resizeStickyNote (figure) {
       try {
@@ -152,7 +150,6 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      // this.refreshCanvas()
     },
     async moveStickyNote (figure) {
       try {
@@ -161,7 +158,6 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      // this.refreshCanvas()
     },
     async deleteStickyNote (figure) {
       try {
@@ -171,7 +167,6 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      // this.refreshCanvas()
     },
     async changeFigureOrder () {
       try {
@@ -237,22 +232,25 @@ export default {
       this.canvas.add(group)
       this.canvas.renderAll()
     },
-    refreshCanvas () {
-      this.canvas.clear()
-      this.getBoardContent()
-      this.drawAllUserCursors()
-    },
     listenEventsOnCanvas () {
       var _this = this
+      // listen event on context menu
       _this.addListenerOfChangeTextFigureColor()
       _this.addListenerOfDeleteTextFigure()
       _this.addListenerOfBringToFront()
       _this.addListenerOfBringForward()
       _this.addListenerOfSendBackward()
       _this.addListenerOfSendToBack()
-      var canvas = this.canvas
+      // listen event on canvas
       _this.listenToMouseMove()
-      canvas.on(
+      _this.listenToMouseDown()
+      _this.listenToObjectScaled()
+      _this.listenToObjectMoving()
+      _this.listenToMouseDoubleClick()
+    },
+    listenToMouseDoubleClick () {
+      var _this = this
+      _this.canvas.on(
         {
           'mouse:dblclick': function (e) {
             if (e.target != null) {
@@ -261,7 +259,7 @@ export default {
               var rect = e.target.item(0)
               var dimensionText = e.target.item(1)
               _this.ungroup(e.target)
-              canvas.setActiveObject(dimensionText)
+              _this.canvas.setActiveObject(dimensionText)
               dimensionText.enterEditing()
               dimensionText.selectAll()
               dimensionText.on('editing:exited', function () {
@@ -271,37 +269,11 @@ export default {
                   left: oldleft,
                   top: oldtop
                 })
-                canvas.remove(rect)
-                canvas.remove(dimensionText)
-                canvas.add(group)
+                _this.canvas.remove(rect)
+                _this.canvas.remove(dimensionText)
+                _this.canvas.add(group)
                 _this.changeStickyNoteContent(group)
               })
-            }
-          },
-          'mouse:down': function (e) {
-            if (e.target != null && e.button === 3) {
-              canvas.setActiveObject(e.target) // right click
-              _this.activeObjects = canvas.getActiveObjects()
-              _this.showContextMenu(e)
-            } else {
-              _this.hideContextMenu()
-            }
-          },
-          'object:scaled': function (e) {
-            if (e.target.type === 'group') {
-              _this.resizeStickyNote(e.target)
-            }
-          },
-          'object:moving': function (e) {
-            if (_this.updateFigureFlag) {
-              if (e.target.type === 'group') {
-                _this.moveStickyNote(e.target)
-              } else {
-                e.target._objects.forEach((target) => {
-                  _this.moveStickyNote(target)
-                })
-              }
-              _this.updateFigureFlag = false
             }
           }
         })
@@ -329,7 +301,49 @@ export default {
           }
         })
     },
+    listenToMouseDown () {
+      var _this = this
+      _this.canvas.on(
+        {
+          'mouse:down': function (e) {
+            if (e.target != null && e.button === 3) {
+              _this.canvas.setActiveObject(e.target) // right click
+              _this.activeObjects = _this.canvas.getActiveObjects()
+              _this.showContextMenu(e)
+            } else {
+              _this.hideContextMenu()
+            }
+          }
+        })
+    },
     listenToObjectScaled () {
+      var _this = this
+      _this.canvas.on(
+        {
+          'object:scaled': function (e) {
+            if (e.target.type === 'group') {
+              _this.resizeStickyNote(e.target)
+            }
+          }
+        })
+    },
+    listenToObjectMoving () {
+      var _this = this
+      _this.canvas.on(
+        {
+          'object:moving': function (e) {
+            if (_this.updateFigureFlag) {
+              if (e.target.type === 'group') {
+                _this.moveStickyNote(e.target)
+              } else {
+                e.target._objects.forEach((target) => {
+                  _this.moveStickyNote(target)
+                })
+              }
+              _this.updateFigureFlag = false
+            }
+          }
+        })
     },
     ungroup (group) {
       var _this = this
@@ -419,7 +433,7 @@ export default {
       }
       _this.sendToBackButton.addEventListener('mouseup', newHandler)
     },
-    updateStickyPosition (figure) { // todo: update userCursorList
+    updateStickyNotePosition (figure) { // todo: update userCursorList
       try {
         this.canvas.getObjects().forEach(function (item) {
           if (item.get('id') === figure.figureId) {
@@ -432,7 +446,7 @@ export default {
         console.log(e)
       }
     },
-    updateStickySize (figure) {
+    updateStickyNoteSize (figure) {
       try {
         this.canvas.getObjects().forEach(function (group) {
           if (group.get('id') === figure.figureId) {
@@ -536,6 +550,7 @@ export default {
       } else if (receivedData.event === 'CursorCreatedDomainEvent') {
         _this.addUserCursor(receivedData)
       } else if (receivedData.event === 'CursorDeletedDomainEvent') {
+        console.log(receivedData)
         _this.delUserCursor(receivedData.userId)
       } else if (receivedData.event === 'StickyNoteCreatedDomainEvent') {
         const figure = {
@@ -563,11 +578,11 @@ export default {
         }
       } else if (receivedData.event === 'StickyNoteResizedDomainEvent') {
         // console.log(receivedData)
-        _this.updateStickySize(receivedData)
+        _this.updateStickyNoteSize(receivedData)
       } else if (receivedData.event === 'StickyNoteColorChangedDomainEvent') {
 
       } else if (receivedData.event === 'StickyNoteMovedDomainEvent') {
-        _this.updateStickyPosition(receivedData)
+        _this.updateStickyNotePosition(receivedData)
       } else if (receivedData.event === 'GetAllCursorList') {
         _this.userCursorList = receivedData.cursorList.cursorDtos
         _this.drawAllUserCursors()
