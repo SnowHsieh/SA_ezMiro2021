@@ -3,6 +3,7 @@ package ntut.csie.selab.usecase.widget;
 import ntut.csie.selab.adapter.board.BoardAssociationRepositoryImpl;
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.adapter.board.BoardRepositoryInMemoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardDataMapper;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
@@ -71,14 +72,14 @@ public class DeleteStickyNoteUseCaseTest {
     public void delete_sticky_note_in_board_should_notify_board_successfully() {
         // Arrange
         BoardAssociationRepository boardRepository = new BoardAssociationRepositoryImpl(boardRepositoryPeer, committedWidgetRepositoryPeer);
-        String boardId = "boardId";
-        String stickyNoteId = "stickyNoteId";
+        String boardId = "deletedBoardId";
+        String stickyNoteId = "deletedStickyNoteId";
 
         boardRepository.save(createBoardHasStickNoteWith(boardId, stickyNoteId));
 
         WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
-        Widget stickyNote = new StickyNote(stickyNoteId, "boardId", stickyNoteCoordinate);
+        Widget stickyNote = new StickyNote(stickyNoteId, boardId, stickyNoteCoordinate);
         widgetRepository.save(stickyNote);
         stickyNote.clearDomainEvents();
 
@@ -89,7 +90,7 @@ public class DeleteStickyNoteUseCaseTest {
         DeleteStickyNoteUseCase deleteStickyNoteUseCase = new DeleteStickyNoteUseCase(widgetRepository, domainEventBus);
         DeleteStickyNoteInput input = new DeleteStickyNoteInput();
         DeleteStickyNoteOutput output = new DeleteStickyNoteOutput();
-        input.setStickyNoteId("stickyNoteId");
+        input.setStickyNoteId(stickyNoteId);
 
         // Act
         deleteStickyNoteUseCase.execute(input, output);
@@ -97,7 +98,7 @@ public class DeleteStickyNoteUseCaseTest {
         // Assert
         Assert.assertNotNull(output.getStickyNoteId());
         Assert.assertFalse(widgetRepository.findById(output.getStickyNoteId()).isPresent());
-        Assert.assertEquals(0, boardRepository.findById(boardId).get().getWidgetIds().size());
+        Assert.assertEquals(0, committedWidgetRepositoryPeer.countByBoard(BoardDataMapper.domainToData(boardRepository.findById(boardId).get())));
         Assert.assertEquals(2, domainEventBus.getCount());
     }
 

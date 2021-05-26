@@ -27,7 +27,6 @@ public class NotifyBoard {
         Optional<Board> board = boardAssociationRepository.findById(widgetCreated.getBoardId());
 
         if (board.isPresent()) {
-//            board.get().commitWidgetCreation(widgetCreated.getBoardId(), widgetCreated.getWidgetId());
             Board selectedBoard = board.get();
             boardAssociationRepository.save(selectedBoard);
             boardAssociationRepository.saveCommittedWidget(selectedBoard.getId(), widgetCreated.getWidgetId());
@@ -42,8 +41,9 @@ public class NotifyBoard {
         Optional<Board> board = boardAssociationRepository.findById(widgetDeleted.getBoardId());
 
         if (board.isPresent()) {
-            board.get().commitWidgetDeletion(widgetDeleted.getBoardId(), widgetDeleted.getWidgetId());
-            boardAssociationRepository.save(board.get());
+            Board selectedBoard = board.get();
+            boardAssociationRepository.save(selectedBoard);
+            boardAssociationRepository.deleteCommittedWidget(selectedBoard.getId(), widgetDeleted.getWidgetId());
             domainEventBus.post(new WidgetDeletionCommitted(new Date()));
         } else {
             throw new RuntimeException("Board not found, board id = " + widgetDeleted.getBoardId());

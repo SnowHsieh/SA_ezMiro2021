@@ -1,5 +1,6 @@
 package ntut.csie.selab.adapter.widget;
 
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetData;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetDataMapper;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
 import ntut.csie.selab.entity.model.widget.Widget;
@@ -13,24 +14,25 @@ public class WidgetRepositoryImpl implements WidgetRepository {
 
     private WidgetRepositoryPeer peer;
 
-    List<Widget> widgets;
-
     public WidgetRepositoryImpl(WidgetRepositoryPeer peer) {
         this.peer = peer;
-        widgets = new ArrayList<>();
     }
 
     @Override
     public void save(Widget widget) {
         peer.save(WidgetDataMapper.domainToData(widget));
-        widgets.add(widget);
     }
 
     @Override
-    public void delete(Widget widget) { widgets.remove(widget); }
+    public void delete(Widget widget) { peer.deleteById(widget.getId()); }
 
     @Override
     public Optional<Widget> findById(final String widgetId) {
-        return widgets.stream().filter(e -> e.getId().equals(widgetId)).findFirst();
+        Optional<WidgetData> widgetData = peer.findById(widgetId);
+        if (widgetData.isPresent()) {
+            Widget selectedWidget = WidgetDataMapper.dataToDomain(widgetData.get());
+            return Optional.of(selectedWidget);
+        }
+        return Optional.empty();
     }
 }

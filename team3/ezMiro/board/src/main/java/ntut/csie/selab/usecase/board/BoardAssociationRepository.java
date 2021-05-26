@@ -5,4 +5,6 @@ import ntut.csie.selab.entity.model.widget.Widget;
 
 public interface BoardAssociationRepository extends BoardRepository {
     void saveCommittedWidget(String boardId, String widgetId);
+
+    void deleteCommittedWidget(String boardId, String widgetId);
 }

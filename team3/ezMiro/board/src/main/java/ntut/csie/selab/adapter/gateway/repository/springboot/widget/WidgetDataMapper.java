@@ -1,5 +1,7 @@
 package ntut.csie.selab.adapter.gateway.repository.springboot.widget;
 
+import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 
 import java.util.ArrayList;
@@ -26,5 +28,12 @@ public class WidgetDataMapper {
         List<WidgetData> widgetDatas = new ArrayList<>();
         widgets.forEach(widget -> widgetDatas.add(domainToData(widget)));
         return widgetDatas;
+    }
+
+    public static Widget dataToDomain(WidgetData widgetData) {
+        Coordinate coordinate = new Coordinate(widgetData.getTopLeftX(), widgetData.getTopLeftY(), widgetData.getBottomRightX(), widgetData.getBottomRightY());
+        // TODO 要把widget型態(sticky note, line, etc.)存入資料庫，用Mapper時用Factory生不同的instance，這邊先stickynote寫死
+        Widget widget = new StickyNote(widgetData.getWidgetId(), widgetData.getBoardId(), coordinate);
+        return widget;
     }
 }

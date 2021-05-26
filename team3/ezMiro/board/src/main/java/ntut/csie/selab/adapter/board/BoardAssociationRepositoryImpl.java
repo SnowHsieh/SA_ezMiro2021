@@ -5,8 +5,10 @@ import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardDataMapp
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.CommittedWidgetData;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.CommittedWidgetDataKey;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.usecase.board.BoardAssociationRepository;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.Optional;
 
@@ -33,6 +35,15 @@ public class BoardAssociationRepositoryImpl implements BoardAssociationRepositor
             Long zOrder = commitedWidgetRepositoryPeer.countByBoard(selectedBoard) + 1;
             CommittedWidgetData committedWidgetData = new CommittedWidgetData(selectedBoard.getBoardId(), widgetId, zOrder.intValue());
             commitedWidgetRepositoryPeer.save(committedWidgetData);
+        }
+    }
+
+    @Override
+    public void deleteCommittedWidget(String boardId, String widgetId) {
+        Optional<BoardData> boardData = boardRepositoryPeer.findById(boardId);
+        if (boardData.isPresent()) {
+            BoardData selectedBoard = boardData.get();
+            commitedWidgetRepositoryPeer.deleteById(new CommittedWidgetDataKey(selectedBoard.getBoardId(), widgetId));
         }
     }
 

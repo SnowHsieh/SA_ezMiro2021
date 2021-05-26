@@ -3,6 +3,7 @@ package ntut.csie.selab.usecase.widget;
 import ntut.csie.selab.adapter.board.BoardAssociationRepositoryImpl;
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.adapter.board.BoardRepositoryInMemoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardDataMapper;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
@@ -95,7 +96,7 @@ public class CreateStickyNoteUseCaseTest {
         createStickyNoteUseCase.execute(input, output);
 
         // Assert
-        Assert.assertEquals(1, boardRepository.findById(boardId).get().getWidgetIds().size());
+        Assert.assertEquals(1, committedWidgetRepositoryPeer.countByBoard(BoardDataMapper.domainToData(boardRepository.findById(boardId).get())));
         Assert.assertEquals(3, domainEventBus.getCount());
     }
 
