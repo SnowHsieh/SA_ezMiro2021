@@ -1,21 +1,33 @@
 package ntut.csie.selab.usecase.board;
 
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
 import ntut.csie.selab.domain.MockFactory;
 import ntut.csie.selab.entity.model.board.Board;
-import ntut.csie.selab.entity.model.widget.Coordinate;
-import ntut.csie.selab.entity.model.widget.StickyNote;
-import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
+import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.board.edit.zorder.ChangeZOrderOfWidgetInput;
 import ntut.csie.selab.usecase.board.edit.zorder.ChangeZOrderOfWidgetOutput;
 import ntut.csie.selab.usecase.board.edit.zorder.ChangeZOrderOfWidgetUseCase;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
+@ContextConfiguration(classes= JpaApplicationTest.class)
+@Rollback(false)
 public class ChangeZOrderOfWidgetUseCaseTest {
+
+    @Autowired
+    private WidgetRepositoryPeer widgetRepositoryPeer;
 
     @Test
     public void change_z_order_of_sticky_note_should_succeed() {
@@ -25,13 +37,13 @@ public class ChangeZOrderOfWidgetUseCaseTest {
         Board board = MockFactory.createBoard(boardId);
         boardRepository.add(board);
 
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl();
+        WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         String widgetId1 = "widgetId1";
         String widgetId2 = "widgetId2";
         String widgetId3 = "widgetId3";
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId1));
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId2));
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId3));
+        widgetRepository.save(MockFactory.createStickyNoteIn(board, widgetId1));
+        widgetRepository.save(MockFactory.createStickyNoteIn(board, widgetId2));
+        widgetRepository.save(MockFactory.createStickyNoteIn(board, widgetId3));
 
         DomainEventBus domainEventBus = new DomainEventBus();
         ChangeZOrderOfWidgetInput input = new ChangeZOrderOfWidgetInput();
@@ -72,15 +84,15 @@ public class ChangeZOrderOfWidgetUseCaseTest {
         Board board = MockFactory.createBoard(boardId);
         boardRepository.add(board);
 
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl();
+        WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         String widgetId1 = "widgetId1";
         String widgetId2 = "widgetId2";
         String widgetId3 = "widgetId3";
         String widgetId4 = "widgetId4";
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId1));
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId2));
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId3));
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId4));
+        widgetRepository.save(MockFactory.createStickyNoteIn(board, widgetId1));
+        widgetRepository.save(MockFactory.createStickyNoteIn(board, widgetId2));
+        widgetRepository.save(MockFactory.createStickyNoteIn(board, widgetId3));
+        widgetRepository.save(MockFactory.createStickyNoteIn(board, widgetId4));
 
         DomainEventBus domainEventBus = new DomainEventBus();
         ChangeZOrderOfWidgetInput input = new ChangeZOrderOfWidgetInput();
@@ -107,13 +119,13 @@ public class ChangeZOrderOfWidgetUseCaseTest {
         Board board = MockFactory.createBoard(boardId);
         boardRepository.add(board);
 
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl();
+        WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         String widgetId1 = "widgetId1";
         String widgetId2 = "widgetId2";
         String widgetId3 = "widgetId3";
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId1));
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId2));
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId3));
+        widgetRepository.save(MockFactory.createStickyNoteIn(board, widgetId1));
+        widgetRepository.save(MockFactory.createStickyNoteIn(board, widgetId2));
+        widgetRepository.save(MockFactory.createStickyNoteIn(board, widgetId3));
 
         DomainEventBus domainEventBus = new DomainEventBus();
         ChangeZOrderOfWidgetInput input = new ChangeZOrderOfWidgetInput();
@@ -140,15 +152,15 @@ public class ChangeZOrderOfWidgetUseCaseTest {
         Board board = MockFactory.createBoard(boardId);
         boardRepository.add(board);
 
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl();
+        WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         String widgetId1 = "widgetId1";
         String widgetId2 = "widgetId2";
         String widgetId3 = "widgetId3";
         String widgetId4 = "widgetId4";
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId1));
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId2));
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId3));
-        widgetRepository.add(MockFactory.createStickyNoteIn(board, widgetId4));
+        widgetRepository.save(MockFactory.createStickyNoteIn(board, widgetId1));
+        widgetRepository.save(MockFactory.createStickyNoteIn(board, widgetId2));
+        widgetRepository.save(MockFactory.createStickyNoteIn(board, widgetId3));
+        widgetRepository.save(MockFactory.createStickyNoteIn(board, widgetId4));
 
         DomainEventBus domainEventBus = new DomainEventBus();
         ChangeZOrderOfWidgetInput input = new ChangeZOrderOfWidgetInput();
