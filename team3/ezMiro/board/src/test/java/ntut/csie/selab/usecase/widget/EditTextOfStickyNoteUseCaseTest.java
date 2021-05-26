@@ -48,6 +48,6 @@ public class EditTextOfStickyNoteUseCaseTest {
 
         // Assert
         Assert.assertEquals("modified text", output.getText());
-        Assert.assertEquals(2, domainEventBus.getCount());
+        Assert.assertEquals(1, domainEventBus.getCount());
     }
 }
