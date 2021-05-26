@@ -31,7 +31,10 @@ public class BoardData {
     private Set<CursorData> cursors;
 
     public BoardData() {
+    }
 
+    public BoardData(String boardId) {
+        this.boardId = boardId;
     }
 
     public BoardData(String boardId, String teamId, String boardName, Set<CursorData> cursors) {

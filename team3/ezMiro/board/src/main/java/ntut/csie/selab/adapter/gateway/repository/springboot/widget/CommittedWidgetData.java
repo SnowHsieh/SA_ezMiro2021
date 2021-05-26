@@ -5,7 +5,6 @@ import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardData;
 import javax.persistence.*;
 
 @Entity
-//@Table(name = "committed_widget")
 public class CommittedWidgetData {
 
     @EmbeddedId
@@ -23,4 +22,20 @@ public class CommittedWidgetData {
 
     @Column(name = "z_order")
     private int zOrder;
+
+//    public CommittedWidgetData (BoardData board, WidgetData widget) {
+//        this.board = board;
+//        this.widget = widget;
+//        this.id = new CommittedWidgetDataKey(board.getBoardId(), widget.getWidgetId());
+//    }
+    public CommittedWidgetData() {
+
+    }
+
+    public CommittedWidgetData (String boardId, String widgetId, int zOrder) {
+        this.board = new BoardData(boardId);
+        this.widget = new WidgetData(widgetId);
+        this.id = new CommittedWidgetDataKey(boardId, widgetId);
+        this.zOrder = zOrder;
+    }
 }
