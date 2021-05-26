@@ -2,6 +2,9 @@ package ntut.csie.selab.usecase.eventHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.eventbus.Subscribe;
+import ntut.csie.selab.entity.model.board.Cursor;
+import ntut.csie.selab.entity.model.board.event.BoardCursorMoved;
+import ntut.csie.selab.entity.model.board.event.BoardEntered;
 import ntut.csie.selab.entity.model.board.event.WidgetCreationCommitted;
 import ntut.csie.selab.entity.model.board.event.WidgetDeletionCommitted;
 import ntut.csie.selab.entity.model.widget.Widget;
@@ -13,10 +16,13 @@ import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.websocket.WebSocket;
 import ntut.csie.selab.usecase.widget.*;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.beans.Customizer;
 import java.util.Date;
 import java.util.Optional;
+import java.util.Set;
 
 public class NotifyUsersInBoard {
 
@@ -111,6 +117,46 @@ public class NotifyUsersInBoard {
         } else {
             throw new RuntimeException("Widget not found, widget id = " + textOfWidgetEdited.getWidgetId());
         }
+    }
+
+    @Subscribe
+    public void whenBoardEntered(BoardEntered boardEntered) {
+        String boardId = boardEntered.getBoardId();
+        Set<Cursor> cursors = boardEntered.getCursors();
+
+        webSocket.sendMessageForAllUsersIn(boardId, convertCursorToMessage(cursors));
+    }
+
+    @Subscribe
+    public void whenBoardCursorMoved(BoardCursorMoved boardCursorMoved) {
+        String boardId = boardCursorMoved.getBoardId();
+        Set<Cursor> cursors = boardCursorMoved.getCursors();
+
+        webSocket.sendMessageForAllUsersIn(boardId, convertCursorToMessage(cursors));
+    }
+
+    private JSONObject convertCursorToMessage(Set<Cursor> cursorSet) {
+        JSONArray parsedCursors = new JSONArray();
+        cursorSet.forEach(cursor -> {
+            JSONObject parsedCursor = new JSONObject();
+            try {
+                parsedCursor.put("userId", cursor.getUserId());
+                parsedCursor.put("x", cursor.getPoint().x);
+                parsedCursor.put("y", cursor.getPoint().y);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            parsedCursors.put(parsedCursor);
+        });
+
+        JSONObject message = new JSONObject();
+        try {
+            message.put("cursors", parsedCursors);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return message;
     }
 }
 

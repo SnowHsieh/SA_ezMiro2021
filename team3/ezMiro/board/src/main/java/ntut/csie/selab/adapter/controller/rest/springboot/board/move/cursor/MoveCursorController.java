@@ -49,31 +49,5 @@ public class MoveCursorController {
         input.setUserId(userId);
         input.setPoint(new Point(cursorX, cursorY));
         moveCursorUseCase.execute(input, output);
-
-        boardWebSocket.sendMessageForAllUsersIn(boardId, convertCursorToMessage(output.getCursors()));
-    }
-
-    private JSONObject convertCursorToMessage(Set<Cursor> cursorSet) {
-        JSONArray parsedCursors = new JSONArray();
-        cursorSet.forEach(cursor -> {
-            JSONObject parsedCursor = new JSONObject();
-            try {
-                parsedCursor.put("userId", cursor.getUserId());
-                parsedCursor.put("x", cursor.getPoint().x);
-                parsedCursor.put("y", cursor.getPoint().y);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            parsedCursors.put(parsedCursor);
-        });
-
-        JSONObject message = new JSONObject();
-        try {
-            message.put("cursors", parsedCursors);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return message;
     }
 }
