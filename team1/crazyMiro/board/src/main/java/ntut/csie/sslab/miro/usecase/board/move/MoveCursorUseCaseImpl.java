@@ -1,35 +1,31 @@
-package ntut.csie.sslab.miro.usecase.cursor.move;
+package ntut.csie.sslab.miro.usecase.board.move;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
-import ntut.csie.sslab.miro.entity.model.cursor.Cursor;
+import ntut.csie.sslab.miro.entity.model.board.Board;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
-import ntut.csie.sslab.miro.usecase.cursor.CursorRepository;
+import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 
 public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
 
-    private CursorRepository cursorRepository;
+    private BoardRepository boardRepository;
     private DomainEventBus domainEventBus;
 
-    public MoveCursorUseCaseImpl(CursorRepository cursorRepository, DomainEventBus domainEventBus) {
-        this.cursorRepository = cursorRepository;
+    public MoveCursorUseCaseImpl(BoardRepository boardRepository, DomainEventBus domainEventBus) {
+        this.boardRepository = boardRepository;
         this.domainEventBus = domainEventBus;
     }
 
     @Override
     public void execute(MoveCursorInput input, CqrsCommandOutput output) {
         try{
-            Cursor cursor = cursorRepository.findCursorByUserId(input.getUserId()).get();
-            if(cursor.getPosition().equals(input.getPosition()))
-                return;
+            Board board = boardRepository.findById(input.getboardId()).get();
+            board.moveCursor(input.getUserId(), input.getPosition());
 
-            cursor.setPosition(input.getPosition());
+            domainEventBus.postAll(board);
 
-            cursorRepository.save(cursor);
-            domainEventBus.postAll(cursor);
-
-            output.setId(cursor.getCursorId())
+            output.setId(board.getId())
                     .setExitCode(ExitCode.SUCCESS);
         }catch (Exception e){
             output.setMessage(e.getMessage())
@@ -43,6 +39,7 @@ public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
     }
 
     private class MoveCursorInputImpl implements MoveCursorInput {
+        private String boardId;
         private String userId;
         private Coordinate position;
 
@@ -64,6 +61,16 @@ public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
         @Override
         public void setPosition(Coordinate position) {
             this.position = position;
+        }
+
+        @Override
+        public String getboardId() {
+            return boardId;
+        }
+
+        @Override
+        public void setBoardId(String boardId) {
+            this.boardId = boardId;
         }
     }
 }

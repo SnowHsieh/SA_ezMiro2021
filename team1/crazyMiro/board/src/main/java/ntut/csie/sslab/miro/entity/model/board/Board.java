@@ -1,7 +1,11 @@
 package ntut.csie.sslab.miro.entity.model.board;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
+import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.board.event.*;
+import ntut.csie.sslab.miro.entity.model.cursor.event.CursorCreated;
+import ntut.csie.sslab.miro.entity.model.cursor.event.CursorDeleted;
+import ntut.csie.sslab.miro.entity.model.cursor.event.CursorMoved;
 
 import java.util.*;
 
@@ -98,11 +102,17 @@ public class Board extends AggregateRoot<String> {
         addDomainEvent(new BoardEntered(boardSession.getUserId(),
                                         boardSession.getBoardId(),
                                         boardSession.getBoardSessionId()));
+        addDomainEvent(new CursorCreated(boardSession.getUserId(), boardSession.getBoardId()));
     }
 
     public void removeBoardSession(String boardSessionId) {
         BoardSession boardSession = boardSessions.stream().filter(x->x.getBoardSessionId().equals(boardSessionId)).findFirst().get();
         boardSessions.removeIf(x->x.getBoardSessionId().equals(boardSessionId));
         addDomainEvent(new BoardLeft(boardSession.getUserId(), boardId, boardSessionId));
+        addDomainEvent(new CursorDeleted(boardId, boardSession.getUserId()));
+    }
+
+    public void moveCursor(String userId, Coordinate position) {
+        addDomainEvent(new CursorMoved(boardId, userId, position));
     }
 }

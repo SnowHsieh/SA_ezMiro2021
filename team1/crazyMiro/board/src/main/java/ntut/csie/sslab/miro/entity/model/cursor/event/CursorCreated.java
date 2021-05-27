@@ -5,22 +5,16 @@ import ntut.csie.sslab.ddd.model.common.DateProvider;
 
 public class CursorCreated extends DomainEvent {
     private final String boardId;
-    private final String cursorId;
     private final String userId;
 
-    public CursorCreated(String userId, String boardId, String cursorId) {
+    public CursorCreated(String userId, String boardId) {
         super(DateProvider.now());
         this.boardId = boardId;
-        this.cursorId = cursorId;
         this.userId = userId;
     }
 
     public String getBoardId() {
         return boardId;
-    }
-
-    public String getCursorId() {
-        return cursorId;
     }
 
     public String getUserId() {

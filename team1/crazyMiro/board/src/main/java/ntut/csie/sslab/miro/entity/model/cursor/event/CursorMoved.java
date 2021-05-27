@@ -4,22 +4,29 @@ import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.common.DateProvider;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 
+import java.util.Date;
+
 public class CursorMoved extends DomainEvent {
-    private String cursorId;
+    private String boardId;
+    private String userId;
     private Coordinate position;
 
-    public CursorMoved(String cursorId, Coordinate position) {
+    public CursorMoved(String boardId, String userId, Coordinate position) {
         super(DateProvider.now());
-        this.cursorId = cursorId;
+        this.boardId = boardId;
+        this.userId = userId;
         this.position = position;
     }
 
-    public String getCursorId() {
-        return cursorId;
+    public String getBoardId() {
+        return boardId;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public Coordinate getPosition() {
         return position;
     }
-
 }

@@ -4,12 +4,9 @@ import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.mongodb.BoardRepositoryMongoDbPeer;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.cursor.CursorRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryPeer;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
-import ntut.csie.sslab.miro.usecase.cursor.CursorRepository;
 import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +21,6 @@ public class RepositoryInjection {
 
   private FigureRepositoryPeer figureRepositoryPeer;
 
-  private BoardRepositoryMongoDbPeer boardRepositoryMongoDbPeer;
 //
 //  private WorkflowRepositoryPeer workflowRepositoryPeer;
 //
@@ -66,11 +62,6 @@ public class RepositoryInjection {
   @Bean(name="boardRepository")
   public BoardRepository boardRepository() {
     return new BoardRepositoryImpl(boardRepositoryPeer);
-  }
-
-  @Bean(name="cursorRepository")
-  public CursorRepository cursorRepository() {
-    return new CursorRepositoryImpl();
   }
 
   //

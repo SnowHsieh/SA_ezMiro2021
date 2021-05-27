@@ -11,12 +11,10 @@ import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCase;
 import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.board.sendFigureToBack.SendFigureToBackUseCase;
 import ntut.csie.sslab.miro.usecase.board.sendFigureToBack.SendFigureToBackUseCaseImpl;
-import ntut.csie.sslab.miro.usecase.cursor.CursorRepository;
-import ntut.csie.sslab.miro.usecase.cursor.move.MoveCursorUseCaseImpl;
-import ntut.csie.sslab.miro.usecase.cursor.move.MoveCursorUseCase;
+import ntut.csie.sslab.miro.usecase.board.move.MoveCursorUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.board.move.MoveCursorUseCase;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoardSessionBroadcaster;
-import ntut.csie.sslab.miro.usecase.eventhandler.NotifyCursor;
 import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecolor.ChangeStickerColorUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecolor.ChangeStickerColorUseCaseImpl;
@@ -45,9 +43,6 @@ public class UseCaseInjection {
     @Autowired
     private BoardRepository boardRepository;
 
-    @Autowired
-    private CursorRepository cursorRepository;
-
 
     @Autowired
     private BoardSessionBroadcaster boardSessionBroadcaster;
@@ -60,14 +55,9 @@ public class UseCaseInjection {
         return new NotifyBoard(boardRepository, eventBus);
     }
 
-    @Bean(name="createNotifyCursor")
-    public NotifyCursor createNotifyCursor() {
-        return new NotifyCursor(cursorRepository, boardRepository, eventBus);
-    }
-
     @Bean(name="createNotifyBoardSessionBroadcaster")
     public NotifyBoardSessionBroadcaster createNotifyBoardSessionBroadcaster() {
-        return new NotifyBoardSessionBroadcaster(boardSessionBroadcaster, boardRepository, figureRepository, cursorRepository);
+        return new NotifyBoardSessionBroadcaster(boardSessionBroadcaster, boardRepository, figureRepository);
     }
 
     @Bean(name="createStickerUseCase")
@@ -113,7 +103,7 @@ public class UseCaseInjection {
 
     @Bean(name="moveCursorUseCase")
     public MoveCursorUseCase moveCursorUseCase() {
-        return new MoveCursorUseCaseImpl(cursorRepository, eventBus);
+        return new MoveCursorUseCaseImpl(boardRepository, eventBus);
     }
 
     @Bean(name="enterBoardUseCase")

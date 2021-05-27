@@ -7,7 +7,6 @@ import ntut.csie.sslab.miro.entity.model.board.BoardSession;
 import ntut.csie.sslab.miro.entity.model.board.event.BoardEntered;
 import ntut.csie.sslab.miro.entity.model.board.event.FigureBroughtToFront;
 import ntut.csie.sslab.miro.entity.model.board.event.FigureSentToBack;
-import ntut.csie.sslab.miro.entity.model.cursor.Cursor;
 import ntut.csie.sslab.miro.entity.model.cursor.event.CursorCreated;
 import ntut.csie.sslab.miro.entity.model.cursor.event.CursorDeleted;
 import ntut.csie.sslab.miro.entity.model.cursor.event.CursorMoved;
@@ -15,7 +14,6 @@ import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.entity.model.figure.event.*;
 import ntut.csie.sslab.miro.usecase.BoardSessionBroadcaster;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
-import ntut.csie.sslab.miro.usecase.cursor.CursorRepository;
 import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,14 +25,12 @@ public class NotifyBoardSessionBroadcaster {
     private BoardSessionBroadcaster boardSessionBroadcaster;
     private BoardRepository boardRepository;
     private FigureRepository figureRepository;
-    private CursorRepository cursorRepository;
 
     @Autowired
-    public NotifyBoardSessionBroadcaster(BoardSessionBroadcaster boardSessionBroadcasters, BoardRepository boardRepository, FigureRepository figureRepository, CursorRepository cursorRepository) {
+    public NotifyBoardSessionBroadcaster(BoardSessionBroadcaster boardSessionBroadcasters, BoardRepository boardRepository, FigureRepository figureRepository) {
         this.boardSessionBroadcaster = boardSessionBroadcasters;
         this.boardRepository = boardRepository;
         this.figureRepository = figureRepository;
-        this.cursorRepository = cursorRepository;
     }
 
     @Subscribe
@@ -102,15 +98,16 @@ public class NotifyBoardSessionBroadcaster {
     public void whenCursorCreated(CursorCreated cursorCreated) {
         Board board = boardRepository.findById(cursorCreated.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessions();
+        if(boardSessions.stream().anyMatch(x->x.getUserId().equals(cursorCreated.getUserId())))
+            return;
         boardSessions.forEach(each->broadcast(cursorCreated, each.getBoardSessionId()));
     }
 
     @Subscribe
     public void whenCursorMoved(CursorMoved cursorMoved) {
-        Cursor cursor = cursorRepository.findById(cursorMoved.getCursorId()).get();
-        Board board = boardRepository.findById(cursor.getBoardId()).get();
+        Board board = boardRepository.findById(cursorMoved.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessions();
-        boardSessions = boardSessions.stream().filter(x->!x.getUserId().equals(cursor.getUserId())).collect(Collectors.toList());
+        boardSessions = boardSessions.stream().filter(x->!x.getUserId().equals(cursorMoved.getUserId())).collect(Collectors.toList());
         boardSessions.forEach(each->broadcast(cursorMoved, each.getBoardSessionId()));
     }
 

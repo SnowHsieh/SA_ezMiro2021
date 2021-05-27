@@ -1,4 +1,4 @@
-package ntut.csie.sslab.miro.usecase.cursor.move;
+package ntut.csie.sslab.miro.usecase.board.move;
 
 import ntut.csie.sslab.ddd.usecase.cqrs.Command;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
