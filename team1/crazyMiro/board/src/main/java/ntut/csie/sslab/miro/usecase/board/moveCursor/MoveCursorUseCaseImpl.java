@@ -1,4 +1,4 @@
-package ntut.csie.sslab.miro.usecase.board.move;
+package ntut.csie.sslab.miro.usecase.board.moveCursor;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
@@ -25,7 +25,7 @@ public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
 
             domainEventBus.postAll(board);
 
-            output.setId(board.getId())
+            output.setId(input.getUserId())
                     .setExitCode(ExitCode.SUCCESS);
         }catch (Exception e){
             output.setMessage(e.getMessage())

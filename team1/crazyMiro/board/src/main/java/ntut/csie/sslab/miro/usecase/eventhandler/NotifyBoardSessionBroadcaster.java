@@ -7,9 +7,10 @@ import ntut.csie.sslab.miro.entity.model.board.BoardSession;
 import ntut.csie.sslab.miro.entity.model.board.event.BoardEntered;
 import ntut.csie.sslab.miro.entity.model.board.event.FigureBroughtToFront;
 import ntut.csie.sslab.miro.entity.model.board.event.FigureSentToBack;
-import ntut.csie.sslab.miro.entity.model.cursor.event.CursorCreated;
-import ntut.csie.sslab.miro.entity.model.cursor.event.CursorDeleted;
-import ntut.csie.sslab.miro.entity.model.cursor.event.CursorMoved;
+import ntut.csie.sslab.miro.entity.model.board.event.cursor.CursorCreated;
+import ntut.csie.sslab.miro.entity.model.board.event.cursor.CursorDeleted;
+import ntut.csie.sslab.miro.entity.model.board.event.cursor.CursorMoved;
+import ntut.csie.sslab.miro.entity.model.board.event.cursor.CursorShowed;
 import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.entity.model.figure.event.*;
 import ntut.csie.sslab.miro.usecase.BoardSessionBroadcaster;
@@ -98,7 +99,7 @@ public class NotifyBoardSessionBroadcaster {
     public void whenCursorCreated(CursorCreated cursorCreated) {
         Board board = boardRepository.findById(cursorCreated.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessions();
-        if(boardSessions.stream().anyMatch(x->x.getUserId().equals(cursorCreated.getUserId())))
+        if(boardSessions.stream().filter(x->x.getUserId().equals(cursorCreated.getUserId())).collect(Collectors.toList()).size() > 1)
             return;
         boardSessions.forEach(each->broadcast(cursorCreated, each.getBoardSessionId()));
     }
@@ -109,6 +110,14 @@ public class NotifyBoardSessionBroadcaster {
         List<BoardSession> boardSessions = board.getBoardSessions();
         boardSessions = boardSessions.stream().filter(x->!x.getUserId().equals(cursorMoved.getUserId())).collect(Collectors.toList());
         boardSessions.forEach(each->broadcast(cursorMoved, each.getBoardSessionId()));
+    }
+
+    @Subscribe
+    public void whenCursorShowed(CursorShowed cursorShowed) {
+        Board board = boardRepository.findById(cursorShowed.getBoardId()).get();
+        List<BoardSession> boardSessions = board.getBoardSessions();
+        boardSessions = boardSessions.stream().filter(x->!x.getUserId().equals(cursorShowed.getUserId())).collect(Collectors.toList());
+        boardSessions.forEach(each->broadcast(cursorShowed, each.getBoardSessionId()));
     }
 
     @Subscribe

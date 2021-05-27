@@ -2,8 +2,8 @@ package ntut.csie.sslab.miro.usecase.eventhandler;
 
 import ntut.csie.sslab.miro.entity.model.board.event.BoardEntered;
 import ntut.csie.sslab.miro.entity.model.board.event.BoardLeft;
-import ntut.csie.sslab.miro.entity.model.cursor.event.CursorCreated;
-import ntut.csie.sslab.miro.entity.model.cursor.event.CursorDeleted;
+import ntut.csie.sslab.miro.entity.model.board.event.cursor.CursorCreated;
+import ntut.csie.sslab.miro.entity.model.board.event.cursor.CursorDeleted;
 import ntut.csie.sslab.miro.usecase.AbstractSpringBootJpaTest;
 import org.junit.jupiter.api.Test;
 

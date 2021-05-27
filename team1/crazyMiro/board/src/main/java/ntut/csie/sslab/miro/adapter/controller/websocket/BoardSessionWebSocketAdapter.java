@@ -6,14 +6,14 @@ import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.miro.adapter.presenter.broadcastDomainEvent.DomainEventEncoder;
 import ntut.csie.sslab.miro.application.springboot.web.config.websocket.EndpointConfigure;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
-import ntut.csie.sslab.miro.entity.model.cursor.event.CursorMoved;
+import ntut.csie.sslab.miro.entity.model.board.event.cursor.CursorMoved;
 import ntut.csie.sslab.miro.usecase.BoardSessionBroadcaster;
 import ntut.csie.sslab.miro.usecase.board.enter.EnterBoardInput;
 import ntut.csie.sslab.miro.usecase.board.enter.EnterBoardUseCase;
 import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardInput;
 import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCase;
-import ntut.csie.sslab.miro.usecase.board.move.MoveCursorInput;
-import ntut.csie.sslab.miro.usecase.board.move.MoveCursorUseCase;
+import ntut.csie.sslab.miro.usecase.board.moveCursor.MoveCursorInput;
+import ntut.csie.sslab.miro.usecase.board.moveCursor.MoveCursorUseCase;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,7 +117,9 @@ public class BoardSessionWebSocketAdapter {
     private void handleCursorMoved(JSONObject info) {
         Coordinate newPosition = null;
         String userId = "";
+        String boardId = "";
         try {
+            boardId = info.getString("boardId");
             Long x = info.getJSONObject("position").getLong("x");
             Long y = info.getJSONObject("position").getLong("y");
             newPosition = new Coordinate(x, y);
@@ -128,6 +130,7 @@ public class BoardSessionWebSocketAdapter {
         }
         MoveCursorInput input = moveCursorUseCase.newInput();
         CqrsCommandOutput output = CqrsCommandPresenter.newInstance();
+        input.setBoardId(boardId);
         input.setUserId(userId);
         input.setPosition(newPosition);
         moveCursorUseCase.execute(input, output);

@@ -3,9 +3,10 @@ package ntut.csie.sslab.miro.entity.model.board;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.board.event.*;
-import ntut.csie.sslab.miro.entity.model.cursor.event.CursorCreated;
-import ntut.csie.sslab.miro.entity.model.cursor.event.CursorDeleted;
-import ntut.csie.sslab.miro.entity.model.cursor.event.CursorMoved;
+import ntut.csie.sslab.miro.entity.model.board.event.cursor.CursorCreated;
+import ntut.csie.sslab.miro.entity.model.board.event.cursor.CursorDeleted;
+import ntut.csie.sslab.miro.entity.model.board.event.cursor.CursorMoved;
+import ntut.csie.sslab.miro.entity.model.board.event.cursor.CursorShowed;
 
 import java.util.*;
 
@@ -114,5 +115,9 @@ public class Board extends AggregateRoot<String> {
 
     public void moveCursor(String userId, Coordinate position) {
         addDomainEvent(new CursorMoved(boardId, userId, position));
+    }
+
+    public void showCursor(String userId, Coordinate position) {
+        addDomainEvent(new CursorShowed(boardId, userId, position));
     }
 }

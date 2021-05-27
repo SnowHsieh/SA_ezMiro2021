@@ -1,4 +1,4 @@
-package ntut.csie.sslab.miro.entity.model.cursor.event;
+package ntut.csie.sslab.miro.entity.model.board.event.cursor;
 
 import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.common.DateProvider;

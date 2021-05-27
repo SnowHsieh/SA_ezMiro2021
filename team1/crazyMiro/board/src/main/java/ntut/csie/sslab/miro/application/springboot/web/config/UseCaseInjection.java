@@ -11,8 +11,10 @@ import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCase;
 import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.board.sendFigureToBack.SendFigureToBackUseCase;
 import ntut.csie.sslab.miro.usecase.board.sendFigureToBack.SendFigureToBackUseCaseImpl;
-import ntut.csie.sslab.miro.usecase.board.move.MoveCursorUseCaseImpl;
-import ntut.csie.sslab.miro.usecase.board.move.MoveCursorUseCase;
+import ntut.csie.sslab.miro.usecase.board.moveCursor.MoveCursorUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.board.moveCursor.MoveCursorUseCase;
+import ntut.csie.sslab.miro.usecase.board.showCursor.ShowCursorUseCase;
+import ntut.csie.sslab.miro.usecase.board.showCursor.ShowCursorUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoardSessionBroadcaster;
 import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
@@ -104,6 +106,10 @@ public class UseCaseInjection {
     @Bean(name="moveCursorUseCase")
     public MoveCursorUseCase moveCursorUseCase() {
         return new MoveCursorUseCaseImpl(boardRepository, eventBus);
+    }
+
+    @Bean(name="showCursorUseCase")
+    public ShowCursorUseCase showCursorUseCase() { return new ShowCursorUseCaseImpl(boardRepository, eventBus);
     }
 
     @Bean(name="enterBoardUseCase")

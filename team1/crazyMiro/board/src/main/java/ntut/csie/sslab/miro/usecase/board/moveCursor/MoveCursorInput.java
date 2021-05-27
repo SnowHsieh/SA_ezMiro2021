@@ -1,4 +1,4 @@
-package ntut.csie.sslab.miro.usecase.board.move;
+package ntut.csie.sslab.miro.usecase.board.moveCursor;
 
 import ntut.csie.sslab.ddd.usecase.Input;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
