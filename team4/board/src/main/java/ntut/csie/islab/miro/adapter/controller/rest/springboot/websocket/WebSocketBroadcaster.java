@@ -45,15 +45,15 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
         throw new RuntimeException("sessionId: " + sessionId +" not found!");
     }
 
-    public void narrowCastMsg(JSONObject obj, Session session) {
-        synchronized (session) {
-            try {
-                if(session.isOpen()){
-                    session.getAsyncRemote().sendText(obj.toString());
-                }
-            } catch ( Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    public void narrowCastMsg(JSONObject obj, Session session) {
+//        synchronized (session) {
+//            try {
+//                if(session.isOpen()){
+//                    session.getAsyncRemote().sendText(obj.toString());
+//                }
+//            } catch ( Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }

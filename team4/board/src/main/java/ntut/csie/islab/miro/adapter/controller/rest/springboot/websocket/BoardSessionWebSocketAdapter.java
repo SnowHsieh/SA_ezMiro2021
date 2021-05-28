@@ -77,40 +77,17 @@ public class BoardSessionWebSocketAdapter {
             info = jsonObject.getJSONObject("info");
 //            System.out.println("event in onMessage is: "+jsonObject.toString());
             System.out.println("eventhandler start");
-            websocketEventHandler(event, info , session);
+            websocketEventHandler(event, info);
             System.out.println("eventhandler end");
         }catch (JSONException err){
             System.out.println("onMessage err:" + err);
         }
     }
 
-    private void websocketEventHandler(String event, JSONObject info , Session session) throws JSONException {
+    private void websocketEventHandler(String event, JSONObject info) throws JSONException {
         if(CursorMovedDomainEvent.class.getSimpleName().equals(event)){
             handleCursorMoved(info);
         }
-        else if (event.equals("getAllUser")){
-            handleGetAllUser(info, session);
-        }
-    }
-
-    private void handleGetAllUser(JSONObject info, Session session) throws JSONException {
-        String boardId = "";
-        try {
-            boardId = info.getString("boardId");
-
-        }catch (JSONException err){
-            System.out.println(err);
-            return;
-        }
-        GetAllUserCursorsInput input = getAllUserCursorsUseCase.newInput();
-        input.setBoardId(UUID.fromString(boardId));
-        GetAllUserCursorsPresenter presenter = new GetAllUserCursorsPresenter();
-        getAllUserCursorsUseCase.execute(input, presenter);
-        WebSocketBroadcaster webSocketBroadcaster = new WebSocketBroadcaster();
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("event", "GetAllCursorList");
-        jsonObject.put("cursorList", new JSONObject(presenter.buildViewModel()));
-        webSocketBroadcaster.narrowCastMsg(jsonObject, session);
     }
 
     @OnOpen

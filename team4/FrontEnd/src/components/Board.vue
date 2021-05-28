@@ -54,7 +54,7 @@ import uuidGenerator from '../utils/uuidGenerator.js'
 export default {
   data () {
     return {
-      boardId: '0e3d84a8-e420-4d98-815a-f3dda69540b4',
+      boardId: 'a5a35205-bcc0-46f8-98fe-05fa64678c7a',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -200,7 +200,6 @@ export default {
       figureDtos.forEach(figure => {
         _this.addStickyNote(figure)
       })
-      // this.canvas.renderAll()
     },
     addStickyNote (figure) {
       var shadow = new fabric.Shadow({
@@ -297,7 +296,7 @@ export default {
                 }
               }
             }
-            _this.sendMouseData(_this.mouseData)
+            _this.sendMouseData()
           }
         })
     },
@@ -464,26 +463,9 @@ export default {
         console.log(e)
       }
     },
-    drawAllUserCursors () {
-      var _this = this
-      this.userCursorList.forEach(function (item) {
-        const userId = item.userId
-        const position = item.position
-        if (userId === _this.myUserId) {
-          return
-        }
-        const cursor = new fabric.Text(userId, {
-          fontSize: 15,
-          left: position.x,
-          top: position.y,
-          selectable: false,
-          id: userId,
-          objectType: 'cursor'
-        })
-        _this.canvas.add(cursor)
-      })
-    },
     addUserCursor (data) {
+      const left = data.newPosition !== undefined ? data.newPosition.x : 0.0
+      const top = data.newPosition !== undefined ? data.newPosition.y : 0.0
       try {
         var userId = data.userId
         if (userId === this.myUserId) {
@@ -492,8 +474,8 @@ export default {
         this.userCursorList.push(data)
         const cursor = new fabric.Text(userId, {
           fontSize: 15,
-          left: 0.0,
-          top: 0.0,
+          left: left,
+          top: top,
           selectable: false,
           id: userId,
           objectType: 'cursor'
@@ -507,13 +489,19 @@ export default {
     updateUserCursor (data) { // todo: update userCursorList
       try {
         const _this = this
+        let foundCursor
         this.canvas.getObjects().forEach(function (item) {
           if (data.userId !== _this.myUserId && item.get('id') === data.userId) {
+            foundCursor = item
             item.set('left', data.newPosition.x)
             item.set('top', data.newPosition.y)
           }
         })
-        this.canvas.renderAll()
+        if (foundCursor === undefined) {
+          this.addUserCursor(data)
+        } else {
+          this.canvas.renderAll()
+        }
       } catch (e) {
         console.log(e)
       }
@@ -535,7 +523,6 @@ export default {
     },
     websocketonopen: function () {
       console.log('WebSocket连接成功')
-      this.sendGetAllCursors()
     },
     websocketonerror: function () {
       console.log('WebSocket连接发生错误')
@@ -543,12 +530,15 @@ export default {
     websocketonmessage: function (e) {
       const _this = this
       const receivedData = JSON.parse(e.data)
+      console.log(receivedData)
       if (receivedData.event === 'CursorMovedDomainEvent') {
         _this.updateUserCursor(receivedData)
       } else if (receivedData.event === 'BoardEnteredDomainEvent') {
         // console.log(receivedData)
       } else if (receivedData.event === 'CursorCreatedDomainEvent') {
         _this.addUserCursor(receivedData)
+        this.updateCursorFlag = true
+        this.sendMouseData()
       } else if (receivedData.event === 'CursorDeletedDomainEvent') {
         console.log(receivedData)
         _this.delUserCursor(receivedData.userId)
@@ -583,9 +573,6 @@ export default {
 
       } else if (receivedData.event === 'StickyNoteMovedDomainEvent') {
         _this.updateStickyNotePosition(receivedData)
-      } else if (receivedData.event === 'GetAllCursorList') {
-        _this.userCursorList = receivedData.cursorList.cursorDtos
-        _this.drawAllUserCursors()
       }
     },
     websocketclose: function (e) {
@@ -594,20 +581,6 @@ export default {
     socketInit () {
       this.myUserId = uuidGenerator.generateUUID()
       this.socket = new WebSocket(`${webSocketHostIp}/websocket/${this.boardId}/${this.myUserId}/`)
-    },
-    sendGetAllCursors () {
-      if (this.socket.readyState === 1) {
-        console.log('sendGetAllCursors')
-        const data = {
-          message: {
-            event: 'getAllUser',
-            info: {
-              boardId: this.boardId
-            }
-          }
-        }
-        this.socket.send(JSON.stringify(data))
-      }
     },
     sendMessage: function (data) {
       if (this.socket.readyState === 1) {
