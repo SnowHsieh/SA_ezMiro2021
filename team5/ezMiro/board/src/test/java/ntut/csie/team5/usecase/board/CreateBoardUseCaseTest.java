@@ -30,7 +30,8 @@ public class CreateBoardUseCaseTest extends AbstractTest {
         assertNotNull(createBoardOutput.getId());
         assertEquals(ExitCode.SUCCESS, createBoardOutput.getExitCode());
 
-        Board board = boardRepository.findById(createBoardOutput.getId()).get();
+        Board board = boardRepository.findById(createBoardOutput.getId()).orElse(null);
+        assertNotNull(board);
         assertEquals(createBoardOutput.getId(), board.getBoardId());
         assertEquals(projectId, board.getProjectId());
         assertEquals(boardName, board.getName());

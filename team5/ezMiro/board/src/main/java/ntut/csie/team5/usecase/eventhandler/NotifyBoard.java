@@ -7,8 +7,6 @@ import ntut.csie.team5.entity.model.figure.event.FigureCreated;
 import ntut.csie.team5.entity.model.figure.event.FigureDeleted;
 import ntut.csie.team5.usecase.board.BoardRepository;
 
-import java.util.Optional;
-
 public class NotifyBoard {
 
     private BoardRepository boardRepository;

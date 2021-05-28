@@ -2,7 +2,6 @@ package ntut.csie.team5.entity.model.figure.note;
 
 import ntut.csie.team5.entity.model.figure.FigureType;
 
-import java.awt.*;
 import java.util.UUID;
 
 public class NoteBuilder {

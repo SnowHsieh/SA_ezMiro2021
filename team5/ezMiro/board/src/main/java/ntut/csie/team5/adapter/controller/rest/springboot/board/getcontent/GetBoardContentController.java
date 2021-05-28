@@ -1,7 +1,5 @@
 package ntut.csie.team5.adapter.controller.rest.springboot.board.getcontent;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ntut.csie.team5.adapter.presenter.board.getcontent.BoardContentViewModel;
 import ntut.csie.team5.adapter.presenter.board.getcontent.GetBoardContentPresenter;
 import ntut.csie.team5.usecase.board.getcontent.GetBoardContentInput;

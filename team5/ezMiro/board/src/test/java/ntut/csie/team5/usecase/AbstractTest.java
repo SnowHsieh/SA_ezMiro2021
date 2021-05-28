@@ -4,6 +4,8 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.team5.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.team5.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
+import ntut.csie.team5.adapter.gateway.repository.springboot.figure.line.LineRepositoryImpl;
+import ntut.csie.team5.adapter.gateway.repository.springboot.figure.line.LineRepositoryPeer;
 import ntut.csie.team5.adapter.gateway.repository.springboot.figure.note.NoteRepositoryImpl;
 import ntut.csie.team5.adapter.gateway.repository.springboot.figure.note.NoteRepositoryPeer;
 import ntut.csie.team5.adapter.project.ProjectRepositoryImpl;
@@ -20,6 +22,7 @@ import ntut.csie.team5.usecase.figure.connectable_figure.note.NoteRepository;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteInput;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCase;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCaseImpl;
+import ntut.csie.team5.usecase.figure.line.LineRepository;
 import ntut.csie.team5.usecase.project.ProjectRepository;
 import ntut.csie.team5.usecase.project.create.CreateProjectInput;
 import ntut.csie.team5.usecase.project.create.CreateProjectUseCase;
@@ -31,15 +34,12 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@RunWith(SpringRunner.class)
 @ContextConfiguration(classes= JpaApplicationTest.class)
 @TestPropertySource(locations = "classpath:test.properties")
 @AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
@@ -48,6 +48,7 @@ public abstract class AbstractTest {
     public ProjectRepository projectRepository;
     public BoardRepository boardRepository;
     public NoteRepository noteRepository;
+    public LineRepository lineRepository;
     public DomainEventBus domainEventBus;
 
     public NotifyBoard notifyBoard;
@@ -70,11 +71,15 @@ public abstract class AbstractTest {
     @Autowired
     private NoteRepositoryPeer noteRepositoryPeer;
 
+    @Autowired
+    private LineRepositoryPeer lineRepositoryPeer;
+
     @Before
     public void setUp() throws Exception {
         projectRepository = new ProjectRepositoryImpl();
         boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
         noteRepository = new NoteRepositoryImpl(noteRepositoryPeer);
+        lineRepository = new LineRepositoryImpl(lineRepositoryPeer);
         domainEventBus = new DomainEventBus();
 
         notifyBoard = new NotifyBoard(boardRepository, domainEventBus);

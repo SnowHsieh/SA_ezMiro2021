@@ -26,6 +26,7 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
     }
 
     public void addSession(String boardSessionId, Session session) {
+        session.setMaxIdleTimeout(30 * 60);
         boardSessionMap.put(boardSessionId, session);
     }
 

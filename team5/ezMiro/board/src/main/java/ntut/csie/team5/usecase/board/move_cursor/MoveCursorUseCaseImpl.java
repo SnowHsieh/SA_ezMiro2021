@@ -33,7 +33,7 @@ public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
             return;
         }
 
-        board.moveCursor(input.getUserId(), input.getPositionX(), input.getPositionY());
+        board.moveCursor(input.getBoardSessionId(), input.getPositionX(), input.getPositionY());
 
         boardRepository.save(board);
         domainEventBus.postAll(board);
@@ -45,7 +45,7 @@ public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
     private class MoveCursorInputImpl implements MoveCursorInput {
 
         String boardId;
-        String userId;
+        String boardSessionId;
         int positionX;
         int positionY;
 
@@ -60,13 +60,13 @@ public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
         }
 
         @Override
-        public String getUserId() {
-            return userId;
+        public String getBoardSessionId() {
+            return boardSessionId;
         }
 
         @Override
-        public void setUserId(String userId) {
-            this.userId = userId;
+        public void setBoardSessionId(String boardSessionId) {
+            this.boardSessionId = boardSessionId;
         }
 
         @Override

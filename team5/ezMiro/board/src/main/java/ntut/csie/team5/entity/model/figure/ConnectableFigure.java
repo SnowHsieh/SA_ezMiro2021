@@ -1,7 +1,5 @@
 package ntut.csie.team5.entity.model.figure;
 
-import java.awt.*;
-
 public abstract class ConnectableFigure extends Figure {
 
 //    private Point leftTopPosition;

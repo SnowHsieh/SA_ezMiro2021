@@ -21,9 +21,6 @@ public class BoardMapper {
         for (BoardSessionData boardSessionData: data.getBoardSessionDatas()) {
             board.addBoardSession(boardSessionData.getBoardSessionId(), boardSessionData.getUserId());
         }
-        for (CursorData cursorData: data.getCursorDatas()) {
-            board.addCursor(cursorData.getUserId(), cursorData.getPositionX(), cursorData.getPositionX());
-        }
         board.clearDomainEvents();
         return board;
     }
@@ -38,8 +35,6 @@ public class BoardMapper {
                 transformToData(board.getCommittedFigures()));
         boardData.setBoardSessionDatas(BoardSessionMapper.
                 transformToData(board.getBoardSessions()));
-        boardData.setCursorDatas(CursorMapper.
-                transformToData(board.getCursors()));
         return boardData;
     }
 }

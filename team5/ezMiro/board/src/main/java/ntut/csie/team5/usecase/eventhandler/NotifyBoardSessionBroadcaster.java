@@ -5,8 +5,8 @@ import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.team5.entity.model.board.Board;
 import ntut.csie.team5.entity.model.board.BoardSession;
-import ntut.csie.team5.entity.model.board.event.CursorCreated;
-import ntut.csie.team5.entity.model.board.event.CursorDeleted;
+import ntut.csie.team5.entity.model.board.event.BoardEntered;
+import ntut.csie.team5.entity.model.board.event.BoardLeft;
 import ntut.csie.team5.entity.model.board.event.CursorMoved;
 import ntut.csie.team5.entity.model.figure.event.FigureCreated;
 import ntut.csie.team5.entity.model.figure.event.FigureDeleted;
@@ -67,8 +67,8 @@ public class NotifyBoardSessionBroadcaster {
     }
 
     @Subscribe
-    public void whenCursorCreated(CursorCreated cursorCreated) {
-        broadcastEvent(cursorCreated.boardId(), cursorCreated);
+    public void whenBoardEntered(BoardEntered boardEntered) {
+        broadcastEvent(boardEntered.boardId(), boardEntered);
     }
 
     @Subscribe
@@ -77,8 +77,8 @@ public class NotifyBoardSessionBroadcaster {
     }
 
     @Subscribe
-    public void whenCursorDelete(CursorDeleted CursorDeleted) {
-        broadcastEvent(CursorDeleted.boardId(), CursorDeleted);
+    public void whenBoardLeft(BoardLeft boardLeft) {
+        broadcastEvent(boardLeft.boardId(), boardLeft);
     }
 
     private void broadcastEvent(String boardId, DomainEvent domainEvent) {

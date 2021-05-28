@@ -23,13 +23,9 @@ public class BoardData {
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private Set<BoardSessionData> boardSessionDatas;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    private Set<CursorData> cursorDatas;
-
     public BoardData() {
         committedFigureDatas = new HashSet<>();
         boardSessionDatas = new HashSet<>();
-        cursorDatas = new HashSet<>();
     }
 
     public BoardData(String projectId, String boardId, String boardName) {
@@ -77,14 +73,6 @@ public class BoardData {
 
     public void setBoardSessionDatas(List<BoardSessionData> boardSessionDatas) {
         this.boardSessionDatas = new HashSet<>(boardSessionDatas);
-    }
-
-    public List<CursorData> getCursorDatas() {
-        return new ArrayList<>(cursorDatas);
-    }
-
-    public void setCursorDatas(List<CursorData> cursorDatas) {
-        this.cursorDatas = new HashSet<>(cursorDatas);
     }
 
     @Override

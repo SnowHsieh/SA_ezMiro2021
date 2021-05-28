@@ -37,7 +37,8 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         changeFigureZOrderInput.setFigureId(firstNoteId);
         changeFigureZOrderInput.setZOrderType(ZOrderType.BRING_FORWARD);
 
-        Board board = boardRepository.findById(boardId).get();
+        Board board = boardRepository.findById(boardId).orElse(null);
+        assertNotNull(board);
         assertEquals(0, board.getCommittedFigures().get(0).zOrder());
         assertEquals(1, board.getCommittedFigures().get(1).zOrder());
 
@@ -65,7 +66,8 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         changeFigureZOrderInput.setFigureId(secondNoteId);
         changeFigureZOrderInput.setZOrderType(ZOrderType.SEND_BACKWARDS);
 
-        Board board = boardRepository.findById(boardId).get();
+        Board board = boardRepository.findById(boardId).orElse(null);
+        assertNotNull(board);
         assertEquals(0, board.getCommittedFigures().get(0).zOrder());
         assertEquals(1, board.getCommittedFigures().get(1).zOrder());
 
@@ -73,7 +75,8 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         assertNotNull(changeFigureOrderOutput.getId());
         assertEquals(ExitCode.SUCCESS, changeFigureOrderOutput.getExitCode());
 
-        board = boardRepository.findById(changeFigureOrderOutput.getId()).get();
+        board = boardRepository.findById(changeFigureOrderOutput.getId()).orElse(null);
+        assertNotNull(board);
         assertEquals(0, board.getCommittedFigures().get(0).zOrder());
         assertEquals(1, board.getCommittedFigures().get(1).zOrder());
     }
@@ -93,7 +96,8 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         changeFigureZOrderInput.setFigureId(firstNoteId);
         changeFigureZOrderInput.setZOrderType(ZOrderType.BRING_TO_FRONT);
 
-        Board board = boardRepository.findById(boardId).get();
+        Board board = boardRepository.findById(boardId).orElse(null);
+        assertNotNull(board);
         assertEquals(0, board.getCommittedFigures().get(0).zOrder());
         assertEquals(1, board.getCommittedFigures().get(1).zOrder());
         assertEquals(2, board.getCommittedFigures().get(2).zOrder());
@@ -102,7 +106,8 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         assertNotNull(changeFigureOrderOutput.getId());
         assertEquals(ExitCode.SUCCESS, changeFigureOrderOutput.getExitCode());
 
-        board = boardRepository.findById(changeFigureOrderOutput.getId()).get();
+        board = boardRepository.findById(changeFigureOrderOutput.getId()).orElse(null);
+        assertNotNull(board);
         assertEquals(0, board.getCommittedFigures().get(0).zOrder());
         assertEquals(1, board.getCommittedFigures().get(1).zOrder());
         assertEquals(2, board.getCommittedFigures().get(2).zOrder());
@@ -123,7 +128,8 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         changeFigureZOrderInput.setFigureId(thirdNoteId);
         changeFigureZOrderInput.setZOrderType(ZOrderType.SEND_TO_BACK);
 
-        Board board = boardRepository.findById(boardId).get();
+        Board board = boardRepository.findById(boardId).orElse(null);
+        assertNotNull(board);
         assertEquals(0, board.getCommittedFigures().get(0).zOrder());
         assertEquals(1, board.getCommittedFigures().get(1).zOrder());
         assertEquals(2, board.getCommittedFigures().get(2).zOrder());
@@ -132,7 +138,8 @@ public class ChangeFigureZOrderUseCaseTest extends AbstractTest {
         assertNotNull(changeFigureOrderOutput.getId());
         assertEquals(ExitCode.SUCCESS, changeFigureOrderOutput.getExitCode());
 
-        board = boardRepository.findById(changeFigureOrderOutput.getId()).get();
+        board = boardRepository.findById(changeFigureOrderOutput.getId()).orElse(null);
+        assertNotNull(board);
         assertEquals(0, board.getCommittedFigures().get(0).zOrder());
         assertEquals(1, board.getCommittedFigures().get(1).zOrder());
         assertEquals(2, board.getCommittedFigures().get(2).zOrder());
