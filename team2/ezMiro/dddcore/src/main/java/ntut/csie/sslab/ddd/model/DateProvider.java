@@ -1,18 +1,18 @@
 package ntut.csie.sslab.ddd.model;
 
-import java.util.Date;
+import java.time.Instant;
 
 public class DateProvider {
-	private static Date date = null;
+	private static Instant date = null;
 	
-	public static Date now() {
+	public static Instant now() {
 		if(date == null) {
-			return new Date();
+			return Instant.now();
 		}
 		return date;
 	}
 	
-	public static void setDate(Date now) {
+	public static void setDate(Instant now) {
 		date = now;
 	}
 	

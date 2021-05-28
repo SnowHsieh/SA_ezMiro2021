@@ -1,8 +1,6 @@
 package ntut.csie.sslab.team.entity.model.team;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
-import ntut.csie.sslab.team.entity.model.team.event.*;
-
 import java.util.*;
 
 public class Team extends AggregateRoot<TeamId> {
@@ -20,7 +18,7 @@ public class Team extends AggregateRoot<TeamId> {
         defaultProject = new Project(new ProjectId(UUID.randomUUID()), id, "Default");
         userDefinedProjects = new ArrayList<>();
 
-        addDomainEvent(new TeamCreated(this.getId(), userId, name));
+//        addDomainEvent(new TeamCreated(this.getId(), userId, name));
     }
 
     public Team(TeamId teamId,
@@ -46,7 +44,7 @@ public class Team extends AggregateRoot<TeamId> {
 
         Project project = new Project(new ProjectId(UUID.randomUUID()), this.getId(), name);
         userDefinedProjects.add(project);
-        addDomainEvent(new ProjectCreated(id, project.getId(), name));
+//        addDomainEvent(new ProjectCreated(id, project.getId(), name));
         return project.getId();
 
     }
@@ -57,7 +55,7 @@ public class Team extends AggregateRoot<TeamId> {
             Project each = iterator.next();
             if (each.getId().equals(projectId)){
                 iterator.remove();
-                addDomainEvent(new ProjectDeleted(id, projectId));
+//                addDomainEvent(new ProjectDeleted(id, projectId));
                 return;
             }
         }
@@ -66,7 +64,7 @@ public class Team extends AggregateRoot<TeamId> {
     public void commitBoard(BoardId boardId, String boardName) {
         Board board = new Board(boardId, this.getId(), defaultProject.getId(), boardName);
         defaultProject.addBoard(board);
-        addDomainEvent(new BoardCommittedToTeam(id, boardId, boardName));
+//        addDomainEvent(new BoardCommittedToTeam(id, boardId, boardName));
     }
 
     public void uncommitBoard(BoardId boardId) {
@@ -76,8 +74,8 @@ public class Team extends AggregateRoot<TeamId> {
             for(Board board : project.getBoards()){
                 if (board.getId().equals(boardId)){
                     project.removeBoard(board);
-                    addDomainEvent(new BoardRemovedFromProject(id, boardId, project.getId(), board.getName()));
-                    addDomainEvent(new BoardUncommittedFromTeam(id, boardId, board.getName()));
+//                    addDomainEvent(new BoardRemovedFromProject(id, boardId, project.getId(), board.getName()));
+//                    addDomainEvent(new BoardUncommittedFromTeam(id, boardId, board.getName()));
                     return;
                 }
             }
@@ -114,11 +112,11 @@ public class Team extends AggregateRoot<TeamId> {
         Project fromProject = getProject(board.getProjectId());
 
         fromProject.removeBoard(board);
-        addDomainEvent(new BoardRemovedFromProject(id, boardId, fromProject.getId(), board.getName()));
+//        addDomainEvent(new BoardRemovedFromProject(id, boardId, fromProject.getId(), board.getName()));
 
         board.setProjectId(toProject.getId());
         toProject.addBoard(board);
-        addDomainEvent(new BoardMovedToProject(id, boardId, projectId, board.getName()));
+//        addDomainEvent(new BoardMovedToProject(id, boardId, projectId, board.getName()));
     }
 
     private List<Project> getAllProjects(){
@@ -140,7 +138,7 @@ public class Team extends AggregateRoot<TeamId> {
         if(!project.getName().equals(newName)) {
             String oldName = project.getName();
             project.setName(newName);
-            addDomainEvent(new ProjectRenamed(id, projectId, oldName, newName));
+//            addDomainEvent(new ProjectRenamed(id, projectId, oldName, newName));
         }
         return project.getId();
     }
@@ -154,7 +152,7 @@ public class Team extends AggregateRoot<TeamId> {
         }
 
         teamMembers.add(new TeamMember(userId, getId(), role));
-        addDomainEvent(new TeamMemberAdded(userId, getId(), role.toString()));
+//        addDomainEvent(new TeamMemberAdded(userId, getId(), role.toString()));
     }
 
     public List<Project> getUserDefinedProjects() {
@@ -202,14 +200,14 @@ public class Team extends AggregateRoot<TeamId> {
             if (each.getId().equals(boardId)) {
                 String oldName = each.getName();
                 each.setName(newName);
-                addDomainEvent(new CommittedBoardRenamed(id, boardId, oldName, newName));
+//                addDomainEvent(new CommittedBoardRenamed(id, boardId, oldName, newName));
                 break;
             }
         }
     }
 
     public void markAsRemoved() {
-        addDomainEvent(new TeamDeleted(id));
+//        addDomainEvent(new TeamDeleted(id));
     }
 
     public String getName(){

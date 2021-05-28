@@ -17,12 +17,10 @@ public class MoveNoteUseCaseImpl implements MoveNoteUseCase {
 
     @Override
     public void execute(MoveNoteInput input, CqrsCommandOutput output) {
-        Note note = (Note)figureRepository.findById(input.getNoteId()).orElse(null);
-        // TODO: Type cast need to fix.
+        Note note = figureRepository.findNoteById(input.getNoteId()).orElse(null);
         if (note == null){
             output.setId(input.getNoteId())
-                    .setMessage("Move note failed: note not found, note id = " + input.getNoteId());
-//           domainEventBus.post()
+                  .setMessage("Move note failed: note not found, note id = " + input.getNoteId());
             return;
         }
 

@@ -93,9 +93,102 @@ export default {
       }
       this.webSocket.onmessage = async function (e) {
         const message = await JSON.parse(e.data)
-        me.handleCursorMessage(message.cursors)
-        me.handleWidgetMessage(message.widgets)
+        if (message.domainEvent === 'widgetDeletionNotifiedToAllUser') {
+          me.whenWidgetDeleted(message.widgets)
+        } else if (message.domainEvent === 'notifyTextOfWidgetModifiedToAllUser') {
+          me.whenTextOfWidgetEdited(message.widgets)
+        } else if (message.domainEvent === 'notifyWidgetResizedToAllUser') {
+          me.whenWidgetResized(message.widgets)
+        } else if (message.domainEvent === 'notifyColorOfWidgetModifiedToAllUser') {
+          me.whenColorOfWidgetChanged(message.widgets)
+        } else if (message.domainEvent === 'notifyWidgetZOrderRearrangedToAllUser') {
+          me.whenZOrderOfWidgetChanged(message.widgets)
+        } else {
+          me.handleCursorMessage(message.cursors)
+          me.handleWidgetMessage(message.widgets)
+        }
       }
+    },
+    whenWidgetDeleted (widgets) {
+      for (let index = 0; index < widgets.length; index++) {
+        if (this.boardContent.widgetDtos.some(widgetDto => widgetDto.widgetId === widgets[index].widgetId)) {
+          this.deleteWidgetInCanvas(widgets[index])
+        }
+      }
+    },
+    deleteWidgetInCanvas (widgetDto) {
+      const canvas = this.canvas
+      canvas.getObjects().forEach(function (o) {
+        if (o.id === widgetDto.widgetId) {
+          canvas.remove(o)
+        }
+      })
+      canvas.renderAll()
+    },
+    whenTextOfWidgetEdited (widgets) {
+      for (let index = 0; index < widgets.length; index++) {
+        if (this.boardContent.widgetDtos.some(widgetDto => widgetDto.widgetId === widgets[index].widgetId)) {
+          this.editTextOfWidget(widgets[index])
+        }
+      }
+    },
+    editTextOfWidget (widgetDto) {
+      const canvas = this.canvas
+      canvas.getObjects().forEach(function (o) {
+        if (o.id === widgetDto.widgetId) {
+          o.textObject.set('text', widgetDto.text)
+        }
+      })
+      canvas.renderAll()
+    },
+    whenWidgetResized (widgets) {
+      for (let index = 0; index < widgets.length; index++) {
+        if (this.boardContent.widgetDtos.some(widgetDto => widgetDto.widgetId === widgets[index].widgetId)) {
+          this.resizeWidget(widgets[index])
+        }
+      }
+    },
+    resizeWidget (widgetDto) {
+      const canvas = this.canvas
+      const me = this
+      canvas.getObjects().forEach(function (o) {
+        if (o.id === widgetDto.widgetId) {
+          canvas.remove(o)
+          me.loadStickyNoteIntoCanvas(widgetDto)
+        }
+      })
+      canvas.renderAll()
+    },
+    whenColorOfWidgetChanged (widgets) {
+      for (let index = 0; index < widgets.length; index++) {
+        if (this.boardContent.widgetDtos.some(widgetDto => widgetDto.widgetId === widgets[index].widgetId)) {
+          this.colorOfWidgetChanged(widgets[index])
+        }
+      }
+    },
+    whenZOrderOfWidgetChanged (widgets) {
+      for (let index = 0; index < widgets.length; index++) {
+        if (this.boardContent.widgetDtos.some(widgetDto => widgetDto.widgetId === widgets[index].widgetId)) {
+          this.zOrderOfWidgetChanged(widgets[index])
+        }
+      }
+    },
+    colorOfWidgetChanged (widgetDto) {
+      const canvas = this.canvas
+      canvas.getObjects().forEach(function (o) {
+        if (o.id === widgetDto.widgetId) {
+          o.rectObject.set('fill', widgetDto.color)
+        }
+      })
+      canvas.renderAll()
+    },
+    zOrderOfWidgetChanged (widgetDto) {
+      const canvas = this.canvas
+      canvas.getObjects().forEach(function (o) {
+        if (o.id === widgetDto.widgetId) {
+          canvas.moveTo(o, widgetDto.zorder)
+        }
+      })
     },
     handleCursorMessage (cursors) {
       if (cursors !== undefined) {
@@ -252,8 +345,6 @@ export default {
     async deleteWidget () {
       const res = await DeleteStickyNoteBy(this.selectedStickyNote.id, this.boardId)
       if (res !== null) {
-        this.canvas.remove(this.selectedStickyNote)
-        this.canvas.renderAll()
         this.isDisplayRightClickMenu = false
         this.selectedStickyNote = null
       }

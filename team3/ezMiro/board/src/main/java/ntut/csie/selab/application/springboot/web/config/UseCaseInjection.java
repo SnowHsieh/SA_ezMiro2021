@@ -1,6 +1,7 @@
 package ntut.csie.selab.application.springboot.web.config;
 
 import ntut.csie.selab.model.DomainEventBus;
+import ntut.csie.selab.usecase.board.BoardAssociationRepository;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.board.enterboard.EnterBoardUseCase;
 import ntut.csie.selab.usecase.board.create.CreateBoardUseCase;
@@ -27,13 +28,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration("MiroUseCaseInjection")
 public class UseCaseInjection {
     private BoardRepository boardRepository;
+    private BoardAssociationRepository boardAssociationRepository;
     private WidgetRepository widgetRepository;
     private DomainEventBus eventBus;
     private WebSocket boardWebSocket;
 
     @Bean(name="createNotifyBoard")
     public NotifyBoard createNotifyBoard() {
-        return new NotifyBoard(boardRepository, eventBus);
+        return new NotifyBoard(boardAssociationRepository, eventBus);
     }
 
     @Bean(name="createNotifyUsersInBoard")
@@ -87,7 +89,7 @@ public class UseCaseInjection {
 
     @Bean(name="ChangeZOrderOfWidgetUseCase")
     public ChangeZOrderOfWidgetUseCase changeZOrderOfWidgetUseCase() {
-        return new ChangeZOrderOfWidgetUseCase(boardRepository, eventBus);
+        return new ChangeZOrderOfWidgetUseCase(boardAssociationRepository, eventBus);
     }
 
     @Bean("EditFontSizeOfStickyNoteUseCase")
@@ -108,6 +110,11 @@ public class UseCaseInjection {
     @Autowired
     public void setBoardRepository(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
+    }
+
+    @Autowired
+    public void setBoardAssociationRepository(BoardAssociationRepository boardAssociationRepository) {
+        this.boardAssociationRepository = boardAssociationRepository;
     }
 
     @Autowired

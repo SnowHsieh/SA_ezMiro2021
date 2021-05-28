@@ -1,41 +1,21 @@
 package ntut.csie.sslab.miro.usecase.note;
 
-import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.note.FigureRepositoryImpl;
-import ntut.csie.sslab.miro.entity.model.figure.Figure;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
-import ntut.csie.sslab.miro.usecase.note.create.CreateNoteInput;
-import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCase;
-import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCaseImpl;
-import ntut.csie.sslab.miro.usecase.note.get.GetNoteInput;
 import ntut.csie.sslab.miro.adapter.presenter.note.GetNotePresenter;
+import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.usecase.AbstractUseCaseTest;
+import ntut.csie.sslab.miro.usecase.note.get.GetNoteInput;
 import ntut.csie.sslab.miro.usecase.note.get.GetNoteUseCase;
 import ntut.csie.sslab.miro.usecase.note.get.GetNoteUseCaseImpl;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class GetNoteUseCaseTest {
-    private FigureRepository figureRepository;
-    private DomainEventBus domainEventBus;
-
-    @Before
-    public void setUp() {
-        figureRepository = new FigureRepositoryImpl();
-        domainEventBus = new DomainEventBus();
-
-        // TODO : should be deleted after demo
-        for (Figure figure : figureRepository.findAll()) {
-            figureRepository.deleteById(figure.getId());
-        }
-    }
-
+public class GetNoteUseCaseTest extends AbstractUseCaseTest {
     @Test
     public void get_note_by_note_id() {
+        String boardId = create_board();
         Coordinate coordinate = new Coordinate(5,6);
-        String noteId = create_note(coordinate);
+        String noteId = create_note(boardId, coordinate);
         GetNoteUseCase getNoteUseCase = new GetNoteUseCaseImpl(figureRepository);
         GetNoteInput input = (GetNoteInput) getNoteUseCase;
         input.setNoteId(noteId);
@@ -53,13 +33,14 @@ public class GetNoteUseCaseTest {
 
     @Test
     public void get_notes_by_board_id() {
+        String boardId = create_board();
         Coordinate coordinate1 = new Coordinate(5,6);
         Coordinate coordinate2 = new Coordinate(10,8);
-        String note1Id = create_note(coordinate1);
-        String note2Id = create_note(coordinate2);
+        String note1Id = create_note(boardId, coordinate1);
+        String note2Id = create_note(boardId, coordinate2);
         GetNoteUseCase getNoteUseCase = new GetNoteUseCaseImpl(figureRepository);
         GetNoteInput input = (GetNoteInput) getNoteUseCase;
-        input.setBoardId("boardId");
+        input.setBoardId(boardId);
         GetNotePresenter output = new GetNotePresenter();
 
         getNoteUseCase.execute(input, output);
@@ -83,10 +64,11 @@ public class GetNoteUseCaseTest {
 
     @Test
     public void get_notes_by_board_id_and_note_id() {
+        String boardId = create_board();
         Coordinate coordinate1 = new Coordinate(5,6);
         Coordinate coordinate2 = new Coordinate(10,8);
-        String note1Id = create_note(coordinate1);
-        create_note(coordinate2);
+        String note1Id = create_note(boardId, coordinate1);
+        create_note(boardId, coordinate2);
         GetNoteUseCase getNoteUseCase = new GetNoteUseCaseImpl(figureRepository);
         GetNoteInput input = (GetNoteInput) getNoteUseCase;
         input.setBoardId("boardId");
@@ -105,10 +87,11 @@ public class GetNoteUseCaseTest {
 
     @Test
     public void get_notes_without_board_id_and_note_id() {
+        String boardId = create_board();
         Coordinate coordinate1 = new Coordinate(5,6);
         Coordinate coordinate2 = new Coordinate(10,8);
-        create_note(coordinate1);
-        create_note(coordinate2);
+        create_note(boardId, coordinate1);
+        create_note(boardId, coordinate2);
         GetNoteUseCase getNoteUseCase = new GetNoteUseCaseImpl(figureRepository);
         GetNoteInput input = (GetNoteInput) getNoteUseCase;
         GetNotePresenter output = new GetNotePresenter();
@@ -118,17 +101,5 @@ public class GetNoteUseCaseTest {
         } catch(IllegalArgumentException e) {
             assertEquals("boardId and noteId cannot be null.", e.getMessage());
         }
-    }
-
-    private String create_note(Coordinate coordinate){
-        CreateNoteUseCase createNoteUseCase = new CreateNoteUseCaseImpl(figureRepository, domainEventBus);
-        CreateNoteInput input = createNoteUseCase.newInput();
-        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-        input.setBoardId("boardId");
-        input.setCoordinate(coordinate);
-
-        createNoteUseCase.execute(input, output);
-
-        return output.getId();
     }
 }

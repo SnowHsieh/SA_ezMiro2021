@@ -1,6 +1,6 @@
 package ntut.csie.selab.usecase.board;
 
-import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
+import ntut.csie.selab.adapter.board.BoardRepositoryInMemoryImpl;
 import ntut.csie.selab.domain.MockFactory;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.model.DomainEventBus;
@@ -17,14 +17,14 @@ public class EnterBoardUseCaseTest {
         String boardId = "boardId";
         String userId = "userId";
         Board board = MockFactory.createBoard(boardId);
-        BoardRepository boardRepository = new BoardRepositoryImpl();
+        BoardRepository boardRepository = new BoardRepositoryInMemoryImpl();
         DomainEventBus domainEventBus = new DomainEventBus();
         EnterBoardUseCase enterBoardUseCase = new EnterBoardUseCase(boardRepository, domainEventBus);
         EnterBoardInput input = new EnterBoardInput();
         EnterBoardOutput output = new EnterBoardOutput();
         input.setBoardId(boardId);
         input.setUserId(userId);
-        boardRepository.add(board);
+        boardRepository.save(board);
         // Act
         enterBoardUseCase.execute(input, output);
 

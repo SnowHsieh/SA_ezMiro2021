@@ -2,8 +2,8 @@ package ntut.csie.selab.adapter.controller.rest.springboot.widget.resize;
 
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.usecase.widget.resize.ResizeStickyNoteUseCase;
-import ntut.csie.selab.usecase.widget.resize.ResizeStickyNoteUseCaseInput;
-import ntut.csie.selab.usecase.widget.resize.ResizeStickyNoteUseCaseOutput;
+import ntut.csie.selab.usecase.widget.resize.ResizeStickyNoteInput;
+import ntut.csie.selab.usecase.widget.resize.ResizeStickyNoteOutput;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,8 @@ public class ResizeStickyNoteController {
     @PutMapping(path = "/${EZ_MIRO_PREFIX}/boards/{boardId}/widgets/sticky-notes/{stickyNoteId}/resize", consumes = "application/json", produces = "application/json")
     public String ResizeStickyNote(@PathVariable("stickyNoteId") String stickyNoteId,
                                    @RequestBody String resizeInfo) {
-        ResizeStickyNoteUseCaseInput input = new ResizeStickyNoteUseCaseInput();
-        ResizeStickyNoteUseCaseOutput output = new ResizeStickyNoteUseCaseOutput();
+        ResizeStickyNoteInput input = new ResizeStickyNoteInput();
+        ResizeStickyNoteOutput output = new ResizeStickyNoteOutput();
         int topLeftX = 0;
         int topLeftY = 0;
         int bottomLeftX = 0;

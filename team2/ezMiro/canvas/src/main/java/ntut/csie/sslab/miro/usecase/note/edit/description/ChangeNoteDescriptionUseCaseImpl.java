@@ -17,12 +17,10 @@ public class ChangeNoteDescriptionUseCaseImpl implements ChangeNoteDescriptionUs
 
     @Override
     public void execute(ChangeNoteDescriptionInput input, CqrsCommandOutput output) {
-        Note note = (Note)figureRepository.findById(input.getNoteId()).orElse(null);
-        // TODO: Type cast need to fix.
+        Note note = figureRepository.findNoteById(input.getNoteId()).orElse(null);
         if (note == null) {
            output.setId(input.getNoteId())
-                   .setMessage("Change note description failed: note not found, note id = " + input.getNoteId());
-//           domainEventBus.post()
+                 .setMessage("Change note description failed: note not found, note id = " + input.getNoteId());
            return;
         }
 

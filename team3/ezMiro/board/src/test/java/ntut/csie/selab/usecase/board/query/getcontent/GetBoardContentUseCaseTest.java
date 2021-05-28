@@ -1,6 +1,6 @@
 package ntut.csie.selab.usecase.board.query.getcontent;
 
-import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
+import ntut.csie.selab.adapter.board.BoardRepositoryInMemoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
 import ntut.csie.selab.adapter.presenter.board.getcontent.BoardContentViewModel;
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
@@ -11,9 +11,9 @@ import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.board.CommittedWidgetDto;
-import ntut.csie.selab.usecase.board.CommittedWidgetMapper;
+import ntut.csie.selab.usecase.board.CommittedWidgetDtoMapper;
 import ntut.csie.selab.usecase.widget.WidgetDto;
-import ntut.csie.selab.usecase.widget.WidgetMapper;
+import ntut.csie.selab.usecase.widget.WidgetDtoMapper;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,23 +38,23 @@ public class GetBoardContentUseCaseTest {
     @Test
     public void get_board_content_should_succeed() {
         // Arrange
-        BoardRepository boardRepository = new BoardRepositoryImpl();
+        BoardRepository boardRepository = new BoardRepositoryInMemoryImpl();
         WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(boardRepository, widgetRepository);
         GetBoardContentInput input = new GetBoardContentInput();
         GetBoardContentOutput output = new GetBoardContentOutput();
         create_single_board_with_event_storming(boardRepository, widgetRepository);
         input.setBoardId("firstId");
-        WidgetMapper widgetMapper = new WidgetMapper();
-        CommittedWidgetMapper committedWidgetMapper = new CommittedWidgetMapper();
+        WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
+        CommittedWidgetDtoMapper committedWidgetDtoMapper = new CommittedWidgetDtoMapper();
         List<WidgetDto> widgetDtos;
         List<CommittedWidgetDto> committedWidgetDtos;
 
         // Act
         getBoardContentUseCase.execute(input, output);
 
-        widgetDtos = widgetMapper.domainToDto(output.getWidgets());
-        committedWidgetDtos = committedWidgetMapper.domainToDto(output.getCommittedWidgets());
+        widgetDtos = widgetDtoMapper.domainToDto(output.getWidgets());
+        committedWidgetDtos = committedWidgetDtoMapper.domainToDto(output.getCommittedWidgets());
         BoardContentViewModel boardContentViewModel = new BoardContentViewModel(output.getBoardId(), widgetDtos, committedWidgetDtos);
 
         // Assert
@@ -66,7 +66,7 @@ public class GetBoardContentUseCaseTest {
     private void create_single_board_with_event_storming(BoardRepository boardRepository, WidgetRepository widgetRepository) {
         String boardId = "firstId";
         Board board = new Board(boardId,"firstTeam", "firstBoard");
-        boardRepository.add(board);
+        boardRepository.save(board);
 
         Widget readModel = new StickyNote("readModelId", boardId, new Coordinate(0, 20, 10, 30));
         widgetRepository.save(readModel);

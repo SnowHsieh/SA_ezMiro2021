@@ -1,8 +1,7 @@
 package ntut.csie.selab.adapter.gateway.repository.springboot.widget;
 
-import ntut.csie.selab.entity.model.widget.Coordinate;
-
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="widget")
@@ -44,7 +43,15 @@ public class WidgetData {
     @Column(name="font_size")
     private int fontSize;
 
+//    @OneToMany(mappedBy = "widget", cascade = CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(mappedBy = "widget", cascade = CascadeType.ALL)
+    private List<CommittedWidgetData> committedWidgets;
+
     public WidgetData() {
+    }
+
+    public WidgetData(String widgetId) {
+        this.widgetId = widgetId;
     }
 
     public WidgetData(
@@ -68,6 +75,86 @@ public class WidgetData {
         this.color = color;
         this.textColor = textColor;
         this.text = text;
+        this.fontSize = fontSize;
+    }
+
+    public String getWidgetId() {
+        return widgetId;
+    }
+
+    public String getBoardId() {
+        return boardId;
+    }
+
+    public int getTopLeftX() {
+        return topLeftX;
+    }
+
+    public int getTopLeftY() {
+        return topLeftY;
+    }
+
+    public int getBottomRightX() {
+        return bottomRightX;
+    }
+
+    public int getBottomRightY() {
+        return bottomRightY;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getTextColor() {
+        return textColor;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public int getFontSize() {
+        return fontSize;
+    }
+
+    public void setWidgetId(String widgetId) {
+        this.widgetId = widgetId;
+    }
+
+    public void setBoardId(String boardId) {
+        this.boardId = boardId;
+    }
+
+    public void setTopLeftX(int topLeftX) {
+        this.topLeftX = topLeftX;
+    }
+
+    public void setTopLeftY(int topLeftY) {
+        this.topLeftY = topLeftY;
+    }
+
+    public void setBottomRightX(int bottomRightX) {
+        this.bottomRightX = bottomRightX;
+    }
+
+    public void setBottomRightY(int bottomRightY) {
+        this.bottomRightY = bottomRightY;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setTextColor(String textColor) {
+        this.textColor = textColor;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setFontSize(int fontSize) {
         this.fontSize = fontSize;
     }
 }

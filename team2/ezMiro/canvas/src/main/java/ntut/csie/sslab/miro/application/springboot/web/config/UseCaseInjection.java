@@ -1,7 +1,10 @@
 package ntut.csie.sslab.miro.application.springboot.web.config;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
+import ntut.csie.sslab.miro.adapter.controller.websocket.WebSocketBroadcaster;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.NotifyBoardAdapter;
+import ntut.csie.sslab.miro.adapter.gateway.eventbus.NotifyCursorAdapter;
+import ntut.csie.sslab.miro.adapter.gateway.eventbus.NotifyEventBroadcasterAdapter;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCase;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCaseImpl;
@@ -9,7 +12,11 @@ import ntut.csie.sslab.miro.usecase.board.enter.EnterBoardUseCase;
 import ntut.csie.sslab.miro.usecase.board.enter.EnterBoardUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCase;
 import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.cursor.CursorRepository;
+import ntut.csie.sslab.miro.usecase.cursor.move.MoveCursorUseCase;
+import ntut.csie.sslab.miro.usecase.cursor.move.MoveCursorUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
+import ntut.csie.sslab.miro.usecase.eventhandler.NotifyCursor;
 import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCase;
 import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCaseImpl;
@@ -38,8 +45,12 @@ import java.util.concurrent.ExecutorService;
 public class UseCaseInjection {
     private BoardRepository boardRepository;
     private FigureRepository figureRepository;
+    private CursorRepository cursorRepository;
     private DomainEventBus eventBus;
     private ExecutorService executor;
+
+    @Autowired
+    private WebSocketBroadcaster webSocketBroadcaster;
 
     @Bean(name="createBoardUseCase")
     public CreateBoardUseCase createBoardUseCase() {
@@ -96,14 +107,29 @@ public class UseCaseInjection {
         return new SendNoteToBackUseCaseImpl(figureRepository, eventBus);
     }
 
-    @Bean(name="notifyBoardAdapter")
-    public NotifyBoardAdapter notifyBoardAdapter() {
-        return new NotifyBoardAdapter(new NotifyBoard(figureRepository, boardRepository, eventBus));
+    @Bean(name="moveCursorUseCase")
+    public MoveCursorUseCase moveCursorUseCase() {
+        return new MoveCursorUseCaseImpl(cursorRepository, eventBus);
     }
 
     @Bean(name="deleteNoteUseCase")
     public DeleteNoteUseCase deleteNoteUseCase() {
         return new DeleteNoteUseCaseImpl(figureRepository, eventBus);
+    }
+
+    @Bean(name="notifyBoardAdapter")
+    public NotifyBoardAdapter notifyBoardAdapter() {
+        return new NotifyBoardAdapter(new NotifyBoard(figureRepository, boardRepository, eventBus));
+    }
+
+    @Bean(name="notifyCursorAdapter")
+    public NotifyCursorAdapter notifyCursorAdapter() {
+        return new NotifyCursorAdapter(new NotifyCursor(cursorRepository, eventBus));
+    }
+
+    @Bean(name="notifyEventBroadcasterAdapter")
+    public NotifyEventBroadcasterAdapter notifyEventBroadcasterAdapter() {
+        return new NotifyEventBroadcasterAdapter(webSocketBroadcaster, cursorRepository, boardRepository, figureRepository);
     }
 
     @Autowired
@@ -114,6 +140,11 @@ public class UseCaseInjection {
     @Autowired
     public void setFigureRepository(FigureRepository figureRepository) {
         this.figureRepository = figureRepository;
+    }
+
+    @Autowired
+    public void setCursorRepository(CursorRepository cursorRepository) {
+        this.cursorRepository = cursorRepository;
     }
 
     @Autowired

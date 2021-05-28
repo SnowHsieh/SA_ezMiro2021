@@ -1,9 +1,10 @@
 package ntut.csie.selab.entity.model.board;
 
+import ntut.csie.selab.model.ValueObject;
+
 import java.awt.*;
 
-// TODO: 要改成value object，移除setter
-public class Cursor {
+public class Cursor extends ValueObject {
     private String boardId;
     private String userId;
     private Point point;
@@ -18,21 +19,11 @@ public class Cursor {
         return boardId;
     }
 
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
-    }
-
     public String getUserId() {
         return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public Point getPoint() {
         return point;
     }
-
-    public void setPoint(Point point) { this.point = point; }
 }

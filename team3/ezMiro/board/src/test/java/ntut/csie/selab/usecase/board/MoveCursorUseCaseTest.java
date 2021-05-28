@@ -1,6 +1,6 @@
 package ntut.csie.selab.usecase.board;
 
-import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
+import ntut.csie.selab.adapter.board.BoardRepositoryInMemoryImpl;
 import ntut.csie.selab.domain.MockFactory;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.board.Cursor;
@@ -20,14 +20,14 @@ public class MoveCursorUseCaseTest {
         // Arrange
         MoveCursorInput input = new MoveCursorInput();
         MoveCursorOutput output = new MoveCursorOutput();
-        BoardRepository boardRepository = new BoardRepositoryImpl();
+        BoardRepository boardRepository = new BoardRepositoryInMemoryImpl();
         DomainEventBus domainEventBus = new DomainEventBus();
         MoveCursorUseCase moveCursorUseCase = new MoveCursorUseCase(boardRepository, domainEventBus);
         String boardId = "boardId";
         String userId = "userId";
         Point point = new Point(100, 100);
         Board board = MockFactory.createBoard(boardId);
-        boardRepository.add(board);
+        boardRepository.save(board);
         board.addCursor(new Cursor(boardId, userId, point));
         input.setBoardId(boardId);
         input.setUserId(userId);

@@ -2,7 +2,6 @@ package ntut.csie.sslab.account.users.command.adapter.repository;
 
 import ntut.csie.sslab.account.users.command.entity.User;
 import ntut.csie.sslab.account.users.command.usecase.UserRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +35,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void deleteById(String id) {
         peer.deleteById(id);
+    }
+
+    @Override
+    public void deleteAll() {
+
     }
 
     @Override

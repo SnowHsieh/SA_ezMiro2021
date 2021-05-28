@@ -8,7 +8,7 @@ import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.widget.WidgetDto;
-import ntut.csie.selab.usecase.widget.WidgetMapper;
+import ntut.csie.selab.usecase.widget.WidgetDtoMapper;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -37,12 +37,12 @@ public class GetWidgetUseCaseTest {
         GetWidgetOutput output = new GetWidgetOutput();
         create_single_sticky_note(widgetRepository);
         input.setWidgetId("stickyNoteId");
-        WidgetMapper widgetMapper = new WidgetMapper();
+        WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
         WidgetDto widgetDto;
 
         // Act
         getWidgetUseCase.execute(input, output);
-        widgetDto = widgetMapper.domainToDto(output.getWidget());
+        widgetDto = widgetDtoMapper.domainToDto(output.getWidget());
         WidgetViewModel widgetViewModel = new WidgetViewModel(widgetDto);
 
         // Assert

@@ -5,7 +5,22 @@ import ntut.csie.selab.model.DomainEvent;
 import java.util.Date;
 
 public class WidgetZOrderChanged extends DomainEvent {
-    public WidgetZOrderChanged(Date occurredOn) {
+
+    private String boardId;
+
+    private String widgetId;
+
+    public WidgetZOrderChanged(Date occurredOn, String boardId, String widgetId) {
         super(occurredOn);
+        this.boardId = boardId;
+        this.widgetId = widgetId;
+    }
+
+    public String getBoardId() {
+        return boardId;
+    }
+
+    public String getWidgetId() {
+        return widgetId;
     }
 }

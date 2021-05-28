@@ -2,12 +2,12 @@ package ntut.csie.selab.adapter.controller.rest.springboot.board.getcontent;
 
 import ntut.csie.selab.adapter.presenter.board.getcontent.BoardContentViewModel;
 import ntut.csie.selab.usecase.board.CommittedWidgetDto;
-import ntut.csie.selab.usecase.board.CommittedWidgetMapper;
+import ntut.csie.selab.usecase.board.CommittedWidgetDtoMapper;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentInput;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentOutput;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
 import ntut.csie.selab.usecase.widget.WidgetDto;
-import ntut.csie.selab.usecase.widget.WidgetMapper;
+import ntut.csie.selab.usecase.widget.WidgetDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,13 +29,13 @@ public class GetBoardContentController {
         GetBoardContentOutput output = new GetBoardContentOutput();
         List<WidgetDto> widgetDtos;
         List<CommittedWidgetDto> committedWidgetDtos;
-        WidgetMapper widgetMapper = new WidgetMapper();
-        CommittedWidgetMapper committedWidgetMapper = new CommittedWidgetMapper();
+        WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
+        CommittedWidgetDtoMapper committedWidgetDtoMapper = new CommittedWidgetDtoMapper();
         input.setBoardId(boardId);
 
         getBoardContentUseCase.execute(input, output);
-        widgetDtos = widgetMapper.domainToDto(output.getWidgets());
-        committedWidgetDtos = committedWidgetMapper.domainToDto(output.getCommittedWidgets());
+        widgetDtos = widgetDtoMapper.domainToDto(output.getWidgets());
+        committedWidgetDtos = committedWidgetDtoMapper.domainToDto(output.getCommittedWidgets());
         return new BoardContentViewModel(output.getBoardId(), widgetDtos, committedWidgetDtos);
     }
 }

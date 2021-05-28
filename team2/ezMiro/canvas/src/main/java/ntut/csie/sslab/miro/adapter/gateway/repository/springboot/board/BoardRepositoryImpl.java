@@ -1,37 +1,45 @@
 package ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board;
 
 import ntut.csie.sslab.miro.entity.model.board.Board;
-import ntut.csie.sslab.miro.entity.model.board.BoardChannel;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class BoardRepositoryImpl implements BoardRepository {
-    private List<Board> boards = new ArrayList<>();
 
-    public BoardRepositoryImpl() {
-        Board board = new Board("team2", "boardId", "ezMiro", new BoardChannel("boardChannel"));
-        boards.add(board);
+    private BoardRepositoryPeer peer;
+
+    public BoardRepositoryImpl(BoardRepositoryPeer peer){
+        this.peer = peer;
     }
 
     @Override
     public List<Board> findAll() {
-        return this.boards;
+        List<BoardData> boardDatas = new ArrayList();
+        peer.findAll().forEach(boardDatas::add);
+        return BoardMapper.transformToDomain(boardDatas);
     }
 
     @Override
-    public Optional<Board> findById(String boardId) {
-        return boards.stream().filter(x -> x.getId().equals(boardId)).findFirst();
+    public Optional<Board> findById(String id) {
+        return peer.findById(id).map(BoardMapper::transformToDomain);
     }
 
     @Override
-    public void save(Board data) {
-        boards.add(data);
+    public void save(Board board) {
+        BoardData data = BoardMapper.transformToData(board);
+        peer.save(data);
     }
 
     @Override
-    public void deleteById(String s) {
+    public void deleteById(String id) {
+        peer.deleteById(id);
+    }
 
+    @Override
+    public void deleteAll() {
+        peer.deleteAll();
     }
 }

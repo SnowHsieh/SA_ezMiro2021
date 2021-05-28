@@ -1,12 +1,18 @@
 package ntut.csie.selab.usecase.widget;
 
+import ntut.csie.selab.adapter.board.BoardAssociationRepositoryImpl;
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
+import ntut.csie.selab.adapter.board.BoardRepositoryInMemoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardDataMapper;
+import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
+import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.JpaApplicationTest;
+import ntut.csie.selab.usecase.board.BoardAssociationRepository;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
@@ -27,10 +33,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.websocket.Session;
 import java.awt.*;
 
-//@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-//@ExtendWith(SpringExtension.class)
-//@TestPropertySource(locations = "classpath:test.properties")
-//@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes= JpaApplicationTest.class)
@@ -39,6 +41,12 @@ public class CreateStickyNoteUseCaseTest {
 
     @Autowired
     private WidgetRepositoryPeer widgetRepositoryPeer;
+
+    @Autowired
+    private BoardRepositoryPeer boardRepositoryPeer;
+
+    @Autowired
+    private CommittedWidgetRepositoryPeer committedWidgetRepositoryPeer;
 
     @Test
     public void create_sticky_note_should_succeed() {
@@ -66,11 +74,11 @@ public class CreateStickyNoteUseCaseTest {
     @Test
     public void create_sticky_note_in_board_should_notify_board_successfully() {
         // Arrange
-        BoardRepository boardRepository = new BoardRepositoryImpl();
+        BoardAssociationRepository boardRepository = new BoardAssociationRepositoryImpl(boardRepositoryPeer, committedWidgetRepositoryPeer);
         WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
         WebSocket webSocket = new FakeBoardWebSocket();
         String boardId = "1";
-        boardRepository.add(createSimpleBoardWith(boardId));
+        boardRepository.save(createSimpleBoardWith(boardId));
 
         DomainEventBus domainEventBus = new DomainEventBus();
         NotifyBoard notifyBoard = new NotifyBoard(boardRepository, domainEventBus);
@@ -88,7 +96,7 @@ public class CreateStickyNoteUseCaseTest {
         createStickyNoteUseCase.execute(input, output);
 
         // Assert
-        Assert.assertEquals(1, boardRepository.findById(boardId).get().getWidgetIds().size());
+        Assert.assertEquals(1, committedWidgetRepositoryPeer.countByBoard(BoardDataMapper.domainToData(boardRepository.findById(boardId).get())));
         Assert.assertEquals(3, domainEventBus.getCount());
     }
 
@@ -97,15 +105,17 @@ public class CreateStickyNoteUseCaseTest {
         String boardName = "first";
         return new Board(boardId, teamId, boardName);
     }
+
+    class FakeBoardWebSocket implements ntut.csie.selab.usecase.websocket.WebSocket {
+
+        public void addSessionIn(String boardId, String userId, Session session) { }
+
+        public void removeSessionFrom(String boardId, Session session) { }
+
+        public void sendMessage(Session session, JSONObject message) { }
+
+        public void sendMessageForAllUsersIn(String boardId, JSONObject message) { }
+    }
 }
 
-class FakeBoardWebSocket implements ntut.csie.selab.usecase.websocket.WebSocket {
 
-    public void addSessionIn(String boardId, String userId, Session session) { }
-
-    public void removeSessionFrom(String boardId, Session session) { }
-
-    public void sendMessage(Session session, JSONObject message) { }
-
-    public void sendMessageForAllUsersIn(String boardId, JSONObject message) { }
-}

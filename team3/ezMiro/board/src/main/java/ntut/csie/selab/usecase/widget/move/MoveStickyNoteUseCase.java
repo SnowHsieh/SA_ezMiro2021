@@ -19,8 +19,9 @@ public class MoveStickyNoteUseCase {
         Optional<Widget> stickyNote = widgetRepository.findById(input.getStickyNoteId());
         if (stickyNote.isPresent()) {
             Widget selectedStickyNote = stickyNote.get();
-            selectedStickyNote.setCoordinate(input.getCoordinate());
-
+            selectedStickyNote.clearDomainEvents();
+            selectedStickyNote.move(input.getCoordinate());
+            widgetRepository.save(selectedStickyNote);
             domainEventBus.postAll(selectedStickyNote);
             output.setStickyNoteId(selectedStickyNote.getId());
             output.setCoordinate(selectedStickyNote.getCoordinate());

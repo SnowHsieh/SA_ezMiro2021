@@ -1,9 +1,13 @@
 package ntut.csie.selab.application.springboot.web.config;
 
+import ntut.csie.selab.adapter.board.BoardAssociationRepositoryImpl;
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
+import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
 import ntut.csie.selab.model.DomainEventBus;
+import ntut.csie.selab.usecase.board.BoardAssociationRepository;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +21,34 @@ public class RepositoryInjection {
 
     private WidgetRepositoryPeer widgetRepositoryPeer;
 
+    private BoardRepositoryPeer boardRepositoryPeer;
+
+    private CommittedWidgetRepositoryPeer committedWidgetRepositoryPeer;
+
     @Autowired
     public void setWidgetRepositoryPeer(WidgetRepositoryPeer widgetRepositoryPeer) {
         this.widgetRepositoryPeer = widgetRepositoryPeer;
     }
 
+    @Autowired
+    public void setBoardRepositoryPeer(BoardRepositoryPeer boardRepositoryPeer) {
+        this.boardRepositoryPeer = boardRepositoryPeer;
+    }
+
+    @Autowired
+    public void setCommittedWidgetRepositoryPeer(CommittedWidgetRepositoryPeer committedWidgetRepositoryPeer) {
+        this.committedWidgetRepositoryPeer = committedWidgetRepositoryPeer;
+    }
+
     @Bean(name="boardRepository")
-    public BoardRepository boardRepository() { return new BoardRepositoryImpl(); }
+    public BoardRepository boardRepository() {
+        return new BoardRepositoryImpl(boardRepositoryPeer);
+    }
+
+    @Bean(name="boardAssociationRepository")
+    public BoardAssociationRepository boardAssociationRepository() {
+        return new BoardAssociationRepositoryImpl(boardRepositoryPeer, committedWidgetRepositoryPeer);
+    }
 
     @Bean(name="widgetRepository")
     public WidgetRepository widgetRepository() { return new WidgetRepositoryImpl(widgetRepositoryPeer); }
