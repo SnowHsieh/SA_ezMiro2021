@@ -1,18 +1,17 @@
 package ntut.csie.islab.miro.usecase.board;
 
-import ntut.csie.islab.miro.adapter.presenter.getContent.GetBoardContentPresenter;
-import ntut.csie.islab.miro.adapter.presenter.getContent.BoardContentViewModel;
+import ntut.csie.islab.miro.adapter.presenter.getcontent.GetBoardContentPresenter;
+import ntut.csie.islab.miro.adapter.presenter.getcontent.BoardContentViewModel;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.Position;
-import ntut.csie.islab.miro.entity.model.textFigure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.textFigure.Style;
+import ntut.csie.islab.miro.entity.model.textfigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.textfigure.Style;
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardInput;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentInput;
 import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentUseCase;
-import ntut.csie.islab.miro.usecase.textFigure.TextFigureDto;
-import ntut.csie.islab.miro.usecase.textFigure.stickyNote.*;
+import ntut.csie.islab.miro.usecase.textfigure.TextFigureDto;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.BeforeEach;

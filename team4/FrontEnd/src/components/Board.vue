@@ -54,7 +54,7 @@ import uuidGenerator from '../utils/uuidGenerator.js'
 export default {
   data () {
     return {
-      boardId: '22559c39-d9af-4868-9077-5ce72e7e4074',
+      boardId: '0e3d84a8-e420-4d98-815a-f3dda69540b4',
       canvasContext: null,
       boardContent: null,
       canvas: null,

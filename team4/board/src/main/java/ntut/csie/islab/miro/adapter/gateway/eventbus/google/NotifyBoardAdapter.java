@@ -1,9 +1,9 @@
 package ntut.csie.islab.miro.adapter.gateway.eventbus.google;
 
 import com.google.common.eventbus.Subscribe;
-import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteCreatedDomainEvent;
-import ntut.csie.islab.miro.entity.model.textFigure.stickynote.event.StickyNoteDeleteDomainEvent;
-import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
+import ntut.csie.islab.miro.entity.model.textfigure.stickynote.event.StickyNoteCreatedDomainEvent;
+import ntut.csie.islab.miro.entity.model.textfigure.stickynote.event.StickyNoteDeleteDomainEvent;
+import ntut.csie.islab.miro.usecase.eventhandler.NotifyBoard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,18 +1,12 @@
 package ntut.csie.islab.miro.usecase.board;
 
-import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
-import ntut.csie.islab.miro.adapter.presenter.getAllCursors.AllCursorsViewModel;
-import ntut.csie.islab.miro.adapter.presenter.getAllCursors.GetAllUserCursorsPresenter;
+import ntut.csie.islab.miro.adapter.presenter.getallcursors.AllCursorsViewModel;
+import ntut.csie.islab.miro.adapter.presenter.getallcursors.GetAllUserCursorsPresenter;
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.islab.miro.usecase.board.getallusercursors.GetAllUserCursorsInput;
 import ntut.csie.islab.miro.usecase.board.getallusercursors.GetAllUserCursorsUseCase;
-import ntut.csie.islab.miro.usecase.eventHandler.NotifyBoard;
-import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
-import ntut.csie.sslab.ddd.model.DomainEventBus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

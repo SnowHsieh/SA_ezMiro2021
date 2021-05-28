@@ -1,15 +1,10 @@
 package ntut.csie.islab.miro.usecase.scenario;
 
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.islab.miro.usecase.textFigure.StickyNoteRepository;
 import ntut.csie.islab.miro.entity.model.Position;
-import ntut.csie.islab.miro.entity.model.textFigure.*;
-import ntut.csie.islab.miro.usecase.textFigure.stickyNote.*;
-import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
+import ntut.csie.islab.miro.entity.model.textfigure.*;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
