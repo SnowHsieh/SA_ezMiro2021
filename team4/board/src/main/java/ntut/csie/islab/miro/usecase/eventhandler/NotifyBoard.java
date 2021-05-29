@@ -1,5 +1,6 @@
 package ntut.csie.islab.miro.usecase.eventhandler;
 
+import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.event.FigureCommittedDomainEvent;
@@ -19,7 +20,7 @@ public class NotifyBoard {
     }
 
 
-    public void whenTextFigureCreated(StickyNoteCreatedDomainEvent stickyNoteCreatedDomainEvent) {
+    public void whenFigureCreated(StickyNoteCreatedDomainEvent stickyNoteCreatedDomainEvent) {
         Optional<Board> board = boardRepository.findById(stickyNoteCreatedDomainEvent.getBoardId());
 
         if (board.isPresent()) {
@@ -31,7 +32,19 @@ public class NotifyBoard {
         }
     }
 
-    public void whenTextFigureDeleted(StickyNoteDeleteDomainEvent stickyNoteDeleteDomainEvent) {
+    public void whenFigureCreated(LineCreatedDomainEvent lineCreatedDomainEvent) {
+        Optional<Board> board = boardRepository.findById(lineCreatedDomainEvent.getBoardId());
+
+        if (board.isPresent()) {
+            board.get().commitFigure(lineCreatedDomainEvent.getFigureId());
+            boardRepository.save(board.get());
+            domainEventBus.post(new FigureCommittedDomainEvent(lineCreatedDomainEvent.getBoardId(), lineCreatedDomainEvent.getFigureId()));
+        } else {
+            throw new RuntimeException("Board not found, board id = " + lineCreatedDomainEvent.getBoardId());
+        }
+    }
+
+    public void whenFigureDeleted(StickyNoteDeleteDomainEvent stickyNoteDeleteDomainEvent) {
         Optional<Board> board = boardRepository.findById(stickyNoteDeleteDomainEvent.getBoardId());
 
         if (board.isPresent()) {

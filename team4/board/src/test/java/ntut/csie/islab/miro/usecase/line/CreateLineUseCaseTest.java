@@ -31,16 +31,18 @@ public class CreateLineUseCaseTest extends AbstractSpringBootJpaTest {
     public void setUp() {
         super.setUp();
         lineRepository = new LineRepositoryImpl(lineRepositoryPeer);
+        domainEventBus.register(notifyBoardAdapter);
     }
+
     @Test
-    public void test_create_line_usecase(){
-        CreateLineUseCase createLineUseCase = new CreateLineUseCase(lineRepository,domainEventBus);
+    public void test_create_line_usecase() {
+        CreateLineUseCase createLineUseCase = new CreateLineUseCase(lineRepository, domainEventBus);
         CreateLineInput input = createLineUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
 
         List<Position> positionList = new ArrayList<>();
-        positionList.add(new Position(0,50));
-        positionList.add(new Position(100,150));
+        positionList.add(new Position(0, 50));
+        positionList.add(new Position(100, 150));
         int strokeWidth = 5;
         String color = "#000000";
 
@@ -51,18 +53,20 @@ public class CreateLineUseCaseTest extends AbstractSpringBootJpaTest {
         createLineUseCase.execute(input, output);
 
         assertNotNull(output.getId());
-        assertEquals(ExitCode.SUCCESS,output.getExitCode());
+        assertEquals(ExitCode.SUCCESS, output.getExitCode());
 
         Line resultLine = lineRepository.findById(UUID.fromString(output.getId())).get();
         assertNotNull(resultLine);
-        assertEquals(boardId,resultLine.getBoardId());
-        assertEquals(0,resultLine.getPositionList().get(0).getX());
-        assertEquals(50,resultLine.getPositionList().get(0).getY());
-        assertEquals(100,resultLine.getPositionList().get(1).getX());
-        assertEquals(150,resultLine.getPositionList().get(1).getY());
-        assertEquals(strokeWidth,resultLine.getStrokeWidth());
-        assertEquals(color,resultLine.getColor());
+        assertEquals(boardId, resultLine.getBoardId());
+        assertEquals(0, resultLine.getPositionList().get(0).getX());
+        assertEquals(50, resultLine.getPositionList().get(0).getY());
+        assertEquals(100, resultLine.getPositionList().get(1).getX());
+        assertEquals(150, resultLine.getPositionList().get(1).getY());
+        assertEquals(strokeWidth, resultLine.getStrokeWidth());
+        assertEquals(color, resultLine.getColor());
 
+        board = boardRepository.findById(board.getBoardId()).get();
+        assertEquals(1, board.getCommittedFigures().size());
 
     }
 

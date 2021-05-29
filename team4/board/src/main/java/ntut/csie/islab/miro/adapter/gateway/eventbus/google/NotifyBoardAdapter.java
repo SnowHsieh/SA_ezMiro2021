@@ -1,6 +1,7 @@
 package ntut.csie.islab.miro.adapter.gateway.eventbus.google;
 
 import com.google.common.eventbus.Subscribe;
+import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.textfigure.stickynote.event.StickyNoteCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.textfigure.stickynote.event.StickyNoteDeleteDomainEvent;
 import ntut.csie.islab.miro.usecase.eventhandler.NotifyBoard;
@@ -18,12 +19,17 @@ public class NotifyBoardAdapter {
 
     @Subscribe
     public void whenTextFigureCreated(StickyNoteCreatedDomainEvent stickyNoteCreatedDomainEvent) {
-        notifyBoard.whenTextFigureCreated(stickyNoteCreatedDomainEvent);
+        notifyBoard.whenFigureCreated(stickyNoteCreatedDomainEvent);
+    }
+
+    @Subscribe
+    public void whenTextFigureCreated(LineCreatedDomainEvent lineCreatedDomainEvent) {
+        notifyBoard.whenFigureCreated(lineCreatedDomainEvent);
     }
 
     @Subscribe
     public void whenTextFigureDeleted(StickyNoteDeleteDomainEvent stickyNoteDeleteDomainEvent) {
-        notifyBoard.whenTextFigureDeleted(stickyNoteDeleteDomainEvent);
+        notifyBoard.whenFigureDeleted(stickyNoteDeleteDomainEvent);
     }
 
 }
