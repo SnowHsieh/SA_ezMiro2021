@@ -1,7 +1,6 @@
 package ntut.csie.islab.miro.adapter.controller.rest.springboot.websocket;
 
 import ntut.csie.islab.miro.adapter.presenter.broadcastdomainevent.DomainEventEncoder;
-import ntut.csie.islab.miro.adapter.presenter.getallcursors.GetAllUserCursorsPresenter;
 import ntut.csie.islab.miro.application.springboot.web.config.websocket.EndpointConfigure;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorMovedDomainEvent;
