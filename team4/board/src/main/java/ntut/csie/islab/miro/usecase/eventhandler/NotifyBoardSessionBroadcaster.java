@@ -1,9 +1,9 @@
 package ntut.csie.islab.miro.usecase.eventhandler;
 
 import com.google.common.eventbus.Subscribe;
-import ntut.csie.islab.miro.entity.model.textfigure.stickynote.event.*;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.*;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
-import ntut.csie.islab.miro.usecase.textfigure.StickyNoteRepository;
+import ntut.csie.islab.miro.usecase.figure.textfigure.StickyNoteRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.BoardSession;
 import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorCreatedDomainEvent;
@@ -11,7 +11,7 @@ import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorDeletedDomainE
 import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorMovedDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.event.BoardEnteredDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.event.BoardLeftDomainEvent;
-import ntut.csie.islab.miro.entity.model.textfigure.TextFigure;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.TextFigure;
 import ntut.csie.islab.miro.usecase.websocket.BoardSessionBroadcaster;
 import ntut.csie.sslab.ddd.model.DomainEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +69,7 @@ public class NotifyBoardSessionBroadcaster {
     }
 
     @Subscribe
-    public void whenStickerColorChanged(StickyNoteColorChangedDomainEvent  stickyNoteColorChangedDomainEvent){
+    public void whenStickerColorChanged(StickyNoteColorChangedDomainEvent stickyNoteColorChangedDomainEvent){
         TextFigure figure = figureRepository.findById(stickyNoteColorChangedDomainEvent.getFigureId()).get();
         Board board = boardRepository.findById(figure.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();

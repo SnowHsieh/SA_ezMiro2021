@@ -2,22 +2,14 @@ package ntut.csie.islab.miro.usecase.board.cursor;
 
 import ntut.csie.islab.miro.entity.model.board.BoardSession;
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.board.Board;
-import ntut.csie.islab.miro.entity.model.board.cursor.Cursor;
 import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardInput;
 import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardUseCase;
-import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
-
-import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

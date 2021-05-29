@@ -3,7 +3,7 @@ package ntut.csie.islab.miro.entity.model.figure;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.entity.model.figure.line.ArrowKindEnum;
-import ntut.csie.islab.miro.entity.model.textfigure.Style;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 
 import java.util.List;

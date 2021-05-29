@@ -2,10 +2,10 @@ package ntut.csie.islab.miro.usecase.stickynote;
 
 
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.islab.miro.entity.model.textfigure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.textfigure.Style;
-import ntut.csie.islab.miro.usecase.textfigure.stickynote.create.CreateStickyNoteInput;
-import ntut.csie.islab.miro.usecase.textfigure.stickynote.create.CreateStickyNoteUseCase;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
+import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.create.CreateStickyNoteInput;
+import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.create.CreateStickyNoteUseCase;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,8 +1,8 @@
 package ntut.csie.islab.miro.usecase.stickynote;
 
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.islab.miro.usecase.textfigure.stickynote.changecolor.ChangeStickyNoteColorInput;
-import ntut.csie.islab.miro.usecase.textfigure.stickynote.changecolor.ChangeStickyNoteColorUseCase;
+import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.changecolor.ChangeStickyNoteColorInput;
+import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.changecolor.ChangeStickyNoteColorUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.Test;

@@ -1,11 +1,14 @@
 package ntut.csie.islab.miro.entity.model.stickynote;
 
-import ntut.csie.islab.miro.entity.model.textfigure.TextFigure;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.TextFigure;
 import ntut.csie.islab.miro.entity.model.Position;
-import ntut.csie.islab.miro.entity.model.textfigure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.textfigure.Style;
-import ntut.csie.islab.miro.entity.model.textfigure.stickynote.StickyNote;
-import ntut.csie.islab.miro.entity.model.textfigure.stickynote.event.*;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.StickyNote;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteColorChangedDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteContentChangedDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteMovedDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteResizedDomainEvent;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;

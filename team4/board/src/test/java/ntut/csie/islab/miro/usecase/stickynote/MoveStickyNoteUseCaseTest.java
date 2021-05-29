@@ -2,9 +2,9 @@ package ntut.csie.islab.miro.usecase.stickynote;
 
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.islab.miro.entity.model.Position;
-import ntut.csie.islab.miro.entity.model.textfigure.TextFigure;
-import ntut.csie.islab.miro.usecase.textfigure.stickynote.move.MoveStickyNoteInput;
-import ntut.csie.islab.miro.usecase.textfigure.stickynote.move.MoveStickyNoteUseCase;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.TextFigure;
+import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.move.MoveStickyNoteInput;
+import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.move.MoveStickyNoteUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.Test;

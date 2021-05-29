@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.usecase.board.getboardcontent;
 
-import ntut.csie.islab.miro.usecase.textfigure.FigureDto;
+import ntut.csie.islab.miro.usecase.figure.FigureDto;
 import ntut.csie.sslab.ddd.usecase.Output;
 
 import java.util.List;

@@ -4,14 +4,14 @@ import ntut.csie.islab.miro.adapter.presenter.getcontent.GetBoardContentPresente
 import ntut.csie.islab.miro.adapter.presenter.getcontent.BoardContentViewModel;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.Position;
-import ntut.csie.islab.miro.entity.model.textfigure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.textfigure.Style;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardInput;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentInput;
 import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentUseCase;
-import ntut.csie.islab.miro.usecase.textfigure.FigureDto;
+import ntut.csie.islab.miro.usecase.figure.FigureDto;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.BeforeEach;

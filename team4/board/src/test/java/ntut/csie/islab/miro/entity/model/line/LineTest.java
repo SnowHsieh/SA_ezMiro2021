@@ -4,10 +4,6 @@ import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.figure.Figure;
 import ntut.csie.islab.miro.entity.model.figure.line.ArrowKindEnum;
 import ntut.csie.islab.miro.entity.model.figure.line.Line;
-import ntut.csie.islab.miro.entity.model.textfigure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.textfigure.Style;
-import ntut.csie.islab.miro.entity.model.textfigure.TextFigure;
-import ntut.csie.islab.miro.entity.model.textfigure.stickynote.StickyNote;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -4,7 +4,7 @@ package ntut.csie.islab.miro.application.springboot.web;
 import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryPeer;
 import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryPeer;
-import ntut.csie.islab.miro.adapter.gateway.repository.textfigure.stickynote.StickyNoteRepositoryPeer;
+import ntut.csie.islab.miro.adapter.gateway.repository.figure.textfigure.stickynote.StickyNoteRepositoryPeer;
 import ntut.csie.islab.miro.usecase.eventhandler.NotifyBoardSessionBroadcaster;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import org.springframework.beans.factory.annotation.Autowired;

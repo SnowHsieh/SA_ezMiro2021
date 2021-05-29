@@ -1,8 +1,8 @@
 package ntut.csie.islab.miro.usecase.stickynote;
 
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.islab.miro.usecase.textfigure.stickynote.changecontent.ChangeStickyNoteContentInput;
-import ntut.csie.islab.miro.usecase.textfigure.stickynote.changecontent.ChangeStickyNoteContentUseCase;
+import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.changecontent.ChangeStickyNoteContentInput;
+import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.changecontent.ChangeStickyNoteContentUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.Test;

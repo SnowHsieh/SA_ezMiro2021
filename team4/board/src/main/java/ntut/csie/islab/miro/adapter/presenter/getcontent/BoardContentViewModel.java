@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.adapter.presenter.getcontent;
 
-import ntut.csie.islab.miro.usecase.textfigure.FigureDto;
+import ntut.csie.islab.miro.usecase.figure.FigureDto;
 import ntut.csie.sslab.ddd.adapter.presenter.ViewModel;
 
 import java.util.List;

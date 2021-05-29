@@ -6,8 +6,8 @@ import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.event.FigureCommittedDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.event.FigureUncommittedDomainEvent;
-import ntut.csie.islab.miro.entity.model.textfigure.stickynote.event.StickyNoteCreatedDomainEvent;
-import ntut.csie.islab.miro.entity.model.textfigure.stickynote.event.StickyNoteDeleteDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteCreatedDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteDeleteDomainEvent;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 
 import java.util.Optional;
