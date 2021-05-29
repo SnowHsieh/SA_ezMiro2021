@@ -1,10 +1,13 @@
 package ntut.csie.islab.miro.application.springboot.web.config;
 
+import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryImpl;
+import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryPeer;
 import ntut.csie.islab.miro.adapter.gateway.repository.textfigure.stickynote.StickyNoteRepositoryImpl;
 import ntut.csie.islab.miro.adapter.gateway.repository.textfigure.stickynote.StickyNoteRepositoryPeer;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryImpl;
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryPeer;
+import ntut.csie.islab.miro.usecase.figure.line.LineRepository;
 import ntut.csie.islab.miro.usecase.textfigure.StickyNoteRepository;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
@@ -19,6 +22,12 @@ public class RepositoryInjection {
 
     private BoardRepositoryPeer boardRepositoryPeer ;
     private StickyNoteRepositoryPeer stickyNoteRepositoryPeer ;
+    private LineRepositoryPeer lineRepositoryPeer;
+
+    @Autowired
+    public void setLineRepositoryPeer(LineRepositoryPeer lineRepositoryPeer){
+        this.lineRepositoryPeer = lineRepositoryPeer;
+    }
 
     @Autowired
     public void setBoardRepositoryPeer(BoardRepositoryPeer boardRepositoryPeer){
@@ -30,6 +39,10 @@ public class RepositoryInjection {
         this.stickyNoteRepositoryPeer = stickyNoteRepositoryPeer;
     }
 
+    @Bean(name = "lineRepository")
+    public LineRepository lineRepository() {
+        return new LineRepositoryImpl(lineRepositoryPeer);
+    }
 
     @Bean(name = "boardRepository")
     public BoardRepository boardRepository() {

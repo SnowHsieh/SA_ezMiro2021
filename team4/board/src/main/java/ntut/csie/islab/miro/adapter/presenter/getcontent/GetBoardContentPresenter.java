@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.adapter.presenter.getcontent;
 
-import ntut.csie.islab.miro.usecase.textfigure.TextFigureDto;
+import ntut.csie.islab.miro.usecase.textfigure.FigureDto;
 import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentOutput;
 import ntut.csie.sslab.ddd.adapter.presenter.Presenter;
 import ntut.csie.sslab.ddd.usecase.Result;
@@ -11,10 +11,10 @@ import java.util.UUID;
 
 public class GetBoardContentPresenter extends Result implements Presenter<BoardContentViewModel>, GetBoardContentOutput {
     private UUID boardId;
-    private List<TextFigureDto> textFigureDtos;
+    private List<FigureDto> figureDtos;
 
     public GetBoardContentPresenter() {
-        this.textFigureDtos = new ArrayList<>();
+        this.figureDtos = new ArrayList<>();
     }
 
     @Override
@@ -29,21 +29,21 @@ public class GetBoardContentPresenter extends Result implements Presenter<BoardC
     }
 
     @Override
-    public GetBoardContentOutput setFigures(List<TextFigureDto> textFigureDtos) {
-        this.textFigureDtos = textFigureDtos;
+    public GetBoardContentOutput setFigures(List<FigureDto> figureDtos) {
+        this.figureDtos = figureDtos;
         return this;
     }
 
     @Override
-    public List<TextFigureDto> getFigures() {
-        return this.textFigureDtos;
+    public List<FigureDto> getFigures() {
+        return this.figureDtos;
     }
 
     @Override
     public BoardContentViewModel buildViewModel() {
         BoardContentViewModel boardContentViewModel = new BoardContentViewModel();
         boardContentViewModel.setBoardId(boardId);
-        boardContentViewModel.setFigureDtos(textFigureDtos);
+        boardContentViewModel.setFigureDtos(figureDtos);
         return boardContentViewModel;
     }
 }

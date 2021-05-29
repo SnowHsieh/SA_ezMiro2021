@@ -1,6 +1,6 @@
 package ntut.csie.islab.miro.usecase.board.getboardcontent;
 
-import ntut.csie.islab.miro.usecase.textfigure.TextFigureDto;
+import ntut.csie.islab.miro.usecase.textfigure.FigureDto;
 import ntut.csie.sslab.ddd.usecase.Output;
 
 import java.util.List;
@@ -12,8 +12,8 @@ public interface GetBoardContentOutput extends Output {
 
     UUID getBoardId();
 
-    GetBoardContentOutput setFigures(List<TextFigureDto> textFigureDtos);
+    GetBoardContentOutput setFigures(List<FigureDto> figureDtos);
 
-    List<TextFigureDto> getFigures();
+    List<FigureDto> getFigures();
 
 }

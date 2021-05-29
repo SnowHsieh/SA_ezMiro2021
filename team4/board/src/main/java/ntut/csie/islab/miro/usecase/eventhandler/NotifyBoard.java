@@ -1,5 +1,6 @@
 package ntut.csie.islab.miro.usecase.eventhandler;
 
+import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
@@ -24,7 +25,7 @@ public class NotifyBoard {
         Optional<Board> board = boardRepository.findById(stickyNoteCreatedDomainEvent.getBoardId());
 
         if (board.isPresent()) {
-            board.get().commitFigure(stickyNoteCreatedDomainEvent.getFigureId());
+            board.get().commitFigure(stickyNoteCreatedDomainEvent.getFigureId(), FigureTypeEnum.STICKYNOTE);
             boardRepository.save(board.get());
             domainEventBus.post(new FigureCommittedDomainEvent(stickyNoteCreatedDomainEvent.getBoardId(), stickyNoteCreatedDomainEvent.getFigureId()));
         } else {
@@ -36,7 +37,7 @@ public class NotifyBoard {
         Optional<Board> board = boardRepository.findById(lineCreatedDomainEvent.getBoardId());
 
         if (board.isPresent()) {
-            board.get().commitFigure(lineCreatedDomainEvent.getFigureId());
+            board.get().commitFigure(lineCreatedDomainEvent.getFigureId(), FigureTypeEnum.LINE);
             boardRepository.save(board.get());
             domainEventBus.post(new FigureCommittedDomainEvent(lineCreatedDomainEvent.getBoardId(), lineCreatedDomainEvent.getFigureId()));
         } else {

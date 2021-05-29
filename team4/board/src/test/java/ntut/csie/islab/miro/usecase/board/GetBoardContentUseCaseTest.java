@@ -11,12 +11,14 @@ import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardInput;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentInput;
 import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentUseCase;
-import ntut.csie.islab.miro.usecase.textfigure.TextFigureDto;
+import ntut.csie.islab.miro.usecase.textfigure.FigureDto;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,7 +39,7 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
     public void test_get_board_with_empty_content_with_exist_board_id() {
 
 
-        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(domainEventBus, boardRepository, stickyNoteRepository);
+        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(domainEventBus, boardRepository, stickyNoteRepository, lineRepository);
         GetBoardContentInput input = getBoardContentUseCase.newInput();
         input.setBoardId(board.getBoardId());
         GetBoardContentPresenter output = new GetBoardContentPresenter();
@@ -52,29 +54,7 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
 
         assertEquals(boardId, boardContentViewModel.getBoardId());
         assertEquals(0, boardContentViewModel.getFigureDtos().size());
-
-
-//  //TODO ISSUE : RECONSTRUCT OBJECT PROBLEM!
-//
-//        GetBoardContentUseCase getBoardContentUseCase2 = new GetBoardContentUseCase(domainEventBus, boardRepository, textFigureRepository);
-//        GetBoardContentInput input2 = getBoardContentUseCase.newInput();
-//        UUID boardId2= UUID.randomUUID();
-//        input2.setBoardId(boardId);
-//        GetBoardContentPresenter output2 = new GetBoardContentPresenter();
-//
-//        GetBoardContentPresenter presenter2 = new GetBoardContentPresenter();
-//        getBoardContentUseCase.execute(input2, presenter2);
-//
-//        assertEquals(boardId, presenter2.getBoardId());
-//        assertEquals(0, presenter2.getFigures().size());
-//
-//        BoardContentViewModel boardContentViewModel2 = presenter2.buildViewModel();
-//
-//        assertEquals(boardId, boardContentViewModel2.getBoardId());
-//        assertEquals(0, boardContentViewModel2.getFigureDtos().size());
-
     }
-
 
     @Test
     public void test_get_board_with_nonempty_content_with_exist_board_id() {
@@ -404,7 +384,7 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
         assertEquals(4, oneFigureEditedInBoardViewModel.getFigureDtos().size());
 
         //Check domainEventStickyNote is EditEvent(Content and Color had been changed) Success
-        TextFigureDto domainEventStickyNoteDto = getSpecifiedFigureDto(oneFigureEditedInBoardViewModel, domainEventStickyNote.getId());
+        FigureDto domainEventStickyNoteDto = getSpecifiedFigureDto(oneFigureEditedInBoardViewModel, domainEventStickyNote.getId());
         assertEquals(boardId, domainEventStickyNoteDto.getBoardId());
 //        assertEquals("sticky\n note \n created", domainEventStickyNoteDto.getContent());
 //        assertEquals("#f28500", domainEventStickyNoteDto.getStyle().getColor());
@@ -429,7 +409,7 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
         assertEquals(4, commandStickyNoteEditedInBoardViewModel.getFigureDtos().size());
 
         //Check CommandStickyNoteDto is EditEvent(Content and Color had been changed) Success
-        TextFigureDto commandStickyNoteDto = getSpecifiedFigureDto(
+        FigureDto commandStickyNoteDto = getSpecifiedFigureDto(
                 commandStickyNoteEditedInBoardViewModel,
                 commandStickyNote.getId());
         assertEquals(boardId, commandStickyNoteDto.getBoardId());
@@ -465,7 +445,7 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
         assertEquals(4, readModelStickyNoteEditedInBoardViewModel.getFigureDtos().size());
 
         //Check readModelStickyNoteDto is EditEvent(Content and Color had been changed) Success
-        TextFigureDto readModelStickyNoteDto = getSpecifiedFigureDto(
+        FigureDto readModelStickyNoteDto = getSpecifiedFigureDto(
                 readModelStickyNoteEditedInBoardViewModel,
                 readModelStickyNote.getId());
         assertEquals(boardId, readModelStickyNoteDto.getBoardId());
@@ -496,7 +476,7 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
         assertEquals(4, aggregateStickyNoteEditedInBoardViewModel.getFigureDtos().size());
 
         //Check aggregateStickyNoteDto is EditEvent(Content and Color had been changed) Success
-        TextFigureDto aggregateStickyNoteDto = getSpecifiedFigureDto(
+        FigureDto aggregateStickyNoteDto = getSpecifiedFigureDto(
                 aggregateStickyNoteEditedInBoardViewModel,
                 aggregateStickyNote.getId());
         assertEquals(boardId, aggregateStickyNoteDto.getBoardId());
@@ -505,8 +485,71 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
 
     }
 
+    @Test
+    public void test_create_a_stickyNote_and_a_line_in_the_same_board(){
+        //Create a New Board by AbstractSpringBootJpaTest
 
-    private TextFigureDto getSpecifiedFigureDto(BoardContentViewModel boardContentViewModel, String id) {
+        //Check BoardContent = 0
+        GetBoardContentPresenter emptyBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
+        assertEquals(boardId, emptyBoardPresenter.getBoardId());
+        assertEquals(0, emptyBoardPresenter.getFigures().size());
+        BoardContentViewModel emptyBoardViewModel = emptyBoardPresenter.buildViewModel();
+        assertEquals(boardId, emptyBoardViewModel.getBoardId());
+        assertEquals(0, emptyBoardViewModel.getFigureDtos().size());
+
+        //Create a domainEventStickyNote
+        CqrsCommandPresenter domainEventStickyNote = generateCreateStickyNoteUseCaseOutput(
+                boardId,
+                new Position(20, 10),
+                "",
+                new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
+
+        assertNotNull(domainEventStickyNote.getId());
+        assertEquals(ExitCode.SUCCESS, domainEventStickyNote.getExitCode());
+        assertEquals(boardId, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getBoardId());
+        assertEquals(20, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getX());
+        assertEquals(10, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getPosition().getY());
+        assertEquals("", stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getContent());
+        assertEquals(12, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getFontSize());
+        assertEquals(ShapeKindEnum.RECTANGLE, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getShape());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getWidth());
+        assertEquals(100, stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getHeight());
+        assertEquals("#f9f900", stickyNoteRepository.findById(UUID.fromString(domainEventStickyNote.getId())).get().getStyle().getColor());
+
+        //Check BoardContent = 1
+        GetBoardContentPresenter oneFigureInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
+        assertEquals(boardId, oneFigureInBoardPresenter.getBoardId());
+        assertEquals(1, oneFigureInBoardPresenter.getFigures().size());
+        BoardContentViewModel oneFigureInBoardViewModel = oneFigureInBoardPresenter.buildViewModel();
+        assertEquals(boardId, oneFigureInBoardViewModel.getBoardId());
+        assertEquals(1, oneFigureInBoardViewModel.getFigureDtos().size());
+
+
+        //Create a Line in the board
+        List<Position> positionList = new ArrayList<>();
+        positionList.add(new Position(0, 50));
+        positionList.add(new Position(100, 150));
+
+        CqrsCommandPresenter newLine = generateCreateLineUseCaseOutput(
+                boardId,
+                positionList,
+                5,
+                "#000000"
+        );
+
+
+        //Check BoardContent = 2
+        GetBoardContentPresenter twoFigureInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
+        assertEquals(boardId, twoFigureInBoardPresenter.getBoardId());
+        assertEquals(2, twoFigureInBoardPresenter.getFigures().size());
+        BoardContentViewModel twoFigureInBoardViewModel = twoFigureInBoardPresenter.buildViewModel();
+        assertEquals(boardId, twoFigureInBoardViewModel.getBoardId());
+        assertEquals(2, twoFigureInBoardViewModel.getFigureDtos().size());
+
+
+
+    }
+    private FigureDto getSpecifiedFigureDto(BoardContentViewModel boardContentViewModel, String id) {
         return boardContentViewModel.getFigureDtos().stream().filter(s -> s.getFigureId().equals(UUID.fromString(id))).findFirst().get();
     }
 
@@ -524,7 +567,7 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
 
     private GetBoardContentPresenter generateGetBoardContentUseCaseOutput(UUID boardId) {
 
-        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(domainEventBus, boardRepository, stickyNoteRepository);
+        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(domainEventBus, boardRepository, stickyNoteRepository, lineRepository);
         GetBoardContentInput input = getBoardContentUseCase.newInput();
         input.setBoardId(boardId);
         GetBoardContentPresenter presenter = new GetBoardContentPresenter();

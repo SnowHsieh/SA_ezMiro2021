@@ -3,11 +3,16 @@ package ntut.csie.islab.miro.usecase;
 import ntut.csie.islab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryImpl;
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryPeer;
+import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryImpl;
+import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryPeer;
 import ntut.csie.islab.miro.adapter.gateway.repository.textfigure.stickynote.StickyNoteRepositoryImpl;
 import ntut.csie.islab.miro.adapter.gateway.repository.textfigure.stickynote.StickyNoteRepositoryPeer;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.textfigure.ShapeKindEnum;
 import ntut.csie.islab.miro.entity.model.textfigure.Style;
+import ntut.csie.islab.miro.usecase.figure.line.LineRepository;
+import ntut.csie.islab.miro.usecase.figure.line.create.CreateLineInput;
+import ntut.csie.islab.miro.usecase.figure.line.create.CreateLineUseCase;
 import ntut.csie.islab.miro.usecase.textfigure.StickyNoteRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
@@ -30,6 +35,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,6 +53,7 @@ public abstract class AbstractSpringBootJpaTest {
     public DomainEventBus domainEventBus;
     public BoardRepository boardRepository;
     public StickyNoteRepository stickyNoteRepository;
+    public LineRepository lineRepository;
     public NotifyBoardAdapter notifyBoardAdapter;
     public Board board;
     public UUID teamId;
@@ -58,11 +66,15 @@ public abstract class AbstractSpringBootJpaTest {
     private BoardRepositoryPeer boardRepositoryPeer;
     @Autowired
     private StickyNoteRepositoryPeer stickyNoteRepositoryPeer;
+    @Autowired
+    public LineRepositoryPeer lineRepositoryPeer;
+
 
     @BeforeEach
     public void setUp() {
         domainEventBus = new GoogleEventBus();
         boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
+        lineRepository = new LineRepositoryImpl(lineRepositoryPeer);
         stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
 
@@ -126,6 +138,19 @@ public abstract class AbstractSpringBootJpaTest {
         input.setFigureId(figureId);
         input.setColor(newColor);
         changeStickyNoteColorUseCase.execute(input,output);
+        return output;
+    }
+
+    public CqrsCommandPresenter generateCreateLineUseCaseOutput(UUID boardId, List<Position> positionList, int strokeWidth, String color) {
+        CreateLineUseCase createLineUseCase = new CreateLineUseCase(lineRepository, domainEventBus);
+        CreateLineInput input = createLineUseCase.newInput();
+        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
+
+        input.setBoardId(boardId);
+        input.setPositionList(positionList);
+        input.setStrokeWidth(strokeWidth);
+        input.setColor(color);
+        createLineUseCase.execute(input, output);
         return output;
     }
 

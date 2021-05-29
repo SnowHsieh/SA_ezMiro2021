@@ -1,10 +1,7 @@
 package ntut.csie.islab.miro.adapter.gateway.repository.board;
 
 
-import ntut.csie.islab.miro.entity.model.board.Board;
-import ntut.csie.islab.miro.entity.model.board.BoardSession;
-import ntut.csie.islab.miro.entity.model.board.BoardSessionId;
-import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
+import ntut.csie.islab.miro.entity.model.board.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +14,11 @@ public class BoardMapper {
                 UUID.fromString(boardData.getBoardId()), boardData.getBoardName());
 
         for (CommittedFigureData committedFigureData : boardData.getCommittedFigures()) {
-            board.commitFigure(UUID.fromString(committedFigureData.getFigureId()));
+            board.commitFigure(
+                    UUID.fromString(committedFigureData.getFigureId()),
+                    FigureTypeEnum.fromInteger(committedFigureData.getFigureType())
+            );
+
         }
 
         List<BoardSession> boardSessionList = new ArrayList<>();
@@ -60,7 +61,11 @@ public class BoardMapper {
 
         List<CommittedFigure> committedFigures = board.getCommittedFigures();
         for (int i =0 ; i < committedFigures.size() ; i++) {
-            CommittedFigureData item = new CommittedFigureData(committedFigures.get(i).getFigureId().toString(),i);
+            CommittedFigureData item = new CommittedFigureData(
+                    committedFigures.get(i).getFigureId().toString(),
+                    i,
+                    committedFigures.get(i).getFigureType().ordinal()
+            );
             committedFigureDatas.add(item);
         }
         boardData.setCommittedFigures(committedFigureDatas);

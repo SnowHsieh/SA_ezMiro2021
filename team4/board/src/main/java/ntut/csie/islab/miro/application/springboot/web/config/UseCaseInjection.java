@@ -8,6 +8,8 @@ import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentUseCase;
 import ntut.csie.islab.miro.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.islab.miro.usecase.eventhandler.NotifyBoard;
+import ntut.csie.islab.miro.usecase.figure.line.LineRepository;
+import ntut.csie.islab.miro.usecase.figure.line.create.CreateLineUseCase;
 import ntut.csie.islab.miro.usecase.textfigure.StickyNoteRepository;
 import ntut.csie.islab.miro.usecase.textfigure.stickynote.changecolor.ChangeStickyNoteColorUseCase;
 import ntut.csie.islab.miro.usecase.textfigure.stickynote.changecontent.ChangeStickyNoteContentUseCase;
@@ -26,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 public class UseCaseInjection {
     private BoardRepository boardRepository;
     private StickyNoteRepository stickyNoteRepository;
+    private LineRepository lineRepository;
     private DomainEventBus eventBus;
 
     @Autowired
@@ -47,15 +50,13 @@ public class UseCaseInjection {
 
     @Bean(name = "getBoardContentUseCase")
     public GetBoardContentUseCase getBoardContentUseCase() {
-        return new GetBoardContentUseCase(eventBus,boardRepository, stickyNoteRepository);
+        return new GetBoardContentUseCase(eventBus,boardRepository, stickyNoteRepository, lineRepository);
     }
 
     @Bean(name = "createStickyNoteUseCase")
     public CreateStickyNoteUseCase createStickyNoteUseCase() {
         return new CreateStickyNoteUseCase(stickyNoteRepository,eventBus);
     }
-
-
 
     @Bean(name = "deleteStickyNoteUseCase")
     public DeleteStickyNoteUseCase deleteStickyNoteUseCase() {
@@ -95,6 +96,11 @@ public class UseCaseInjection {
         return new LeaveBoardUseCase(boardRepository, eventBus);
     }
 
+    @Bean(name="createLineUseCase")
+    public CreateLineUseCase createLineUseCase() {
+        return new CreateLineUseCase(lineRepository, eventBus);
+    }
+
 //    @Bean(name="createNotifyBoardSessionBroadcaster")
 //    public NotifyBoardSessionBroadcaster createNotifyBoardSessionBroadcaster() {
 //        return new NotifyBoardSessionBroadcaster(boardSessionBroadcaster, boardRepository, textFigureRepository);
@@ -108,6 +114,11 @@ public class UseCaseInjection {
     @Autowired
     public void setFigureRepository(StickyNoteRepository stickyNoteRepository) {
         this.stickyNoteRepository = stickyNoteRepository;
+    }
+
+    @Autowired
+    public void setLineRepository(LineRepository lineRepository) {
+        this.lineRepository = lineRepository;
     }
 
     @Autowired

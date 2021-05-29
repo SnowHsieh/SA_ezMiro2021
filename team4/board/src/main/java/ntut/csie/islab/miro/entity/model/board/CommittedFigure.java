@@ -7,10 +7,12 @@ import java.util.UUID;
 public class CommittedFigure extends ValueObject {
     private UUID boardId;
     private UUID figureId;
+    private FigureTypeEnum figureType;
 
-    public CommittedFigure(UUID boardId, UUID figureId) {
+    public CommittedFigure(UUID boardId, UUID figureId, FigureTypeEnum figureType) {
         this.boardId = boardId;
         this.figureId = figureId;
+        this.figureType = figureType;
     }
 
     public UUID getBoardId() {
@@ -27,5 +29,13 @@ public class CommittedFigure extends ValueObject {
 
     public void setFigureId(UUID figureId) {
         this.figureId = figureId;
+    }
+
+    public FigureTypeEnum getFigureType() {
+        return figureType;
+    }
+
+    public void setFigureType(FigureTypeEnum figureType) {
+        this.figureType = figureType;
     }
 }

@@ -17,12 +17,17 @@ public class CommittedFigureData {
     @Column(name="z_order")
     private int zOrder;
 
+    @Column(name="figure_type")
+    private int figureType;
+
+
     public CommittedFigureData() {
     }
 
-    public CommittedFigureData(String figureId, int zOrder) {
+    public CommittedFigureData(String figureId, int zOrder, int figureType) {
         this.figureId = figureId;
         this.zOrder = zOrder;
+        this.figureType = figureType;
     }
 
     public String getFigureId() {
@@ -31,5 +36,9 @@ public class CommittedFigureData {
 
     public int getzOrder() {
         return zOrder;
+    }
+
+    public int getFigureType() {
+        return figureType;
     }
 }

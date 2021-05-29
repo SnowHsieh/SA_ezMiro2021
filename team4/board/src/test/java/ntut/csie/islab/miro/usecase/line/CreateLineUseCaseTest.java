@@ -22,15 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CreateLineUseCaseTest extends AbstractSpringBootJpaTest {
-    public LineRepository lineRepository;
-    @Autowired
-    public LineRepositoryPeer lineRepositoryPeer;
 
     @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
-        lineRepository = new LineRepositoryImpl(lineRepositoryPeer);
         domainEventBus.register(notifyBoardAdapter);
     }
 

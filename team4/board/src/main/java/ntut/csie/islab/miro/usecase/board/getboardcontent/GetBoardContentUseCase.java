@@ -1,13 +1,15 @@
 package ntut.csie.islab.miro.usecase.board.getboardcontent;
 
 import ntut.csie.islab.miro.adapter.presenter.getcontent.GetBoardContentPresenter;
+import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
+import ntut.csie.islab.miro.entity.model.figure.Figure;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
 import ntut.csie.islab.miro.entity.model.board.event.BoardContentMightExpire;
+import ntut.csie.islab.miro.usecase.figure.line.LineRepository;
 import ntut.csie.islab.miro.usecase.textfigure.StickyNoteRepository;
-import ntut.csie.islab.miro.entity.model.textfigure.TextFigure;
-import ntut.csie.islab.miro.usecase.textfigure.TextFigureDto;
+import ntut.csie.islab.miro.usecase.textfigure.FigureDto;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 
@@ -19,11 +21,13 @@ public class GetBoardContentUseCase {
     private DomainEventBus domainEventBus;
     private BoardRepository boardRepository;
     private StickyNoteRepository stickyNoteRepository;
+    private LineRepository lineRepository;
 
-    public GetBoardContentUseCase(DomainEventBus domainEventBus, BoardRepository boardRepository, StickyNoteRepository stickyNoteRepository) {
+    public GetBoardContentUseCase(DomainEventBus domainEventBus, BoardRepository boardRepository, StickyNoteRepository stickyNoteRepository, LineRepository lineRepository) {
         this.domainEventBus = domainEventBus;
         this.boardRepository = boardRepository;
         this.stickyNoteRepository = stickyNoteRepository;
+        this.lineRepository = lineRepository;
     }
 
     public GetBoardContentInput newInput() {
@@ -43,15 +47,20 @@ public class GetBoardContentUseCase {
         }
 
         List<CommittedFigure> CommittedFigureList = board.getCommittedFigures();
-        List<TextFigure> textFigureList = new ArrayList<TextFigure>();
+        List<Figure> figureList = new ArrayList<>();
 
-        for(CommittedFigure f :CommittedFigureList ){
-            textFigureList.add(this.stickyNoteRepository.findById(f.getFigureId()).get());
+
+        for (CommittedFigure f : CommittedFigureList) {
+            if (f.getFigureType() == FigureTypeEnum.STICKYNOTE) {
+                figureList.add(this.stickyNoteRepository.findById(f.getFigureId()).get());
+            } else if (f.getFigureType() == FigureTypeEnum.LINE) {
+                figureList.add(this.lineRepository.findById(f.getFigureId()).get());
+            }
         }
 
-        List<TextFigureDto> textFigureDtos = ConvertFigureToDto.transform(textFigureList);
+        List<FigureDto> figureDtos = ConvertFigureToDto.transform(figureList);
 
 
-        presenter.setBoardId(board.getBoardId()).setFigures(textFigureDtos);
+        presenter.setBoardId(board.getBoardId()).setFigures(figureDtos);
     }
 }

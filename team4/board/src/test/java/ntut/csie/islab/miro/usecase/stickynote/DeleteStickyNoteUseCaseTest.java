@@ -1,6 +1,7 @@
 package ntut.csie.islab.miro.usecase.stickynote;
 
 import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
+import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.textfigure.ShapeKindEnum;
@@ -30,8 +31,8 @@ public class DeleteStickyNoteUseCaseTest extends AbstractSpringBootJpaTest {
         super.setUp();
         this.preGeneratedFactory();
         board = boardRepository.findById(board.getBoardId()).get();
-        board.commitFigure(UUID.fromString(preGeneratedStickyNote.getId()));
-        board.commitFigure(UUID.fromString(preGeneratedStickyNoteAnother.getId()));
+        board.commitFigure(UUID.fromString(preGeneratedStickyNote.getId()), FigureTypeEnum.STICKYNOTE );
+        board.commitFigure(UUID.fromString(preGeneratedStickyNoteAnother.getId()),FigureTypeEnum.STICKYNOTE);
 
         boardRepository.save(board);
         domainEventBus.register(notifyBoardAdapter);

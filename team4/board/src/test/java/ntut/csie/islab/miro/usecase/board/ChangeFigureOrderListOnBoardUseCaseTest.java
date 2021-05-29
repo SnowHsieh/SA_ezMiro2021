@@ -2,6 +2,7 @@ package ntut.csie.islab.miro.usecase.board;
 
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
+import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderListOnBoardInput;
 import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderListOnBoardUseCase;
@@ -40,9 +41,9 @@ public class ChangeFigureOrderListOnBoardUseCaseTest extends AbstractSpringBootJ
         UUID figureId_1 = UUID.randomUUID();
 
         figureOrderList.add(figureId_0);
-        board.commitFigure(figureId_0);
+        board.commitFigure(figureId_0, FigureTypeEnum.STICKYNOTE);
         figureOrderList.add(figureId_1);
-        board.commitFigure(figureId_1);
+        board.commitFigure(figureId_1,FigureTypeEnum.STICKYNOTE);
 
 
         input.setBoardId(board.getBoardId());

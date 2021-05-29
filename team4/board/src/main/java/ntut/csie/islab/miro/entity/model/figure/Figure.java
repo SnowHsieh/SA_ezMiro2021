@@ -12,10 +12,10 @@ public abstract class Figure extends AggregateRoot<UUID> {
     private UUID boardId;
     // line
     private List<Position> positionList;
-    private ArrowKindEnum srcArrowKind ; //NONE,CIRCLE,ARROW
+    private ArrowKindEnum srcArrowKind; //NONE,CIRCLE,ARROW
     private ArrowKindEnum destArrowKind; //NONE,CIRCLE,ARROW
-    private int strokeWidth ;
-    private String color ;
+    private int strokeWidth;
+    private String color;
     // textFigure
     private Position position;
     private String content;
@@ -33,7 +33,7 @@ public abstract class Figure extends AggregateRoot<UUID> {
         this.color = color;
     }
 
-    public Figure(UUID boardId,UUID figureId ,List<Position> positionList, int strokeWidth, String color) {
+    public Figure(UUID boardId, UUID figureId, List<Position> positionList, int strokeWidth, String color) {
         super(figureId);
         this.boardId = boardId;
         this.positionList = positionList;
@@ -51,7 +51,8 @@ public abstract class Figure extends AggregateRoot<UUID> {
         this.content = content;
         this.style = style;
     }
-    public Figure(UUID boardId, UUID stickyNoteId,Position position, String content, Style style) {
+
+    public Figure(UUID boardId, UUID stickyNoteId, Position position, String content, Style style) {
         super(stickyNoteId);
         this.boardId = boardId;
         this.position = position;
@@ -59,7 +60,7 @@ public abstract class Figure extends AggregateRoot<UUID> {
         this.style = style;
     }
 
-    public  UUID getFigureId(){
+    public UUID getFigureId() {
         return this.getId();
     }
 

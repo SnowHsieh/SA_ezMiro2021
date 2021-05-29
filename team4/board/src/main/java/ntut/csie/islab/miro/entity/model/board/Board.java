@@ -9,6 +9,7 @@ import ntut.csie.sslab.ddd.model.AggregateRoot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static ntut.csie.sslab.ddd.model.common.Contract.requireNotNull;
@@ -59,8 +60,8 @@ public class Board extends AggregateRoot<UUID> {
         return this.getId();
     }
 
-    public void commitFigure(UUID figureId) {
-        addFigure(figureId);
+    public void commitFigure(UUID figureId, FigureTypeEnum figureType) {
+        addFigure(figureId, figureType);
         addDomainEvent(new FigureCommittedDomainEvent(getBoardId(), figureId));
 
     }
@@ -73,8 +74,8 @@ public class Board extends AggregateRoot<UUID> {
 
     }
 
-    private void addFigure(UUID figureId) {
-        CommittedFigure committedFigure = new CommittedFigure(getBoardId(), figureId);
+    private void addFigure(UUID figureId, FigureTypeEnum figureType) {
+        CommittedFigure committedFigure = new CommittedFigure(getBoardId(), figureId, figureType);
         this.figureList.add(committedFigure);
     }
 
@@ -95,8 +96,10 @@ public class Board extends AggregateRoot<UUID> {
 
         List<CommittedFigure> newCommittedFigureList = new ArrayList<CommittedFigure>();
         for (UUID figureId : figureOrderList) {
-            if (figureList.stream().filter(s -> s.getFigureId().equals(figureId)).findFirst().isPresent()) {
-                newCommittedFigureList.add(new CommittedFigure(this.getBoardId(), figureId));
+            Optional<CommittedFigure> committedFigure = figureList.stream().filter(s -> s.getFigureId().equals(figureId)).findFirst();
+
+            if (committedFigure.isPresent()) {
+                newCommittedFigureList.add(new CommittedFigure(this.getBoardId(), figureId,committedFigure.get().getFigureType()));
             }
         }
         figureList = newCommittedFigureList;

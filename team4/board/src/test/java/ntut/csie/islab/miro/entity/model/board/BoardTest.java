@@ -20,7 +20,7 @@ class BoardTest {
     public void commit_a_figure(){
         Board board = createBoard();
         UUID figureId = UUID.randomUUID();
-        board.commitFigure(figureId);
+        board.commitFigure(figureId, FigureTypeEnum.STICKYNOTE);
 
         assertEquals(1, board.getCommittedFigures().size());
         assertEquals(figureId, board.getCommittedFigures().get(0).getFigureId());
