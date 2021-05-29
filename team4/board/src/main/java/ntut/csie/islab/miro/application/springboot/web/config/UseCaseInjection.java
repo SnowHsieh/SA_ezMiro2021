@@ -5,7 +5,6 @@ import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderLis
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.cursor.MoveCursorUseCase;
 import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardUseCase;
-import ntut.csie.islab.miro.usecase.board.getallusercursors.GetAllUserCursorsUseCase;
 import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentUseCase;
 import ntut.csie.islab.miro.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.islab.miro.usecase.eventhandler.NotifyBoard;
@@ -50,11 +49,6 @@ public class UseCaseInjection {
     public GetBoardContentUseCase getBoardContentUseCase() {
         return new GetBoardContentUseCase(eventBus,boardRepository, stickyNoteRepository);
     }
-    @Bean(name = "getAllUserCursorsUseCase")
-    public GetAllUserCursorsUseCase getAllUserCursorsUseCase() {
-        return new GetAllUserCursorsUseCase(eventBus,boardRepository);
-    }
-
 
     @Bean(name = "createStickyNoteUseCase")
     public CreateStickyNoteUseCase createStickyNoteUseCase() {

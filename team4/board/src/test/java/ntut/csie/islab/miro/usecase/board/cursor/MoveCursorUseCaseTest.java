@@ -1,5 +1,6 @@
 package ntut.csie.islab.miro.usecase.board.cursor;
 
+import ntut.csie.islab.miro.entity.model.board.BoardSession;
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.Position;
@@ -10,12 +11,15 @@ import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardUseCase;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
+import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MoveCursorUseCaseTest extends AbstractSpringBootJpaTest {
 
@@ -50,9 +54,10 @@ public class MoveCursorUseCaseTest extends AbstractSpringBootJpaTest {
         moveCursorUseCase.execute(input, output);
 
         Board resolveBoard= boardRepository.findById(boardId).get();
-        Cursor cursor = resolveBoard.getCursorList().stream().filter(x->x.getUserId().equals(userId)).findFirst().get();
-        assertTrue(cursor.getPosition().equals(newPosition));
-
+        BoardSession boardSession = resolveBoard.getBoardSessionList().stream().filter(x->x.getUserId().equals(userId)).findFirst().get();
+        assertNotNull(output.getId());
+        assertEquals(ExitCode.SUCCESS,output.getExitCode());
+        // TODO: check other user can receive domain event
     }
 
 }

@@ -9,8 +9,6 @@ import ntut.csie.islab.miro.usecase.board.cursor.MoveCursorInput;
 import ntut.csie.islab.miro.usecase.board.cursor.MoveCursorUseCase;
 import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardInput;
 import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardUseCase;
-import ntut.csie.islab.miro.usecase.board.getallusercursors.GetAllUserCursorsInput;
-import ntut.csie.islab.miro.usecase.board.getallusercursors.GetAllUserCursorsUseCase;
 import ntut.csie.islab.miro.usecase.board.leaveboard.LeaveBoardInput;
 import ntut.csie.islab.miro.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.islab.miro.usecase.websocket.BoardSessionBroadcaster;
@@ -39,12 +37,7 @@ public class BoardSessionWebSocketAdapter {
     private MoveCursorUseCase moveCursorUseCase;
     private EnterBoardUseCase enterBoardUseCase;
     private LeaveBoardUseCase leaveBoardUseCase;
-    private GetAllUserCursorsUseCase getAllUserCursorsUseCase;
     private BoardSessionBroadcaster boardSessionBroadcaster;
-    @Autowired
-    public void setGetAllUserCursorsUseCase(GetAllUserCursorsUseCase getAllUserCursorsUseCase) {
-        this.getAllUserCursorsUseCase = getAllUserCursorsUseCase;
-    }
 
     @Autowired
     public void setMoveCursorUseCase(MoveCursorUseCase moveCursorUseCase) {
