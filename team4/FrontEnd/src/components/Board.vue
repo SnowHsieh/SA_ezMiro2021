@@ -198,7 +198,11 @@ export default {
     drawStickyNote (figureDtos) {
       var _this = this
       figureDtos.forEach(figure => {
-        _this.addStickyNote(figure)
+        if (figure.kind === 'LINE') {
+          console.log(figure)
+        } else if (figure.kind === 'STICKYNOTE') {
+          _this.addStickyNote(figure)
+        }
       })
     },
     addStickyNote (figure) {

@@ -25,7 +25,7 @@ public class CreateStickyNoteController {
 
 
     @PostMapping(path = "/board/{boardId}/createStickyNote", consumes = "application/json", produces = "application/json")
-    public CqrsCommandViewModel createBoard(
+    public CqrsCommandViewModel createStickyNote(
             @PathVariable("boardId") UUID boardId,
             @RequestBody String stickyNoteInfo) {
 

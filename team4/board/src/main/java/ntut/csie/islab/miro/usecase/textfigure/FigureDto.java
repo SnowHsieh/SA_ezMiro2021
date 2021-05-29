@@ -1,6 +1,7 @@
 package ntut.csie.islab.miro.usecase.textfigure;
 
 import ntut.csie.islab.miro.entity.model.Position;
+import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.entity.model.figure.line.ArrowKindEnum;
 import ntut.csie.islab.miro.entity.model.textfigure.Style;
 
@@ -11,6 +12,7 @@ public class FigureDto {
 
     private UUID boardId;
     private UUID figureId;
+    private String kind;
     //line
     private List<Position> positionList;
     private ArrowKindEnum srcArrowKind ; //NONE,CIRCLE,ARROW
@@ -101,5 +103,13 @@ public class FigureDto {
 
     public void setStyle(Style style) {
         this.style = style;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 }

@@ -11,6 +11,7 @@ public class ConvertFigureToDto {
     public static FigureDto transform(Figure figure) {
         FigureDto dto = new FigureDto();
 
+        dto.setKind(figure.getKind().toString());
         dto.setFigureId(figure.getFigureId());
         dto.setBoardId(figure.getBoardId());
 

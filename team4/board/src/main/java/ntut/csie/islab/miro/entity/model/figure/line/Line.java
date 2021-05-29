@@ -1,6 +1,7 @@
 package ntut.csie.islab.miro.entity.model.figure.line;
 
 import ntut.csie.islab.miro.entity.model.Position;
+import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.entity.model.figure.Figure;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
 
@@ -43,5 +44,9 @@ public class Line extends Figure {
     @Override
     public void resize(Double newWidth, Double newHeight) {
 
+    }
+    @Override
+    public FigureTypeEnum getKind(){
+        return FigureTypeEnum.LINE;
     }
 }

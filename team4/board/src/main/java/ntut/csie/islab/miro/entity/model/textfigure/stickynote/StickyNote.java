@@ -1,6 +1,7 @@
 package ntut.csie.islab.miro.entity.model.textfigure.stickynote;
 
 
+import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.entity.model.textfigure.Style;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.textfigure.TextFigure;
@@ -63,6 +64,12 @@ public class StickyNote extends TextFigure {
             addDomainEvent(new StickyNoteResizedDomainEvent(this.getBoardId(), this.getFigureId(), oldWidth, oldHeight, newWidth, newHeight));
         }
     }
+
+    @Override
+    public FigureTypeEnum getKind() {
+        return FigureTypeEnum.STICKYNOTE;
+    }
+
     private Boolean isValidSide(double newWidth,double newHeight){
         return newWidth > 0 && newHeight > 0;
     }

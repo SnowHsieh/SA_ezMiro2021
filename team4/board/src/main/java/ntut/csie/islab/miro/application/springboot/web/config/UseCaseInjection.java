@@ -30,6 +30,7 @@ public class UseCaseInjection {
     private StickyNoteRepository stickyNoteRepository;
     private LineRepository lineRepository;
     private DomainEventBus eventBus;
+    //todo : Revise the inconsistent order of Usecase Constructor.
 
     @Autowired
     private BoardSessionBroadcaster boardSessionBroadcaster;
