@@ -1,4 +1,4 @@
-package ntut.csie.islab.miro.entity.model.line;
+package ntut.csie.islab.miro.entity.model.figure.line;
 
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.figure.Figure;

@@ -1,4 +1,4 @@
-package ntut.csie.islab.miro.usecase.line;
+package ntut.csie.islab.miro.usecase.figure.line;
 
 import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryImpl;
 import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryPeer;

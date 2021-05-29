@@ -1,4 +1,4 @@
-package ntut.csie.islab.miro.usecase.stickynote;
+package ntut.csie.islab.miro.usecase.figure.textfigure.stickynote;
 
 import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
 import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
