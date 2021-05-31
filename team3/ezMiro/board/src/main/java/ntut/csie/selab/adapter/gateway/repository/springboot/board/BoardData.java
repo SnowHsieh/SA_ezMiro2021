@@ -23,7 +23,8 @@ public class BoardData {
     @Column(name="board_name")
     private String boardName;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
+    @JoinColumn(name = "board_id")
     private Set<CommittedWidgetData> committedWidgets;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
@@ -37,10 +38,12 @@ public class BoardData {
         this.boardId = boardId;
     }
 
-    public BoardData(String boardId, String teamId, String boardName, Set<CursorData> cursors) {
+    public BoardData(String boardId, String teamId, String boardName, Set<CommittedWidgetData> committedWidgets, Set<CursorData> cursors) {
         this.boardId = boardId;
         this.teamId = teamId;
         this.boardName = boardName;
+        this.committedWidgets = new HashSet<>();
+        this.committedWidgets.addAll(committedWidgets);
         this.cursors = new HashSet<>();
         this.cursors.addAll(cursors);
     }

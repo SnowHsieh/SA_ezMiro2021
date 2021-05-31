@@ -97,27 +97,24 @@ public class Board extends AggregateRoot<String> {
         return committedWidgets.stream().filter(e -> e.getWidgetId().equals(widgetId)).findFirst();
     }
 
-    public void commitWidgetCreation(String boardId, String widgetId) {
-        if (id.equals(boardId)) {
-            committedWidgets.add(new CommittedWidget(boardId, widgetId, committedWidgets.size()));
-        }
+    public void commitWidgetCreation(String widgetId) {
+        committedWidgets.add(new CommittedWidget(this.id, widgetId, committedWidgets.size()));
     }
 
-    public void commitWidgetDeletion(String boardId, String widgetId) {
-        if (id.equals(boardId)) {
-            CommittedWidget removedCommittedWidget = getCommittedWidgetBy(widgetId).get();
-            committedWidgets.remove(removedCommittedWidget);
-            List<CommittedWidget> clone = new ArrayList<>();
-            Collections.copy(clone, committedWidgets);
-            committedWidgets.clear();
-            for(int i = 0; i < clone.size(); i++) {
-                int zOrder = i;
-                if(clone.get(i).getZOrder() > removedCommittedWidget.getZOrder()) {
-                    zOrder--;
-                }
-                committedWidgets.add(new CommittedWidget(widgetId, getId(), zOrder));
+    public void commitWidgetDeletion(String widgetId) {
+        CommittedWidget removedCommittedWidget = getCommittedWidgetBy(widgetId).get();
+        committedWidgets.remove(removedCommittedWidget);
+        List<CommittedWidget> clone = new ArrayList<>();
+        Collections.copy(clone, committedWidgets);
+        committedWidgets.clear();
+        for(int i = 0; i < clone.size(); i++) {
+            int zOrder = i;
+            if (clone.get(i).getZOrder() > removedCommittedWidget.getZOrder()) {
+                zOrder--;
             }
+            committedWidgets.add(new CommittedWidget(widgetId, getId(), zOrder));
         }
+
     }
 
     public void addCursor(Cursor cursor) {

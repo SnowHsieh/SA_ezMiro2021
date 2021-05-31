@@ -70,18 +70,18 @@ public class GetBoardContentUseCaseTest {
 
         Widget readModel = new StickyNote("readModelId", boardId, new Coordinate(0, 20, 10, 30));
         widgetRepository.save(readModel);
-        board.commitWidgetCreation(boardId, "readModelId");
+        board.commitWidgetCreation("readModelId");
 
         Widget command = new StickyNote("commandId", boardId, new Coordinate(15, 20, 25, 30));
         widgetRepository.save(command);
-        board.commitWidgetCreation(boardId, "commandId");
+        board.commitWidgetCreation("commandId");
 
         Widget aggregate = new StickyNote("aggregateId", boardId, new Coordinate(20, 0, 30, 10));
         widgetRepository.save(aggregate);
-        board.commitWidgetCreation(boardId, "aggregateId");
+        board.commitWidgetCreation("aggregateId");
 
         Widget domainEvent = new StickyNote("domainEventId", boardId, new Coordinate(30, 20, 40, 30));
         widgetRepository.save(domainEvent);
-        board.commitWidgetCreation(boardId, "domainEventId");
+        board.commitWidgetCreation("domainEventId");
     }
 }

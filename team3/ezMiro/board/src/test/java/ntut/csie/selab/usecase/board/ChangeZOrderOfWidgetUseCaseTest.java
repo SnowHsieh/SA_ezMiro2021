@@ -1,7 +1,6 @@
 package ntut.csie.selab.usecase.board;
 
-import ntut.csie.selab.adapter.board.BoardAssociationRepositoryImpl;
-import ntut.csie.selab.adapter.board.BoardRepositoryInMemoryImpl;
+import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
@@ -51,7 +50,7 @@ public class ChangeZOrderOfWidgetUseCaseTest {
     @Test
     public void change_z_order_of_sticky_note_should_succeed() {
         // Arrange
-        BoardAssociationRepository boardRepository = new BoardAssociationRepositoryImpl(boardRepositoryPeer, committedWidgetRepositoryPeer);
+        BoardRepository boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
 
         DomainEventBus domainEventBus = new DomainEventBus();
         NotifyBoard notifyBoard = new NotifyBoard(boardRepository, domainEventBus);
@@ -95,7 +94,7 @@ public class ChangeZOrderOfWidgetUseCaseTest {
     @Test
     public void change_z_order_of_sticky_note_to_neighbor_should_succeed() {
         // Arrange
-        BoardAssociationRepository boardRepository = new BoardAssociationRepositoryImpl(boardRepositoryPeer, committedWidgetRepositoryPeer);
+        BoardRepository boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
         String boardId = UUID.randomUUID().toString();
         DomainEventBus domainEventBus = new DomainEventBus();
         NotifyBoard notifyBoard = new NotifyBoard(boardRepository, domainEventBus);
@@ -124,7 +123,7 @@ public class ChangeZOrderOfWidgetUseCaseTest {
     @Test
     public void change_z_order_of_sticky_note_revert_should_succeed() {
         // Arrange
-        BoardAssociationRepository boardRepository = new BoardAssociationRepositoryImpl(boardRepositoryPeer, committedWidgetRepositoryPeer);
+        BoardRepository boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
         DomainEventBus domainEventBus = new DomainEventBus();
         NotifyBoard notifyBoard = new NotifyBoard(boardRepository, domainEventBus);
         domainEventBus.register(notifyBoard);
@@ -153,7 +152,7 @@ public class ChangeZOrderOfWidgetUseCaseTest {
     @Test
     public void change_z_order_of_sticky_note_to_neighbor_revert_should_succeed() {
         // Arrange
-        BoardAssociationRepository boardRepository = new BoardAssociationRepositoryImpl(boardRepositoryPeer, committedWidgetRepositoryPeer);
+        BoardRepository boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
         DomainEventBus domainEventBus = new DomainEventBus();
         NotifyBoard notifyBoard = new NotifyBoard(boardRepository, domainEventBus);
         domainEventBus.register(notifyBoard);
