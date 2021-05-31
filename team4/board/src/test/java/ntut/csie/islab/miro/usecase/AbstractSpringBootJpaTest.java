@@ -59,7 +59,7 @@ public abstract class AbstractSpringBootJpaTest {
     public UUID boardId;
     public UUID userId;
     public CqrsCommandPresenter createBoardUseCaseOutput;
-    public CqrsCommandPresenter preGeneratedStickyNote;
+    public CqrsCommandPresenter preGeneratedStickyNote; // todo: delete it
 
     @Autowired
     private BoardRepositoryPeer boardRepositoryPeer;

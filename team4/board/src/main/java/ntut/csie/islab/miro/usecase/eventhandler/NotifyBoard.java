@@ -2,6 +2,7 @@ package ntut.csie.islab.miro.usecase.eventhandler;
 
 import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.line.event.LineDeletedDomainEvent;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.event.FigureCommittedDomainEvent;
@@ -55,6 +56,19 @@ public class NotifyBoard {
             domainEventBus.post(new FigureUncommittedDomainEvent(stickyNoteDeleteDomainEvent.getBoardId(), stickyNoteDeleteDomainEvent.getFigureId()));
         } else {
             throw new RuntimeException("Board not found, board id = " + stickyNoteDeleteDomainEvent.getBoardId());
+        }
+    }
+
+    public void whenFigureDeleted(LineDeletedDomainEvent lineDeleteDomainEvent) {
+        Optional<Board> board = boardRepository.findById(lineDeleteDomainEvent.getBoardId());
+
+        if (board.isPresent()) {
+            //for board in db , not for board in memory
+            board.get().uncommitFigure(lineDeleteDomainEvent.getFigureId());
+            boardRepository.save(board.get());
+            domainEventBus.post(new FigureUncommittedDomainEvent(lineDeleteDomainEvent.getBoardId(), lineDeleteDomainEvent.getFigureId()));
+        } else {
+            throw new RuntimeException("Board not found, board id = " + lineDeleteDomainEvent.getBoardId());
         }
     }
 

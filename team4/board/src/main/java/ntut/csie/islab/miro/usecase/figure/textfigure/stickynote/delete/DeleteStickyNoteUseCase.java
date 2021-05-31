@@ -23,7 +23,7 @@ public class DeleteStickyNoteUseCase {
     public void execute(DeleteStickyNoteInput input, CqrsCommandOutput output) {
         TextFigure stickyNote = stickyNoteRepository.findById(input.getFigureId()).orElse(null);
 
-        if (null == stickyNote){
+        if (null == stickyNote) {
             output.setId(input.getFigureId().toString())
                     .setExitCode(ExitCode.FAILURE)
                     .setMessage("Delete stickyNote failed: stickyNote not found, stickyNote id = " + input.getFigureId());
