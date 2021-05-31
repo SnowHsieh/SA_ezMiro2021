@@ -10,17 +10,17 @@ import java.util.Set;
 
 public class CommittedWidgetDataMapper {
     public static CommittedWidgetData domainToData(CommittedWidget committedWidget) {
-        return new CommittedWidgetData( committedWidget.getWidgetId(), committedWidget.getZOrder());
+        return new CommittedWidgetData(committedWidget.getBoardId(), committedWidget.getWidgetId(), committedWidget.getZOrder());
     }
 
-    public static Set<CommittedWidgetData> domainToData(List<CommittedWidget> committedWidgets) {
-        Set<CommittedWidgetData> committedWidgetDatas = new HashSet<>();
+    public static List<CommittedWidgetData> domainToData(List<CommittedWidget> committedWidgets) {
+        List<CommittedWidgetData> committedWidgetDatas = new ArrayList<>();
         committedWidgets.forEach(committedWidget -> committedWidgetDatas.add(domainToData(committedWidget)));
         return committedWidgetDatas;
     }
 
     public static CommittedWidget dataToDomain(CommittedWidgetData committedWidgetData) {
-        return new CommittedWidget(committedWidgetData.getBoard().getBoardId(), committedWidgetData.getWidgetId(), committedWidgetData.getzOrder());
+        return new CommittedWidget(committedWidgetData.getId().getBoardId(), committedWidgetData.getId().getWidgetId(), committedWidgetData.getzOrder());
     }
 
     public static Set<CommittedWidget> dataToDomain(Set<CommittedWidgetData> committedWidgetDatas) {

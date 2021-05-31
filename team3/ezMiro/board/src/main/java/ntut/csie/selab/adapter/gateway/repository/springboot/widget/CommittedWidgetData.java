@@ -3,49 +3,44 @@ package ntut.csie.selab.adapter.gateway.repository.springboot.widget;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardData;
 
 import javax.persistence.*;
-import javax.websocket.OnClose;
 
 @Entity
 public class CommittedWidgetData {
 
-    @Id
-    @Column(name="widget_id", nullable=false)
-    private String widgetId;
+    @EmbeddedId
+    CommittedWidgetDataKey id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", insertable = false, updatable = false)
+    @ManyToOne
+    @MapsId("boardId")
+    @JoinColumn(name = "board_id")
     private BoardData board;
+
+    @ManyToOne
+    @MapsId("widgetId")
+    @JoinColumn(name = "widget_id")
+    private WidgetData widget;
 
     @Column(name = "z_order")
     private int zOrder;
 
+//    public CommittedWidgetData (BoardData board, WidgetData widget) {
+//        this.board = board;
+//        this.widget = widget;
+//        this.id = new CommittedWidgetDataKey(board.getBoardId(), widget.getWidgetId());
+//    }
     public CommittedWidgetData() {
 
     }
 
-    public CommittedWidgetData ( String widgetId, int zOrder) {
-        this.widgetId = widgetId;
+    public CommittedWidgetData (String boardId, String widgetId, int zOrder) {
+        this.board = new BoardData(boardId);
+        this.widget = new WidgetData(widgetId);
+        this.id = new CommittedWidgetDataKey(boardId, widgetId);
         this.zOrder = zOrder;
     }
 
-    public String getWidgetId() {
-        return widgetId;
-    }
-
-    public void setWidgetId(String widgetId) {
-        this.widgetId = widgetId;
-    }
-
-    public BoardData getBoard() {
-        return board;
-    }
-
-    public void setBoard(BoardData board) {
-        this.board = board;
-    }
-
-    public void setzOrder(int zOrder) {
-        this.zOrder = zOrder;
+    public CommittedWidgetDataKey getId() {
+        return id;
     }
 
     public int getzOrder() {

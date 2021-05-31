@@ -64,7 +64,6 @@ public class Board extends AggregateRoot<String> {
         } else {
             shiftZOrderInRange(newZOrder, originZOrder, newZOrder, committedWidgets, 1);
         }
-        sortAscendByZOrder(committedWidgets);
         addDomainEvent(new WidgetZOrderChanged(new Date(), id, committedWidgets.get(newZOrder).getWidgetId()));
     }
 

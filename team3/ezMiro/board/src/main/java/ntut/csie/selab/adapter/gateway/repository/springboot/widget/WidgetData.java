@@ -43,6 +43,10 @@ public class WidgetData {
     @Column(name="font_size")
     private int fontSize;
 
+//    @OneToMany(mappedBy = "widget", cascade = CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(mappedBy = "widget", cascade = CascadeType.ALL)
+    private List<CommittedWidgetData> committedWidgets;
+
     public WidgetData() {
     }
 

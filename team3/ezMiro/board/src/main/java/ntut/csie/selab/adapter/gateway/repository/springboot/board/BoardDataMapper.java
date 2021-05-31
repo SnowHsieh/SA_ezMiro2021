@@ -12,7 +12,7 @@ public class BoardDataMapper {
     public static BoardData domainToData(Board board) {
         Set<Cursor> cursors = board.getCursors();
         List<CommittedWidget> committedWidgets = board.getCommittedWidgets();
-        return new BoardData(board.getId(), board.getTeamId(), board.getBoardName(), CommittedWidgetDataMapper.domainToData(committedWidgets), CursorDataMapper.domainToData(cursors));
+        return new BoardData(board.getId(), board.getTeamId(), board.getBoardName(), CursorDataMapper.domainToData(cursors), CommittedWidgetDataMapper.domainToData(committedWidgets));
     }
 
     public static Board DataToDomain(BoardData selectedBoardData) {
