@@ -4,6 +4,8 @@ import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.entity.model.figure.Figure;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.line.event.LineDeletedDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteDeleteDomainEvent;
 
 
 import java.util.List;
@@ -23,7 +25,7 @@ public class Line extends Figure {
 
     @Override
     public void markAsRemoved(UUID boardId, UUID figureId) {
-
+        addDomainEvent(new LineDeletedDomainEvent(boardId, figureId));
     }
 
     @Override
@@ -45,8 +47,9 @@ public class Line extends Figure {
     public void resize(Double newWidth, Double newHeight) {
 
     }
+
     @Override
-    public FigureTypeEnum getKind(){
+    public FigureTypeEnum getKind() {
         return FigureTypeEnum.LINE;
     }
 }
