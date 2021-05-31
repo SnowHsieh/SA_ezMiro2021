@@ -393,19 +393,16 @@ export default {
       _this.canvas.on(
         {
           'object:moving': function (e) {
-            if (_this.updateFigureFlag) {
-              if (e.target.type === 'group') {
+            if (e.target.type === 'group') {
+              if (_this.updateFigureFlag) {
                 _this.moveStickyNote(e.target)
-              } else {
-                var p = e.target
-                p.line1 && p.line1.set({ x2: p.left, y2: p.top })
-                p.line2 && p.line2.set({ x1: p.left, y1: p.top })
-                _this.canvas.renderAll()
-                // e.target._objects.forEach((target) => {
-                //   _this.moveStickyNote(target)
-                // })
+                _this.updateFigureFlag = false
               }
-              _this.updateFigureFlag = false
+            } else {
+              const p = e.target
+              p.line1 && p.line1.set({ x2: p.left, y2: p.top })
+              p.line2 && p.line2.set({ x1: p.left, y1: p.top })
+              _this.canvas.renderAll()
             }
           }
         })
