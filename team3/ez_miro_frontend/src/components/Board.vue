@@ -34,6 +34,7 @@ import {
   EditFontSizeOfStickyNoteBy
 } from '@/apis/Widget'
 import '@/models/StickyNote'
+import '@/models/Line'
 import { fabric } from 'fabric'
 import { webSocketHost } from '@/config/config'
 
@@ -66,8 +67,24 @@ export default {
     this.loadAllStickyNote(this.boardContent.widgetDtos)
     this.user = this.createStubUser()
     this.initWebSocketAndBingEventListener()
+    // ==================================
+    this.createLine()
+    // ==================================
   },
   methods: {
+    createLine () {
+      this.canvas.add(new fabric.OurLine({
+        id: 'lineId',
+        coors: [100, 100, 250, 250]
+      }, {
+        fill: 'black',
+        stroke: 'black',
+        strokeWidth: 5,
+        selectable: true,
+        evented: true
+      }))
+      this.canvas.renderAll()
+    },
     initCanvas () {
       this.canvas = new fabric.Canvas('canvas', {
         fireRightClick: true,
