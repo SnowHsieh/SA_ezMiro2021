@@ -11,7 +11,9 @@ import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
 import ntut.csie.selab.usecase.websocket.WebSocket;
+import ntut.csie.selab.usecase.widget.LineRepository;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.line.create.CreateLineUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.delete.DeleteStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.edit.color.ChangeColorOfStickyNoteUseCase;
@@ -30,6 +32,7 @@ public class UseCaseInjection {
     private BoardRepository boardRepository;
     private BoardAssociationRepository boardAssociationRepository;
     private WidgetRepository widgetRepository;
+    private LineRepository lineRepository;
     private DomainEventBus eventBus;
     private WebSocket boardWebSocket;
 
@@ -55,6 +58,9 @@ public class UseCaseInjection {
 
     @Bean(name="CreateStickyNoteUseCase")
     public CreateStickyNoteUseCase createStickyNoteUseCase() { return new CreateStickyNoteUseCase(widgetRepository, eventBus); }
+
+    @Bean(name="CreateLineUseCase")
+    public CreateLineUseCase createLineUseCase() { return new CreateLineUseCase(lineRepository, eventBus); }
 
     @Bean(name="MoveStickyNoteUseCase")
     public MoveStickyNoteUseCase moveStickyNoteUseCase() {
@@ -119,6 +125,9 @@ public class UseCaseInjection {
 
     @Autowired
     public void setWidgetRepository(WidgetRepository widgetRepository) { this.widgetRepository = widgetRepository; }
+
+    @Autowired
+    public void setLineRepository(LineRepository lineRepository) { this.lineRepository = lineRepository; }
 
     @Autowired
     public void setEventBus(DomainEventBus eventBus) { this.eventBus = eventBus; }

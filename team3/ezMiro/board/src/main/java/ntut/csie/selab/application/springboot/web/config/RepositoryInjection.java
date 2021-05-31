@@ -4,11 +4,14 @@ import ntut.csie.selab.adapter.board.BoardAssociationRepositoryImpl;
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.LineRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
+import ntut.csie.selab.adapter.widget.LineRepositoryImpl;
 import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardAssociationRepository;
 import ntut.csie.selab.usecase.board.BoardRepository;
+import ntut.csie.selab.usecase.widget.LineRepository;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +24,8 @@ public class RepositoryInjection {
 
     private WidgetRepositoryPeer widgetRepositoryPeer;
 
+    private LineRepositoryPeer lineRepositoryPeer;
+
     private BoardRepositoryPeer boardRepositoryPeer;
 
     private CommittedWidgetRepositoryPeer committedWidgetRepositoryPeer;
@@ -28,6 +33,11 @@ public class RepositoryInjection {
     @Autowired
     public void setWidgetRepositoryPeer(WidgetRepositoryPeer widgetRepositoryPeer) {
         this.widgetRepositoryPeer = widgetRepositoryPeer;
+    }
+
+    @Autowired
+    public void setLineRepositoryPeer(LineRepositoryPeer lineRepositoryPeer) {
+        this.lineRepositoryPeer = lineRepositoryPeer;
     }
 
     @Autowired
@@ -52,6 +62,9 @@ public class RepositoryInjection {
 
     @Bean(name="widgetRepository")
     public WidgetRepository widgetRepository() { return new WidgetRepositoryImpl(widgetRepositoryPeer); }
+
+    @Bean(name="lineRepository")
+    public LineRepository lineRepository() { return new LineRepositoryImpl(lineRepositoryPeer); }
 
     @Bean(name="miroEventBus")
     public DomainEventBus eventBus() {
