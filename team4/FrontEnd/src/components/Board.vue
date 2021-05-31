@@ -4,6 +4,7 @@
         <div>
           <div>
             <button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
+            <button id="createLineButton" @click="createLine()">Add New Line</button>
             <input v-model="myUserId" placeholder="input userName">
             <canvas id="canvas" ref='board' >
             </canvas>
@@ -51,10 +52,11 @@ import {
 } from '@/apis/stickyNoteApi'
 import { webSocketHostIp } from '../config/config.js'
 import uuidGenerator from '../utils/uuidGenerator.js'
+import { createLineApi } from '../apis/lineApi'
 export default {
   data () {
     return {
-      boardId: '531d9068-a89c-4b45-a0ce-f6e96f7c64d8',
+      boardId: '951a9c6f-561a-4f49-9d23-d82ae6e5b54c',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -114,10 +116,65 @@ export default {
     async getBoardContent () {
       try {
         const res = await getBoardContentApi(this.boardId)
-        this.drawStickyNote(res.data.figureDtos)
+        this.drawFigures(res.data.figureDtos)
       } catch (err) {
         console.log(err)
       }
+    },
+    async createLine (figure) {
+      try {
+        const res = await createLineApi(this.boardId, figure)
+        console.log(res.data.message)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    // 畫直線
+    drawLine (figure) {
+      const srcPosition = figure.positionList[0]
+      const destPosition = figure.positionList[1]
+      const line = new fabric.Line([srcPosition.x, srcPosition.y, destPosition.x, destPosition.y], {
+        id: figure.figureId,
+        // fill: figure.color,
+        stroke: figure.color, // 筆觸顏色
+        strokeWidth: figure.strokeWidth, // 筆觸寬度
+        hasControls: false, // 選中時是否可以放大縮小
+        hasRotatingPoint: false, // 選中時是否可以旋轉
+        hasBorders: false, // 選中時是否有邊框
+        evented: false
+      })
+      console.log('line: ', line)
+      // line.set({ x2: 250.0, y2: 200.0 })
+      // line.set({ x1: 0.0, y1: 20.0 })
+      // const point1 = this.makeCircle(line.x2, line.y2, line, null)
+      // const point2 = this.makeCircle(line.x1, line.y1, null, line)
+      // line.point1 = point1
+      // line.point2 = point2
+      this.canvas.add(line)
+      this.canvas.add(
+        this.makeCircle(line.x2, line.y2, line, null),
+        this.makeCircle(line.x1, line.y1, null, line)
+      )
+      this.canvas.renderAll()
+      // return line
+    },
+    // 畫球
+    makeCircle (left, top, line1, line2) {
+      var c = new fabric.Circle({
+        left: left,
+        top: top,
+        strokeWidth: 5,
+        radius: 5,
+        fill: '#f9f900',
+        stroke: '#f9f900',
+        originX: 'center',
+        originY: 'center'
+      })
+      c.hasControls = c.hasBorders = false
+      c.line1 = line1
+      c.line2 = line2
+
+      return c
     },
     async createStickyNote () {
       try {
@@ -195,10 +252,11 @@ export default {
       })
       fabric.Object.prototype.objectType = 'normalObject'
     },
-    drawStickyNote (figureDtos) {
+    drawFigures (figureDtos) {
       var _this = this
       figureDtos.forEach(figure => {
         if (figure.kind === 'LINE') {
+          _this.drawLine(figure)
           console.log(figure)
         } else if (figure.kind === 'STICKYNOTE') {
           _this.addStickyNote(figure)
@@ -339,9 +397,13 @@ export default {
               if (e.target.type === 'group') {
                 _this.moveStickyNote(e.target)
               } else {
-                e.target._objects.forEach((target) => {
-                  _this.moveStickyNote(target)
-                })
+                var p = e.target
+                p.line1 && p.line1.set({ x2: p.left, y2: p.top })
+                p.line2 && p.line2.set({ x1: p.left, y1: p.top })
+                _this.canvas.renderAll()
+                // e.target._objects.forEach((target) => {
+                //   _this.moveStickyNote(target)
+                // })
               }
               _this.updateFigureFlag = false
             }
@@ -534,7 +596,7 @@ export default {
     websocketonmessage: function (e) {
       const _this = this
       const receivedData = JSON.parse(e.data)
-      console.log(receivedData)
+      // console.log(receivedData)
       if (receivedData.event === 'CursorMovedDomainEvent') {
         _this.updateUserCursor(receivedData)
       } else if (receivedData.event === 'BoardEnteredDomainEvent') {
@@ -544,7 +606,7 @@ export default {
         this.updateCursorFlag = true
         this.sendMouseData()
       } else if (receivedData.event === 'CursorDeletedDomainEvent') {
-        console.log(receivedData)
+        // console.log(receivedData)
         _this.delUserCursor(receivedData.userId)
       } else if (receivedData.event === 'StickyNoteCreatedDomainEvent') {
         const figure = {
