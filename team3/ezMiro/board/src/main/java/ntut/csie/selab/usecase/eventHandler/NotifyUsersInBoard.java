@@ -2,10 +2,7 @@ package ntut.csie.selab.usecase.eventHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.eventbus.Subscribe;
-import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetDataMapper;
-import ntut.csie.selab.adapter.gateway.repository.springboot.widget.CommittedWidgetData;
 import ntut.csie.selab.entity.model.board.Board;
-import ntut.csie.selab.entity.model.board.CommittedWidget;
 import ntut.csie.selab.entity.model.board.Cursor;
 import ntut.csie.selab.entity.model.board.event.BoardCursorMoved;
 import ntut.csie.selab.entity.model.board.event.BoardEntered;
@@ -22,7 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 

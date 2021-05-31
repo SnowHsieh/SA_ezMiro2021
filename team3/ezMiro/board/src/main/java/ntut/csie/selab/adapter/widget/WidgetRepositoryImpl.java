@@ -6,8 +6,6 @@ import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetReposi
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class WidgetRepositoryImpl implements WidgetRepository {

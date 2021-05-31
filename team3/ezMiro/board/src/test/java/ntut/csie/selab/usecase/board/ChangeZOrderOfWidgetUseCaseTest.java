@@ -1,7 +1,6 @@
 package ntut.csie.selab.usecase.board;
 
 import ntut.csie.selab.adapter.board.BoardAssociationRepositoryImpl;
-import ntut.csie.selab.adapter.board.BoardRepositoryInMemoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
@@ -16,9 +15,9 @@ import ntut.csie.selab.usecase.board.edit.zorder.ChangeZOrderOfWidgetOutput;
 import ntut.csie.selab.usecase.board.edit.zorder.ChangeZOrderOfWidgetUseCase;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
-import ntut.csie.selab.usecase.widget.create.CreateStickyNoteInput;
-import ntut.csie.selab.usecase.widget.create.CreateStickyNoteOutput;
-import ntut.csie.selab.usecase.widget.create.CreateStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteInput;
+import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteOutput;
+import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteUseCase;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +29,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 @RunWith(SpringJUnit4ClassRunner.class)
