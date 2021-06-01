@@ -332,8 +332,9 @@ export default {
         const topLeftY = point.tl.y
         const bottomRightX = point.br.x
         const bottomRightY = point.br.y
-
-        if (me.isSamplingWidgetDelayFinish) {
+        if (o.target.get('type') === 'circle') {
+          me.canvas.renderAll()
+        } else if (o.target.get('type') === 'stickyNote' && me.isSamplingWidgetDelayFinish) {
           me.isSamplingWidgetDelayFinish = false
           setTimeout(function () {
             me.isSamplingWidgetDelayFinish = true
@@ -382,7 +383,8 @@ export default {
       this.canvas.renderAll()
     },
     async loadLineIntoCanvas (widgetDto) {
-      await this.canvas.add(this.buildFabricObjectOfLine(widgetDto))
+      const ourLine = this.buildFabricObjectOfLine(widgetDto)
+      await this.canvas.add(ourLine, ourLine.circleHead, ourLine.circleTail)
       this.canvas.renderAll()
     },
     setTarget (target) {
@@ -463,7 +465,12 @@ export default {
     buildFabricObjectOfLine (widget) {
       return new fabric.OurLine({
         id: widget.widgetId,
-        coors: [widget.topLeftX, widget.topLeftY, widget.bottomRightX, widget.bottomRightY]
+        coors: {
+          topLeftX: widget.topLeftX,
+          topLeftY: widget.topLeftY,
+          bottomRightX: widget.bottomRightX,
+          bottomRightY: widget.bottomRightY
+        }
       }, {
         fill: 'red',
         stroke: 'black',
