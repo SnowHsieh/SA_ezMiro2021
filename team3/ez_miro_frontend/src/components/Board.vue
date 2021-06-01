@@ -265,11 +265,13 @@ export default {
       this.canvas.renderAll()
     },
     addWidgetToCanvas (widgetDto) {
-      if (widgetDto.type === 'StickyNote') {
-        this.loadStickyNoteIntoCanvas(widgetDto)
-      } else if (widgetDto.type === 'Line') {
-        this.loadLineIntoCanvas(widgetDto)
-      }
+      this.loadStickyNoteIntoCanvas(widgetDto)
+      // TODO: 後端傳過的 DTO 要給 type 的屬性
+      // if (widgetDto.type === 'StickyNote') {
+
+      // } else if (widgetDto.type === 'Line') {
+      //   this.loadLineIntoCanvas(widgetDto)
+      // }
     },
     bindCanvasEventListener () {
       const me = this

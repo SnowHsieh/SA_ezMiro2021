@@ -3,8 +3,8 @@ package ntut.csie.selab.usecase.widget.stickynote;
 import ntut.csie.selab.adapter.board.BoardAssociationRepositoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
-import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
-import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
+import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.board.CommittedWidget;
 import ntut.csie.selab.entity.model.widget.Coordinate;
@@ -39,7 +39,7 @@ import javax.websocket.Session;
 public class DeleteStickyNoteUseCaseTest {
 
     @Autowired
-    private WidgetRepositoryPeer widgetRepositoryPeer;
+    private StickyNoteRepositoryPeer stickyNoteRepositoryPeer;
 
     @Autowired
     private BoardRepositoryPeer boardRepositoryPeer;
@@ -50,7 +50,7 @@ public class DeleteStickyNoteUseCaseTest {
     @Test
     public void delete_sticky_note_should_successd() {
         // Arrange
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
+        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         String stickyNoteId = "1";
         Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
         Widget stickyNote = new StickyNote(stickyNoteId, "0", stickyNoteCoordinate);
@@ -79,7 +79,7 @@ public class DeleteStickyNoteUseCaseTest {
 
         boardRepository.save(createBoardHasStickNoteWith(boardId, stickyNoteId));
 
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
+        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         WebSocket webSocket = new FakeBoardWebSocket();
         Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
         Widget stickyNote = new StickyNote(stickyNoteId, boardId, stickyNoteCoordinate);

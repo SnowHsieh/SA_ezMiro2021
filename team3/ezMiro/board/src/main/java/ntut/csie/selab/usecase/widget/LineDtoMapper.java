@@ -1,24 +1,27 @@
 package ntut.csie.selab.usecase.widget;
 
 import ntut.csie.selab.entity.model.widget.Line;
+import ntut.csie.selab.entity.model.widget.Widget;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LineDtoMapper {
-    public LineDto domainToDto(Line line) {
-        return new LineDto(line.getId(),
+    public LineDto domainToDto(Widget widget) {
+        Line line = (Line) widget;
+        return new LineDto(
+                line.getId(),
                 line.getCoordinate().getTopLeft().x,
                 line.getCoordinate().getTopLeft().y,
                 line.getCoordinate().getBottomRight().x,
-                line.getCoordinate().getBottomRight().x,
-                "Line");
+                line.getCoordinate().getBottomRight().x
+        );
     }
 
-    public List<LineDto> domainToDto(List<Line> lines) {
+    public List<LineDto> domainToDto(List<Widget> widgets) {
         List<LineDto> lineDtos = new ArrayList<>();
 
-        lines.forEach(line -> lineDtos.add(domainToDto(line)));
+        widgets.forEach(line -> lineDtos.add(domainToDto(line)));
 
         return lineDtos;
     }

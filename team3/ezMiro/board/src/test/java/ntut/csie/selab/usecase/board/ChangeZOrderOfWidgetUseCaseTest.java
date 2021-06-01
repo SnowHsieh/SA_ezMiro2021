@@ -3,8 +3,8 @@ package ntut.csie.selab.usecase.board;
 import ntut.csie.selab.adapter.board.BoardAssociationRepositoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
-import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
-import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
+import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
 import ntut.csie.selab.domain.MockFactory;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.widget.Coordinate;
@@ -38,7 +38,7 @@ import java.util.UUID;
 public class ChangeZOrderOfWidgetUseCaseTest {
 
     @Autowired
-    private WidgetRepositoryPeer widgetRepositoryPeer;
+    private StickyNoteRepositoryPeer stickyNoteRepositoryPeer;
 
     @Autowired
     private BoardRepositoryPeer boardRepositoryPeer;
@@ -179,7 +179,7 @@ public class ChangeZOrderOfWidgetUseCaseTest {
 
     private List<String> generateSequenceOfStickyNoteIn(String boardId, DomainEventBus domainEventBus) {
         List<String> generatedWidgetIds = new ArrayList<>();
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
+        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
 
         CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(widgetRepository, domainEventBus);
         CreateStickyNoteInput createStickyNoteInput = new CreateStickyNoteInput();

@@ -1,5 +1,6 @@
 package ntut.csie.selab.usecase.widget.stickynote.edit.text;
 
+import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
@@ -20,7 +21,7 @@ public class EditTextOfStickyNoteUseCase {
         Optional<Widget> stickyNote = widgetRepository.findById(input.getStickyNoteId());
 
         if(stickyNote.isPresent()) {
-            Widget selectedStickyNote = stickyNote.get();
+            StickyNote selectedStickyNote = (StickyNote) stickyNote.get();
             selectedStickyNote.clearDomainEvents();
             selectedStickyNote.setText(input.getText());
 

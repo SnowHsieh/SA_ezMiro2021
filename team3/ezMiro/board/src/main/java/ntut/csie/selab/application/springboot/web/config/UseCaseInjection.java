@@ -3,8 +3,9 @@ package ntut.csie.selab.application.springboot.web.config;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardAssociationRepository;
 import ntut.csie.selab.usecase.board.BoardRepository;
-import ntut.csie.selab.usecase.board.enterboard.EnterBoardUseCase;
 import ntut.csie.selab.usecase.board.create.CreateBoardUseCase;
+import ntut.csie.selab.usecase.board.edit.zorder.ChangeZOrderOfWidgetUseCase;
+import ntut.csie.selab.usecase.board.enterboard.EnterBoardUseCase;
 import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.selab.usecase.board.movecursor.MoveCursorUseCase;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
@@ -14,14 +15,13 @@ import ntut.csie.selab.usecase.websocket.WebSocket;
 import ntut.csie.selab.usecase.widget.LineRepository;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import ntut.csie.selab.usecase.widget.line.create.CreateLineUseCase;
+import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.delete.DeleteStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.edit.color.ChangeColorOfStickyNoteUseCase;
-import ntut.csie.selab.usecase.board.edit.zorder.ChangeZOrderOfWidgetUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.edit.fontsize.EditFontSizeOfStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.edit.text.EditTextOfStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.move.MoveStickyNoteUseCase;
-import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.resize.ResizeStickyNoteUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -43,7 +43,7 @@ public class UseCaseInjection {
 
     @Bean(name="createNotifyUsersInBoard")
     public NotifyUsersInBoard createNotifyUsersInBoard() {
-        return new NotifyUsersInBoard(boardRepository, widgetRepository, eventBus, boardWebSocket);
+        return new NotifyUsersInBoard(boardRepository, widgetRepository, lineRepository, eventBus, boardWebSocket);
     }
 
     @Bean(name="GetBoardContentUseCase")

@@ -4,8 +4,8 @@ import ntut.csie.selab.adapter.board.BoardAssociationRepositoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardDataMapper;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
-import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
-import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
+import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.model.DomainEventBus;
@@ -38,7 +38,7 @@ import java.awt.*;
 public class CreateStickyNoteUseCaseTest {
 
     @Autowired
-    private WidgetRepositoryPeer widgetRepositoryPeer;
+    private StickyNoteRepositoryPeer stickyNoteRepositoryPeer;
 
     @Autowired
     private BoardRepositoryPeer boardRepositoryPeer;
@@ -50,7 +50,7 @@ public class CreateStickyNoteUseCaseTest {
     public void create_sticky_note_should_succeed() {
         // Arrange
         DomainEventBus domainEventBus = new DomainEventBus();
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
+        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(widgetRepository, domainEventBus);
         CreateStickyNoteInput input = new CreateStickyNoteInput();
         CreateStickyNoteOutput output = new CreateStickyNoteOutput();
@@ -73,7 +73,7 @@ public class CreateStickyNoteUseCaseTest {
     public void create_sticky_note_in_board_should_notify_board_successfully() {
         // Arrange
         BoardAssociationRepository boardRepository = new BoardAssociationRepositoryImpl(boardRepositoryPeer, committedWidgetRepositoryPeer);
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
+        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         WebSocket webSocket = new FakeBoardWebSocket();
         String boardId = "1";
         boardRepository.save(createSimpleBoardWith(boardId));

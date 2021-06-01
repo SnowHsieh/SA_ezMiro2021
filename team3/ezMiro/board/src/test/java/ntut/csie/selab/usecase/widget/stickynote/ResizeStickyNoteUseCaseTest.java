@@ -2,8 +2,8 @@ package ntut.csie.selab.usecase.widget.stickynote;
 
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
-import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
-import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
+import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
@@ -36,7 +36,7 @@ import java.awt.*;
 public class ResizeStickyNoteUseCaseTest {
 
     @Autowired
-    private WidgetRepositoryPeer widgetRepositoryPeer;
+    private StickyNoteRepositoryPeer stickyNoteRepositoryPeer;
 
     @Autowired
     private BoardRepositoryPeer boardRepositoryPeer;
@@ -45,7 +45,7 @@ public class ResizeStickyNoteUseCaseTest {
     public void resize_sticky_note_should_succed() {
         // Arrange
         BoardRepository boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
+        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         DomainEventBus domainEventBus = new DomainEventBus();
         WebSocket webSocket = new FakeBoardWebSocket();
         NotifyUsersInBoard notifyUsersInBoard = new NotifyUsersInBoard(boardRepository, widgetRepository, domainEventBus, webSocket);

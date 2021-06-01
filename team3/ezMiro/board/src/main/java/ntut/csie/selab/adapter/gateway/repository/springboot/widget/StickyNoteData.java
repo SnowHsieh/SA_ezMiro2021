@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name="widget")
-public class WidgetData {
+public class StickyNoteData {
     @Id
     @Column(name="widget_id")
     private String widgetId;
@@ -47,14 +47,14 @@ public class WidgetData {
     @OneToMany(mappedBy = "widget", cascade = CascadeType.ALL)
     private List<CommittedWidgetData> committedWidgets;
 
-    public WidgetData() {
+    public StickyNoteData() {
     }
 
-    public WidgetData(String widgetId) {
+    public StickyNoteData(String widgetId) {
         this.widgetId = widgetId;
     }
 
-    public WidgetData(
+    public StickyNoteData(
             String widgetId,
             String boardId,
             int topLeftX,
