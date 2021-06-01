@@ -1,44 +1,44 @@
 <!--<script src="../assets/js/jquery.colorPicker.js"></script>-->
 <template>
-        <!-- <button @click="drawARect">畫圖</button> -->
-        <div>
-          <div>
-            <button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
-            <button id="createLineButton" @click="createLine()">Add New Line</button>
-            <input v-model="myUserId" placeholder="input userName">
-            <canvas id="canvas" ref='board' >
-            </canvas>
-          </div>
+  <!-- <button @click="drawARect">畫圖</button> -->
+  <div>
+    <div>
+      <button id="createStickyNoteButton" @click="createStickyNote()">Add New StickyNote</button>
+      <button id="createLineButton" @click="createLine()">Add New Line</button>
+      <input v-model="myUserId" placeholder="input userName">
+      <canvas id="canvas" ref='board' >
+      </canvas>
+    </div>
 
-          <div class="container" oncontextmenu="return false">
-            <div id="contextMenu" class="context-menu">
-              <ul>
-                <label>
-                  <li>ColorPicker
-                    <input type="color" id="favcolor" name="favcolor" list="colors" style="margin-left: 4rem" />
-                    <datalist id="colors">
-                      <option>#fffabb</option>
-                      <option>#c8dd57</option>
-                      <option>#7adbfa</option>
-                      <option>#ffaa61</option>
-                      <option>#c697ce</option>
-                      <option>#fefe45</option>
-                      <option>#e693b9</option>
-                      <option>#ffffff</option>
-                      <option>#da0063</option>
-                      <option>#5b9bd5</option>
-                    </datalist>
-                  </li>
-                </label>
-                <li id="delButton" name="delButton">Delete</li>
-                <li id = "bringToFrontButton">BringToFront</li>
-                <li id = "bringForwardButton">BringForward</li>
-                <li id = "sendBackwardButton">SendBackward</li>
-                <li id = "sendToBackButton">SendToBack</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+    <div class="container" oncontextmenu="return false">
+      <div id="contextMenu" class="context-menu">
+        <ul>
+          <label>
+            <li>ColorPicker
+              <input type="color" id="favcolor" name="favcolor" list="colors" style="margin-left: 4rem" />
+              <datalist id="colors">
+                <option>#fffabb</option>
+                <option>#c8dd57</option>
+                <option>#7adbfa</option>
+                <option>#ffaa61</option>
+                <option>#c697ce</option>
+                <option>#fefe45</option>
+                <option>#e693b9</option>
+                <option>#ffffff</option>
+                <option>#da0063</option>
+                <option>#5b9bd5</option>
+              </datalist>
+            </li>
+          </label>
+          <li id="delButton" name="delButton">Delete</li>
+          <li id = "bringToFrontButton">BringToFront</li>
+          <li id = "bringForwardButton">BringForward</li>
+          <li id = "sendBackwardButton">SendBackward</li>
+          <li id = "sendToBackButton">SendToBack</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -52,11 +52,11 @@ import {
 } from '@/apis/stickyNoteApi'
 import { webSocketHostIp } from '../config/config.js'
 import uuidGenerator from '../utils/uuidGenerator.js'
-import { createLineApi } from '../apis/lineApi'
+import { createLineApi, deleteLineApi } from '../apis/lineApi'
 export default {
   data () {
     return {
-      boardId: '951a9c6f-561a-4f49-9d23-d82ae6e5b54c',
+      boardId: 'f51edf13-a8fa-431a-859a-836b2a7b2c22',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -129,8 +129,16 @@ export default {
         console.log(err)
       }
     },
+    async deleteLine (figure) {
+      try {
+        const res = await deleteLineApi(this.boardId, figure)
+        console.log(res.data.message)
+      } catch (err) {
+        console.log(err)
+      }
+    },
     // 畫直線
-    drawLine (figure) {
+    addLine (figure) {
       const srcPosition = figure.positionList[0]
       const destPosition = figure.positionList[1]
       const line = new fabric.Line([srcPosition.x, srcPosition.y, destPosition.x, destPosition.y], {
@@ -141,7 +149,8 @@ export default {
         hasControls: false, // 選中時是否可以放大縮小
         hasRotatingPoint: false, // 選中時是否可以旋轉
         hasBorders: false, // 選中時是否有邊框
-        evented: false
+        evented: false,
+        selectable: true
       })
       console.log('line: ', line)
       // line.set({ x2: 250.0, y2: 200.0 })
@@ -159,7 +168,7 @@ export default {
       // return line
     },
     // 畫球
-    makeCircle (left, top, line1, line2) {
+    makeCircle (left, top, line1, line2, lineId) {
       var c = new fabric.Circle({
         left: left,
         top: top,
@@ -170,6 +179,7 @@ export default {
         originX: 'center',
         originY: 'center'
       })
+      c.attachedLineId = lineId
       c.hasControls = c.hasBorders = false
       c.line1 = line1
       c.line2 = line2
@@ -256,7 +266,7 @@ export default {
       var _this = this
       figureDtos.forEach(figure => {
         if (figure.kind === 'LINE') {
-          _this.drawLine(figure)
+          _this.addLine(figure)
           console.log(figure)
         } else if (figure.kind === 'STICKYNOTE') {
           _this.addStickyNote(figure)
@@ -442,7 +452,11 @@ export default {
       var newHandler = function () {
         _this.activeObjects.forEach((target) => {
           if (target.selectable) {
-            _this.deleteStickyNote(target)
+            if (target.type === 'group') {
+              _this.deleteStickyNote(target)
+            } else {
+              _this.deleteLine(target)
+            }
           }
         })
         _this.hideContextMenu()
@@ -622,7 +636,7 @@ export default {
           }
         }
         _this.addStickyNote(figure)
-      } else if (receivedData.event === 'StickyNoteDeleteDomainEvent') {
+      } else if (receivedData.event === 'StickyNoteDeletedDomainEvent') {
         try {
           const cursorObject = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
           this.canvas.remove(cursorObject)
@@ -636,6 +650,32 @@ export default {
 
       } else if (receivedData.event === 'StickyNoteMovedDomainEvent') {
         _this.updateStickyNotePosition(receivedData)
+      } else if (receivedData.event === 'LineCreatedDomainEvent') {
+        const figure = {
+          positionList: [
+            {
+              x: 0.0,
+              y: 20.0
+            }, {
+              x: 250.0,
+              y: 200.0
+            }
+          ],
+          strokeWidth: 5,
+          color: '#000000'
+        }
+        _this.addLine(figure)
+      } else if (receivedData.event === 'LineDeletedDomainEvent') {
+        try {
+          const lineObject0 = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
+          const endPointObjects = this.canvas.getObjects().filter(object => object.attachedLineId === receivedData.figureId)
+          console.log('endPointObjects: ', endPointObjects)
+          this.canvas.remove(lineObject0)
+          this.canvas.remove(endPointObjects[0])
+          this.canvas.remove(endPointObjects[1])
+        } catch (e) {
+          console.log(e)
+        }
       }
     },
     websocketclose: function (e) {

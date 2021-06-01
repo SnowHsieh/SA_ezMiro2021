@@ -5,7 +5,6 @@ import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.entity.model.figure.Figure;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineDeletedDomainEvent;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteDeleteDomainEvent;
 
 
 import java.util.List;

@@ -4,7 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineDeletedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteCreatedDomainEvent;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteDeleteDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteDeletedDomainEvent;
 import ntut.csie.islab.miro.usecase.eventhandler.NotifyBoard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,8 +29,8 @@ public class NotifyBoardAdapter {
     }
 
     @Subscribe
-    public void whenFigureDeleted(StickyNoteDeleteDomainEvent stickyNoteDeleteDomainEvent) {
-        notifyBoard.whenFigureDeleted(stickyNoteDeleteDomainEvent);
+    public void whenFigureDeleted(StickyNoteDeletedDomainEvent stickyNoteDeletedDomainEvent) {
+        notifyBoard.whenFigureDeleted(stickyNoteDeletedDomainEvent);
     }
 
     @Subscribe

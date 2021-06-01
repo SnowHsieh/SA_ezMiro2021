@@ -24,3 +24,16 @@ export const createLineApi = async (boardId, figure) => {
     console.log(err)
   }
 }
+
+export const deleteLineApi = async (boardId, figure) => {
+  try {
+    const res = await axios.post(`${hostIp}/board/${boardId}/deleteLine`,
+      {
+        figureId: figure.get('id')
+      }
+    )
+    return res
+  } catch (err) {
+    console.log(err)
+  }
+}

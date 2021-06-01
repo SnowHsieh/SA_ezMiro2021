@@ -26,7 +26,7 @@ public class StickyNote extends TextFigure {
 
     @Override
     public void markAsRemoved(UUID boardId, UUID figureId) {
-        addDomainEvent(new StickyNoteDeleteDomainEvent(boardId, figureId));
+        addDomainEvent(new StickyNoteDeletedDomainEvent(boardId, figureId));
     }
 
     @Override

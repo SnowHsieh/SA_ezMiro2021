@@ -1,6 +1,7 @@
 package ntut.csie.islab.miro.usecase.figure.line;
 
 import ntut.csie.islab.miro.entity.model.Position;
+import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.islab.miro.usecase.figure.line.delete.DeleteLineInput;
 import ntut.csie.islab.miro.usecase.figure.line.delete.DeleteLineUseCase;
@@ -36,6 +37,8 @@ public class DeleteLineUseCaseTest extends AbstractSpringBootJpaTest {
                 5,
                 "#000000"
         );
+        board.commitFigure(UUID.fromString(newLine.getId()), FigureTypeEnum.LINE);
+        assertEquals(1, board.getCommittedFigures().size());
 
         DeleteLineUseCase deleteLineUseCase = new DeleteLineUseCase(domainEventBus, lineRepository);
         DeleteLineInput input = deleteLineUseCase.newInput();
@@ -48,6 +51,6 @@ public class DeleteLineUseCaseTest extends AbstractSpringBootJpaTest {
         assertEquals(ExitCode.SUCCESS, output.getExitCode());
 
         board = boardRepository.findById(board.getBoardId()).get();
-        assertEquals(1, board.getCommittedFigures().size());
+        assertEquals(0, board.getCommittedFigures().size());
     }
 }
