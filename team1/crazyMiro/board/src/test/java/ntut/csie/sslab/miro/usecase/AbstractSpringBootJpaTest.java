@@ -81,6 +81,7 @@ import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRep
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryPeer;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.line.LineRepositoryImpl;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardInput;
@@ -100,6 +101,7 @@ import ntut.csie.sslab.miro.usecase.figure.sticker.create.CreateStickerUseCaseIm
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerInput;
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.line.LineRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -128,6 +130,7 @@ public abstract class AbstractSpringBootJpaTest {
     protected EventListener eventListener;
     protected BoardSessionBroadcaster boardSessionBroadcaster;
     protected BoardRepository boardMdbRepository;
+    protected LineRepository lineRepository;
 
     @Autowired
     protected BoardRepositoryPeer boardRepositoryPeer;
@@ -144,6 +147,7 @@ public abstract class AbstractSpringBootJpaTest {
     public void setUp() {
         boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
         figureRepository = new FigureRepositoryImpl(figureRepositoryPeer);
+        lineRepository = new LineRepositoryImpl();
         domainEventBus = new GoogleEventBus();
         eventListener = new EventListener();
         notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
