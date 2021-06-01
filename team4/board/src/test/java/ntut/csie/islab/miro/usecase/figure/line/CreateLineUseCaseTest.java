@@ -1,18 +1,14 @@
 package ntut.csie.islab.miro.usecase.figure.line;
 
-import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryImpl;
-import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryPeer;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.figure.line.Line;
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.islab.miro.usecase.figure.line.LineRepository;
 import ntut.csie.islab.miro.usecase.figure.line.create.CreateLineInput;
 import ntut.csie.islab.miro.usecase.figure.line.create.CreateLineUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;

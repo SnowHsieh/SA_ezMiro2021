@@ -8,6 +8,7 @@ import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.figure.textfigure.TextFigure;
 
 
+import java.util.List;
 import java.util.UUID;
 
 public class StickyNote extends TextFigure {
@@ -69,6 +70,11 @@ public class StickyNote extends TextFigure {
     @Override
     public FigureTypeEnum getKind() {
         return FigureTypeEnum.STICKYNOTE;
+    }
+
+    @Override
+    public void changeLinePath(List<Position> positionList) {
+
     }
 
     private Boolean isValidSide(double newWidth,double newHeight){

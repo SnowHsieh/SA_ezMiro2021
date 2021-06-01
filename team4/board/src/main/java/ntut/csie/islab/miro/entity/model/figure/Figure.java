@@ -149,4 +149,5 @@ public abstract class Figure extends AggregateRoot<UUID> {
 
     public abstract FigureTypeEnum getKind();
 
+    public abstract void changeLinePath(List<Position> positionList);
 }

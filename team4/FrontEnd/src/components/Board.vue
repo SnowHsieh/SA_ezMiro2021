@@ -56,7 +56,7 @@ import { createLineApi, deleteLineApi } from '../apis/lineApi'
 export default {
   data () {
     return {
-      boardId: '596c704d-7887-4abc-a724-b4a47aae3c73',
+      boardId: '448c479a-ca2a-4b71-9950-41268881104c',
       canvasContext: null,
       boardContent: null,
       canvas: null,

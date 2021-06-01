@@ -33,7 +33,6 @@ public class ChangeFigureOrderListController {
             JSONArray jsonArray = figureOrderListInfoJSON.getJSONArray("figureOrderList");
 
             for (int i=0; i<jsonArray.length(); i++) {
-
                 figureOrderList.add(UUID.fromString(jsonArray.getString(i)));
             }
         } catch (JSONException e) {
