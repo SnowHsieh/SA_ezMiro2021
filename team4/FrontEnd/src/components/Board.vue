@@ -146,11 +146,10 @@ export default {
         // fill: figure.color,
         stroke: figure.color, // 筆觸顏色
         strokeWidth: figure.strokeWidth, // 筆觸寬度
-        hasControls: false, // 選中時是否可以放大縮小
-        hasRotatingPoint: false, // 選中時是否可以旋轉
-        hasBorders: false, // 選中時是否有邊框
-        evented: false,
-        selectable: true
+        hasControls: true, // 選中時是否可以放大縮小
+        hasRotatingPoint: true, // 選中時是否可以旋轉
+        hasBorders: true // 選中時是否有邊框
+        // evented: false  // false means event on line can't be triggered
       })
       console.log('line: ', line)
       // line.set({ x2: 250.0, y2: 200.0 })
@@ -161,8 +160,8 @@ export default {
       // line.point2 = point2
       this.canvas.add(line)
       this.canvas.add(
-        this.makeCircle(line.x2, line.y2, line, null),
-        this.makeCircle(line.x1, line.y1, null, line)
+        this.makeCircle(line.x2, line.y2, line, null, line.get('id')),
+        this.makeCircle(line.x1, line.y1, null, line, line.get('id'))
       )
       this.canvas.renderAll()
       // return line
@@ -431,7 +430,7 @@ export default {
       this.contextMenu.style.display = 'block'
       this.contextMenu.style.left = event.e.clientX + 'px'
       this.contextMenu.style.top = event.e.clientY + 'px'
-      this.favcolor.value = this.canvas.getActiveObject().item(0).get('fill')
+      this.favcolor.value = this.canvas.getActiveObject().item(0).get('fill') // it is for group
     },
     hideContextMenu () {
       this.contextMenu.style.display = 'none'
@@ -654,8 +653,8 @@ export default {
         const figure = {
           positionList: [
             {
-              x: 0.0,
-              y: 20.0
+              x: 100.0,
+              y: 100.0
             }, {
               x: 250.0,
               y: 200.0
