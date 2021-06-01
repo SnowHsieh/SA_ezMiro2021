@@ -14,7 +14,8 @@ class App extends Component {
       notes: [],
       reconnectTime: 0,
       isConnect: false,
-      onlineUsers: []
+      onlineUsers: [],
+      boardChannel: ""
     };
     this.getBoardContent();
     this.getBoardContent = this.getBoardContent.bind(this);
@@ -28,7 +29,6 @@ class App extends Component {
     this.noteRef = createRef();
     this.cursorBroadcast = null;
     this.userId = "小貓熊"+Math.floor(Math.random()*100+1);
-    this.boardChannel = "";
     this.cursor = {
       x: 0,
       y: 0
@@ -37,13 +37,15 @@ class App extends Component {
       x: 0,
       y: 0
     }
-    this.draggingNote = ""
+    this.draggingNote = "";
+    this.boardId = "262a68ed-cc97-4a16-9d5a-1bb5b68c4364"
   }
 
   componentDidMount() {
+    this.getBoardContent()
     this.cursorBroadcaster = setInterval(()=>{
       try {
-        if (this.oldCursor != this.cursor) {
+        if (this.oldCursor !== this.cursor) {
           const myCursor = {
             userId: this.userId,
             ...this.cursor
@@ -72,9 +74,8 @@ class App extends Component {
   };
 
   getBoardContent() {
-    Axios.get('http://localhost:8080/ezmiro/miro/boards/boardId/getcontent').then(response => {
-      this.setState({notes: response.data.notes})
-      this.boardChannel = response.data.boardChannel
+    Axios.get(`http://localhost:8080/ezmiro/miro/boards/${this.boardId}/getcontent`).then(response => {
+      this.setState({notes: response.data.notes, boardChannel: response.data.boardChannel})
     }).catch(error => console.error(error));
   }
 
@@ -86,12 +87,7 @@ class App extends Component {
         y: coordinate.y
       }
     }).then((response) => {
-      this.getBoardContent();
-      try {
-        this.noteRef.current.sendMessage("/app/sendNote", JSON.stringify(this.state.notes))
-      } catch(error) {
-        console.error(error);
-      }
+      console.log("moveNote", response)
     }
     ).catch(error => console.error(error));
   }
@@ -102,7 +98,7 @@ class App extends Component {
       notes: this.state.notes.map(x => x.noteId === id ? {...x, coordinate} : x)
     })
     try {
-      this.noteRef.current.sendMessage("/app/sendNote", JSON.stringify(this.state.notes))
+      this.clientRef.current.sendMessage(`/app/sendNote/${this.state.boardChannel}`, JSON.stringify({noteId: id, coordinate: coordinate}))
     } catch(error) {
       console.error(error);
     }
@@ -111,12 +107,16 @@ class App extends Component {
   changeNoteSize = (id, size) => {
     Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/edit/size`,{
       size: size
+    }).then((response) => {
+      console.log("changeNoteSize", response)
     }).catch(error => console.error(error));
   }
 
   changeNoteDescription = (id, description) => {
     Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/edit/description`,{
       description: description
+    }).then((response) => {
+      console.log("changeNoteDescription", response)
     }).catch(error => console.error(error));
   }
 
@@ -124,32 +124,21 @@ class App extends Component {
     Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/edit/color`,{
       color: color
     }).then((response) => {
-      try {
-        this.noteRef.current.sendMessage("/app/sendNote", JSON.stringify(this.state.notes))
-      } catch(error) {
-        console.error(error); 
-      }
-    }
-
-    ).catch(error => console.error(error));
+      console.log("changeNoteColor", response)
+    }).catch(error => console.error(error));
   }
 
   bringNoteToFront = (id) => {
     Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/edit/zorder/front`,{
     }).then((response) => {
-      this.getBoardContent();
-      try {
-        this.noteRef.current.sendMessage("/app/sendNote", JSON.stringify(this.state.notes))
-      } catch(error) {
-        console.error(error);
-      }
+      console.log("bringNoteToFront", response)
     }).catch(error => console.error(error));
   }
 
   sendNoteToBack = (id) => {
     Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/edit/zorder/back`,{
     }).then((response) => {
-      this.getBoardContent();
+      console.log("sendNoteToBack", response)
     }).catch(error => console.error(error));
   }
 
@@ -158,57 +147,215 @@ class App extends Component {
     this.setState({
       notes:notes.filter( x => x.noteId !== id)
     });
-    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/delete?boardId=boardId`,{
-    }).then(() => {
-      this.getBoardContent();
-      try {
-        this.noteRef.current.sendMessage("/app/sendNote", JSON.stringify(this.state.notes))
-      } catch(error) {
-        console.error(error);
-      }
+    Axios.post(`http://localhost:8080/ezmiro/miro/notes/${id}/delete?boardId=${this.boardId}`,{
+    }).then((response) => {
+      console.log("deleteNote", response)
     }).catch(error => console.error(error));
   }
 
   createNote = () => {
     console.log("double click")
-    Axios.post('http://localhost:8080/ezmiro/miro/figures/notes?boardId=boardId',
+    Axios.post(`http://localhost:8080/ezmiro/miro/figures/notes?boardId=${this.boardId}`,
       {
         "coordinate": {
           "x": this.cursor.x - 50,
           "y": this.cursor.y - 50
         }
       }).then(response => {
-        this.getBoardContent();
-        try {
-          this.noteRef.current.sendMessage("/app/sendNote", JSON.stringify(this.state.notes))
-        } catch(error) {
-          console.error(error);
-        }
+        console.log("createNote", response)
       }).catch(error => console.error(error));
   }
 
-  onPositionReceived = (allUserCursors) => {
-    const onlineUsers = allUserCursors.filter(cursor => cursor.userId !== this.userId)
-      this.setState({
-        onlineUsers: onlineUsers
-      })
+  onEventReceived = (domainEvent, channel) => {
+    console.log("channel", channel)
+    if (channel === `/topic/${this.state.boardChannel}/cursor`) {
+      this.handleCursorEvent(domainEvent)
+    } else if (channel === `/topic/${this.state.boardChannel}/note`) {
+      this.handleNoteEvent(domainEvent)
+    } else if (channel === `/topic/${this.state.boardChannel}/draggingNote`) {
+      this.handleDraggingNote(domainEvent)
+    }
   }
-  
-  onNoteReceived = (allOnlineNotes) => {
-    console.log("allOnlineNotes", allOnlineNotes)
-    let notes = allOnlineNotes.map(x => {
-      if(x.noteId === this.draggingNote) {
-        return this.state.notes.find(y => y.noteId === this.draggingNote)
+
+  handleCursorEvent = (cursorEvent) =>{
+    let cursor = JSON.parse(cursorEvent.jsonEvent);
+    if (cursorEvent.eventType === "CursorRemoved") {
+      this.setState({
+        onlineUsers: [...this.state.onlineUsers.filter(x => x.cursorId !== cursor.cursorId)]
+      })
+    } else {
+      if (cursor.userId !== this.userId) {
+        this.setState({
+          onlineUsers: [...this.state.onlineUsers.filter(x => x.userId !== cursor.userId),
+          {
+            x: cursor.coordinate.x, 
+            y: cursor.coordinate.y, 
+            userId: cursor.userId,
+            cursorId: cursor.cursorId
+          }]
+        })
       }
-      return x
-    })
+    }
+  }
+
+  handleNoteEvent = (noteEvent) =>{
+    console.log("noteEvent", noteEvent)
+    let note = JSON.parse(noteEvent.jsonEvent);
+    switch (noteEvent.eventType) {
+      case "NoteCreated":
+        this.handleNoteCreated(note);
+        break;
+      case "NoteColorChanged":
+        this.handleNoteColorChanged(note);
+        break;
+      case "NoteDescriptionChanged":
+        this.handleNoteDescriptionChanged(note);
+        break;
+      case "NoteSizeChanged":
+        this.handleNoteSizeChanged(note);
+        break;
+      case "NoteMoved":
+        this.handleNoteMoved(note);
+        break;
+      case "NoteDeleted":
+        this.handleNoteDeleted(note);
+        break;
+      case "NoteBroughtToFront":
+        this.handleNoteBroughtToFront(note);
+        break;
+      case "NoteSentToBack":
+        this.handleNoteSentToBack(note);
+        break;
+      default:
+        break;
+    }
+  }
+
+  handleNoteCreated = (note) => {
+    console.log("handleNoteCreated", note);
     this.setState({
-      notes
+      notes: [...this.state.notes,
+      {
+        boardId: note.boardId,
+        noteId: note.noteId,
+        width: note.width, 
+        height: note.height, 
+        coordinate: note.coordinate,
+        color: note.color,
+        description: note.description,
+        zorder: this.state.notes.length
+      }]
     })
   }
 
+  handleNoteColorChanged = (note) => {
+    console.log("handleNoteColorChanged", note);
+    let originNote = this.state.notes.find(x => x.noteId === note.noteId);
+    this.setState({
+      notes: [...this.state.notes.filter(x => x.noteId !== note.noteId),
+      {
+        ...originNote,
+        color: note.color
+      }]
+    })
+  }
+
+  handleNoteDescriptionChanged = (note) => {
+    console.log("handleNoteDescriptionChanged", note);
+    let originNote = this.state.notes.find(x => x.noteId === note.noteId);
+    this.setState({
+      notes: [...this.state.notes.filter(x => x.noteId !== note.noteId),
+      {
+        ...originNote,
+        description: note.description
+      }]
+    })
+  }
+
+  handleNoteSizeChanged = (note) => {
+    console.log("handleNoteSizeChanged", note);
+    let originNote = this.state.notes.find(x => x.noteId === note.noteId);
+    this.setState({
+      notes: [...this.state.notes.filter(x => x.noteId !== note.noteId),
+      {
+        ...originNote,
+        width: note.width,
+        height: note.height
+      }]
+    })
+  }
+
+  handleNoteMoved = (note) => {
+    console.log("handleNoteMoved", note);
+    let originNote = this.state.notes.find(x => x.noteId === note.noteId);
+    this.setState({
+      notes: [...this.state.notes.filter(x => x.noteId !== note.noteId),
+      {
+        ...originNote,
+        coordinate: note.coordinate
+      }]
+    })
+  }
+
+  handleNoteBroughtToFront = (note) => {
+    console.log("handleNoteBroughtToFront", note);
+    let originNote = this.state.notes.find(x => x.noteId === note.noteId);
+    let newNotes = this.state.notes.filter(x => x.noteId !== originNote.noteId).map(x => {
+      if (x.zorder > originNote.zorder) {
+        return {...x, zorder: x.zorder - 1};
+      } else {
+        return x;
+      }} )
+    this.setState({
+      notes: [...newNotes,
+      {
+        ...originNote,
+        zorder: newNotes.length
+      }]
+    })
+  }
+
+  handleNoteSentToBack = (note) => {
+    console.log("handleNoteSentToBack", note);
+    let originNote = this.state.notes.find(x => x.noteId === note.noteId);
+    let newNotes = this.state.notes.filter(x => x.noteId !== originNote.noteId).map(x => {
+      if (x.zorder < originNote.zorder) {
+        return {...x, zorder: x.zorder + 1};
+      } else {
+        return x;
+      }} )
+    this.setState({
+      notes: [...newNotes,
+      {
+        ...originNote,
+        zorder: 0
+      }]
+    })
+  }
+
+  handleNoteDeleted = (note) => {
+    console.log("handleNoteDeleted", note);
+    this.setState({
+      notes: this.state.notes.filter(x => x.noteId !== note.noteId)
+    })
+  }
+
+  handleDraggingNote = (draggingNote) => {
+    console.log("handleDraggingNote", draggingNote);
+    let originNote = this.state.notes.find(x => x.noteId === draggingNote.noteId);
+    if( draggingNote.noteId !== this.draggingNote) {
+      this.setState({
+        notes: [...this.state.notes.filter(x => x.noteId !== draggingNote.noteId),
+        {
+          ...originNote,
+          coordinate: draggingNote.coordinate
+        }]
+      })
+    }
+  }
+
   enterBoard = () => {
-    this.clientRef.current.sendMessage("/app/enterBoard/boardId", this.userId)
+    this.clientRef.current.sendMessage(`/app/enterBoard/${this.boardId}`, this.userId)
   }
 
   render() {
@@ -216,21 +363,13 @@ class App extends Component {
       <div id="canvas" style={{width: window.innerWidth, height: window.innerHeight}} onDoubleClick={this.createNote}> 
         <SockJsClient
           url={SOCKET_URL}
-          topics={[`/topic/${this.boardChannel}/position`]}
+          topics={[`/topic/${this.state.boardChannel}/cursor`, `/topic/${this.state.boardChannel}/note`, `/topic/${this.state.boardChannel}/draggingNote`]}
           onConnect={this.enterBoard}
           onDisconnect={()=> console.log("DisconnectedNote!")}
-          onMessage={this.onPositionReceived}
+          onMessage={this.onEventReceived}
           ref={ (client) => { this.clientRef.current = client }}
         />
 
-        <SockJsClient
-          url={SOCKET_URL}
-          topics={['/topic/note']}
-          onConnect={()=> console.log("ConnectedNote!")}
-          onDisconnect={()=> console.log("DisconnectedNote!")}
-          onMessage={this.onNoteReceived}
-          ref={ (client) => { this.noteRef.current = client }}
-        />
         {this.state.onlineUsers.map(user => (
           <div style={{position: "fixed", top: user.y, left: user.x, zIndex:999}}><RiCursorFill/>{user.userId}</div>
         ))}

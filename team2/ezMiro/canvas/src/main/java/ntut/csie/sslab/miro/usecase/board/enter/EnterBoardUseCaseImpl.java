@@ -20,7 +20,6 @@ public class EnterBoardUseCaseImpl implements EnterBoardUseCase {
         if(board == null) {
             output.setId(input.getBoardId())
                     .setMessage("Enter Board failed: board not found, board id = " + input.getBoardId());
-//           domainEventBus.post()
             return;
         }
         board.enter(input.getUserId());

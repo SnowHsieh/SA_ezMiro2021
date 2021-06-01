@@ -4,8 +4,6 @@ import ntut.csie.sslab.ddd.model.DateProvider;
 import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.team5.entity.model.figure.FigureType;
 
-import java.awt.*;
-
 public class NoteTextEdited extends DomainEvent {
     private final String figureId;
     private final String oldText;

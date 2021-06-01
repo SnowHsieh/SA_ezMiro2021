@@ -77,12 +77,8 @@ import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
-import ntut.csie.sslab.miro.adapter.gateway.eventbus.google.NotifyCursorAdapter;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.mongodb.BoardRepositoryMdbImpl;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.mongodb.BoardRepositoryMongoDbPeer;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.cursor.CursorRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryPeer;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
@@ -96,9 +92,7 @@ import ntut.csie.sslab.miro.usecase.board.enter.EnterBoardUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardInput;
 import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCase;
 import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCaseImpl;
-import ntut.csie.sslab.miro.usecase.cursor.CursorRepository;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
-import ntut.csie.sslab.miro.usecase.eventhandler.NotifyCursor;
 import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
 import ntut.csie.sslab.miro.usecase.figure.sticker.create.CreateStickerInput;
 import ntut.csie.sslab.miro.usecase.figure.sticker.create.CreateStickerUseCase;
@@ -130,7 +124,6 @@ public abstract class AbstractSpringBootJpaTest {
 
     protected BoardRepository boardRepository;
     protected FigureRepository figureRepository;
-    protected CursorRepository cursorRepository;
     protected DomainEventBus domainEventBus;
     protected EventListener eventListener;
     protected BoardSessionBroadcaster boardSessionBroadcaster;
@@ -146,19 +139,15 @@ public abstract class AbstractSpringBootJpaTest {
     protected FigureRepositoryPeer figureRepositoryPeer;
 
     public NotifyBoardAdapter notifyBoardAdapter;
-    public NotifyCursorAdapter notifyCursorAdapter;
 
     @BeforeEach
     public void setUp() {
         boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
         figureRepository = new FigureRepositoryImpl(figureRepositoryPeer);
-        cursorRepository = new CursorRepositoryImpl();
         domainEventBus = new GoogleEventBus();
         eventListener = new EventListener();
         notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
-        notifyCursorAdapter = new NotifyCursorAdapter(new NotifyCursor(cursorRepository, boardRepository, domainEventBus));
         domainEventBus.register(notifyBoardAdapter);
-        domainEventBus.register(notifyCursorAdapter);
         domainEventBus.register(eventListener);
 //        boardMdbRepository = new BoardRepositoryMdbImpl(boardRepositoryMongoDbPeer);
     }

@@ -7,8 +7,6 @@ import ntut.csie.team5.entity.model.board.Board;
 import ntut.csie.team5.entity.model.board.BoardSessionId;
 import ntut.csie.team5.usecase.ClientBoardContentMightExpire;
 import ntut.csie.team5.usecase.board.BoardRepository;
-import ntut.csie.team5.usecase.board.enter.EnterBoardInput;
-import ntut.csie.team5.usecase.board.enter.EnterBoardUseCaseImpl;
 
 public class LeaveBoardUseCaseImpl implements LeaveBoardUseCase {
 

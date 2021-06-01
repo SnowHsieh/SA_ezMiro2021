@@ -50,14 +50,16 @@ public class PostNoteUseCaseTest extends AbstractTest {
     @Test
     public void should_succeed_when_post_note_in_board() {
         String boardId = createBoard(projectId, boardName);
-        Board board = boardRepository.findById(boardId).get();
+        Board board = boardRepository.findById(boardId).orElse(null);
+        assertNotNull(board);
 
         String firstNodeId = postNote(boardId, 1, 1, 11, 11, "#ff0000");
 
         board.commitFigure(firstNodeId);
         boardRepository.save(board);
 
-        board = boardRepository.findById(boardId).get();
+        board = boardRepository.findById(boardId).orElse(null);
+        assertNotNull(board);
         assertEquals(1, board.getCommittedFigures().size());
 
 
@@ -66,7 +68,8 @@ public class PostNoteUseCaseTest extends AbstractTest {
         board.commitFigure(secondNodeId);
         boardRepository.save(board);
 
-        board = boardRepository.findById(boardId).get();
+        board = boardRepository.findById(boardId).orElse(null);
+        assertNotNull(board);
         assertEquals(2, board.getCommittedFigures().size());
     }
 }

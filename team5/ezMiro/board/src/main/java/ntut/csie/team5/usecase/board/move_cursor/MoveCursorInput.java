@@ -8,9 +8,9 @@ public interface MoveCursorInput extends Input {
 
     void setBoardId(String boardId);
 
-    String getUserId();
+    String getBoardSessionId();
 
-    void setUserId(String userId);
+    void setBoardSessionId(String boardSessionId);
 
     int getPositionX();
 

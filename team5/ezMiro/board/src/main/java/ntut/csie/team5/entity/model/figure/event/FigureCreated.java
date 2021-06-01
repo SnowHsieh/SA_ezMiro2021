@@ -4,8 +4,6 @@ import ntut.csie.sslab.ddd.model.DateProvider;
 import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.team5.entity.model.figure.FigureType;
 
-import java.util.Date;
-
 public abstract class FigureCreated extends DomainEvent {
 
     private final String figureId;

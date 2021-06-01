@@ -3,8 +3,6 @@ package ntut.csie.team5.usecase.figure.connectable_figure.note.post;
 import ntut.csie.sslab.ddd.usecase.Input;
 import ntut.csie.team5.entity.model.figure.FigureType;
 
-import java.awt.*;
-
 public interface PostNoteInput extends Input {
 
     String getBoardId();

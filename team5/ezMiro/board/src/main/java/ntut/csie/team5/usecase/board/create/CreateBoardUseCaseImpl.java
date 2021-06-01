@@ -6,8 +6,6 @@ import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.entity.model.board.Board;
 import ntut.csie.team5.entity.model.board.BoardBuilder;
 import ntut.csie.team5.usecase.board.BoardRepository;
-import ntut.csie.team5.usecase.board.create.CreateBoardInput;
-import ntut.csie.team5.usecase.board.create.CreateBoardUseCase;
 
 public class CreateBoardUseCaseImpl implements CreateBoardUseCase {
 

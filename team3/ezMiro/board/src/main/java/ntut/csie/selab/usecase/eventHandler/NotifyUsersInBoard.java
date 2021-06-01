@@ -2,14 +2,13 @@ package ntut.csie.selab.usecase.eventHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.eventbus.Subscribe;
-import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetDataMapper;
-import ntut.csie.selab.adapter.gateway.repository.springboot.widget.CommittedWidgetData;
 import ntut.csie.selab.entity.model.board.Board;
-import ntut.csie.selab.entity.model.board.CommittedWidget;
 import ntut.csie.selab.entity.model.board.Cursor;
 import ntut.csie.selab.entity.model.board.event.BoardCursorMoved;
 import ntut.csie.selab.entity.model.board.event.BoardEntered;
 import ntut.csie.selab.entity.model.board.event.WidgetCreationNotifiedToAllUser;
+import ntut.csie.selab.entity.model.widget.Line;
+import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.entity.model.widget.event.*;
 import ntut.csie.selab.model.DomainEventBus;
@@ -21,8 +20,8 @@ import ntut.csie.selab.usecase.widget.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,6 +29,7 @@ public class NotifyUsersInBoard {
 
     private BoardRepository boardRepository;
     private WidgetRepository widgetRepository;
+    private LineRepository lineRepository;
     private DomainEventBus domainEventBus;
     private WebSocket webSocket;
 
@@ -40,14 +40,22 @@ public class NotifyUsersInBoard {
         this.webSocket = webSocket;
     }
 
+    public NotifyUsersInBoard(BoardRepository boardRepository, WidgetRepository widgetRepository, LineRepository lineRepository, DomainEventBus domainEventBus, WebSocket webSocket) {
+        this.boardRepository = boardRepository;
+        this.widgetRepository = widgetRepository;
+        this.lineRepository = lineRepository;
+        this.domainEventBus = domainEventBus;
+        this.webSocket = webSocket;
+    }
+
     @Subscribe
     public void notifyWidgetCreationToAllUser(WidgetCreated widgetCreated) {
         Optional<Widget> widget = widgetRepository.findById(widgetCreated.getWidgetId());
 
         if (widget.isPresent()) {
             Widget selectedWidget = widget.get();
-            WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
-            WidgetDto widgetDto = widgetDtoMapper.domainToDto(selectedWidget);
+            StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
+            StickyNoteDto stickyNoteDto = stickyNoteDtoMapper.domainToDto((StickyNote) selectedWidget);
 
             JSONObject message = new JSONObject();
 
@@ -55,7 +63,7 @@ public class NotifyUsersInBoard {
             JSONArray widgetsInfo = new JSONArray();
 
             try {
-                widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(widgetDto)));
+                widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(stickyNoteDto)));
                 message.put("widgets", widgetsInfo);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -101,15 +109,15 @@ public class NotifyUsersInBoard {
             throw new RuntimeException("Widget not found, widget id = " + widgetMoved.getWidgetId());
         }
 
-        WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
-        WidgetDto widgetDto = widgetDtoMapper.domainToDto(widget.get());
+        StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
+        StickyNoteDto stickyNoteDto = stickyNoteDtoMapper.domainToDto((StickyNote) widget.get());
 
         ObjectMapper objectMapper = new ObjectMapper();
         JSONObject message = new JSONObject();
         JSONArray widgetsInfo = new JSONArray();
 
         try {
-            widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(widgetDto)));
+            widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(stickyNoteDto)));
             message.put("widgets", widgetsInfo);
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,15 +159,15 @@ public class NotifyUsersInBoard {
             throw new RuntimeException("Widget not found, widget id = " + widgetResized.getWidgetId());
         }
 
-        WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
-        WidgetDto widgetDto = widgetDtoMapper.domainToDto(widget.get());
+        StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
+        StickyNoteDto stickyNoteDto = stickyNoteDtoMapper.domainToDto((StickyNote) widget.get());
 
         ObjectMapper objectMapper = new ObjectMapper();
         JSONObject message = new JSONObject();
         JSONArray widgetsInfo = new JSONArray();
 
         try {
-            widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(widgetDto)));
+            widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(stickyNoteDto)));
             message.put("domainEvent", "notifyWidgetResizedToAllUser");
             message.put("widgets", widgetsInfo);
         } catch (Exception e) {
@@ -175,8 +183,8 @@ public class NotifyUsersInBoard {
 
         if (widget.isPresent()) {
             Widget selectedWidget = widget.get();
-            WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
-            WidgetDto widgetDto = widgetDtoMapper.domainToDto(selectedWidget);
+            StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
+            StickyNoteDto stickyNoteDto = stickyNoteDtoMapper.domainToDto((StickyNote) selectedWidget);
 
             JSONObject message = new JSONObject();
 
@@ -184,7 +192,7 @@ public class NotifyUsersInBoard {
             JSONArray widgetsInfo = new JSONArray();
 
             try {
-                widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(widgetDto)));
+                widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(stickyNoteDto)));
                 message.put("widgets", widgetsInfo);
                 message.put("domainEvent", "notifyTextOfWidgetModifiedToAllUser");
             } catch (Exception e) {
@@ -219,8 +227,8 @@ public class NotifyUsersInBoard {
 
         if (widget.isPresent()) {
             Widget selectedWidget = widget.get();
-            WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
-            WidgetDto widgetDto = widgetDtoMapper.domainToDto(selectedWidget);
+            StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
+            StickyNoteDto stickyNoteDto = stickyNoteDtoMapper.domainToDto((StickyNote) selectedWidget);
 
             JSONObject message = new JSONObject();
 
@@ -228,7 +236,7 @@ public class NotifyUsersInBoard {
             JSONArray widgetsInfo = new JSONArray();
 
             try {
-                widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(widgetDto)));
+                widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(stickyNoteDto)));
                 message.put("widgets", widgetsInfo);
                 message.put("domainEvent", "notifyColorOfWidgetModifiedToAllUser");
             } catch (Exception e) {
@@ -237,6 +245,33 @@ public class NotifyUsersInBoard {
             webSocket.sendMessageForAllUsersIn(colorOfWidgetChanged.getBoardId(), message);
         } else {
             throw new RuntimeException("Widget not found, widget id = " + colorOfWidgetChanged.getWidgetId());
+        }
+    }
+
+    @Subscribe
+    public void notifyLineCreationToAllUser(LineCreated lineCreated) {
+        Optional<Line> line = lineRepository.findById(lineCreated.getLineId());
+
+        if (line.isPresent()) {
+            Line selectedLine = line.get();
+            LineDtoMapper lineDtoMapper= new LineDtoMapper();
+            LineDto lineDto = lineDtoMapper.domainToDto(selectedLine);
+
+            JSONObject message = new JSONObject();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JSONArray linesInfo = new JSONArray();
+
+            try {
+                linesInfo.put(new JSONObject(objectMapper.writeValueAsString(lineDto)));
+                message.put("lines", linesInfo);
+                message.put("domainEvent", "notifyLineCreatedToAllUser");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            webSocket.sendMessageForAllUsersIn(lineCreated.getBoardId(), message);
+        } else {
+            throw new RuntimeException("Line not found, line id = " + lineCreated.getLineId());
         }
     }
 

@@ -1,7 +1,9 @@
 package ntut.csie.team5.entity.model.board;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
+import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.entity.model.board.event.*;
+import ntut.csie.team5.usecase.ClientBoardContentMightExpire;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,6 @@ public class Board extends AggregateRoot<String> {
     private String projectId;
     private final List<CommittedFigure> committedFigures;
     private final List<BoardSession> boardSessions;
-    private final List<Cursor> cursors;
 
     public Board(String boardId, String name, String projectId) {
         super(boardId);
@@ -21,7 +22,6 @@ public class Board extends AggregateRoot<String> {
         this.projectId = projectId;
         this.committedFigures = new ArrayList<>();
         this.boardSessions = new ArrayList<>();
-        this.cursors = new ArrayList<>();
 
         addDomainEvent(new BoardCreated(boardId, name, projectId));
     }
@@ -172,16 +172,14 @@ public class Board extends AggregateRoot<String> {
     }
 
     public void addBoardSession(String boardSessionId, String userId) {
-        BoardSession boardSession = new BoardSession(boardSessionId, getBoardId(), userId);
+        BoardSession boardSession = new BoardSession(getBoardId(), boardSessionId, userId);
         boardSessions.add(boardSession);
     }
 
     public String acceptUserEntry(String userId) {
-//        boardSessions.add(boardSession);
         String boardSessionId = UUID.randomUUID().toString();
         addBoardSession(boardSessionId, userId);
-        createCursor(userId);
-        addDomainEvent(new BoardEntered(getBoardId(), userId));
+        addDomainEvent(new BoardEntered(getBoardId(), boardSessionId, userId));
         return boardSessionId;
     }
 
@@ -192,7 +190,6 @@ public class Board extends AggregateRoot<String> {
                 break;
             }
         }
-        deleteCursor(userId);
 
         addDomainEvent(new BoardLeft(getBoardId(), boardSessionId, userId));
     }
@@ -201,46 +198,17 @@ public class Board extends AggregateRoot<String> {
         return boardSessions;
     }
 
-    public void addCursor(String userId, int positionX, int positionY) {
-        Cursor cursor = new Cursor(userId, positionX, positionY);
-        cursors.add(cursor);
+    public BoardSession getBoardSession(String boardSessionId) {
+        BoardSession boardSession = boardSessions.stream().filter(bs ->  bs.boardSessionId().equals(boardSessionId)).findAny().orElse(null);
+        return boardSession;
     }
 
-    private void createCursor(String userId) {
-        addCursor(userId, 0, 0);
-        addDomainEvent(new CursorCreated(getBoardId(), userId));
-    }
+    public void moveCursor(String boardSessionId, int positionX, int positionY) {
+        BoardSession boardSession = boardSessions.stream().filter(bs ->  bs.boardSessionId().equals(boardSessionId)).findAny().orElse(null);
 
-    private void deleteCursor(String userId) {
-        for(int i = 0; i < cursors.size(); i++){
-            if(cursors.get(i).userId().equals(userId)) {
-                cursors.remove(i);
-                break;
-            }
-        }
+        if(null == boardSession)
+            throw new NullPointerException("Move cursor error: board session not exist");
 
-        addDomainEvent(new CursorDeleted(getBoardId(), userId));
-    }
-
-    public List<Cursor> getCursors() {
-        return cursors;
-    }
-
-    public Cursor getUserCursor(String userId) {
-        return cursors.stream().filter(cu -> cu.userId().equals(userId)).findAny().orElse(null);
-    }
-
-
-    public void moveCursor(String userId, int positionX, int positionY) {
-        Cursor cursor = getUserCursor(userId);
-
-        if(cursor == null)
-            return;
-
-        int index = cursors.indexOf(cursor);
-
-        cursors.set(index, new Cursor(userId, positionX, positionY));
-
-        addDomainEvent(new CursorMoved(getBoardId(), userId, positionX, positionY));
+        addDomainEvent(new CursorMoved(getBoardId(), boardSession.boardSessionId(), boardSession.userId(), positionX, positionY));
     }
 }

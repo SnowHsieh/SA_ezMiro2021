@@ -21,7 +21,6 @@ public class LeaveBoardUseCaseTest extends AbstractSpringBootJpaTest {
     public void user_leave_board() {
         String boardId = UUID.randomUUID().toString();
         createBoard(boardId, "Jay board");
-        eventListener.clearEventCount();
         String userId = "user1";
         String boardSessionId = enterBoard(boardId, userId);
         eventListener.clearEventCount();

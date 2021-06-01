@@ -16,12 +16,10 @@ public class SendNoteToBackUseCaseImpl implements SendNoteToBackUseCase {
 
     @Override
     public void execute(SendNoteToBackInput input, CqrsCommandOutput output) {
-        Note note = (Note)figureRepository.findById(input.getNoteId()).orElse(null);
-        // TODO: Type cast need to fix.
+        Note note = figureRepository.findNoteById(input.getNoteId()).orElse(null);
         if (note == null) {
             output.setId(input.getNoteId())
-                    .setMessage("Send note to back failed: note not found, note id = " + input.getNoteId());
-//           domainEventBus.post()
+                  .setMessage("Send note to back failed: note not found, note id = " + input.getNoteId());
             return;
         }
 

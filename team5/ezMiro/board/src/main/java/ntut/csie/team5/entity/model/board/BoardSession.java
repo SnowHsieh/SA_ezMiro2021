@@ -2,17 +2,15 @@ package ntut.csie.team5.entity.model.board;
 
 import ntut.csie.sslab.ddd.model.ValueObject;
 
-import java.util.UUID;
-
 public class BoardSession extends ValueObject {
 
-    private final String boardSessionId;
     private final String boardId;
+    private final String boardSessionId;
     private final String userId;
 
-    public BoardSession(String boardSessionId, String boardId, String userId) {
-        this.boardSessionId = boardSessionId;
+    public BoardSession(String boardId, String boardSessionId, String userId) {
         this.boardId = boardId;
+        this.boardSessionId = boardSessionId;
         this.userId = userId;
     }
 
@@ -20,11 +18,11 @@ public class BoardSession extends ValueObject {
         return boardId;
     }
 
-    public String userId() {
-        return userId;
-    }
-
     public String boardSessionId() {
         return boardSessionId;
+    }
+
+    public String userId() {
+        return userId;
     }
 }

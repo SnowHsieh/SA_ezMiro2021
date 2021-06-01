@@ -9,4 +9,5 @@ public interface AbstractRepository<T, ID> {
     Optional<T> findById(ID id);
     void save(T data);
     void deleteById(ID id);
+    void deleteAll();
 }

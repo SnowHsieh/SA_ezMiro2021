@@ -62,6 +62,8 @@ public class WebSocketController {
 
         String message = "有新成員[" + userId + "]加入畫布!";
         System.out.println(message);
+
+        session.setMaxIdleTimeout(30 * 60);
         ((WebSocketBroadcaster) boardSessionBroadcaster).addSession(presenter.getId(), session);
 //        webSocketBroadcaster.sendMessageToAllUser(boardId, message);
     }
@@ -88,9 +90,10 @@ public class WebSocketController {
     public void onMessage(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String userId, String message, Session session) {
         MoveCursorInput input = moveCursorUseCase.newInput();
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+        String boardSessionId = ((WebSocketBroadcaster) boardSessionBroadcaster).getBoardSessionIdBySessionId(session.getId());
 
         input.setBoardId(boardId);
-        input.setUserId(userId);
+        input.setBoardSessionId(boardSessionId);
 
         try {
             JSONObject pointer = new JSONObject(message);

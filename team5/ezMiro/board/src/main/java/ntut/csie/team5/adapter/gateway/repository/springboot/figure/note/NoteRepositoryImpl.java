@@ -1,13 +1,11 @@
 package ntut.csie.team5.adapter.gateway.repository.springboot.figure.note;
 
-import ntut.csie.team5.entity.model.figure.Figure;
 import ntut.csie.team5.entity.model.figure.note.Note;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.NoteRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class NoteRepositoryImpl implements NoteRepository {
 

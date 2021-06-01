@@ -4,7 +4,6 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.sslab.miro.adapter.gateway.eventbus.google.NotifyCursorAdapter;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardInput;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCase;
@@ -28,7 +27,6 @@ public class EzKanbanWebMain extends SpringBootServletInitializer implements Com
 
     private DomainEventBus domainEventBus;
     private NotifyBoardAdapter notifyBoardAdapter;
-    private NotifyCursorAdapter notifyCursorAdapter;
     private NotifyBoardSessionBroadcaster notifyBoardSessionBroadcaster;
     private BoardRepository boardRepository;
 
@@ -40,11 +38,6 @@ public class EzKanbanWebMain extends SpringBootServletInitializer implements Com
 
     @Autowired
     public void setNotifyBoardAdapter(NotifyBoardAdapter notifyBoardAdapter) { this.notifyBoardAdapter = notifyBoardAdapter; }
-
-    @Autowired
-    public void setNotifyCursorAdapter(NotifyCursorAdapter notifyCursorAdapter) {
-        this.notifyCursorAdapter = notifyCursorAdapter;
-    }
 
     @Autowired
     public void setNotifyBoardSessionBroadcaster(NotifyBoardSessionBroadcaster notifyBoardSessionBroadcaster) {
@@ -70,7 +63,6 @@ public class EzKanbanWebMain extends SpringBootServletInitializer implements Com
     public void run(String... arg0) throws Exception {
         System.out.println("EzKanbanWebMain run");
         domainEventBus.register(notifyBoardAdapter);
-        domainEventBus.register(notifyCursorAdapter);
         domainEventBus.register(notifyBoardSessionBroadcaster);
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCaseImpl(boardRepository, domainEventBus);
         CreateBoardInput input = createBoardUseCase.newInput();

@@ -1,34 +1,16 @@
 package ntut.csie.sslab.miro.usecase.board;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
-import ntut.csie.sslab.miro.usecase.DomainEventListener;
-import ntut.csie.sslab.miro.usecase.board.create.CreateBoardInput;
-import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCase;
-import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCaseImpl;
+import ntut.csie.sslab.miro.entity.model.cursor.Cursor;
+import ntut.csie.sslab.miro.usecase.AbstractUseCaseTest;
 import ntut.csie.sslab.miro.usecase.board.enter.EnterBoardInput;
 import ntut.csie.sslab.miro.usecase.board.enter.EnterBoardUseCase;
 import ntut.csie.sslab.miro.usecase.board.enter.EnterBoardUseCaseImpl;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class EnterBoardUseCaseTest {
-    private BoardRepository boardRepository;
-    private DomainEventBus domainEventBus;
-    private DomainEventListener eventListener;
-
-    @Before
-    public void setUp() {
-        boardRepository = new BoardRepositoryImpl();
-        domainEventBus = new DomainEventBus();
-        eventListener = new DomainEventListener();
-
-        domainEventBus.register(eventListener);
-    }
-
+public class EnterBoardUseCaseTest extends AbstractUseCaseTest {
     @Test
     public void enter_board() {
         String boardId = create_board();
@@ -43,18 +25,29 @@ public class EnterBoardUseCaseTest {
 
         assertNotNull(output.getId());
         assertEquals(boardId, output.getId());
-        assertEquals(1, eventListener.getEventCount());
+        assertEquals(2, eventListener.getEventCount());
     }
 
-    private String create_board() {
-        CreateBoardUseCase createBoardUseCase = new CreateBoardUseCaseImpl(boardRepository, domainEventBus);
-        CreateBoardInput input = createBoardUseCase.newInput();
+    @Test
+    public void should_create_cursor_when_board_entered() {
+        String boardId = create_board();
+        eventListener.clear();
+        EnterBoardUseCase enterBoardUseCase = new EnterBoardUseCaseImpl(boardRepository, domainEventBus);
+        EnterBoardInput input = enterBoardUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-        input.setTeamId("TeamId");
-        input.setBoardName("Team2sBoard");
+        input.setBoardId(boardId);
+        String userId = "userId";
+        input.setUserId(userId);
 
-        createBoardUseCase.execute(input, output);
+        enterBoardUseCase.execute(input, output);
 
-        return output.getId();
+        assertNotNull(output.getId());
+        assertEquals(boardId, output.getId());
+        assertEquals(2, eventListener.getEventCount());
+        Cursor cursor = cursorRepository.findByUserId(userId).get();
+        assertEquals(boardId, cursor.getBoardId());
+        assertEquals(userId, cursor.getUserId());
+        assertEquals(0, cursor.getCoordinate().getX(), 0.01);
+        assertEquals(0, cursor.getCoordinate().getY(), 0.01);
     }
 }

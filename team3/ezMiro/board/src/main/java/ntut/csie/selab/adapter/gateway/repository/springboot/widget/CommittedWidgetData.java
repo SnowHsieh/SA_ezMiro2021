@@ -18,7 +18,7 @@ public class CommittedWidgetData {
     @Column(name = "z_order")
     private int zOrder;
 
-//    public CommittedWidgetData (BoardData board, WidgetData widget) {
+//    public CommittedWidgetData (BoardData board, StickyNoteData widget) {
 //        this.board = board;
 //        this.widget = widget;
 //        this.id = new CommittedWidgetDataKey(board.getBoardId(), widget.getWidgetId());

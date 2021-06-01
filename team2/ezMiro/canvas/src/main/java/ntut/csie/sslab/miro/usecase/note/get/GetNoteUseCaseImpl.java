@@ -21,11 +21,11 @@ public class GetNoteUseCaseImpl implements GetNoteUseCase, GetNoteInput {
         }
 
         if(input.getNoteId() != null) {
-            output.setNote(ConvertNoteToDTO.transform((Note)figureRepository.findById(input.getNoteId()).get()));
+            output.setNote(ConvertNoteToDTO.transform(figureRepository.findNoteById(input.getNoteId()).get()));
         } else if (input.getBoardId() != null) {
-            output.setNotes(ConvertNoteToDTO.transform(figureRepository.findByBoardId(input.getBoardId()).stream().map(f -> (Note)f).collect(Collectors.toList())));
+            output.setNotes(ConvertNoteToDTO.transform(figureRepository.findByBoardId(input.getBoardId()).stream()
+                    .filter(f -> f instanceof Note).map(f -> (Note)f).collect(Collectors.toList())));
         }
-        // TODO: type cast need to fix.
     }
 
     @Override

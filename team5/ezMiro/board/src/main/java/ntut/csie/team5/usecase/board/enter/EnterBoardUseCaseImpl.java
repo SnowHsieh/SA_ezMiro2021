@@ -4,11 +4,8 @@ import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.entity.model.board.Board;
-import ntut.csie.team5.entity.model.board.BoardSessionId;
 import ntut.csie.team5.usecase.ClientBoardContentMightExpire;
 import ntut.csie.team5.usecase.board.BoardRepository;
-
-import java.util.UUID;
 
 public class EnterBoardUseCaseImpl implements EnterBoardUseCase {
 

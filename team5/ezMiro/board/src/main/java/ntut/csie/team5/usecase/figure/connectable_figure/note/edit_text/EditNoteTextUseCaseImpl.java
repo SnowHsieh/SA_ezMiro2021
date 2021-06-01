@@ -3,7 +3,6 @@ package ntut.csie.team5.usecase.figure.connectable_figure.note.edit_text;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
-import ntut.csie.team5.entity.model.figure.Figure;
 import ntut.csie.team5.entity.model.figure.note.Note;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.NoteRepository;
 

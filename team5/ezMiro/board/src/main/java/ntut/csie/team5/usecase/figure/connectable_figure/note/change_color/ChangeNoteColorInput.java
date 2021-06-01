@@ -2,8 +2,6 @@ package ntut.csie.team5.usecase.figure.connectable_figure.note.change_color;
 
 import ntut.csie.sslab.ddd.usecase.Input;
 
-import java.awt.*;
-
 public interface ChangeNoteColorInput extends Input {
 
     String getFigureId();

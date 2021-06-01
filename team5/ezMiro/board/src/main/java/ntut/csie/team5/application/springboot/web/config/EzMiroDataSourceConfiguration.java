@@ -26,13 +26,13 @@ public class EzMiroDataSourceConfiguration {
 
     @Bean
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource.kanban")
+    @ConfigurationProperties(prefix = "spring.datasource.ezmiro")
     public DataSourceProperties ezMiroDataSourceProperties() {
         return new DataSourceProperties();
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.kanban.configuration")
+    @ConfigurationProperties(prefix = "spring.datasource.ezmiro.configuration")
     public DataSource ezMiroDataSource() {
         return ezMiroDataSourceProperties().initializeDataSourceBuilder()
                 .type(HikariDataSource.class).build();

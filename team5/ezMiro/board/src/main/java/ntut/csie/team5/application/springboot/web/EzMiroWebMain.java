@@ -1,21 +1,17 @@
 package ntut.csie.team5.application.springboot.web;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.team5.adapter.websocket.WebSocketController;
 import ntut.csie.team5.usecase.eventhandler.NotifyBoard;
 import ntut.csie.team5.usecase.eventhandler.NotifyBoardSessionBroadcaster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @ComponentScan(basePackages = {"ntut.csie.team5"})
 @EntityScan(basePackages = {"ntut.csie.team5.adapter"})

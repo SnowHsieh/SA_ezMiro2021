@@ -3,10 +3,13 @@ package ntut.csie.selab.application.springboot.web.config;
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
-import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
-import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.LineRepositoryPeer;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
+import ntut.csie.selab.adapter.widget.LineRepositoryImpl;
+import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
+import ntut.csie.selab.usecase.widget.LineRepository;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,13 +20,20 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration("MiroRepositoryInjection")
 public class RepositoryInjection {
 
-    private WidgetRepositoryPeer widgetRepositoryPeer;
+    private StickyNoteRepositoryPeer stickyNoteRepositoryPeer;
+
+    private LineRepositoryPeer lineRepositoryPeer;
 
     private BoardRepositoryPeer boardRepositoryPeer;
 
     @Autowired
-    public void setWidgetRepositoryPeer(WidgetRepositoryPeer widgetRepositoryPeer) {
-        this.widgetRepositoryPeer = widgetRepositoryPeer;
+    public void setWidgetRepositoryPeer(StickyNoteRepositoryPeer stickyNoteRepositoryPeer) {
+        this.stickyNoteRepositoryPeer = stickyNoteRepositoryPeer;
+    }
+
+    @Autowired
+    public void setLineRepositoryPeer(LineRepositoryPeer lineRepositoryPeer) {
+        this.lineRepositoryPeer = lineRepositoryPeer;
     }
 
     @Autowired
@@ -37,7 +47,10 @@ public class RepositoryInjection {
     }
 
     @Bean(name="widgetRepository")
-    public WidgetRepository widgetRepository() { return new WidgetRepositoryImpl(widgetRepositoryPeer); }
+    public WidgetRepository widgetRepository() { return new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer); }
+
+    @Bean(name="lineRepository")
+    public LineRepository lineRepository() { return new LineRepositoryImpl(lineRepositoryPeer); }
 
     @Bean(name="miroEventBus")
     public DomainEventBus eventBus() {

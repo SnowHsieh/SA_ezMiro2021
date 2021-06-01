@@ -1,18 +1,18 @@
 package ntut.csie.selab.adapter.presenter.board.getcontent;
 
 import ntut.csie.selab.usecase.board.CommittedWidgetDto;
-import ntut.csie.selab.usecase.widget.WidgetDto;
+import ntut.csie.selab.usecase.widget.StickyNoteDto;
 
 import java.util.List;
 
 public class BoardContentViewModel {
     private String boardId;
-    private List<WidgetDto> widgetDtos;
+    private List<StickyNoteDto> stickyNoteDtos;
     private List<CommittedWidgetDto> committedWidgetDtos;
 
-    public BoardContentViewModel(String boardId, List<WidgetDto> widgetDtos, List<CommittedWidgetDto> committedWidgetDtos) {
+    public BoardContentViewModel(String boardId, List<StickyNoteDto> stickyNoteDtos, List<CommittedWidgetDto> committedWidgetDtos) {
         this.boardId = boardId;
-        this.widgetDtos = widgetDtos;
+        this.stickyNoteDtos = stickyNoteDtos;
         this.committedWidgetDtos = committedWidgetDtos;
     }
 
@@ -20,8 +20,8 @@ public class BoardContentViewModel {
         return boardId;
     }
 
-    public List<WidgetDto> getWidgetDtos() {
-        return widgetDtos;
+    public List<StickyNoteDto> getWidgetDtos() {
+        return stickyNoteDtos;
     }
 
     public List<CommittedWidgetDto> getCommittedWidgetDtos() {

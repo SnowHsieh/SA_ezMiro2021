@@ -4,8 +4,6 @@ import ntut.csie.team5.entity.model.figure.ConnectableFigure;
 import ntut.csie.team5.entity.model.figure.FigureType;
 import ntut.csie.team5.entity.model.figure.note.event.*;
 
-import java.awt.*;
-
 public class Note extends ConnectableFigure {
 
     private String color;

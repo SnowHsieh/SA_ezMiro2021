@@ -1,6 +1,7 @@
 package ntut.csie.sslab.miro.entity.model.board;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
+import ntut.csie.sslab.ddd.model.DateProvider;
 import ntut.csie.sslab.miro.entity.model.board.event.*;
 
 import java.util.*;
@@ -18,7 +19,7 @@ public class Board extends AggregateRoot<String> {
         this.committedFigures = new HashMap<>();
         this.boardChannel = boardChannel;
 
-        addDomainEvent(new BoardCreated(teamId, boardId, boardName));
+        addDomainEvent(new BoardEvents.BoardCreated(UUID.randomUUID(), teamId, boardId, boardName, DateProvider.now()));
     }
 
     public String getTeamId() {
@@ -47,7 +48,7 @@ public class Board extends AggregateRoot<String> {
 
     public void commitFigure(String boardId, String noteId, int zOrder) {
         committedFigures.put(noteId, new CommittedFigure(boardId, noteId, zOrder));
-        addDomainEvent(new FigureCommitted(boardId, noteId));
+        addDomainEvent(new BoardEvents.FigureCommitted(UUID.randomUUID(), boardId, noteId, DateProvider.now()));
     }
 
     public void commitNoteToFront(String boardId, String noteId) {
@@ -59,7 +60,7 @@ public class Board extends AggregateRoot<String> {
             }
         }
         committedFigures.put(noteId, new CommittedFigure(boardId, noteId, committedFigures.size() - 1));
-        addDomainEvent(new FigureCommittedToFront(boardId, noteId));
+        addDomainEvent(new BoardEvents.FigureCommittedToFront(UUID.randomUUID(), boardId, noteId, DateProvider.now()));
     }
 
     public void commitNoteToBack(String boardId, String noteId) {
@@ -71,19 +72,19 @@ public class Board extends AggregateRoot<String> {
             }
         }
         committedFigures.put(noteId, new CommittedFigure(boardId, noteId, 0));
-        addDomainEvent(new FigureCommittedToBack(boardId, noteId));
+        addDomainEvent(new BoardEvents.FigureCommittedToBack(UUID.randomUUID(), boardId, noteId, DateProvider.now()));
     }
 
     public void removeNoteFromBoard(String boardId, String noteId) {
         committedFigures.remove(noteId);
-        addDomainEvent(new NoteRemovedFromBoard(boardId, noteId));
+        addDomainEvent(new BoardEvents.NoteRemovedFromBoard(UUID.randomUUID(), boardId, noteId, DateProvider.now()));
     }
 
     public void enter(String userId) {
-        addDomainEvent(new BoardEntered(getId(), userId));
+        addDomainEvent(new BoardEvents.BoardEntered(UUID.randomUUID(), getId(), userId, DateProvider.now()));
     }
 
     public void leave(String userId) {
-        addDomainEvent(new BoardLeft(getId(), userId));
+        addDomainEvent(new BoardEvents.BoardLeft(UUID.randomUUID(), getId(), userId, DateProvider.now()));
     }
 }

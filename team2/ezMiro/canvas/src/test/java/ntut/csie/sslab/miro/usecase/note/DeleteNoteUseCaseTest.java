@@ -1,65 +1,52 @@
 package ntut.csie.sslab.miro.usecase.note;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.sslab.miro.adapter.gateway.eventbus.NotifyBoardAdapter;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.note.FigureRepositoryImpl;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
-import ntut.csie.sslab.miro.usecase.board.BoardRepository;
-import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
-import ntut.csie.sslab.miro.usecase.note.create.CreateNoteInput;
-import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCase;
-import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCaseImpl;
+import ntut.csie.sslab.miro.entity.model.board.Board;
+import ntut.csie.sslab.miro.usecase.AbstractUseCaseTest;
 import ntut.csie.sslab.miro.usecase.note.delete.DeleteNoteInput;
 import ntut.csie.sslab.miro.usecase.note.delete.DeleteNoteUseCase;
 import ntut.csie.sslab.miro.usecase.note.delete.DeleteNoteUseCaseImpl;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DeleteNoteUseCaseTest {
-    private FigureRepository figureRepository;
-    private DomainEventBus domainEventBus;
-    private BoardRepository boardRepository;
-    private NotifyBoardAdapter notifyBoardAdapter;
-
-
-    @Before
-    public void setUp() {
-        figureRepository = new FigureRepositoryImpl();
-        domainEventBus = new DomainEventBus();
-        boardRepository = new BoardRepositoryImpl();
-        notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(figureRepository, boardRepository, domainEventBus));
-        domainEventBus.register(notifyBoardAdapter);
-    }
+public class DeleteNoteUseCaseTest extends AbstractUseCaseTest {
 
     @Test
     public void delete_note() {
-        String noteId = create_note();
+        String boardId = create_board();
+        String noteId = create_note(boardId);
         DeleteNoteUseCase deleteNoteUseCase = new DeleteNoteUseCaseImpl(figureRepository, domainEventBus);
         DeleteNoteInput input = deleteNoteUseCase.newInput();
+        eventListener.clear();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setNoteId(noteId);
-        input.setBoardId("boardId");
+        input.setBoardId(boardId);
 
         deleteNoteUseCase.execute(input, output);
 
         assertNotNull(output.getId());
-        assertEquals(0, figureRepository.findAll().size());
+        assertEquals(0, figureRepository.findByBoardId(boardId).size());
         assertFalse(figureRepository.findById(output.getId()).isPresent());
-        assertEquals(0, boardRepository.findById("boardId").get().getCommittedFigures().size());
+        assertEquals(0, boardRepository.findById(boardId).get().getCommittedFigures().size());
+        assertEquals(2, eventListener.getEventCount());
     }
 
-    private String create_note() {
-        CreateNoteUseCase createNoteUseCase = new CreateNoteUseCaseImpl(figureRepository, domainEventBus);
-        CreateNoteInput input = createNoteUseCase.newInput();
+    @Test
+    public void should_remove_note_from_board_when_note_deleted(){
+        String boardId = create_board();
+        String noteId = create_note(boardId);
+        eventListener.clear();
+        DeleteNoteUseCase deleteNoteUseCase = new DeleteNoteUseCaseImpl(figureRepository, domainEventBus);
+        DeleteNoteInput input = deleteNoteUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-        input.setBoardId("boardId");
-        input.setCoordinate(new Coordinate(9,26));
+        input.setBoardId(boardId);
+        input.setNoteId(noteId);
 
-        createNoteUseCase.execute(input, output);
+        deleteNoteUseCase.execute(input, output);
 
-        return output.getId();
+        assertEquals(2, eventListener.getEventCount());
+        Board board = boardRepository.findById(boardId).get();
+        assertEquals(0, board.getCommittedFigures().size());
     }
 }

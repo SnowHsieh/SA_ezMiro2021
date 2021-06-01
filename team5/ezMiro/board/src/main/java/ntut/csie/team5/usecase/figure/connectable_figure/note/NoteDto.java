@@ -2,8 +2,6 @@ package ntut.csie.team5.usecase.figure.connectable_figure.note;
 
 import ntut.csie.team5.usecase.figure.FigureDto;
 
-import java.awt.*;
-
 public class NoteDto extends FigureDto {
 
     private int leftTopPositionX;

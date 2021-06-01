@@ -82,13 +82,17 @@ export default {
             if (this.user.name === data.userId) {
                 return;
             }
-            // console.log(data)
-            if (data.type === 'CursorCreated') {
+            if (data.type === 'BoardEntered') {
                 this.users[data.userId] = {
                     name: data.userId,
-                    x: 100,
-                    y: 100
+                    x: 0,
+                    y: 0
                 }
+                setTimeout(() => {
+                    this.webSocket.send(JSON.stringify({x: this.user.x, y: this.user.y}))
+                }, 200)
+                console.log(data)
+                console.log(this.users)
             } else if (data.type === 'CursorMoved') {
                 let user = this.users[data.userId]
 
@@ -103,7 +107,7 @@ export default {
 
                 user.x = data.positionX
                 user.y = data.positionY
-            } else if (data.type === 'CursorDeleted') {
+            } else if (data.type === 'BoardLeft') {
                 delete this.users[data.userId]
             } else if (data.type === 'NotePosted') {
                 if(this.activeObject !== null && this.activeObject.figureId === data.figureId)
@@ -201,11 +205,15 @@ export default {
             setTimeout(() => {
                 this.webSocket.send(JSON.stringify({x: e.absolutePointer.x, y: e.absolutePointer.y}))
             }, 200)
+            this.user.x = e.absolutePointer.x
+            this.user.y = e.absolutePointer.y
         })
 
         this.canvas.on('object:moving', (event) => {
             var target = event.target
-            this.$api.note.moveNote(target.figureId, target.top, target.left)
+            setTimeout(() => {
+                this.$api.note.moveNote(target.figureId, target.top, target.left)
+            }, 200)
         })
         this.canvas.on('object:scaling', (event) => {
             var target = event.target
