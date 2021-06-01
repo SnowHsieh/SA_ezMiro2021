@@ -56,7 +56,7 @@ import { createLineApi, deleteLineApi } from '../apis/lineApi'
 export default {
   data () {
     return {
-      boardId: 'f51edf13-a8fa-431a-859a-836b2a7b2c22',
+      boardId: '596c704d-7887-4abc-a724-b4a47aae3c73',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -607,75 +607,156 @@ export default {
       const _this = this
       const receivedData = JSON.parse(e.data)
       // console.log(receivedData)
-      if (receivedData.event === 'CursorMovedDomainEvent') {
-        _this.updateUserCursor(receivedData)
-      } else if (receivedData.event === 'BoardEnteredDomainEvent') {
-        // console.log(receivedData)
-      } else if (receivedData.event === 'CursorCreatedDomainEvent') {
-        _this.addUserCursor(receivedData)
-        this.updateCursorFlag = true
-        this.sendMouseData()
-      } else if (receivedData.event === 'CursorDeletedDomainEvent') {
-        // console.log(receivedData)
-        _this.delUserCursor(receivedData.userId)
-      } else if (receivedData.event === 'StickyNoteCreatedDomainEvent') {
-        const figure = {
-          figureId: receivedData.figureId,
-          content: '',
-          position: {
-            x: 100,
-            y: 100
-          },
-          style: {
-            fontSize: 20,
-            shape: 2,
-            width: 150.0,
-            height: 150.0,
-            color: '#ffa150'
-          }
-        }
-        _this.addStickyNote(figure)
-      } else if (receivedData.event === 'StickyNoteDeletedDomainEvent') {
-        try {
-          const cursorObject = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
-          this.canvas.remove(cursorObject)
-        } catch (e) {
-          console.log(e)
-        }
-      } else if (receivedData.event === 'StickyNoteResizedDomainEvent') {
-        // console.log(receivedData)
-        _this.updateStickyNoteSize(receivedData)
-      } else if (receivedData.event === 'StickyNoteColorChangedDomainEvent') {
-
-      } else if (receivedData.event === 'StickyNoteMovedDomainEvent') {
-        _this.updateStickyNotePosition(receivedData)
-      } else if (receivedData.event === 'LineCreatedDomainEvent') {
-        const figure = {
-          positionList: [
-            {
-              x: 100.0,
-              y: 100.0
-            }, {
-              x: 250.0,
-              y: 200.0
+      switch (receivedData.event) {
+        case 'CursorMovedDomainEvent':
+          _this.updateUserCursor(receivedData)
+          break
+        case 'BoardEnteredDomainEvent':
+          // console.log(receivedData)
+          break
+        case 'CursorCreatedDomainEvent':
+          _this.addUserCursor(receivedData)
+          this.updateCursorFlag = true
+          this.sendMouseData()
+          break
+        case 'CursorDeletedDomainEvent':
+          // console.log(receivedData)
+          _this.delUserCursor(receivedData.userId)
+          break
+        case 'StickyNoteCreatedDomainEvent':
+          var stickyNote = {
+            figureId: receivedData.figureId,
+            content: '',
+            position: {
+              x: 100,
+              y: 100
+            },
+            style: {
+              fontSize: 20,
+              shape: 2,
+              width: 150.0,
+              height: 150.0,
+              color: '#ffa150'
             }
-          ],
-          strokeWidth: 5,
-          color: '#000000'
-        }
-        _this.addLine(figure)
-      } else if (receivedData.event === 'LineDeletedDomainEvent') {
-        try {
-          const lineObject0 = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
-          const endPointObjects = this.canvas.getObjects().filter(object => object.attachedLineId === receivedData.figureId)
-          console.log('endPointObjects: ', endPointObjects)
-          this.canvas.remove(lineObject0)
-          this.canvas.remove(endPointObjects[0])
-          this.canvas.remove(endPointObjects[1])
-        } catch (e) {
-          console.log(e)
-        }
+          }
+          _this.addStickyNote(stickyNote)
+          break
+        case 'StickyNoteDeletedDomainEvent':
+          try {
+            const cursorObject = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
+            this.canvas.remove(cursorObject)
+          } catch (e) {
+            console.log(e)
+          }
+          break
+        case 'StickyNoteResizedDomainEvent':
+          // console.log(receivedData)
+          _this.updateStickyNoteSize(receivedData)
+          break
+        case 'StickyNoteColorChangedDomainEvent':
+          break
+        case 'StickyNoteMovedDomainEvent':
+          _this.updateStickyNotePosition(receivedData)
+          break
+        case 'LineCreatedDomainEvent':
+          var line = {
+            positionList: [
+              {
+                x: 100.0,
+                y: 100.0
+              }, {
+                x: 250.0,
+                y: 200.0
+              }
+            ],
+            strokeWidth: 5,
+            color: '#000000'
+          }
+          _this.addLine(line)
+          break
+        case 'LineDeletedDomainEvent':
+          try {
+            const lineObject0 = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
+            const endPointObjects = this.canvas.getObjects().filter(object => object.attachedLineId === receivedData.figureId)
+            console.log('endPointObjects: ', endPointObjects)
+            this.canvas.remove(lineObject0)
+            this.canvas.remove(endPointObjects[0])
+            this.canvas.remove(endPointObjects[1])
+          } catch (e) {
+            console.log(e)
+          }
+          break
       }
+      // if (receivedData.event === 'CursorMovedDomainEvent') {
+      //   _this.updateUserCursor(receivedData)
+      // } else if (receivedData.event === 'BoardEnteredDomainEvent') {
+      //   // console.log(receivedData)
+      // } else if (receivedData.event === 'CursorCreatedDomainEvent') {
+      //   _this.addUserCursor(receivedData)
+      //   this.updateCursorFlag = true
+      //   this.sendMouseData()
+      //
+      // } else if (receivedData.event === 'CursorDeletedDomainEvent') {
+      //   // console.log(receivedData)
+      //   _this.delUserCursor(receivedData.userId)
+      // } else if (receivedData.event === 'StickyNoteCreatedDomainEvent') {
+      //   const figure = {
+      //     figureId: receivedData.figureId,
+      //     content: '',
+      //     position: {
+      //       x: 100,
+      //       y: 100
+      //     },
+      //     style: {
+      //       fontSize: 20,
+      //       shape: 2,
+      //       width: 150.0,
+      //       height: 150.0,
+      //       color: '#ffa150'
+      //     }
+      //   }
+      //   _this.addStickyNote(figure)
+      // } else if (receivedData.event === 'StickyNoteDeletedDomainEvent') {
+      //   try {
+      //     const cursorObject = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
+      //     this.canvas.remove(cursorObject)
+      //   } catch (e) {
+      //     console.log(e)
+      //   }
+      // } else if (receivedData.event === 'StickyNoteResizedDomainEvent') {
+      //   // console.log(receivedData)
+      //   _this.updateStickyNoteSize(receivedData)
+      // } else if (receivedData.event === 'StickyNoteColorChangedDomainEvent') {
+      //
+      // } else if (receivedData.event === 'StickyNoteMovedDomainEvent') {
+      //   _this.updateStickyNotePosition(receivedData)
+      // } else if (receivedData.event === 'LineCreatedDomainEvent') {
+      //   const figure = {
+      //     positionList: [
+      //       {
+      //         x: 100.0,
+      //         y: 100.0
+      //       }, {
+      //         x: 250.0,
+      //         y: 200.0
+      //       }
+      //     ],
+      //     strokeWidth: 5,
+      //     color: '#000000'
+      //   }
+      //   _this.addLine(figure)
+      // } else if (receivedData.event === 'LineDeletedDomainEvent') {
+      //   try {
+      //     const lineObject0 = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
+      //     const endPointObjects = this.canvas.getObjects().filter(object => object.attachedLineId === receivedData.figureId)
+      //     console.log('endPointObjects: ', endPointObjects)
+      //     this.canvas.remove(lineObject0)
+      //     this.canvas.remove(endPointObjects[0])
+      //     this.canvas.remove(endPointObjects[1])
+      //   } catch (e) {
+      //     console.log(e)
+      //   }
+      // }
     },
     websocketclose: function (e) {
       console.log('connection closed ()')
