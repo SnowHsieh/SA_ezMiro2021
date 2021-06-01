@@ -43,15 +43,7 @@ public class StickyNoteData {
     @Column(name="font_size")
     private int fontSize;
 
-//    @OneToMany(mappedBy = "widget", cascade = CascadeType.ALL, orphanRemoval=true)
-    @OneToMany(mappedBy = "widget", cascade = CascadeType.ALL)
-    private List<CommittedWidgetData> committedWidgets;
-
     public StickyNoteData() {
-    }
-
-    public StickyNoteData(String widgetId) {
-        this.widgetId = widgetId;
     }
 
     public StickyNoteData(
