@@ -47,6 +47,7 @@ public class Board extends AggregateRoot<String> {
 
     public void setCommittedWidgets(List<CommittedWidget> committedWidgets) {
         this.committedWidgets = committedWidgets;
+        sortAscendByZOrder(committedWidgets);
     }
 
     public Cursor getCursorBy(String userId) {
@@ -103,15 +104,11 @@ public class Board extends AggregateRoot<String> {
     public void commitWidgetDeletion(String widgetId) {
         CommittedWidget removedCommittedWidget = getCommittedWidgetBy(widgetId).get();
         committedWidgets.remove(removedCommittedWidget);
-        List<CommittedWidget> clone = new ArrayList<>();
-        Collections.copy(clone, committedWidgets);
+        List<CommittedWidget> clone = new ArrayList<>(committedWidgets);
         committedWidgets.clear();
         for(int i = 0; i < clone.size(); i++) {
             int zOrder = i;
-            if (clone.get(i).getZOrder() > removedCommittedWidget.getZOrder()) {
-                zOrder--;
-            }
-            committedWidgets.add(new CommittedWidget(widgetId, getId(), zOrder));
+            committedWidgets.add(new CommittedWidget(getId(), clone.get(i).getWidgetId(), zOrder));
         }
 
     }
