@@ -40,24 +40,23 @@ export const deleteLineApi = async (boardId, figure) => {
 
 export const changeLinePathApi = async (boardId, figure) => {
   try {
-    console.log(figure)
+    // console.log(figure)
+    const srcPoint = {
+      x: figure.get('x1'),
+      y: figure.get('y1')
+    }
+    const destPoint = {
+      x: figure.get('x2'),
+      y: figure.get('y2')
+    }
+    const newPositionList = []
+    newPositionList.push(srcPoint)
+    newPositionList.push(destPoint)
+
     const res = await axios.post(`${hostIp}/board/${boardId}/changeLinePath`,
       {
         figureId: figure.get('id'),
-        positionList: [
-          // getCoords() [tl, tr, br, bl] of points
-          {
-            // x: figure.get('x1'),
-            // y: figure.get('y1')
-            x: 100.0,
-            y: 100.0
-          }, {
-            // x: figure.get('x2'),
-            // y: figure.get('y2')
-            x: 500.0,
-            y: 500.0
-          }
-        ]
+        positionList: newPositionList
       }
     )
     return res

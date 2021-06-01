@@ -56,7 +56,9 @@ public class ChangeLinePathController {
         }
 
         System.out.println(newPositionList.get(0).getX() + ";" + newPositionList.get(0).getY());
+        System.out.println(newPositionList.get(1).getX() + ";" + newPositionList.get(1).getY());
         System.out.println(newPositionList.size());
+        System.out.println(figureId.toString());
 
         ChangeLinePathInput input = changeLinePathUseCase.newInput();
 

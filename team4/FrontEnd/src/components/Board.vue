@@ -56,7 +56,7 @@ import { changeLinePathApi, createLineApi, deleteLineApi } from '../apis/lineApi
 export default {
   data () {
     return {
-      boardId: '454022c5-6b4a-4452-98b8-d6f5a531c6ff',
+      boardId: 'cc4ca4ce-ecdc-42b8-9802-69fc9a20fb0c',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -149,6 +149,7 @@ export default {
     addLine (figure) {
       const srcPosition = figure.positionList[0]
       const destPosition = figure.positionList[1]
+      console.log(figure)
       const line = new fabric.Line([srcPosition.x, srcPosition.y, destPosition.x, destPosition.y], {
         id: figure.figureId,
         fill: figure.color,
@@ -317,6 +318,7 @@ export default {
       _this.listenToMouseMove()
       _this.listenToMouseDown()
       _this.listenToObjectScaled()
+      _this.listenToObjectMoved()
       _this.listenToObjectMoving()
       _this.listenToMouseDoubleClick()
     },
@@ -409,7 +411,16 @@ export default {
                 _this.moveStickyNote(e.target)
                 _this.updateFigureFlag = false
               }
-            } else {
+            }
+          }
+        })
+    },
+    listenToObjectMoved () {
+      var _this = this
+      _this.canvas.on(
+        {
+          'object:moved': function (e) {
+            if (e.target.type !== 'group') {
               const p = e.target // circle
               if (p.line1 && p.line1.set({ x2: p.left, y2: p.top })) {
                 _this.changeLinePath(p.line1)
@@ -420,7 +431,8 @@ export default {
               _this.canvas.renderAll()
             }
           }
-        })
+        }
+      )
     },
     ungroup (group) {
       var _this = this
