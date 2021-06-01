@@ -52,11 +52,11 @@ import {
 } from '@/apis/stickyNoteApi'
 import { webSocketHostIp } from '../config/config.js'
 import uuidGenerator from '../utils/uuidGenerator.js'
-import { createLineApi, deleteLineApi } from '../apis/lineApi'
+import { changeLinePathApi, createLineApi, deleteLineApi } from '../apis/lineApi'
 export default {
   data () {
     return {
-      boardId: '448c479a-ca2a-4b71-9950-41268881104c',
+      boardId: '454022c5-6b4a-4452-98b8-d6f5a531c6ff',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -137,13 +137,21 @@ export default {
         console.log(err)
       }
     },
+    async changeLinePath (figure) {
+      try {
+        const res = await changeLinePathApi(this.boardId, figure)
+        console.log(res.data.message)
+      } catch (err) {
+        console.log(err)
+      }
+    },
     // 畫直線
     addLine (figure) {
       const srcPosition = figure.positionList[0]
       const destPosition = figure.positionList[1]
       const line = new fabric.Line([srcPosition.x, srcPosition.y, destPosition.x, destPosition.y], {
         id: figure.figureId,
-        // fill: figure.color,
+        fill: figure.color,
         stroke: figure.color, // 筆觸顏色
         strokeWidth: figure.strokeWidth, // 筆觸寬度
         hasControls: true, // 選中時是否可以放大縮小
@@ -152,12 +160,6 @@ export default {
         // evented: false  // false means event on line can't be triggered
       })
       console.log('line: ', line)
-      // line.set({ x2: 250.0, y2: 200.0 })
-      // line.set({ x1: 0.0, y1: 20.0 })
-      // const point1 = this.makeCircle(line.x2, line.y2, line, null)
-      // const point2 = this.makeCircle(line.x1, line.y1, null, line)
-      // line.point1 = point1
-      // line.point2 = point2
       this.canvas.add(line)
       this.canvas.add(
         this.makeCircle(line.x2, line.y2, line, null, line.get('id')),
@@ -408,9 +410,13 @@ export default {
                 _this.updateFigureFlag = false
               }
             } else {
-              const p = e.target
-              p.line1 && p.line1.set({ x2: p.left, y2: p.top })
-              p.line2 && p.line2.set({ x1: p.left, y1: p.top })
+              const p = e.target // circle
+              if (p.line1 && p.line1.set({ x2: p.left, y2: p.top })) {
+                _this.changeLinePath(p.line1)
+              }
+              if (p.line2 && p.line2.set({ x1: p.left, y1: p.top })) {
+                _this.changeLinePath(p.line2)
+              }
               _this.canvas.renderAll()
             }
           }

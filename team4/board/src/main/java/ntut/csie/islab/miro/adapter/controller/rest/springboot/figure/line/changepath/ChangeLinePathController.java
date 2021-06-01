@@ -33,6 +33,8 @@ public class ChangeLinePathController {
         UUID figureId = null;
         List<Position> newPositionList = new ArrayList<>();
         try {
+            System.out.println("lineInfo");
+            System.out.println(lineInfo);
             JSONObject lineJSON = new JSONObject(lineInfo);
             figureId = UUID.fromString(lineJSON.getString("figureId"));
             JSONObject lineInfoJSON = new JSONObject(lineInfo);
@@ -52,6 +54,10 @@ public class ChangeLinePathController {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        System.out.println(newPositionList.get(0).getX() + ";" + newPositionList.get(0).getY());
+        System.out.println(newPositionList.size());
+
         ChangeLinePathInput input = changeLinePathUseCase.newInput();
 
         input.setBoardId(boardId);
