@@ -7,8 +7,6 @@ fabric.OurLine = fabric.util.createClass(fabric.Line, {
   initialize: function (element, options) {
     options = options || {}
     this.id = element.id
-    console.log(element.coors)
-    console.log(options)
     this._setControlVisible(this)
     this.callSuper('initialize', element.coors, options)
   },

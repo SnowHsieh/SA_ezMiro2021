@@ -1,5 +1,7 @@
 <template>
   <div class="board" oncontextmenu="return false">
+    <button type="button" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.LINE)">Line</button>
+    <button type="button" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.STICKY_NOTE)">Sticky Note</button>
     <canvas id="canvas" ref='board'></canvas>
     <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
       <li @click="deleteWidget()" class="list-group-item">Delete</li>
@@ -31,7 +33,8 @@ import {
   EditTextOfStickyNoteBy,
   ChangeColorOfStickyNoteBy,
   ChangeZOrderOfStickyNoteBy,
-  EditFontSizeOfStickyNoteBy
+  EditFontSizeOfStickyNoteBy,
+  CreateLine
 } from '@/apis/Widget'
 import '@/models/StickyNote'
 import '@/models/Line'
@@ -41,6 +44,11 @@ import { webSocketHost } from '@/config/config'
 export default {
   data () {
     return {
+      CREATE_WIDGET_TYPE: {
+        NONE: null,
+        STICKY_NOTE: 0,
+        LINE: 1
+      },
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -57,10 +65,12 @@ export default {
       isSamplingCursorDelayFinish: true,
       isSamplingWidgetDelayFinish: true,
       user: null,
-      collaborator: []
+      collaborator: [],
+      widgetTypeOfCreation: 0
     }
   },
   async created () {
+    this.widgetTypeOfCreation = this.CREATE_WIDGET_TYPE.STICKY_NOTE
     this.boardId = this.$route.params.boardId
     this.boardContent = await GetBoardContent(this.boardId)
     this.initCanvas()
@@ -120,6 +130,8 @@ export default {
           me.whenColorOfWidgetChanged(message.widgets)
         } else if (message.domainEvent === 'notifyWidgetZOrderRearrangedToAllUser') {
           me.whenZOrderOfWidgetChanged(message.widgets)
+        } else if (message.domainEvent === 'notifyLineCreatedToAllUser') {
+          me.whenLineCreated(message.widgets)
         } else {
           me.handleCursorMessage(message.cursors)
           me.handleWidgetMessage(message.widgets)
@@ -190,6 +202,10 @@ export default {
         }
       }
     },
+    whenLineCreated (widgetDto) {
+      this.boardContent.widgetDtos.push(widgetDto)
+      this.addWidgetToCanvas(widgetDto)
+    },
     colorOfWidgetChanged (widgetDto) {
       const canvas = this.canvas
       canvas.getObjects().forEach(function (o) {
@@ -249,7 +265,11 @@ export default {
       this.canvas.renderAll()
     },
     addWidgetToCanvas (widgetDto) {
-      this.loadStickyNoteIntoCanvas(widgetDto)
+      if (widgetDto.type === 'StickyNote') {
+        this.loadStickyNoteIntoCanvas(widgetDto)
+      } else if (widgetDto.type === 'Line') {
+        this.loadLineIntoCanvas(widgetDto)
+      }
     },
     bindCanvasEventListener () {
       const me = this
@@ -272,11 +292,20 @@ export default {
           textObject.enterEditing()
           textObject.selectAll()
         } else {
-          info.topLeftX = e.absolutePointer.x - width / 2
-          info.topLeftY = e.absolutePointer.y - width / 2
-          info.bottomRightX = info.topLeftX + width
-          info.bottomRightY = info.topLeftY + width
-          CreateStickyNote(me.boardId, info)
+          if (me.widgetTypeOfCreation === me.CREATE_WIDGET_TYPE.STICKY_NOTE) {
+            info.topLeftX = e.absolutePointer.x - width / 2
+            info.topLeftY = e.absolutePointer.y - width / 2
+            info.bottomRightX = info.topLeftX + width
+            info.bottomRightY = info.topLeftY + width
+            CreateStickyNote(me.boardId, info)
+          } else if (me.widgetTypeOfCreation === me.CREATE_WIDGET_TYPE.LINE) {
+            info.topLeftX = 100
+            info.topLeftY = 100
+            info.bottomRightX = 250
+            info.bottomRightY = 100
+            CreateLine(me.boardId, info)
+            me.setWidgetTypeOfCreation(me.CREATE_WIDGET_TYPE.STICKY_NOTE)
+          }
         }
       })
 
@@ -374,6 +403,10 @@ export default {
       await this.canvas.add(this.buildFabricObjectOfStickyNote(widgetDto))
       this.canvas.renderAll()
     },
+    async loadLineIntoCanvas (widgetDto) {
+      await this.canvas.add(this.buildFabricObjectOfLine(widgetDto))
+      this.canvas.renderAll()
+    },
     setTarget (target) {
       if (target !== null) {
         this.selectedStickyNote = target
@@ -449,6 +482,12 @@ export default {
         fontSize: widget.fontSize
       })
     },
+    buildFabricObjectOfLine (widget) {
+      return new fabric.OurLine({
+        id: widget.widgetId,
+        coors: [widget.topLeftX, widget.topLeftY, widget.bottomRightX, widget.bottomRightY]
+      })
+    },
     getZOrderOf (widget) {
       return this.canvas.getObjects().indexOf(widget)
     },
@@ -457,6 +496,9 @@ export default {
     },
     composeWidgetInfo (widget) {
       return JSON.stringify({ widgets: [widget.widgetDto] })
+    },
+    setWidgetTypeOfCreation (widgetType) {
+      this.widgetTypeOfCreation = widgetType
     }
   }
 }
