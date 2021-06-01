@@ -77,24 +77,8 @@ export default {
     this.loadAllStickyNote(this.boardContent.widgetDtos)
     this.user = this.createStubUser()
     this.initWebSocketAndBingEventListener()
-    // ==================================
-    this.createLine()
-    // ==================================
   },
   methods: {
-    createLine () {
-      this.canvas.add(new fabric.OurLine({
-        id: 'lineId',
-        coors: [100, 100, 250, 250]
-      }, {
-        fill: 'black',
-        stroke: 'black',
-        strokeWidth: 5,
-        selectable: true,
-        evented: true
-      }))
-      this.canvas.renderAll()
-    },
     initCanvas () {
       this.canvas = new fabric.Canvas('canvas', {
         fireRightClick: true,
@@ -130,8 +114,6 @@ export default {
           me.whenColorOfWidgetChanged(message.widgets)
         } else if (message.domainEvent === 'notifyWidgetZOrderRearrangedToAllUser') {
           me.whenZOrderOfWidgetChanged(message.widgets)
-        } else if (message.domainEvent === 'notifyLineCreatedToAllUser') {
-          me.whenLineCreated(message.widgets)
         } else {
           me.handleCursorMessage(message.cursors)
           me.handleWidgetMessage(message.widgets)
@@ -202,10 +184,6 @@ export default {
         }
       }
     },
-    whenLineCreated (widgetDto) {
-      this.boardContent.widgetDtos.push(widgetDto)
-      this.addWidgetToCanvas(widgetDto)
-    },
     colorOfWidgetChanged (widgetDto) {
       const canvas = this.canvas
       canvas.getObjects().forEach(function (o) {
@@ -265,13 +243,11 @@ export default {
       this.canvas.renderAll()
     },
     addWidgetToCanvas (widgetDto) {
-      this.loadStickyNoteIntoCanvas(widgetDto)
-      // TODO: 後端傳過的 DTO 要給 type 的屬性
-      // if (widgetDto.type === 'StickyNote') {
-
-      // } else if (widgetDto.type === 'Line') {
-      //   this.loadLineIntoCanvas(widgetDto)
-      // }
+      if (widgetDto.type === 'stickyNote') {
+        this.loadStickyNoteIntoCanvas(widgetDto)
+      } else if (widgetDto.type === 'line') {
+        this.loadLineIntoCanvas(widgetDto)
+      }
     },
     bindCanvasEventListener () {
       const me = this
@@ -301,10 +277,10 @@ export default {
             info.bottomRightY = info.topLeftY + width
             CreateStickyNote(me.boardId, info)
           } else if (me.widgetTypeOfCreation === me.CREATE_WIDGET_TYPE.LINE) {
-            info.topLeftX = 100
-            info.topLeftY = 100
-            info.bottomRightX = 250
-            info.bottomRightY = 100
+            info.topLeftX = e.absolutePointer.x - 50
+            info.topLeftY = e.absolutePointer.y - 50
+            info.bottomRightX = e.absolutePointer.x + 50
+            info.bottomRightY = e.absolutePointer.y + 50
             CreateLine(me.boardId, info)
             me.setWidgetTypeOfCreation(me.CREATE_WIDGET_TYPE.STICKY_NOTE)
           }
@@ -488,6 +464,12 @@ export default {
       return new fabric.OurLine({
         id: widget.widgetId,
         coors: [widget.topLeftX, widget.topLeftY, widget.bottomRightX, widget.bottomRightY]
+      }, {
+        fill: 'red',
+        stroke: 'black',
+        strokeWidth: 5,
+        selectable: true,
+        evented: true
       })
     },
     getZOrderOf (widget) {

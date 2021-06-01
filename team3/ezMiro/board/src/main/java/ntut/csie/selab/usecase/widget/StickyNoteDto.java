@@ -1,5 +1,7 @@
 package ntut.csie.selab.usecase.widget;
 
+import ntut.csie.selab.entity.model.widget.WidgetType;
+
 public class StickyNoteDto {
     private String widgetId;
     private int topLeftX;
@@ -23,10 +25,12 @@ public class StickyNoteDto {
         this.textColor = textColor;
         this.text = text;
         this.fontSize = fontSize;
-        this.type = "StickyNote";
+        this.type = WidgetType.STICKY_NOTE.getType();
     }
 
-    public String getWidgetId() { return widgetId; }
+    public String getWidgetId() {
+        return widgetId;
+    }
 
     public int getTopLeftX() {
         return topLeftX;
@@ -58,5 +62,9 @@ public class StickyNoteDto {
 
     public int getFontSize() {
         return fontSize;
+    }
+
+    public String getType() {
+        return type;
     }
 }

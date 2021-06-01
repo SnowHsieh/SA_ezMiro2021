@@ -18,7 +18,7 @@ public abstract class Widget extends AggregateRoot<String> {
         this.color = "#FFFAAD";
         this.type = type;
 
-        addDomainEvent(new WidgetCreated(new Date(), boardId, id));
+        addDomainEvent(new WidgetCreated(new Date(), boardId, id, type));
     }
 
     public void delete() {

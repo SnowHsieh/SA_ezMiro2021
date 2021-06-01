@@ -7,11 +7,13 @@ import java.util.Date;
 public class WidgetCreated extends DomainEvent {
     private String boardId;
     private String widgetId;
+    private String type;
 
-    public WidgetCreated(Date occurredOn, String boardId, String widgetId) {
+    public WidgetCreated(Date occurredOn, String boardId, String widgetId, String type) {
         super(occurredOn);
         this.boardId = boardId;
         this.widgetId = widgetId;
+        this.type = type;
     }
 
     public String getBoardId() {
@@ -22,4 +24,7 @@ public class WidgetCreated extends DomainEvent {
         return widgetId;
     }
 
+    public String getType() {
+        return type;
+    }
 }

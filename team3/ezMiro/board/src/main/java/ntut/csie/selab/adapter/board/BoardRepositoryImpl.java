@@ -1,11 +1,7 @@
 package ntut.csie.selab.adapter.board;
 
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.*;
-import ntut.csie.selab.adapter.gateway.repository.springboot.widget.CommittedWidgetData;
 import ntut.csie.selab.entity.model.board.Board;
-import ntut.csie.selab.entity.model.board.CommittedWidget;
-import ntut.csie.selab.entity.model.widget.Widget;
-import ntut.csie.selab.usecase.board.BoardAssociationRepository;
 import ntut.csie.selab.usecase.board.BoardRepository;
 
 import java.util.Optional;

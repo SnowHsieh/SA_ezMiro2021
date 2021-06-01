@@ -1,6 +1,6 @@
 package ntut.csie.selab.usecase.widget.stickynote;
 
-import ntut.csie.selab.adapter.board.BoardAssociationRepositoryImpl;
+import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardDataMapper;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
@@ -10,7 +10,7 @@ import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.JpaApplicationTest;
-import ntut.csie.selab.usecase.board.BoardAssociationRepository;
+import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
 import ntut.csie.selab.usecase.websocket.WebSocket;
@@ -72,7 +72,7 @@ public class CreateStickyNoteUseCaseTest {
     @Test
     public void create_sticky_note_in_board_should_notify_board_successfully() {
         // Arrange
-        BoardAssociationRepository boardRepository = new BoardAssociationRepositoryImpl(boardRepositoryPeer, committedWidgetRepositoryPeer);
+        BoardRepository boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
         WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         WebSocket webSocket = new FakeBoardWebSocket();
         String boardId = "1";

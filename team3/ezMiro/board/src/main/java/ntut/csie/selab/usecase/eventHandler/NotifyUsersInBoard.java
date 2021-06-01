@@ -10,6 +10,7 @@ import ntut.csie.selab.entity.model.board.event.WidgetCreationNotifiedToAllUser;
 import ntut.csie.selab.entity.model.widget.Line;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
+import ntut.csie.selab.entity.model.widget.WidgetType;
 import ntut.csie.selab.entity.model.widget.event.*;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
@@ -50,24 +51,41 @@ public class NotifyUsersInBoard {
 
     @Subscribe
     public void notifyWidgetCreationToAllUser(WidgetCreated widgetCreated) {
-        Optional<Widget> widget = widgetRepository.findById(widgetCreated.getWidgetId());
+        Optional<Widget> widget;
+        if (widgetCreated.getType().equals(WidgetType.STICKY_NOTE.getType())) {
+            widget = widgetRepository.findById(widgetCreated.getWidgetId());
+        } else {
+            widget = lineRepository.findById(widgetCreated.getWidgetId());
+        }
 
         if (widget.isPresent()) {
             Widget selectedWidget = widget.get();
-            StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
-            StickyNoteDto stickyNoteDto = stickyNoteDtoMapper.domainToDto((StickyNote) selectedWidget);
 
             JSONObject message = new JSONObject();
-
             ObjectMapper objectMapper = new ObjectMapper();
             JSONArray widgetsInfo = new JSONArray();
 
-            try {
-                widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(stickyNoteDto)));
-                message.put("widgets", widgetsInfo);
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (widgetCreated.getType().equals(WidgetType.STICKY_NOTE.getType())) {
+                StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
+                StickyNoteDto stickyNoteDto = stickyNoteDtoMapper.domainToDto(selectedWidget);
+                try {
+                    widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(stickyNoteDto)));
+                    message.put("widgets", widgetsInfo);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                LineDtoMapper lineDtoMapper = new LineDtoMapper();
+                LineDto lineDto = lineDtoMapper.domainToDto(selectedWidget);
+                try {
+                    widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(lineDto)));
+                    message.put("widgets", widgetsInfo);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+
             domainEventBus.post(new WidgetCreationNotifiedToAllUser(new Date(), widgetCreated.getBoardId(), widgetCreated.getWidgetId()));
             webSocket.sendMessageForAllUsersIn(widgetCreated.getBoardId(), message);
         } else {
@@ -245,33 +263,6 @@ public class NotifyUsersInBoard {
             webSocket.sendMessageForAllUsersIn(colorOfWidgetChanged.getBoardId(), message);
         } else {
             throw new RuntimeException("Widget not found, widget id = " + colorOfWidgetChanged.getWidgetId());
-        }
-    }
-
-    @Subscribe
-    public void notifyLineCreationToAllUser(LineCreated lineCreated) {
-        Optional<Line> line = lineRepository.findById(lineCreated.getLineId());
-
-        if (line.isPresent()) {
-            Line selectedLine = line.get();
-            LineDtoMapper lineDtoMapper= new LineDtoMapper();
-            LineDto lineDto = lineDtoMapper.domainToDto(selectedLine);
-
-            JSONObject message = new JSONObject();
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            JSONArray linesInfo = new JSONArray();
-
-            try {
-                linesInfo.put(new JSONObject(objectMapper.writeValueAsString(lineDto)));
-                message.put("lines", linesInfo);
-                message.put("domainEvent", "notifyLineCreatedToAllUser");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            webSocket.sendMessageForAllUsersIn(lineCreated.getBoardId(), message);
-        } else {
-            throw new RuntimeException("Line not found, line id = " + lineCreated.getLineId());
         }
     }
 
