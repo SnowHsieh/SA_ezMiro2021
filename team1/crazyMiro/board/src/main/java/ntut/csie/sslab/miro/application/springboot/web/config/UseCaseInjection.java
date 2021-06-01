@@ -30,6 +30,9 @@ import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.figure.sticker.move.MoveStickerUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.move.MoveStickerUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.line.CreateLineUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.line.LineRepository;
+import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,6 +51,9 @@ public class UseCaseInjection {
 
     @Autowired
     private BoardSessionBroadcaster boardSessionBroadcaster;
+
+    @Autowired
+    private LineRepository lineRepository;
 
     private DomainEventBus eventBus;
 
@@ -122,8 +128,13 @@ public class UseCaseInjection {
         return new LeaveBoardUseCaseImpl(boardRepository, eventBus);
     }
 
+
+    @Bean(name="createLineUseCase")
+    public CreateLineUseCase createLineUseCase() {
+        return new CreateLineUseCaseImpl(lineRepository, eventBus);
+    }
+
     @Autowired
     public void setEventBus(DomainEventBus eventBus) { this.eventBus = eventBus; }
-
 
 }
