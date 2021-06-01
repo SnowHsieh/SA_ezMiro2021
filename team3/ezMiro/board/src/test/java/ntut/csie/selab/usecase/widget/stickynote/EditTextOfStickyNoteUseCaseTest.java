@@ -1,7 +1,7 @@
 package ntut.csie.selab.usecase.widget.stickynote;
 
-import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
-import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
+import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
@@ -27,12 +27,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class EditTextOfStickyNoteUseCaseTest {
 
     @Autowired
-    private WidgetRepositoryPeer widgetRepositoryPeer;
+    private StickyNoteRepositoryPeer stickyNoteRepositoryPeer;
 
     @Test
     public void edit_text_of_sticky_note_should_succeed() {
         // Arrange
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
+        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         String stickyNoteId = "1";
         Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
         Widget stickyNote = new StickyNote(stickyNoteId, "0", stickyNoteCoordinate);

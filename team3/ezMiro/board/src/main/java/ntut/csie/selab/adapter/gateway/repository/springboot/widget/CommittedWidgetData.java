@@ -18,12 +18,12 @@ public class CommittedWidgetData {
     @ManyToOne
     @MapsId("widgetId")
     @JoinColumn(name = "widget_id")
-    private WidgetData widget;
+    private StickyNoteData widget;
 
     @Column(name = "z_order")
     private int zOrder;
 
-//    public CommittedWidgetData (BoardData board, WidgetData widget) {
+//    public CommittedWidgetData (BoardData board, StickyNoteData widget) {
 //        this.board = board;
 //        this.widget = widget;
 //        this.id = new CommittedWidgetDataKey(board.getBoardId(), widget.getWidgetId());
@@ -34,7 +34,7 @@ public class CommittedWidgetData {
 
     public CommittedWidgetData (String boardId, String widgetId, int zOrder) {
         this.board = new BoardData(boardId);
-        this.widget = new WidgetData(widgetId);
+        this.widget = new StickyNoteData(widgetId);
         this.id = new CommittedWidgetDataKey(boardId, widgetId);
         this.zOrder = zOrder;
     }

@@ -1,8 +1,9 @@
 package ntut.csie.selab.adapter.controller.rest.springboot.widget.stickynote.getwidget;
 
-import ntut.csie.selab.adapter.presenter.widget.getwidget.WidgetViewModel;
-import ntut.csie.selab.usecase.widget.WidgetDto;
-import ntut.csie.selab.usecase.widget.WidgetDtoMapper;
+import ntut.csie.selab.adapter.presenter.widget.getwidget.StickyNoteViewModel;
+import ntut.csie.selab.entity.model.widget.StickyNote;
+import ntut.csie.selab.usecase.widget.StickyNoteDto;
+import ntut.csie.selab.usecase.widget.StickyNoteDtoMapper;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetInput;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetOutput;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetUseCase;
@@ -23,17 +24,17 @@ public class GetWidgetController {
     }
 
     @GetMapping(path = "/${EZ_MIRO_PREFIX}/boards/{boardId}/widgets/sticky-notes/{widgetId}", produces = "application/json")
-    public WidgetViewModel getWidget(@PathVariable("widgetId") String widgetId) {
+    public StickyNoteViewModel getWidget(@PathVariable("widgetId") String widgetId) {
         GetWidgetInput input = new GetWidgetInput();
         GetWidgetOutput output = new GetWidgetOutput();
         input.setWidgetId(widgetId);
 
-        WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
-        WidgetDto widgetDto;
+        StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
+        StickyNoteDto stickyNoteDto;
 
         getWidgetUseCase.execute(input, output);
-        widgetDto = widgetDtoMapper.domainToDto(output.getWidget());
+        stickyNoteDto = stickyNoteDtoMapper.domainToDto((StickyNote) output.getWidget());
 
-        return new WidgetViewModel(widgetDto);
+        return new StickyNoteViewModel(stickyNoteDto);
     }
 }

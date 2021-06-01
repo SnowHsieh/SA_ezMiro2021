@@ -1,6 +1,6 @@
 package ntut.csie.selab.usecase.widget;
 
-public class WidgetDto {
+public class StickyNoteDto {
     private String widgetId;
     private int topLeftX;
     private int topLeftY;
@@ -10,9 +10,10 @@ public class WidgetDto {
     private String textColor;
     private String text;
     private int fontSize;
+    private String type;
 
-    public WidgetDto(String widgetId, int topLeftX, int topLeftY, int width, int height,
-                     String color, String textColor, String text, int fontSize) {
+    public StickyNoteDto(String widgetId, int topLeftX, int topLeftY, int width, int height,
+                         String color, String textColor, String text, int fontSize) {
         this.widgetId = widgetId;
         this.topLeftX = topLeftX;
         this.topLeftY = topLeftY;
@@ -22,6 +23,7 @@ public class WidgetDto {
         this.textColor = textColor;
         this.text = text;
         this.fontSize = fontSize;
+        this.type = "StickyNote";
     }
 
     public String getWidgetId() { return widgetId; }

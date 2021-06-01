@@ -8,13 +8,13 @@ public class LineDto {
     private int bottomRightY;
     private String type;
 
-    public LineDto(String lineId, int topLeftX, int topLeftY, int bottomRightX, int bottomRightY, String type) {
+    public LineDto(String lineId, int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) {
         this.lineId = lineId;
         this.topLeftX = topLeftX;
         this.topLeftY = topLeftY;
         this.bottomRightX = bottomRightX;
         this.bottomRightY = bottomRightY;
-        this.type = type;
+        this.type = "Line";
     }
 
     public String getLineId() {

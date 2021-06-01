@@ -6,8 +6,8 @@ import ntut.csie.selab.usecase.board.CommittedWidgetDtoMapper;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentInput;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentOutput;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
-import ntut.csie.selab.usecase.widget.WidgetDto;
-import ntut.csie.selab.usecase.widget.WidgetDtoMapper;
+import ntut.csie.selab.usecase.widget.StickyNoteDto;
+import ntut.csie.selab.usecase.widget.StickyNoteDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,15 +27,15 @@ public class GetBoardContentController {
     public BoardContentViewModel getBoardContent(@PathVariable("boardId") String boardId) {
         GetBoardContentInput input = new GetBoardContentInput();
         GetBoardContentOutput output = new GetBoardContentOutput();
-        List<WidgetDto> widgetDtos;
+        List<StickyNoteDto> stickyNoteDtos;
         List<CommittedWidgetDto> committedWidgetDtos;
-        WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
+        StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
         CommittedWidgetDtoMapper committedWidgetDtoMapper = new CommittedWidgetDtoMapper();
         input.setBoardId(boardId);
 
         getBoardContentUseCase.execute(input, output);
-        widgetDtos = widgetDtoMapper.domainToDto(output.getWidgets());
+        stickyNoteDtos = stickyNoteDtoMapper.domainToDto(output.getWidgets());
         committedWidgetDtos = committedWidgetDtoMapper.domainToDto(output.getCommittedWidgets());
-        return new BoardContentViewModel(output.getBoardId(), widgetDtos, committedWidgetDtos);
+        return new BoardContentViewModel(output.getBoardId(), stickyNoteDtos, committedWidgetDtos);
     }
 }
