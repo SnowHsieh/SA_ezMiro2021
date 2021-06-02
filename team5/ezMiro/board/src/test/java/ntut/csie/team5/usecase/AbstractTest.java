@@ -10,6 +10,7 @@ import ntut.csie.team5.adapter.gateway.repository.springboot.figure.note.NoteRep
 import ntut.csie.team5.adapter.gateway.repository.springboot.figure.note.NoteRepositoryPeer;
 import ntut.csie.team5.adapter.project.ProjectRepositoryImpl;
 import ntut.csie.team5.entity.model.figure.FigureType;
+import ntut.csie.team5.entity.model.figure.line.Endpoint;
 import ntut.csie.team5.usecase.board.BoardRepository;
 import ntut.csie.team5.usecase.board.create.CreateBoardInput;
 import ntut.csie.team5.usecase.board.create.CreateBoardUseCase;
@@ -23,6 +24,9 @@ import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteInput
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCase;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCaseImpl;
 import ntut.csie.team5.usecase.figure.line.LineRepository;
+import ntut.csie.team5.usecase.figure.line.draw.DrawLineInput;
+import ntut.csie.team5.usecase.figure.line.draw.DrawLineUseCase;
+import ntut.csie.team5.usecase.figure.line.draw.DrawLineUseCaseImpl;
 import ntut.csie.team5.usecase.project.ProjectRepository;
 import ntut.csie.team5.usecase.project.create.CreateProjectInput;
 import ntut.csie.team5.usecase.project.create.CreateProjectUseCase;
@@ -64,6 +68,8 @@ public abstract class AbstractTest {
     public int defaultHeight;
     public int defaultWidth;
     public String defaultColor;
+    public Endpoint defaultEndpointA;
+    public Endpoint defaultEndpointB;
 
     @Autowired
     private BoardRepositoryPeer boardRepositoryPeer;
@@ -95,6 +101,8 @@ public abstract class AbstractTest {
         defaultHeight = 10;
         defaultWidth = 10;
         defaultColor = "#000000";
+        defaultEndpointA = new Endpoint(UUID.randomUUID().toString(), 10, 10, "");
+        defaultEndpointB = new Endpoint(UUID.randomUUID().toString(), 100, 100, "");
     }
 
     public String createProject(String teamId, String projectName) {
@@ -150,5 +158,19 @@ public abstract class AbstractTest {
         enterBoardUseCase.execute(enterBoardInput, enterBoardOutput);
 
         return enterBoardOutput.getId();
+    }
+
+    public String drawLine(String boardId, Endpoint endpointA, Endpoint endpointB) {
+        DrawLineUseCase drawLineUseCase = new DrawLineUseCaseImpl(lineRepository, domainEventBus);
+        DrawLineInput drawLineInput = drawLineUseCase.newInput();
+        CqrsCommandPresenter drawLineOutput = CqrsCommandPresenter.newInstance();
+
+        drawLineInput.setBoardId(boardId);
+        drawLineInput.setEndpointA(endpointA);
+        drawLineInput.setEndpointB(endpointB);
+        drawLineInput.setFigureType(FigureType.LINE);
+
+        drawLineUseCase.execute(drawLineInput, drawLineOutput);
+        return drawLineOutput.getId();
     }
 }

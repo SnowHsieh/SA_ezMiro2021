@@ -27,8 +27,9 @@ public class GetBoardContentUseCaseTest extends AbstractTest {
         String boardId = createBoard(projectName, boardName);
 
         String firstNoteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, "#ff0000");
+        String firstLineId = drawLine(boardId, defaultEndpointA, defaultEndpointB);
 
-        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCaseImpl(boardRepository, noteRepository, domainEventBus);
+        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCaseImpl(boardRepository, noteRepository, lineRepository, domainEventBus);
         GetBoardContentInput getBoardContentInput = (GetBoardContentInput) getBoardContentUseCase;
         GetBoardContentPresenter getBoardContentOutput = new GetBoardContentPresenter();
 
@@ -39,10 +40,11 @@ public class GetBoardContentUseCaseTest extends AbstractTest {
         BoardContentViewModel boardContentViewModel = getBoardContentOutput.buildViewModel();
 
         assertEquals(boardId, boardContentViewModel.getBoardId());
-        assertEquals(1, boardContentViewModel.getFigureDtos().size());
+        assertEquals(2, boardContentViewModel.getFigureDtos().size());
 
         FigureDto figureDto = boardContentViewModel.getFigureDtos().get(0);
         assertEquals(firstNoteId, figureDto.getFigureId());
+        figureDto = boardContentViewModel.getFigureDtos().get(1);
+        assertEquals(firstLineId, figureDto.getFigureId());
     }
-
 }

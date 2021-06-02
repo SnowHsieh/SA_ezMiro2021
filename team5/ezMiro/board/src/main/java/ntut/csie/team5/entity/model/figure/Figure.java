@@ -5,8 +5,8 @@ import ntut.csie.team5.entity.model.figure.event.FigureDeleted;
 
 public abstract class Figure extends AggregateRoot<String> {
 
-    private String boardId;
-    private FigureType figureType;
+    protected String boardId;
+    protected FigureType figureType;
 
     public Figure(String figureId, String boardId, FigureType figureType) {
         super(figureId);
