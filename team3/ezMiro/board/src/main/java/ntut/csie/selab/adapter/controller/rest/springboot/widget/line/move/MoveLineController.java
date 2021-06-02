@@ -29,11 +29,11 @@ public class MoveLineController {
         MoveLineOutput output = new MoveLineOutput();
         List<String> lineIds = new ArrayList<>();
         try {
-            JSONObject stickNoteJSON = new JSONObject(lineInfo);
-            Iterator iterator = stickNoteJSON.keys();
+            JSONObject lineJSON = new JSONObject(lineInfo);
+            Iterator iterator = lineJSON.keys();
             while (iterator.hasNext()) {
                 String key = (String) iterator.next();
-                JSONObject coordinateJSON = stickNoteJSON.getJSONObject(key);
+                JSONObject coordinateJSON = lineJSON.getJSONObject(key);
                 int topLeftX = coordinateJSON.getInt("topLeftX");
                 int topLeftY = coordinateJSON.getInt("topLeftY");
                 int bottomRightX = coordinateJSON.getInt("bottomRightX");

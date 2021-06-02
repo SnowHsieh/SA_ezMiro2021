@@ -1,9 +1,8 @@
 package ntut.csie.selab.adapter.gateway.repository.springboot.widget;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import ntut.csie.selab.entity.model.widget.Widget;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "line")
@@ -26,6 +25,14 @@ public class LineData {
 
     @Column(name = "bottom_right_y")
     private int bottomRightY;
+
+    @OneToOne
+    @JoinColumn(name = "head_widget_id", referencedColumnName = "widget_id")
+    private StickyNoteData headWidget;
+
+    @OneToOne
+    @JoinColumn(name = "tail_widget_id", referencedColumnName = "widget_id")
+    private StickyNoteData tailWidget;
 
     public LineData() {
     }
@@ -89,5 +96,21 @@ public class LineData {
 
     public void setBottomRightY(int bottomRightY) {
         this.bottomRightY = bottomRightY;
+    }
+
+    public StickyNoteData getHeadWidget() {
+        return headWidget;
+    }
+
+    public void setHeadWidget(StickyNoteData headWidget) {
+        this.headWidget = headWidget;
+    }
+
+    public StickyNoteData getTailWidget() {
+        return tailWidget;
+    }
+
+    public void setTailWidget(StickyNoteData tailWidget) {
+        this.tailWidget = tailWidget;
     }
 }
