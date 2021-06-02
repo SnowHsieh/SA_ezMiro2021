@@ -35,6 +35,8 @@ import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.line.LineRepository;
 import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCase;
 import ntut.csie.sslab.miro.usecase.line.delete.DeleteLineUseCase;
+import ntut.csie.sslab.miro.usecase.line.move.MoveLineUseCase;
+import ntut.csie.sslab.miro.usecase.line.move.MoveLineUseCaseImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -139,6 +141,11 @@ public class UseCaseInjection {
     @Bean(name="deleteLineUseCase")
     public DeleteLineUseCase deleteLineUseCase() {
         return new DeleteLineUseCaseImpl(lineRepository, eventBus);
+    }
+
+    @Bean(name="moveLineUseCase")
+    public MoveLineUseCase moveLineUseCase() {
+        return new MoveLineUseCaseImpl(lineRepository, eventBus);
     }
 
     @Autowired

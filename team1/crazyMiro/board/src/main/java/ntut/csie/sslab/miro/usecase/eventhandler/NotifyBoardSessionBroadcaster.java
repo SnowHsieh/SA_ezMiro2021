@@ -15,6 +15,7 @@ import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.entity.model.figure.event.*;
 import ntut.csie.sslab.miro.entity.model.line.event.LineCreated;
 import ntut.csie.sslab.miro.entity.model.line.event.LineDeleted;
+import ntut.csie.sslab.miro.entity.model.line.event.LineMoved;
 import ntut.csie.sslab.miro.usecase.BoardSessionBroadcaster;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
@@ -144,6 +145,13 @@ public class NotifyBoardSessionBroadcaster {
         Board board = boardRepository.findById(lineDeleted.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessions();
         boardSessions.forEach(each->broadcast(lineDeleted, each.getBoardSessionId()));
+    }
+
+    @Subscribe
+    public void whenLineMoved(LineMoved lineMoved) {
+        Board board = boardRepository.findById(lineMoved.getBoardId()).get();
+        List<BoardSession> boardSessions = board.getBoardSessions();
+        boardSessions.forEach(each->broadcast(lineMoved, each.getBoardSessionId()));
     }
 
     @Subscribe

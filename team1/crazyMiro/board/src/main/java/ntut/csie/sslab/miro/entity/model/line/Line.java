@@ -4,6 +4,8 @@ import ntut.csie.sslab.ddd.model.AggregateRoot;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.line.event.LineCreated;
 import ntut.csie.sslab.miro.entity.model.line.event.LineDeleted;
+import ntut.csie.sslab.miro.entity.model.line.event.LineMoved;
+import ntut.csie.sslab.miro.usecase.line.move.MoveLineUseCase;
 
 public class Line extends AggregateRoot<String> {
 
@@ -75,5 +77,11 @@ public class Line extends AggregateRoot<String> {
 
     public void deleteLine() {
         addDomainEvent(new LineDeleted(lineId, boardId));
+    }
+
+    public void setPosition(Coordinate sourcePosition, Coordinate targetPosition) {
+        setSourcePosition(sourcePosition);
+        setTargetPosition(targetPosition);
+        addDomainEvent(new LineMoved(boardId, lineId, sourcePosition, targetPosition));
     }
 }
