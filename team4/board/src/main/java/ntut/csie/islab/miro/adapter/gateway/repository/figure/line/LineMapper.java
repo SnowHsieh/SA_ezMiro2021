@@ -27,7 +27,12 @@ public class LineMapper {
                 lineData.getStrokeWidth(),
                 lineData.getColor()
         );
+        List<UUID> attachedTextFigureIdList = new ArrayList<>();
+        for (AttachedTextFigureIdData attachedTextFigureIdData : lineData.getAttachedTextFigureIdDataList()) {
+            attachedTextFigureIdList.add(UUID.fromString(attachedTextFigureIdData.getAttachedTextFigureId()));
+        }
 
+        line.setAttachedTextFigureIdList(attachedTextFigureIdList);
         line.clearDomainEvents();
         return line;
     }
@@ -63,6 +68,19 @@ public class LineMapper {
                 line.getSrcArrowKind().ordinal(),
                 line.getDestArrowKind().ordinal()
         );
+
+        List<AttachedTextFigureIdData> attachedTextFigureDataIdList = new ArrayList<>();
+        List<UUID> attachedTextFigureIdList = line.getAttachedTextFigureIdList();
+        for (int i =0 ; i < attachedTextFigureIdList.size() ; i++) {
+            AttachedTextFigureIdData item = new AttachedTextFigureIdData(
+                   line.getFigureId().toString(),
+                    attachedTextFigureIdList.get(i).toString()
+                    );
+            attachedTextFigureDataIdList.add(item);
+        }
+
+
+        lineData.setAttachedTextFigureIdDataList(attachedTextFigureDataIdList);
         return lineData;
     }
 }

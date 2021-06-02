@@ -6,6 +6,7 @@ import ntut.csie.islab.miro.entity.model.figure.line.ArrowKindEnum;
 import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ public abstract class Figure extends AggregateRoot<UUID> {
     private UUID boardId;
     // line
     private List<Position> positionList;
+    private List<UUID> attachedTextFigureIdList;
     private ArrowKindEnum srcArrowKind; //NONE,CIRCLE,ARROW
     private ArrowKindEnum destArrowKind; //NONE,CIRCLE,ARROW
     private int strokeWidth;
@@ -32,6 +34,7 @@ public abstract class Figure extends AggregateRoot<UUID> {
         this.destArrowKind = ArrowKindEnum.NONE;
         this.strokeWidth = strokeWidth;
         this.color = color;
+        this.attachedTextFigureIdList = new ArrayList<>();
     }
 
     public Figure(UUID boardId, UUID figureId, List<Position> positionList, int strokeWidth, String color) {
@@ -42,6 +45,7 @@ public abstract class Figure extends AggregateRoot<UUID> {
         this.destArrowKind = ArrowKindEnum.NONE;
         this.strokeWidth = strokeWidth;
         this.color = color;
+        this.attachedTextFigureIdList = new ArrayList<>();
     }
 
     // textFigure
@@ -113,6 +117,14 @@ public abstract class Figure extends AggregateRoot<UUID> {
         this.color = color;
     }
 
+    public List<UUID> getAttachedTextFigureIdList() {
+        return attachedTextFigureIdList;
+    }
+
+    public void setAttachedTextFigureIdList(List<UUID> attachedTextFigureIdList) {
+        this.attachedTextFigureIdList = attachedTextFigureIdList;
+    }
+
     public Position getPosition() {
         return position;
     }
@@ -150,4 +162,6 @@ public abstract class Figure extends AggregateRoot<UUID> {
     public abstract FigureTypeEnum getKind();
 
     public abstract void changeLinePath(List<Position> positionList);
+
+    public abstract void attachTextFigure(UUID figureId);
 }

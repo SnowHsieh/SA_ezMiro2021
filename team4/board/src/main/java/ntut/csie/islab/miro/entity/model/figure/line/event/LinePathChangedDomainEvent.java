@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.UUID;
 
 public class LinePathChangedDomainEvent extends DomainEvent {
-    private UUID boardId;
-    private UUID figureId;
-    private List<Position> originalPositionList;
-    private List<Position> newPositionList;
+    private final UUID boardId;
+    private final UUID figureId;
+    private final List<Position> originalPositionList;
+    private final List<Position> newPositionList;
 
     public LinePathChangedDomainEvent(UUID boardId, UUID figureId, List<Position> originalPositionList, List<Position> positionList) {
         super(DateProvider.now());

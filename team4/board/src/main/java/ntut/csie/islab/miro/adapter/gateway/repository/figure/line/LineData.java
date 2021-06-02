@@ -2,9 +2,11 @@ package ntut.csie.islab.miro.adapter.gateway.repository.figure.line;
 
 
 
-
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -33,6 +35,8 @@ public class LineData {
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<PositionData> positionDataList;
 
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<AttachedTextFigureIdData> attachedTextFigureIdDataList;
 
     public LineData(){
 
@@ -46,6 +50,7 @@ public class LineData {
         this.srcEndpointKind = srcEndpointKind;
         this.destEndpointKind = destEndpointKind;
         this.positionDataList = positionDataList;
+        this.attachedTextFigureIdDataList = new HashSet<>();
     }
 
     public String getLineId() {
@@ -102,5 +107,13 @@ public class LineData {
 
     public void setPositionList(List<PositionData> positionDataList) {
         this.positionDataList = positionDataList;
+    }
+
+    public List<AttachedTextFigureIdData> getAttachedTextFigureIdDataList() {
+        return new ArrayList<>(attachedTextFigureIdDataList);
+    }
+
+    public void setAttachedTextFigureIdDataList(List<AttachedTextFigureIdData> attachedTextFigureIdDataList) {
+        this.attachedTextFigureIdDataList = new HashSet<>(attachedTextFigureIdDataList);
     }
 }

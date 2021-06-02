@@ -6,6 +6,7 @@ import ntut.csie.islab.miro.entity.model.figure.Figure;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineDeletedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LinePathChangedDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.line.event.TextfigureAttachedByLineDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteMovedDomainEvent;
 
 
@@ -60,5 +61,11 @@ public class Line extends Figure {
         this.setPositionList(positionList);
         addDomainEvent(new LinePathChangedDomainEvent(this.getBoardId(), this.getFigureId(), originalPositionList, positionList));
 
+    }
+
+    @Override
+    public void attachTextFigure(UUID figureId) {
+        this.getAttachedTextFigureIdList().add(figureId);
+        addDomainEvent(new TextfigureAttachedByLineDomainEvent(this.getBoardId(), this.getFigureId(), this.getAttachedTextFigureIdList()));
     }
 }
