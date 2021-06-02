@@ -30,9 +30,11 @@ import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.figure.sticker.move.MoveStickerUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.move.MoveStickerUseCaseImpl;
-import ntut.csie.sslab.miro.usecase.line.CreateLineUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.line.DeleteLineUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.line.LineRepository;
 import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCase;
+import ntut.csie.sslab.miro.usecase.line.delete.DeleteLineUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -132,6 +134,11 @@ public class UseCaseInjection {
     @Bean(name="createLineUseCase")
     public CreateLineUseCase createLineUseCase() {
         return new CreateLineUseCaseImpl(lineRepository, eventBus);
+    }
+
+    @Bean(name="deleteLineUseCase")
+    public DeleteLineUseCase deleteLineUseCase() {
+        return new DeleteLineUseCaseImpl(lineRepository, eventBus);
     }
 
     @Autowired

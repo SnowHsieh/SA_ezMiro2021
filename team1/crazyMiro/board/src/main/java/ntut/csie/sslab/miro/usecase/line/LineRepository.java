@@ -7,4 +7,5 @@ import ntut.csie.sslab.miro.entity.model.line.Line;
 import java.util.List;
 
 public interface LineRepository extends AbstractRepository<Line, String> {
+    List<Line> getLineByBoardId(String boardId);
 }

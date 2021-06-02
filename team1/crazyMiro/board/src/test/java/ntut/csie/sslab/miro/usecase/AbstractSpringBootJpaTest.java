@@ -102,6 +102,9 @@ import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerInput;
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.line.LineRepository;
+import ntut.csie.sslab.miro.usecase.line.create.CreateLineInput;
+import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCase;
+import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCaseImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -250,6 +253,21 @@ public abstract class AbstractSpringBootJpaTest {
         input.setBoardSessionId(boardSessionId);
 
         leaveBoardUseCase.execute(input, output);
+    }
+
+    protected String createLine(String boardId, String sourceFigureId, String targetFigureId, Coordinate sourcePosition, Coordinate targetPosition) {
+        CreateLineUseCase createLineUseCase = new CreateLineUseCaseImpl(lineRepository, domainEventBus);
+        CreateLineInput input = createLineUseCase.newInput();
+        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
+        input.setBoardId(boardId);
+        input.setSourceId(sourceFigureId);
+        input.setTargetId(targetFigureId);
+        input.setSourcePosition(sourcePosition);
+        input.setTargetPosition(targetPosition);
+
+        createLineUseCase.execute(input, output);
+
+        return output.getId();
     }
 
 //

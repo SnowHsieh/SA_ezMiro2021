@@ -3,6 +3,7 @@ package ntut.csie.sslab.miro.entity.model.line;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.line.event.LineCreated;
+import ntut.csie.sslab.miro.entity.model.line.event.LineDeleted;
 
 public class Line extends AggregateRoot<String> {
 
@@ -70,5 +71,9 @@ public class Line extends AggregateRoot<String> {
 
     public void setTargetPosition(Coordinate targetPosition) {
         this.targetPosition = targetPosition;
+    }
+
+    public void deleteLine() {
+        addDomainEvent(new LineDeleted(lineId, boardId));
     }
 }

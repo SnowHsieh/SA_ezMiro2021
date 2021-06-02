@@ -1,10 +1,11 @@
-package ntut.csie.sslab.miro.usecase.line;
+package ntut.csie.sslab.miro.usecase.line.create;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.line.Line;
+import ntut.csie.sslab.miro.usecase.line.LineRepository;
 import ntut.csie.sslab.miro.usecase.line.create.CreateLineInput;
 import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCase;
 

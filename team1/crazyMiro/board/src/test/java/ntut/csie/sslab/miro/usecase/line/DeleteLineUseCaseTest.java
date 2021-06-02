@@ -1,45 +1,33 @@
 package ntut.csie.sslab.miro.usecase.line;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.miro.entity.model.line.Line;
+import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.miro.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.sslab.miro.usecase.line.create.CreateLineInput;
-import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCase;
-import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.line.delete.DeleteLineUseCase;
+import ntut.csie.sslab.miro.usecase.line.delete.DeleteLineInput;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CreateLineUseCaseTest extends AbstractSpringBootJpaTest {
+public class DeleteLineUseCaseTest extends AbstractSpringBootJpaTest {
 
     @Test
-    public void create_a_line_which_connect_two_figure() {
+    public void delete_a_line_connect_two_figure() {
         String boardId = UUID.randomUUID().toString();
         String sourceFigureId = UUID.randomUUID().toString();
         String targetFigureId = UUID.randomUUID().toString();
-        CreateLineUseCase createLineUseCase = new CreateLineUseCaseImpl(lineRepository, domainEventBus);
-        CreateLineInput input = createLineUseCase.newInput();
-        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
-        input.setBoardId(boardId);
-        input.setSourceId(sourceFigureId);
-        input.setTargetId(targetFigureId);
-        input.setSourcePosition(null);
-        input.setTargetPosition(null);
+        String lineId = createLine(boardId, sourceFigureId, targetFigureId, null, null);
+        eventListener.clearEventCount();
+        DeleteLineUseCase deleteLineUseCase = new DeleteLineUseCaseImpl(lineRepository, domainEventBus);
+        DeleteLineInput input = deleteLineUseCase.newInput();
+        CqrsCommandOutput output = CqrsCommandPresenter.newInstance();
+        input.setLineId(lineId);
 
-        createLineUseCase.execute(input, output);
+        deleteLineUseCase.execute(input, output);
 
-        assertTrue(lineRepository.findById(output.getId()).isPresent());
-        assertNotNull(output.getId());
-        Line line = lineRepository.findById(output.getId()).get();
-        assertEquals(sourceFigureId, line.getSourceId());
-        assertEquals(targetFigureId, line.getTargetId());
-        assertNull(line.getSourcePosition());
-        assertNull(line.getTargetPosition());
+        assertFalse(lineRepository.findById(output.getId()).isPresent());
         assertEquals(1, eventListener.getEventCount());
-
-
-
     }
 }

@@ -1,14 +1,13 @@
 package ntut.csie.sslab.miro.usecase.line;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.line.Line;
 import ntut.csie.sslab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.sslab.miro.usecase.line.create.CreateLineInput;
 import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCase;
+import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCaseImpl;
 import org.junit.jupiter.api.Test;
 
-import java.util.Random;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;

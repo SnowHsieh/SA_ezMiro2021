@@ -7,6 +7,7 @@ import ntut.csie.sslab.miro.usecase.line.LineRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class LineRepositoryImpl implements LineRepository {
 
@@ -33,7 +34,12 @@ public class LineRepositoryImpl implements LineRepository {
     }
 
     @Override
-    public void deleteById(String s) {
+    public void deleteById(String id) {
+        lines.removeIf(x->x.getLineId().equals(id));
+    }
 
+    @Override
+    public List<Line> getLineByBoardId(String boardId) {
+        return lines.stream().filter(x-> x.getBoardId().equals(boardId)).collect(Collectors.toList());
     }
 }
