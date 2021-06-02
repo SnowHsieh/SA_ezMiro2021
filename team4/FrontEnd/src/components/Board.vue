@@ -56,7 +56,7 @@ import { changeLinePathApi, createLineApi, deleteLineApi } from '../apis/lineApi
 export default {
   data () {
     return {
-      boardId: '90475d69-6a19-428e-956f-1f334f30ee5e',
+      boardId: '21b33e52-1a98-4efd-a61b-252ebbae6460',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -442,13 +442,10 @@ export default {
       _this.canvas.on(
         {
           'mouse:up': function (e) {
-            if (e.target !== null) {
-              _this.canvas.getObjects().every(function (item) {
-                if (item.type === 'group' && item.get('id') !== e.target.get('id')) {
-                  if (e.target.intersectsWithObject(item) && item.intersectsWithObject(e.target)) {
-                    _this.attachPoint(e.target, item)
-                    return false // every will stop when get false
-                  }
+            if (e.target.type === 'circle') {
+              _this.canvas.getObjects().forEach(function (item) {
+                if (item.type === 'group' && e.target.intersectsWithObject(item)) {
+                  item.attachPoint = e.target // stickynote attribure
                 }
               })
             } else {
@@ -456,16 +453,6 @@ export default {
             }
           }
         })
-    },
-    attachPoint (srcPoint, destPoint) {
-      console.log('attachPoint')
-      var _this = this
-      if (srcPoint.line1 && srcPoint.line1.set({ x2: destPoint.left, y2: destPoint.top })) {
-        _this.changeLinePath(srcPoint.line1)
-      }
-      if (srcPoint.line2 && srcPoint.line2.set({ x1: destPoint.left, y1: destPoint.top })) {
-        _this.changeLinePath(srcPoint.line2)
-      }
     },
     listenToObjectScaled () {
       var _this = this
@@ -488,6 +475,12 @@ export default {
               if (_this.updateFigureFlag) {
                 _this.moveStickyNote(e.target)
                 _this.updateFigureFlag = false
+                if (e.target.attachPoint !== undefined) {
+                  var attachPoint = e.target.attachPoint
+                  attachPoint.set('top', e.target.get('top'))
+                  attachPoint.set('left', e.target.get('left'))
+                  _this.canvas.fire('object:moved', { target: attachPoint })
+                }
               }
             }
           }
@@ -498,7 +491,9 @@ export default {
       _this.canvas.on(
         {
           'object:moved': function (e) {
-            if (e.target.type !== 'group') {
+            console.log('om:', e)
+            if (e.target.type === 'circle') {
+              console.log('circle moved')
               const p = e.target // circle
               if (p.line1 && p.line1.set({ x2: p.left, y2: p.top })) {
                 _this.changeLinePath(p.line1)
