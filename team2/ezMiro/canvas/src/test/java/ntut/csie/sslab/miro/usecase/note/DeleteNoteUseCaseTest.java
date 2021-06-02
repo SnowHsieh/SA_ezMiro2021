@@ -7,18 +7,16 @@ import ntut.csie.sslab.miro.usecase.note.delete.DeleteNoteInput;
 import ntut.csie.sslab.miro.usecase.note.delete.DeleteNoteUseCase;
 import ntut.csie.sslab.miro.usecase.note.delete.DeleteNoteUseCaseImpl;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DeleteNoteUseCaseTest extends AbstractUseCaseTest {
-
     @Test
     public void delete_note() {
         String boardId = create_board();
         String noteId = create_note(boardId);
+        eventListener.clear();
         DeleteNoteUseCase deleteNoteUseCase = new DeleteNoteUseCaseImpl(figureRepository, domainEventBus);
         DeleteNoteInput input = deleteNoteUseCase.newInput();
-        eventListener.clear();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setNoteId(noteId);
         input.setBoardId(boardId);

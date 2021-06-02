@@ -1,7 +1,7 @@
-package ntut.csie.sslab.miro.entity.model.note.event;
+package ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note.event;
 
 import ntut.csie.sslab.ddd.model.DomainEvent;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -19,7 +19,7 @@ public interface NoteEvents extends DomainEvent {
         private final double height;
         private final Instant occurredOn;
 
-        public NoteCreated(UUID id, String boardId, String noteId, String description, String color, Coordinate coordinate, double width, double height, Instant occurredOn) {
+        public NoteCreated(UUID id, String noteId, String description, String color, Coordinate coordinate, double width, double height, String boardId, Instant occurredOn) {
             this.id = id;
             this.boardId = boardId;
             this.noteId = noteId;
@@ -312,7 +312,7 @@ public interface NoteEvents extends DomainEvent {
         private final String noteId;
         private final Instant occurredOn;
 
-        public NoteDeleted(UUID id, String boardId, String noteId, Instant occurredOn) {
+        public NoteDeleted(UUID id, String noteId, String boardId, Instant occurredOn) {
             this.id = id;
             this.boardId = boardId;
             this.noteId = noteId;

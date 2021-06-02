@@ -2,8 +2,8 @@ package ntut.csie.sslab.miro.usecase.note.move;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
-import ntut.csie.sslab.miro.entity.model.note.Note;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note.Note;
 import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 
 public class MoveNoteUseCaseImpl implements MoveNoteUseCase {

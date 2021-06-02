@@ -22,7 +22,6 @@ public class DeleteNoteController {
     @PostMapping(path = "${MIRO_PREFIX}/notes/{noteId}/delete", produces = "application/json")
     public CqrsCommandViewModel deleteNote(@PathVariable("noteId") String noteId,
                                            @QueryParam("boardId") String boardId) {
-
         DeleteNoteInput input = deleteNoteUseCase.newInput();
         input.setNoteId(noteId);
         input.setBoardId(boardId);

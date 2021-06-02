@@ -4,7 +4,8 @@ import com.google.common.eventbus.Subscribe;
 import ntut.csie.sslab.ddd.model.RemoteDomainEvent;
 import ntut.csie.sslab.miro.entity.model.board.Board;
 import ntut.csie.sslab.miro.entity.model.cursor.event.CursorEvents;
-import ntut.csie.sslab.miro.entity.model.note.event.NoteEvents;
+import ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note.event.NoteEvents;
+import ntut.csie.sslab.miro.entity.model.figure.line.event.LineEvents;
 import ntut.csie.sslab.miro.usecase.EventBroadcaster;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import ntut.csie.sslab.miro.usecase.cursor.CursorRepository;
@@ -35,5 +36,11 @@ public class NotifyEventBroadcasterAdapter {
     public void whenNoteEventOccurred(NoteEvents event){
         Board board = boardRepository.findById(event.getBoardId()).get();
         eventBroadcaster.broadcast(new RemoteDomainEvent(event,"Note", event.getOccurredOn()), board.getBoardChannel(), "note");
+    }
+
+    @Subscribe
+    public void whenLineEventOccurred(LineEvents event){
+        Board board = boardRepository.findById(event.getBoardId()).get();
+        eventBroadcaster.broadcast(new RemoteDomainEvent(event, "Line", event.getOccurredOn()), board.getBoardChannel(), "line");
     }
 }

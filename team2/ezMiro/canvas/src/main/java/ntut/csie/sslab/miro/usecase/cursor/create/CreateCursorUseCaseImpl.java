@@ -4,7 +4,7 @@ import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.miro.entity.model.cursor.Cursor;
 import ntut.csie.sslab.miro.entity.model.cursor.CursorBuilder;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 import ntut.csie.sslab.miro.usecase.cursor.CursorRepository;
 
 public class CreateCursorUseCaseImpl implements CreateCursorUseCase {

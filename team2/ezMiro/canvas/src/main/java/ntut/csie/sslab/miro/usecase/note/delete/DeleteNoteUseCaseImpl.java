@@ -2,7 +2,7 @@ package ntut.csie.sslab.miro.usecase.note.delete;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
-import ntut.csie.sslab.miro.entity.model.note.Note;
+import ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note.Note;
 import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 
 public class DeleteNoteUseCaseImpl implements DeleteNoteUseCase {
@@ -19,7 +19,7 @@ public class DeleteNoteUseCaseImpl implements DeleteNoteUseCase {
         Note note = figureRepository.findNoteById(input.getNoteId()).orElse(null);
         if (note == null){
             output.setId(input.getNoteId())
-                  .setMessage("Move note failed: note not found, note id = " + input.getNoteId());
+                  .setMessage("Delete note failed: note not found, note id = " + input.getNoteId());
             return;
         }
         note.markAsRemoved(input.getBoardId());

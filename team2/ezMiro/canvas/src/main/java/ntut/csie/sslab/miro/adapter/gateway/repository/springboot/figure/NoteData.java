@@ -1,6 +1,6 @@
 package ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure;
 
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;

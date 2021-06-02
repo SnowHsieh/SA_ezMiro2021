@@ -27,8 +27,8 @@ public class ChangeNoteDescriptionController {
         String description = "";
 
         try {
-            JSONObject boardJSON = new JSONObject(noteInfo);
-            description = boardJSON.getString("description");
+            JSONObject noteJSON = new JSONObject(noteInfo);
+            description = noteJSON.getString("description");
         } catch (JSONException e) {
             e.printStackTrace();
         }

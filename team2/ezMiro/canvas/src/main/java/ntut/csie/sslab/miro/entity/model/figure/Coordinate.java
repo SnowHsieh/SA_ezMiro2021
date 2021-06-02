@@ -1,4 +1,4 @@
-package ntut.csie.sslab.miro.entity.model.note;
+package ntut.csie.sslab.miro.entity.model.figure;
 
 import java.util.Objects;
 

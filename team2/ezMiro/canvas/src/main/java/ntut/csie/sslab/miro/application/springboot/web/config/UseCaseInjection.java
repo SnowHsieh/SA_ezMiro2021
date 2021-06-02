@@ -5,6 +5,7 @@ import ntut.csie.sslab.miro.adapter.controller.websocket.WebSocketBroadcaster;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.NotifyBoardAdapter;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.NotifyCursorAdapter;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.NotifyEventBroadcasterAdapter;
+import ntut.csie.sslab.miro.adapter.gateway.eventbus.NotifyFigureAdapter;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCase;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCaseImpl;
@@ -17,6 +18,19 @@ import ntut.csie.sslab.miro.usecase.cursor.move.MoveCursorUseCase;
 import ntut.csie.sslab.miro.usecase.cursor.move.MoveCursorUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyCursor;
+import ntut.csie.sslab.miro.usecase.eventhandler.NotifyFigure;
+import ntut.csie.sslab.miro.usecase.line.connecttofigure.ConnectLineToFigureUseCase;
+import ntut.csie.sslab.miro.usecase.line.connecttofigure.ConnectLineToFigureUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCase;
+import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.line.delete.DeleteLineUseCase;
+import ntut.csie.sslab.miro.usecase.line.delete.DeleteLineUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.line.disconnectfromfigure.DisconnectLineFromFigureUseCase;
+import ntut.csie.sslab.miro.usecase.line.disconnectfromfigure.DisconnectLineFromFigureUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.line.move.MoveLinePointUseCase;
+import ntut.csie.sslab.miro.usecase.line.move.MoveLinePointUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.line.move.MoveLineUseCase;
+import ntut.csie.sslab.miro.usecase.line.move.MoveLineUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCase;
 import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCaseImpl;
@@ -26,12 +40,12 @@ import ntut.csie.sslab.miro.usecase.note.edit.color.ChangeNoteColorUseCase;
 import ntut.csie.sslab.miro.usecase.note.edit.color.ChangeNoteColorUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.note.edit.description.ChangeNoteDescriptionUseCase;
 import ntut.csie.sslab.miro.usecase.note.edit.description.ChangeNoteDescriptionUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.note.edit.size.ChangeNoteSizeUseCase;
+import ntut.csie.sslab.miro.usecase.note.edit.size.ChangeNoteSizeUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.note.edit.zorder.back.SendNoteToBackUseCase;
 import ntut.csie.sslab.miro.usecase.note.edit.zorder.back.SendNoteToBackUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.note.edit.zorder.front.BringNoteToFrontUseCase;
 import ntut.csie.sslab.miro.usecase.note.edit.zorder.front.BringNoteToFrontUseCaseImpl;
-import ntut.csie.sslab.miro.usecase.note.edit.size.ChangeNoteSizeUseCase;
-import ntut.csie.sslab.miro.usecase.note.edit.size.ChangeNoteSizeUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.note.get.GetNoteUseCase;
 import ntut.csie.sslab.miro.usecase.note.get.GetNoteUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.note.move.MoveNoteUseCase;
@@ -117,6 +131,36 @@ public class UseCaseInjection {
         return new DeleteNoteUseCaseImpl(figureRepository, eventBus);
     }
 
+    @Bean(name="createLineUseCase")
+    public CreateLineUseCase createLineUseCase() {
+        return new CreateLineUseCaseImpl(figureRepository, eventBus);
+    }
+
+    @Bean(name="moveLineUseCase")
+    public MoveLineUseCase moveLineUseCase() {
+        return new MoveLineUseCaseImpl(figureRepository, eventBus);
+    }
+
+    @Bean(name="deleteLineUseCase")
+    public DeleteLineUseCase deleteLineUseCase() {
+        return new DeleteLineUseCaseImpl(figureRepository, eventBus);
+    }
+
+    @Bean(name="moveLinePointUseCase")
+    public MoveLinePointUseCase moveLinePointUseCase() {
+        return new MoveLinePointUseCaseImpl(figureRepository, eventBus);
+    }
+
+    @Bean(name="connectLineToFigureUseCase")
+    public ConnectLineToFigureUseCase connectLineToFigureUseCase() {
+        return new ConnectLineToFigureUseCaseImpl(figureRepository, eventBus);
+    }
+
+    @Bean(name="disconnectLineFromFigureUseCase")
+    public DisconnectLineFromFigureUseCase disconnectLineFromFigureUseCase() {
+        return new DisconnectLineFromFigureUseCaseImpl(figureRepository, eventBus);
+    }
+
     @Bean(name="notifyBoardAdapter")
     public NotifyBoardAdapter notifyBoardAdapter() {
         return new NotifyBoardAdapter(new NotifyBoard(figureRepository, boardRepository, eventBus));
@@ -125,6 +169,11 @@ public class UseCaseInjection {
     @Bean(name="notifyCursorAdapter")
     public NotifyCursorAdapter notifyCursorAdapter() {
         return new NotifyCursorAdapter(new NotifyCursor(cursorRepository, eventBus));
+    }
+
+    @Bean(name="notifyFigureAdapter")
+    public NotifyFigureAdapter notifyFigureAdapter() {
+        return new NotifyFigureAdapter(new NotifyFigure(figureRepository, eventBus));
     }
 
     @Bean(name="notifyEventBroadcasterAdapter")

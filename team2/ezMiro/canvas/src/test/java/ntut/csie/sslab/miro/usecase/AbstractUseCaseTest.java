@@ -9,8 +9,9 @@ import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRep
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.cursor.CursorRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.LineRepositoryPeer;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.NoteRepositoryPeer;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardInput;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardUseCase;
@@ -21,6 +22,9 @@ import ntut.csie.sslab.miro.usecase.cursor.create.CreateCursorUseCase;
 import ntut.csie.sslab.miro.usecase.cursor.create.CreateCursorUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyCursor;
+import ntut.csie.sslab.miro.usecase.line.create.CreateLineInput;
+import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCase;
+import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 import ntut.csie.sslab.miro.usecase.note.create.CreateNoteInput;
 import ntut.csie.sslab.miro.usecase.note.create.CreateNoteUseCase;
@@ -58,9 +62,12 @@ public abstract class AbstractUseCaseTest {
     @Autowired
     private NoteRepositoryPeer noteRepositoryPeer;
 
+    @Autowired
+    private LineRepositoryPeer lineRepositoryPeer;
+
     @BeforeEach
     void setUp() {
-        figureRepository = new FigureRepositoryImpl(noteRepositoryPeer);
+        figureRepository = new FigureRepositoryImpl(noteRepositoryPeer, lineRepositoryPeer);
         domainEventBus = new DomainEventBus();
         boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
         cursorRepository = new CursorRepositoryImpl();
@@ -125,6 +132,34 @@ public abstract class AbstractUseCaseTest {
         input.setCoordinate(new Coordinate(3, 4));
 
         createCursorUseCase.execute(input, output);
+        return output.getId();
+    }
+
+    public String create_line_without_connected_figures(String boardId){
+        CreateLineUseCase createLineUseCase = new CreateLineUseCaseImpl(figureRepository, domainEventBus);
+        CreateLineInput input = createLineUseCase.newInput();
+        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
+        input.setBoardId(boardId);
+        input.setStartConnectableFigureId("");
+        input.setEndConnectableFigureId("");
+        input.setStartOffset(new Coordinate(20, 30));
+        input.setEndOffset(new Coordinate(40, 50));
+
+        createLineUseCase.execute(input, output);
+        return output.getId();
+    }
+
+    public String create_line_connected_to_figure_at_start_point(String boardId, String noteId){
+        CreateLineUseCase createLineUseCase = new CreateLineUseCaseImpl(figureRepository, domainEventBus);
+        CreateLineInput input = createLineUseCase.newInput();
+        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
+        input.setBoardId(boardId);
+        input.setStartConnectableFigureId(noteId);
+        input.setEndConnectableFigureId("");
+        input.setStartOffset(new Coordinate(5, 5));
+        input.setEndOffset(new Coordinate(40, 50));
+
+        createLineUseCase.execute(input, output);
         return output.getId();
     }
 }

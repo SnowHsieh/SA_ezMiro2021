@@ -4,6 +4,8 @@ import { Component, createRef } from 'react';
 import Note from './Note';
 import SockJsClient from 'react-stomp';
 import {RiCursorFill} from 'react-icons/ri'
+import LineDrawer from './LineDrawer';
+import { AiTwotoneProject } from 'react-icons/ai';
 
 const SOCKET_URL = 'http://localhost:8080/ezmiro/ws-message';
 
@@ -12,6 +14,7 @@ class App extends Component {
     super(props);
     this.state = { 
       notes: [],
+      lines: [],
       reconnectTime: 0,
       isConnect: false,
       onlineUsers: [],
@@ -38,10 +41,12 @@ class App extends Component {
       y: 0
     }
     this.draggingNote = "";
-    this.boardId = "262a68ed-cc97-4a16-9d5a-1bb5b68c4364"
+    this.boardId = "15fccdbf-f344-4b39-a15a-3e912501d810"
+    this.noteEnter = createRef();
   }
 
   componentDidMount() {
+    this.noteEnter.current = null
     this.getBoardContent()
     this.cursorBroadcaster = setInterval(()=>{
       try {
@@ -75,7 +80,19 @@ class App extends Component {
 
   getBoardContent() {
     Axios.get(`http://localhost:8080/ezmiro/miro/boards/${this.boardId}/getcontent`).then(response => {
-      this.setState({notes: response.data.notes, boardChannel: response.data.boardChannel})
+      let lines = response.data.lines.map((line) => {
+        let temp = {...line}
+        if(line.startConnectableFigureId != "") {
+          let {x:noteX, y:noteY} = response.data.notes.find(x => x.noteId == line.startConnectableFigureId).coordinate
+          temp={...temp, startOffset:{x: noteX + line.startOffset.x, y: noteY + line.startOffset.y}}
+        }
+        if (line.endConnectableFigureId != "") {
+          let {x:noteX, y:noteY} = response.data.notes.find(x => x.noteId == line.endConnectableFigureId).coordinate
+          temp={...temp, endOffset:{x: noteX + line.endOffset.x, y: noteY + line.endOffset.y}}
+        }
+        return temp
+      })
+      this.setState({notes: response.data.notes, lines: lines, boardChannel: response.data.boardChannel})
     }).catch(error => console.error(error));
   }
 
@@ -94,9 +111,9 @@ class App extends Component {
 
   dragNote = (id, coordinate) => {
     this.draggingNote = id
-    this.setState({
-      notes: this.state.notes.map(x => x.noteId === id ? {...x, coordinate} : x)
-    })
+    // this.setState({
+    //   notes: this.state.notes.map(x => x.noteId === id ? {...x, coordinate} : x)
+    // })
     try {
       this.clientRef.current.sendMessage(`/app/sendNote/${this.state.boardChannel}`, JSON.stringify({noteId: id, coordinate: coordinate}))
     } catch(error) {
@@ -166,14 +183,63 @@ class App extends Component {
       }).catch(error => console.error(error));
   }
 
+  createLine = () => {
+    Axios.post(`http://localhost:8080/ezmiro/miro/figures/lines?boardId=${this.boardId}`,
+      {
+        "startOffset": {
+          "x": 0,
+          "y": 0
+        }, 
+        "endOffset": {
+          "x": 100,
+          "y": 100
+        }, 
+        "startConnectableFigureId": "",
+        "endConnectableFigureId": ""
+      }).then(response => {
+        console.log("createLine", response)
+      }).catch(error => console.error(error));
+  }
+
+  connectLineToFigure = (lineId, linePoint, position) => {
+    Axios.post(`http://localhost:8080/ezmiro/miro/lines/${lineId}/connect-to-figure`,
+      {
+        "figureId": this.noteEnter.current,
+        "linePoint": linePoint, 
+        "offset": {
+          "x": 50,
+          "y": 50
+        }
+      }).then(response => {
+        console.log("connectLineToFigure", response)
+      }).catch(error => console.error(error));
+  }
+
+  moveLinePoint = (lineId, linePoint, pointDelta) => {
+    Axios.post(`http://localhost:8080/ezmiro/miro/lines/${lineId}/move-point`,
+      {
+        "linePoint": linePoint,
+        "pointDelta": pointDelta
+      }).then(response => {
+        console.log("moveLinePoint", response)
+      }).catch(error => console.error(error));
+  }
+
+  deleteLine = (lineId) => {
+    Axios.post(`http://localhost:8080/ezmiro/miro/lines/${lineId}/delete?boardId=${this.boardId}`).then(response => {
+        console.log("deleteLine", response)
+      }).catch(error => console.error(error));
+  }
+
   onEventReceived = (domainEvent, channel) => {
-    console.log("channel", channel)
     if (channel === `/topic/${this.state.boardChannel}/cursor`) {
       this.handleCursorEvent(domainEvent)
     } else if (channel === `/topic/${this.state.boardChannel}/note`) {
       this.handleNoteEvent(domainEvent)
     } else if (channel === `/topic/${this.state.boardChannel}/draggingNote`) {
       this.handleDraggingNote(domainEvent)
+    } else if (channel === `/topic/${this.state.boardChannel}/line`) {
+      this.handleLineEvent(domainEvent)
     }
   }
 
@@ -229,6 +295,88 @@ class App extends Component {
       default:
         break;
     }
+  }
+
+  handleLineEvent = (lineEvent) => {
+    console.log("lineEvent", lineEvent)
+    let line = JSON.parse(lineEvent.jsonEvent);
+    switch (lineEvent.eventType) {
+      case "LineCreated":
+        this.handleLineCreated(line);
+        break;
+      case "LinePointMoved":
+        this.handleLinePointMoved(line);
+        break;
+      case "LineDeleted":
+        this.handleLineDeleted(line);
+        break;
+      case "LineConnectedToFigure":
+        this.handleLineConnectedToFigure(line);
+        break;
+      default:
+        break;
+    }
+  }
+
+  handleLineCreated = (line) => {
+    console.log("handleLineCreated", line);
+    this.setState({
+      lines: [...this.state.lines,
+        {
+          boardId: line.boardId,
+          lineId: line.lineId,
+          startConnectableFigureId: line.startConnectableFigureId, 
+          endConnectableFigureId: line.endConnectableFigureId, 
+          startOffset: line.startOffset,
+          endOffset: line.endOffset,
+          startArrowStyle: line.startArrowStyle,
+          endArrowStyle: line.endArrowStyle,
+          zorder: this.state.lines.length
+        }
+      ]
+    })
+  }
+
+  handleLinePointMoved = (line) => {
+    console.log("handleLinePointMoved", line);
+    let originLine = this.state.lines.find(x => x.lineId === line.lineId);
+    this.setState({
+      lines: [...this.state.lines.filter(x => x.lineId !== line.lineId),
+        {
+          ...originLine, 
+          startOffset: line.linePoint == "START" ? line.newOffset : originLine.startOffset,
+          endOffset: line.linePoint == "END" ? line.newOffset : originLine.endOffset
+        }
+      ]
+    })
+  }
+
+  handleLineDeleted = (line) => {
+    console.log("handleLineDeleted", line);
+    this.setState({
+      lines: this.state.lines.filter(x => x.lineId !== line.lineId)
+    })
+  }
+
+  handleLineConnectedToFigure = (line) => {
+    console.log("handleLineConnectedToFigure", line)
+    let originLine = this.state.lines.find(x => x.lineId === line.lineId);
+    let targetNote = this.state.notes.find(x => x.noteId === line.figureId)
+    let newPoint = {
+      x: targetNote.coordinate.x + line.offset.x,
+      y: targetNote.coordinate.y + line.offset.y,
+    }
+    this.setState({
+      lines: [...this.state.lines.filter(x => x.lineId !== line.lineId),
+        {
+          ...originLine, 
+          startConnectableFigureId: line.linePoint == "START" ? line.figureId : originLine.startConnectableFigureId,
+          endConnectableFigureId: line.linePoint == "END" ? line.figureId : originLine.endConnectableFigureId,
+          startOffset: line.linePoint == "START" ? newPoint : originLine.startOffset,
+          endOffset: line.linePoint == "END" ? newPoint : originLine.endOffset
+        }
+      ]
+    }, console.log("handleLineConnectedToFigure",this.state.lines))
   }
 
   handleNoteCreated = (note) => {
@@ -288,12 +436,29 @@ class App extends Component {
   handleNoteMoved = (note) => {
     console.log("handleNoteMoved", note);
     let originNote = this.state.notes.find(x => x.noteId === note.noteId);
+    let newLines = this.state.lines.map((line) => {
+      let temp = {...line}
+      let {x:noteX, y:noteY} = originNote.coordinate
+      let deltaX = note.coordinate.x - noteX
+      let deltaY = note.coordinate.y - noteY
+      console.log("originNote.coordinate", originNote.coordinate, "note.coordinate", note.coordinate)
+      console.log("deltaX", deltaX , "deltaY", deltaY)
+      if(line.startConnectableFigureId == note.noteId) {
+        temp={...temp, startOffset:{x: deltaX + line.startOffset.x, y: deltaY + line.startOffset.y}}
+      }
+      if (line.endConnectableFigureId == note.noteId) {
+        temp={...temp, endOffset:{x: deltaX + line.endOffset.x, y: deltaY + line.endOffset.y}}
+      }
+      return temp
+    })
+
     this.setState({
       notes: [...this.state.notes.filter(x => x.noteId !== note.noteId),
       {
         ...originNote,
         coordinate: note.coordinate
-      }]
+      }],
+      lines: newLines
     })
   }
 
@@ -342,14 +507,33 @@ class App extends Component {
 
   handleDraggingNote = (draggingNote) => {
     console.log("handleDraggingNote", draggingNote);
+    
     let originNote = this.state.notes.find(x => x.noteId === draggingNote.noteId);
+    
+    let newLines = this.state.lines.map((line) => {
+      let temp = {...line}
+      let {x:noteX, y:noteY} = originNote.coordinate
+      let deltaX = draggingNote.coordinate.x - noteX
+      let deltaY = draggingNote.coordinate.y - noteY
+      console.log("originNote.coordinate", originNote.coordinate, "draggingNote.coordinate", draggingNote.coordinate)
+      console.log("deltaX", deltaX , "deltaY", deltaY)
+      if(line.startConnectableFigureId == draggingNote.noteId) {
+        temp={...temp, startOffset:{x: deltaX + line.startOffset.x, y: deltaY + line.startOffset.y}}
+      }
+      if (line.endConnectableFigureId == draggingNote.noteId) {
+        temp={...temp, endOffset:{x: deltaX + line.endOffset.x, y: deltaY + line.endOffset.y}}
+      }
+      return temp
+    })
+
     if( draggingNote.noteId !== this.draggingNote) {
       this.setState({
         notes: [...this.state.notes.filter(x => x.noteId !== draggingNote.noteId),
         {
           ...originNote,
           coordinate: draggingNote.coordinate
-        }]
+        }],
+        lines: newLines
       })
     }
   }
@@ -358,12 +542,30 @@ class App extends Component {
     this.clientRef.current.sendMessage(`/app/enterBoard/${this.boardId}`, this.userId)
   }
 
+  dragStopLine = (lineId, linePoint, position) => {
+    // console.log("dragStopLine", linePoint)
+    if(this.noteEnter.current !== null){
+      this.connectLineToFigure(lineId, linePoint, position)
+    }
+  }
+  
+  enterNote = (id) => {
+    this.noteEnter.current = id
+  }
+
+  leaveNote = () => {
+    this.noteEnter.current = null
+  }
+
+
+
   render() {
     return (
       <div id="canvas" style={{width: window.innerWidth, height: window.innerHeight}} onDoubleClick={this.createNote}> 
+        <button type="button" onClick={this.createLine}>Create Line</button>
         <SockJsClient
           url={SOCKET_URL}
-          topics={[`/topic/${this.state.boardChannel}/cursor`, `/topic/${this.state.boardChannel}/note`, `/topic/${this.state.boardChannel}/draggingNote`]}
+          topics={[`/topic/${this.state.boardChannel}/cursor`, `/topic/${this.state.boardChannel}/note`, `/topic/${this.state.boardChannel}/draggingNote`, `/topic/${this.state.boardChannel}/line`]}
           onConnect={this.enterBoard}
           onDisconnect={()=> console.log("DisconnectedNote!")}
           onMessage={this.onEventReceived}
@@ -388,8 +590,16 @@ class App extends Component {
             onNoteBringToFront={this.bringNoteToFront}
             onNoteSendToBack={this.sendNoteToBack}
             onNoteDragging={this.dragNote}
+            onNoteEnter={this.enterNote}
+            onNoteLeave={this.leaveNote}
           />
         )}
+        <LineDrawer
+          lineData={this.state.lines}
+          onLinePointMoved={this.moveLinePoint}
+          onLineDeleted={this.deleteLine}
+          onLineDragStop={this.dragStopLine}
+        />
       </div>
     );
   }
