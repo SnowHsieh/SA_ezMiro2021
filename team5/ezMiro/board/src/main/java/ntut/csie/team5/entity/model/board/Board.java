@@ -1,9 +1,7 @@
 package ntut.csie.team5.entity.model.board;
 
 import ntut.csie.sslab.ddd.model.AggregateRoot;
-import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.entity.model.board.event.*;
-import ntut.csie.team5.usecase.ClientBoardContentMightExpire;
 
 import java.util.ArrayList;
 import java.util.List;

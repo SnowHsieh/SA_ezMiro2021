@@ -13,20 +13,10 @@ public class LineData {
     @Column(name = "board_id")
     private String boardId;
 
-    @Embedded
-    @AttributeOverrides( {
-            @AttributeOverride(name="positionX", column = @Column(name="endpoint_a_position_x")),
-            @AttributeOverride(name="positionY", column = @Column(name="endpoint_a_position_y")),
-            @AttributeOverride(name="connectedFigureId", column = @Column(name="endpoint_a_connected_figure_id"))
-    })
+    @Column(name = "endpoint_data_a")
     private EndpointData endpointDataA;
 
-    @Embedded
-    @AttributeOverrides( {
-            @AttributeOverride(name="positionX", column = @Column(name="endpoint_b_position_x")),
-            @AttributeOverride(name="positionY", column = @Column(name="endpoint_b_position_y")),
-            @AttributeOverride(name="connectedFigureId", column = @Column(name="endpoint_b_connected_figure_id"))
-    })
+    @Column(name = "endpoint_data_b")
     private EndpointData endpointDataB;
 
     public LineData() {

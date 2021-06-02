@@ -7,6 +7,7 @@
             <button @click="changeColor('#FD9E4B')" style="width:100px;background-color:#FD9E4B">Domain Event</button>
             <button @click="changeColor('#C08AC9')" style="width:100px;background-color:#C08AC9">Policy</button>
             <button @click="changeColor('#FFF9B2')" style="width:100px;background-color:#FFF9B2">Aggregate</button>
+            <button @click="drawLines()">Line</button>
         </div>
         <div v-else>
             <button @click="createNotes('#CADF58')" style="width:100px;background-color:#CADF58">Read Model</button>
@@ -14,6 +15,7 @@
             <button @click="createNotes('#FD9E4B')" style="width:100px;background-color:#FD9E4B">Domain Event</button>
             <button @click="createNotes('#C08AC9')" style="width:100px;background-color:#C08AC9">Policy</button>
             <button @click="createNotes('#FFF9B2')" style="width:100px;background-color:#FFF9B2">Aggregate</button>
+            <button @click="createLines()">Line</button>
         </div>
         <br>
         <div>
@@ -38,6 +40,7 @@
 <script>
 import { markRaw } from '@vue/reactivity';
 import { fabric } from 'fabric';
+import '@/model/line'
 
 export default {
     name: 'DemoBoard',
@@ -53,7 +56,8 @@ export default {
             isActive: false,
             webSocket: null,
             user: null,
-            users: {}
+            users: {},
+            isDrawLineModel: false
         }
     },
     async mounted () {
@@ -91,8 +95,6 @@ export default {
                 setTimeout(() => {
                     this.webSocket.send(JSON.stringify({x: this.user.x, y: this.user.y}))
                 }, 200)
-                console.log(data)
-                console.log(this.users)
             } else if (data.type === 'CursorMoved') {
                 let user = this.users[data.userId]
 
@@ -212,7 +214,12 @@ export default {
         this.canvas.on('object:moving', (event) => {
             var target = event.target
             setTimeout(() => {
-                this.$api.note.moveNote(target.figureId, target.top, target.left)
+                console.log(target)
+                if (target.figureType === 'NOTE') {
+                    this.$api.note.moveNote(target.figureId, target.top, target.left)
+                } else if (target.figureType === 'LINE') {
+                    this.$api.line.moveLineEndpoint(target.figureId, target.endpointId, target.left, target.top)
+                }
             }, 200)
         })
         this.canvas.on('object:scaling', (event) => {
@@ -244,8 +251,18 @@ export default {
         })
 
 
-        var figures = await this.$api.board.getBoardContent(boardId)
-        this.drawNotes(figures)
+        this.getBoardContent()
+        // this.drawLine({
+        //     figureId: '',
+        //     endpointADto: {
+        //         positionX: 100,
+        //         positionY: 100
+        //     },
+        //     endpointBDto: {
+        //         positionX: 200,
+        //         positionY: 200
+        //     }
+        // })
     },
     methods: {
         parseNote (note) {
@@ -262,9 +279,10 @@ export default {
         },
         drawNotes (notes) {
             if (notes !== null) {
-                this.canvas.clear()
                 notes.forEach(note => {
-                    this.drawNote(note)
+                    if (note.figureType === 'NOTE') {
+                        this.drawNote(note)
+                    }
                 })
                 this.canvas.renderAll()
             }
@@ -307,9 +325,55 @@ export default {
         },
         async createNotes (color) {
             await this.$api.note.postNote(this.boardId, 200, 200, 100, 100, color)
+            this.getBoardContent()
+
+        },
+        async createLines () {
+            await this.$api.line.drawLine(this.boardId, {positionX: 100, positionY: 100, connectedFigureId: ''}, {positionX: 200, positionY: 200, connectedFigureId: ''})
+            this.getBoardContent()
+        },
+        async getBoardContent() {
+            this.canvas.clear()
             var figures = await this.$api.board.getBoardContent(this.boardId)
-            console.log(figures)
             this.drawNotes(figures)
+            this.drawLines(figures)
+        },
+        drawLines (lines) {
+            if (lines !== null) {
+                lines.forEach(line => {
+                    if (line.figureType === 'LINE') {
+                        this.drawLine(line)
+                    }
+                })
+                this.canvas.renderAll()
+            }
+        },
+        drawLine (lineDto) {
+            console.log(lineDto)
+            const line = new fabric.OurLine({
+                id: lineDto.figureId,
+                endpointA: {
+                    endpointId: lineDto.endpointA.endpointId,
+                    positionX: lineDto.endpointA.positionX,
+                    positionY: lineDto.endpointA.positionY,
+                    connectedFigureId: ''
+                },
+                endpointB: {
+                    endpointId: lineDto.endpointB.endpointId,
+                    positionX: lineDto.endpointB.positionX,
+                    positionY: lineDto.endpointB.positionY,
+                    connectedFigureId: ''
+                }
+            }, {
+                file: 'red',
+                stroke: 'black',
+                strokeWidth: 5,
+                selectable: false,
+                evented: true
+            })
+
+            this.canvas.add(line, line.endpointA, line.endpointB)
+            this.canvas.renderAll()
         },
         changeColor (color) {
             this.activeObject.item(0).set({

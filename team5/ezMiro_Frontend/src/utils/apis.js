@@ -96,4 +96,39 @@ const note = {
     }
 }
 
-export default {board, note}
+const line = {
+    async drawLine (boardId, endpointA, endpointB) {
+        var id = null
+        await api.line.drawLine({
+            boardId: boardId,
+            endpointA: endpointA,
+            endpointB: endpointB,
+        }).then((response) => {
+            id = response.data.id
+            console.log(response.data)
+        })
+        return id
+    },
+    moveLine (figureId, offsetX, offsetY) {
+        api.line.moveLine({
+            figureId: figureId,
+            offsetX: offsetX,
+            offsetY: offsetY
+        }).then()
+    },
+    moveLineEndpoint (figureId, endpointId, positionX, positionY) {
+        api.line.moveLineEndpoint({
+            figureId: figureId,
+            endpointId: endpointId,
+            positionX: positionX,
+            positionY: positionY
+        }).then()
+    },
+    deleteLine (figureId) {
+        api.line.deleteLine({
+            figureId: figureId
+        }).then()
+    }
+}
+
+export default {board, note, line}
