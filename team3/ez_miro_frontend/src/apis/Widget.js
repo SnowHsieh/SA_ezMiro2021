@@ -112,3 +112,12 @@ export const MoveLineBy = async (boardId, widgets) => {
     return err
   }
 }
+
+export const LinkLine = async (boardId, info) => {
+  try {
+    const res = await axios.put(`${host}/ez-miro/boards/${boardId}/widgets/lines/link`, info)
+    return res.data
+  } catch (err) {
+    console.error(err)
+  }
+}

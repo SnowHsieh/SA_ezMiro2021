@@ -11,7 +11,11 @@ fabric.OurLine = fabric.util.createClass(fabric.Line, {
     this._setControlVisible(this)
     this._initailizeCircle(element.coors)
     this.circleHead.connectedWidgetId = element.headWidgetId
+    this.circleHead.lineId = this.id
+    this.circleHead.endPoint = 'head'
     this.circleTail.connectedWidgetId = element.tailWidgetId
+    this.circleTail.lineId = this.id
+    this.circleTail.endPoint = 'tail'
     const coors = [element.coors.topLeftX, element.coors.topLeftY, element.coors.bottomRightX, element.coors.bottomRightY]
     this.callSuper('initialize', coors, options)
   },

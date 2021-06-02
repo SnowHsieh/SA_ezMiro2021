@@ -20,7 +20,7 @@ public class LineDataMapper {
             lineData.setHeadWidget(StickyNoteDataMapper.domainToData((StickyNote) line.getHeadWidget()));
         }
         if (line.getTailWidget() != null) {
-            lineData.setHeadWidget(StickyNoteDataMapper.domainToData((StickyNote) line.getTailWidget()));
+            lineData.setTailWidget(StickyNoteDataMapper.domainToData((StickyNote) line.getTailWidget()));
         }
 
         return lineData;

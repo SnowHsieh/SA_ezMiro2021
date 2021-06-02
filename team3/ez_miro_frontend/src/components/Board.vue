@@ -35,7 +35,8 @@ import {
   ChangeZOrderOfStickyNoteBy,
   EditFontSizeOfStickyNoteBy,
   CreateLine,
-  MoveLineBy
+  MoveLineBy,
+  LinkLine
 } from '@/apis/Widget'
 import '@/models/StickyNote'
 import '@/models/Line'
@@ -65,6 +66,7 @@ export default {
       webSocket: null,
       isSamplingCursorDelayFinish: true,
       isSamplingWidgetDelayFinish: true,
+      isSamplingLineDelayFinish: true,
       user: null,
       collaborator: [],
       widgetTypeOfCreation: 0
@@ -366,6 +368,7 @@ export default {
                   y: circle.top
                 }
               })
+              LinkLine(me.boardId, { endPoint: circle.endPoint, widgetId: circle.lineId, targetId: circle.connectedWidgetId })
               obj.on('moving', function (o) {
                 const { mtr, ...coordsWithoutMtr } = obj.oCoords
                 const targerPoint = me.getCloestACrood(pointer, Object.values(coordsWithoutMtr))
@@ -548,9 +551,10 @@ export default {
             y: circle.top
           }
         })
+        const me = this
         obj.on('moving', function (o) {
           const { mtr, ...coordsWithoutMtr } = obj.oCoords
-          const targerPoint = this.getCloestACrood(pointer, Object.values(coordsWithoutMtr))
+          const targerPoint = me.getCloestACrood(pointer, Object.values(coordsWithoutMtr))
           circle.set({ left: targerPoint.x, top: targerPoint.y })
           circle.setCoords()
           circle.fire('moving', {
@@ -569,10 +573,10 @@ export default {
           topLeftX: widget.topLeftX,
           topLeftY: widget.topLeftY,
           bottomRightX: widget.bottomRightX,
-          bottomRightY: widget.bottomRightY,
-          headWidgetId: widget.headWidgetId,
-          tailWidgetId: widget.tailWidgetId
-        }
+          bottomRightY: widget.bottomRightY
+        },
+        headWidgetId: widget.headWidgetId,
+        tailWidgetId: widget.tailWidgetId
       }, {
         fill: 'red',
         stroke: 'black',
@@ -580,9 +584,6 @@ export default {
         selectable: false,
         evented: false
       })
-
-      this.connectCircleToWidget(line.circleHead)
-      this.connectCircleToWidget(line.circleTail)
 
       const me = this
       line.circleHead.on('moving', function (e) {
@@ -595,9 +596,12 @@ export default {
         line.setCoords()
       })
 
+      this.connectCircleToWidget(line.circleHead)
+      this.connectCircleToWidget(line.circleTail)
+
       line.circleHead.on('moved', function (e) {
         setTimeout(function () {
-          me.isSamplingWidgetDelayFinish = true
+          me.isSamplingLineDelayFinish = true
           MoveLineBy(me.boardId, {
             [line.id]: {
               topLeftX: line.x1,
@@ -611,7 +615,7 @@ export default {
 
       line.circleTail.on('moved', function (e) {
         setTimeout(function () {
-          me.isSamplingWidgetDelayFinish = true
+          me.isSamplingLineDelayFinish = true
           MoveLineBy(me.boardId, {
             [line.id]: {
               topLeftX: line.x1,
