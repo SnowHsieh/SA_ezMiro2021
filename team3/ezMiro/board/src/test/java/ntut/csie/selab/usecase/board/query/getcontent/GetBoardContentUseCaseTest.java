@@ -1,20 +1,21 @@
 package ntut.csie.selab.usecase.board.query.getcontent;
 
 import ntut.csie.selab.adapter.board.BoardRepositoryInMemoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.LineRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
 import ntut.csie.selab.adapter.presenter.board.getcontent.BoardContentViewModel;
+import ntut.csie.selab.adapter.widget.LineRepositoryImpl;
 import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
+import ntut.csie.selab.entity.model.widget.WidgetType;
 import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.board.CommittedWidgetDto;
 import ntut.csie.selab.usecase.board.CommittedWidgetDtoMapper;
-import ntut.csie.selab.usecase.widget.StickyNoteDto;
-import ntut.csie.selab.usecase.widget.StickyNoteDtoMapper;
-import ntut.csie.selab.usecase.widget.StickyNoteRepository;
+import ntut.csie.selab.usecase.widget.*;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -35,31 +37,39 @@ public class GetBoardContentUseCaseTest {
     @Autowired
     private StickyNoteRepositoryPeer stickyNoteRepositoryPeer;
 
+    @Autowired
+    private LineRepositoryPeer lineRepositoryPeer;
+
     @Test
     public void get_board_content_should_succeed() {
         // Arrange
         BoardRepository boardRepository = new BoardRepositoryInMemoryImpl();
         StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
-        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(boardRepository, stickyNoteRepository);
+        LineRepository lineRepository = new LineRepositoryImpl(lineRepositoryPeer);
+        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(boardRepository, stickyNoteRepository, lineRepository);
         GetBoardContentInput input = new GetBoardContentInput();
         GetBoardContentOutput output = new GetBoardContentOutput();
         create_single_board_with_event_storming(boardRepository, stickyNoteRepository);
         input.setBoardId("firstId");
         StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
+        LineDtoMapper lineDtoMapper = new LineDtoMapper();
         CommittedWidgetDtoMapper committedWidgetDtoMapper = new CommittedWidgetDtoMapper();
         List<StickyNoteDto> stickyNoteDtos;
+        List<LineDto> lineDtos;
         List<CommittedWidgetDto> committedWidgetDtos;
 
         // Act
         getBoardContentUseCase.execute(input, output);
 
-        stickyNoteDtos = stickyNoteDtoMapper.domainToDto(output.getWidgets());
+        stickyNoteDtos = stickyNoteDtoMapper.domainToDto(output.getWidgets().stream().filter(widget -> widget.getType().equals(WidgetType.STICKY_NOTE.getType())).collect(Collectors.toList()));
+        lineDtos = lineDtoMapper.domainToDto(output.getWidgets().stream().filter(widget -> widget.getType().equals(WidgetType.LINE.getType())).collect(Collectors.toList()));
         committedWidgetDtos = committedWidgetDtoMapper.domainToDto(output.getCommittedWidgets());
-        BoardContentViewModel boardContentViewModel = new BoardContentViewModel(output.getBoardId(), stickyNoteDtos, committedWidgetDtos);
+        BoardContentViewModel boardContentViewModel = new BoardContentViewModel(output.getBoardId(), stickyNoteDtos, lineDtos, committedWidgetDtos);
 
         // Assert
         Assert.assertEquals("firstId", boardContentViewModel.getBoardId());
-        Assert.assertEquals(4, boardContentViewModel.getWidgetDtos().size());
+        Assert.assertEquals(4, boardContentViewModel.getStickyNoteDtos().size());
+        Assert.assertEquals(0, boardContentViewModel.getLineDtos().size());
         Assert.assertEquals(4, boardContentViewModel.getCommittedWidgetDtos().size());
     }
 

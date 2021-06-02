@@ -48,7 +48,7 @@ public class UseCaseInjection {
 
     @Bean(name="GetBoardContentUseCase")
     public GetBoardContentUseCase getBoardContentUseCase() {
-        return new GetBoardContentUseCase(boardRepository, stickyNoteRepository);
+        return new GetBoardContentUseCase(boardRepository, stickyNoteRepository, lineRepository);
     }
 
     @Bean(name="CreateBoardUseCase")

@@ -74,8 +74,10 @@ export default {
     this.widgetTypeOfCreation = this.CREATE_WIDGET_TYPE.STICKY_NOTE
     this.boardId = this.$route.params.boardId
     this.boardContent = await GetBoardContent(this.boardId)
+    this.boardContent.widgetDtos = []
     this.initCanvas()
-    this.loadAllStickyNote(this.boardContent.widgetDtos)
+    this.loadAllStickyNote(this.boardContent.stickyNoteDtos)
+    this.loadAllLine(this.boardContent.lineDtos)
     this.user = this.createStubUser()
     this.initWebSocketAndBingEventListener()
   },
@@ -389,7 +391,17 @@ export default {
       }
     },
     async loadAllStickyNote (widgets) {
-      await widgets.forEach(widget => { this.canvas.add(this.buildFabricObjectOfStickyNote(widget)) })
+      await widgets.forEach(widget => {
+        this.boardContent.widgetDtos.push(widget)
+        this.loadStickyNoteIntoCanvas(widget)
+      })
+      this.canvas.renderAll()
+    },
+    async loadAllLine (widgets) {
+      await widgets.forEach(widget => {
+        this.boardContent.widgetDtos.push(widget)
+        this.loadLineIntoCanvas(widget)
+      })
       this.canvas.renderAll()
     },
     async loadStickyNoteIntoCanvas (widgetDto) {
