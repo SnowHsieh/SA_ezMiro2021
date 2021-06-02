@@ -357,6 +357,7 @@ export default {
             } else if (circle.intersectsWithObject(obj) && obj.get('type') === 'stickyNote') {
               const { mtr, ...coordsWithoutMtr } = obj.oCoords
               const targerPoint = me.getCloestACrood(pointer, Object.values(coordsWithoutMtr))
+              circle.connectedWidgetId = obj.id
               circle.set({ left: targerPoint.x, top: targerPoint.y })
               circle.setCoords()
               circle.fire('moving', {
@@ -531,6 +532,36 @@ export default {
         fontSize: widget.fontSize
       })
     },
+    connectCircleToWidget (circle) {
+      if (circle.connectedWidgetId) {
+        const pointer = { x: 100, y: 100 }
+        // TODO 如果widget在line後面才new，會爆掉
+        const obj = this.canvas.getObjects().find(widget => widget.id === circle.connectedWidgetId)
+        const { mtr, ...coordsWithoutMtr } = obj.oCoords
+        const targerPoint = this.getCloestACrood(pointer, Object.values(coordsWithoutMtr))
+        circle.connectedWidgetId = obj.id
+        circle.set({ left: targerPoint.x, top: targerPoint.y })
+        circle.setCoords()
+        circle.fire('moving', {
+          pointer: {
+            x: circle.left,
+            y: circle.top
+          }
+        })
+        obj.on('moving', function (o) {
+          const { mtr, ...coordsWithoutMtr } = obj.oCoords
+          const targerPoint = this.getCloestACrood(pointer, Object.values(coordsWithoutMtr))
+          circle.set({ left: targerPoint.x, top: targerPoint.y })
+          circle.setCoords()
+          circle.fire('moving', {
+            pointer: {
+              x: circle.left,
+              y: circle.top
+            }
+          })
+        })
+      }
+    },
     buildFabricObjectOfLine (widget) {
       const line = new fabric.OurLine({
         id: widget.widgetId,
@@ -538,7 +569,9 @@ export default {
           topLeftX: widget.topLeftX,
           topLeftY: widget.topLeftY,
           bottomRightX: widget.bottomRightX,
-          bottomRightY: widget.bottomRightY
+          bottomRightY: widget.bottomRightY,
+          headWidgetId: widget.headWidgetId,
+          tailWidgetId: widget.tailWidgetId
         }
       }, {
         fill: 'red',
@@ -547,6 +580,9 @@ export default {
         selectable: false,
         evented: false
       })
+
+      this.connectCircleToWidget(line.circleHead)
+      this.connectCircleToWidget(line.circleTail)
 
       const me = this
       line.circleHead.on('moving', function (e) {
