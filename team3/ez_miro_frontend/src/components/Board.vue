@@ -74,8 +74,10 @@ export default {
     this.widgetTypeOfCreation = this.CREATE_WIDGET_TYPE.STICKY_NOTE
     this.boardId = this.$route.params.boardId
     this.boardContent = await GetBoardContent(this.boardId)
+    this.boardContent.widgetDtos = []
     this.initCanvas()
-    this.loadAllStickyNote(this.boardContent.widgetDtos)
+    this.loadAllStickyNote(this.boardContent.stickyNoteDtos)
+    this.loadAllLine(this.boardContent.lineDtos)
     this.user = this.createStubUser()
     this.initWebSocketAndBingEventListener()
   },
@@ -241,16 +243,10 @@ export default {
               easing: fabric.util.ease.easeInOutSine
             })
           } else if (o.get('type') === 'line') {
-            // o.animate({ x1: widgetDto.topLeftX, y1: widgetDto.topLeftY }, {
-            //   duration: 200,
-            //   onChange: canvas.renderAll.bind(canvas),
-            //   easing: fabric.util.ease.easeInOutSine
-            // })
-            // o.animate({ x2: widgetDto.bottomRightX, y2: widgetDto.bottomRightY }, {
-            //   duration: 200,
-            //   onChange: canvas.renderAll.bind(canvas),
-            //   easing: fabric.util.ease.easeInOutSine
-            // })
+            o.set({ x1: widgetDto.topLeftX, y1: widgetDto.topLeftY })
+            o.circleHead.set({ top: o.y1 - o.circleHead.radius, left: o.x1 - o.circleHead.radius })
+            o.set({ x2: widgetDto.bottomRightX, y2: widgetDto.bottomRightY })
+            o.circleTail.set({ top: o.y2 - o.circleTail.radius, left: o.x2 - o.circleTail.radius })
           }
         }
       })
@@ -339,17 +335,12 @@ export default {
             }
           })
         } else if (target.get('type') === 'line') {
-          await MoveLineBy(me.boardId, {
-            [widgetId]: {
-              topLeftX: topLeftX,
-              topLeftY: topLeftY,
-              bottomRightX: bottomRightX,
-              bottomRightY: bottomRightY
-            }
-          })
+          // do nothing
         }
       })
+
       this.canvas.on('object:moving', function (o) {
+        o.target.setCoords()
         const target = o.target
         const widgetId = target.id
         const point = target.lineCoords
@@ -358,7 +349,37 @@ export default {
         const bottomRightX = point.br.x
         const bottomRightY = point.br.y
         if (o.target.get('type') === 'circle') {
-          me.canvas.renderAll()
+          me.canvas.forEachObject(function (obj) {
+            const pointer = o.pointer
+            const circle = o.target
+            if (obj === o.target) {
+              obj.set('opacity', 1)
+            } else if (circle.intersectsWithObject(obj) && obj.get('type') === 'stickyNote') {
+              const { mtr, ...coordsWithoutMtr } = obj.oCoords
+              const targerPoint = me.getCloestACrood(pointer, Object.values(coordsWithoutMtr))
+              circle.connectedWidgetId = obj.id
+              circle.set({ left: targerPoint.x, top: targerPoint.y })
+              circle.setCoords()
+              circle.fire('moving', {
+                pointer: {
+                  x: circle.left,
+                  y: circle.top
+                }
+              })
+              obj.on('moving', function (o) {
+                const { mtr, ...coordsWithoutMtr } = obj.oCoords
+                const targerPoint = me.getCloestACrood(pointer, Object.values(coordsWithoutMtr))
+                circle.set({ left: targerPoint.x, top: targerPoint.y })
+                circle.setCoords()
+                circle.fire('moving', {
+                  pointer: {
+                    x: circle.left,
+                    y: circle.top
+                  }
+                })
+              })
+            }
+          })
         } else if (o.target.get('type') === 'stickyNote' && me.isSamplingWidgetDelayFinish) {
           me.isSamplingWidgetDelayFinish = false
           setTimeout(function () {
@@ -373,17 +394,7 @@ export default {
             })
           }, 200)
         } else if (o.target.get('type') === 'line' && me.isSamplingWidgetDelayFinish) {
-          setTimeout(function () {
-            me.isSamplingWidgetDelayFinish = true
-            MoveLineBy(me.boardId, {
-              [widgetId]: {
-                topLeftX: topLeftX,
-                topLeftY: topLeftY,
-                bottomRightX: bottomRightX,
-                bottomRightY: bottomRightY
-              }
-            })
-          }, 200)
+          o.set({ x1: topLeftX, y1: topLeftY, x2: bottomRightX, y2: bottomRightY })
         }
       })
 
@@ -404,6 +415,18 @@ export default {
         })
       })
     },
+    getCloestACrood (point, aCoords) {
+      var result
+      var leastDistance = 2000000
+      aCoords.forEach(coord => {
+        const distance = Math.sqrt(Math.pow(point.x - coord.x, 2) + Math.pow(point.y - coord.y, 2))
+        if (distance < leastDistance) {
+          leastDistance = distance
+          result = coord
+        }
+      })
+      return result
+    },
     async deleteWidget () {
       const res = await DeleteStickyNoteBy(this.selectedStickyNote.id, this.boardId)
       if (res !== null) {
@@ -412,7 +435,17 @@ export default {
       }
     },
     async loadAllStickyNote (widgets) {
-      await widgets.forEach(widget => { this.canvas.add(this.buildFabricObjectOfStickyNote(widget)) })
+      await widgets.forEach(widget => {
+        this.boardContent.widgetDtos.push(widget)
+        this.loadStickyNoteIntoCanvas(widget)
+      })
+      this.canvas.renderAll()
+    },
+    async loadAllLine (widgets) {
+      await widgets.forEach(widget => {
+        this.boardContent.widgetDtos.push(widget)
+        this.loadLineIntoCanvas(widget)
+      })
       this.canvas.renderAll()
     },
     async loadStickyNoteIntoCanvas (widgetDto) {
@@ -499,22 +532,97 @@ export default {
         fontSize: widget.fontSize
       })
     },
+    connectCircleToWidget (circle) {
+      if (circle.connectedWidgetId) {
+        const pointer = { x: 100, y: 100 }
+        // TODO 如果widget在line後面才new，會爆掉
+        const obj = this.canvas.getObjects().find(widget => widget.id === circle.connectedWidgetId)
+        const { mtr, ...coordsWithoutMtr } = obj.oCoords
+        const targerPoint = this.getCloestACrood(pointer, Object.values(coordsWithoutMtr))
+        circle.connectedWidgetId = obj.id
+        circle.set({ left: targerPoint.x, top: targerPoint.y })
+        circle.setCoords()
+        circle.fire('moving', {
+          pointer: {
+            x: circle.left,
+            y: circle.top
+          }
+        })
+        obj.on('moving', function (o) {
+          const { mtr, ...coordsWithoutMtr } = obj.oCoords
+          const targerPoint = this.getCloestACrood(pointer, Object.values(coordsWithoutMtr))
+          circle.set({ left: targerPoint.x, top: targerPoint.y })
+          circle.setCoords()
+          circle.fire('moving', {
+            pointer: {
+              x: circle.left,
+              y: circle.top
+            }
+          })
+        })
+      }
+    },
     buildFabricObjectOfLine (widget) {
-      return new fabric.OurLine({
+      const line = new fabric.OurLine({
         id: widget.widgetId,
         coors: {
           topLeftX: widget.topLeftX,
           topLeftY: widget.topLeftY,
           bottomRightX: widget.bottomRightX,
-          bottomRightY: widget.bottomRightY
+          bottomRightY: widget.bottomRightY,
+          headWidgetId: widget.headWidgetId,
+          tailWidgetId: widget.tailWidgetId
         }
       }, {
         fill: 'red',
         stroke: 'black',
         strokeWidth: 5,
-        selectable: true,
-        evented: true
+        selectable: false,
+        evented: false
       })
+
+      this.connectCircleToWidget(line.circleHead)
+      this.connectCircleToWidget(line.circleTail)
+
+      const me = this
+      line.circleHead.on('moving', function (e) {
+        line.set({ x1: line.circleHead.left, y1: line.circleHead.top })
+        line.setCoords()
+      })
+
+      line.circleTail.on('moving', function (e) {
+        line.set({ x2: line.circleTail.left, y2: line.circleTail.top })
+        line.setCoords()
+      })
+
+      line.circleHead.on('moved', function (e) {
+        setTimeout(function () {
+          me.isSamplingWidgetDelayFinish = true
+          MoveLineBy(me.boardId, {
+            [line.id]: {
+              topLeftX: line.x1,
+              topLeftY: line.y1,
+              bottomRightX: line.x2,
+              bottomRightY: line.y2
+            }
+          })
+        }, 200)
+      })
+
+      line.circleTail.on('moved', function (e) {
+        setTimeout(function () {
+          me.isSamplingWidgetDelayFinish = true
+          MoveLineBy(me.boardId, {
+            [line.id]: {
+              topLeftX: line.x1,
+              topLeftY: line.y1,
+              bottomRightX: line.x2,
+              bottomRightY: line.y2
+            }
+          })
+        }, 200)
+      })
+      return line
     },
     getZOrderOf (widget) {
       return this.canvas.getObjects().indexOf(widget)

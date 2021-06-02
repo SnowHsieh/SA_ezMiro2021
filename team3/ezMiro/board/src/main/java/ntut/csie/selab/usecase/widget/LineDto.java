@@ -8,15 +8,21 @@ public class LineDto {
     private int topLeftY;
     private int bottomRightX;
     private int bottomRightY;
+
+
+    private String headWidgetId;
+    private String tailWidgetId;
     private String type;
 
 
-    public LineDto(String widgetId, int topLeftX, int topLeftY, int bottomRightX, int bottomRightY) {
+    public LineDto(String widgetId, int topLeftX, int topLeftY, int bottomRightX, int bottomRightY, String headWidgetId, String tailWidgetId) {
         this.widgetId = widgetId;
         this.topLeftX = topLeftX;
         this.topLeftY = topLeftY;
         this.bottomRightX = bottomRightX;
         this.bottomRightY = bottomRightY;
+        this.headWidgetId = headWidgetId;
+        this.tailWidgetId = tailWidgetId;
         this.type = WidgetType.LINE.getType();
     }
 
@@ -42,5 +48,13 @@ public class LineDto {
 
     public String getType() {
         return type;
+    }
+
+    public String getHeadWidgetId() {
+        return headWidgetId;
+    }
+
+    public String getTailWidgetId() {
+        return tailWidgetId;
     }
 }
