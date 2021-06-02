@@ -12,8 +12,9 @@ import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
 import ntut.csie.selab.usecase.websocket.WebSocket;
 import ntut.csie.selab.usecase.widget.LineRepository;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 import ntut.csie.selab.usecase.widget.line.create.CreateLineUseCase;
+import ntut.csie.selab.usecase.widget.line.move.MoveLineUseCase;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.delete.DeleteStickyNoteUseCase;
@@ -29,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration("MiroUseCaseInjection")
 public class UseCaseInjection {
     private BoardRepository boardRepository;
-    private WidgetRepository widgetRepository;
+    private StickyNoteRepository stickyNoteRepository;
     private LineRepository lineRepository;
     private DomainEventBus eventBus;
     private WebSocket boardWebSocket;
@@ -41,12 +42,12 @@ public class UseCaseInjection {
 
     @Bean(name="createNotifyUsersInBoard")
     public NotifyUsersInBoard createNotifyUsersInBoard() {
-        return new NotifyUsersInBoard(boardRepository, widgetRepository, lineRepository, eventBus, boardWebSocket);
+        return new NotifyUsersInBoard(boardRepository, stickyNoteRepository, lineRepository, eventBus, boardWebSocket);
     }
 
     @Bean(name="GetBoardContentUseCase")
     public GetBoardContentUseCase getBoardContentUseCase() {
-        return new GetBoardContentUseCase(boardRepository, widgetRepository);
+        return new GetBoardContentUseCase(boardRepository, stickyNoteRepository);
     }
 
     @Bean(name="CreateBoardUseCase")
@@ -55,14 +56,14 @@ public class UseCaseInjection {
     }
 
     @Bean(name="CreateStickyNoteUseCase")
-    public CreateStickyNoteUseCase createStickyNoteUseCase() { return new CreateStickyNoteUseCase(widgetRepository, eventBus); }
+    public CreateStickyNoteUseCase createStickyNoteUseCase() { return new CreateStickyNoteUseCase(stickyNoteRepository, eventBus); }
 
     @Bean(name="CreateLineUseCase")
     public CreateLineUseCase createLineUseCase() { return new CreateLineUseCase(lineRepository, eventBus); }
 
     @Bean(name="MoveStickyNoteUseCase")
     public MoveStickyNoteUseCase moveStickyNoteUseCase() {
-        return new MoveStickyNoteUseCase(widgetRepository, eventBus);
+        return new MoveStickyNoteUseCase(stickyNoteRepository, eventBus);
     }
 
     @Bean(name="MoveCursorUseCase")
@@ -71,24 +72,24 @@ public class UseCaseInjection {
     }
 
     @Bean(name="ChangeColorOfStickyNoteUseCase")
-    public ChangeColorOfStickyNoteUseCase changeColorOfStickyNoteUseCase() { return new ChangeColorOfStickyNoteUseCase(widgetRepository, eventBus); }
+    public ChangeColorOfStickyNoteUseCase changeColorOfStickyNoteUseCase() { return new ChangeColorOfStickyNoteUseCase(stickyNoteRepository, eventBus); }
 
     @Bean(name="ResizeStickyNoteUseCase")
-    public ResizeStickyNoteUseCase resizeStickyNoteUseCase() { return new ResizeStickyNoteUseCase(widgetRepository, eventBus); }
+    public ResizeStickyNoteUseCase resizeStickyNoteUseCase() { return new ResizeStickyNoteUseCase(stickyNoteRepository, eventBus); }
 
     @Bean(name="GetWidgetUseCase")
     public GetWidgetUseCase getWidgetUseCase() {
-        return new GetWidgetUseCase(widgetRepository);
+        return new GetWidgetUseCase(stickyNoteRepository);
     }
 
     @Bean(name="EditTextOfStickyNoteUseCase")
     public EditTextOfStickyNoteUseCase editTextOfStickyNoteUseCase() {
-        return new EditTextOfStickyNoteUseCase(widgetRepository, eventBus);
+        return new EditTextOfStickyNoteUseCase(stickyNoteRepository, eventBus);
     }
 
     @Bean(name="DeleteStickyNoteUseCase")
     public DeleteStickyNoteUseCase deleteStickyNoteUseCase() {
-        return new DeleteStickyNoteUseCase(widgetRepository, eventBus);
+        return new DeleteStickyNoteUseCase(stickyNoteRepository, eventBus);
     }
 
     @Bean(name="ChangeZOrderOfWidgetUseCase")
@@ -98,7 +99,7 @@ public class UseCaseInjection {
 
     @Bean("EditFontSizeOfStickyNoteUseCase")
     public EditFontSizeOfStickyNoteUseCase editFontSizeOfStickyNoteUseCase() {
-        return new EditFontSizeOfStickyNoteUseCase(widgetRepository, eventBus);
+        return new EditFontSizeOfStickyNoteUseCase(stickyNoteRepository, eventBus);
     }
 
     @Bean("EnterBoardUseCase")
@@ -111,13 +112,18 @@ public class UseCaseInjection {
         return new LeaveBoardUseCase(boardRepository, eventBus);
     }
 
+    @Bean("MoveLineUseCase")
+    public MoveLineUseCase moveLineUseCase() {
+        return new MoveLineUseCase(lineRepository, eventBus);
+    }
+
     @Autowired
     public void setBoardRepository(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
     }
 
     @Autowired
-    public void setWidgetRepository(WidgetRepository widgetRepository) { this.widgetRepository = widgetRepository; }
+    public void setWidgetRepository(StickyNoteRepository stickyNoteRepository) { this.stickyNoteRepository = stickyNoteRepository; }
 
     @Autowired
     public void setLineRepository(LineRepository lineRepository) { this.lineRepository = lineRepository; }

@@ -1,4 +1,4 @@
-package ntut.csie.selab.adapter.controller.rest.springboot.widget.line;
+package ntut.csie.selab.adapter.controller.rest.springboot.widget.line.create;
 
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.usecase.widget.line.create.CreateLineInput;

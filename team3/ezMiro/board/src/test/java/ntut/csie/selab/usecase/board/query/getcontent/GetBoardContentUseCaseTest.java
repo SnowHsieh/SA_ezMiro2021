@@ -14,7 +14,7 @@ import ntut.csie.selab.usecase.board.CommittedWidgetDto;
 import ntut.csie.selab.usecase.board.CommittedWidgetDtoMapper;
 import ntut.csie.selab.usecase.widget.StickyNoteDto;
 import ntut.csie.selab.usecase.widget.StickyNoteDtoMapper;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,11 +39,11 @@ public class GetBoardContentUseCaseTest {
     public void get_board_content_should_succeed() {
         // Arrange
         BoardRepository boardRepository = new BoardRepositoryInMemoryImpl();
-        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
-        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(boardRepository, widgetRepository);
+        StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
+        GetBoardContentUseCase getBoardContentUseCase = new GetBoardContentUseCase(boardRepository, stickyNoteRepository);
         GetBoardContentInput input = new GetBoardContentInput();
         GetBoardContentOutput output = new GetBoardContentOutput();
-        create_single_board_with_event_storming(boardRepository, widgetRepository);
+        create_single_board_with_event_storming(boardRepository, stickyNoteRepository);
         input.setBoardId("firstId");
         StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
         CommittedWidgetDtoMapper committedWidgetDtoMapper = new CommittedWidgetDtoMapper();
@@ -63,25 +63,25 @@ public class GetBoardContentUseCaseTest {
         Assert.assertEquals(4, boardContentViewModel.getCommittedWidgetDtos().size());
     }
 
-    private void create_single_board_with_event_storming(BoardRepository boardRepository, WidgetRepository widgetRepository) {
+    private void create_single_board_with_event_storming(BoardRepository boardRepository, StickyNoteRepository stickyNoteRepository) {
         String boardId = "firstId";
         Board board = new Board(boardId,"firstTeam", "firstBoard");
         boardRepository.save(board);
 
         Widget readModel = new StickyNote("readModelId", boardId, new Coordinate(0, 20, 10, 30));
-        widgetRepository.save(readModel);
+        stickyNoteRepository.save(readModel);
         board.commitWidgetCreation("readModelId");
 
         Widget command = new StickyNote("commandId", boardId, new Coordinate(15, 20, 25, 30));
-        widgetRepository.save(command);
+        stickyNoteRepository.save(command);
         board.commitWidgetCreation("commandId");
 
         Widget aggregate = new StickyNote("aggregateId", boardId, new Coordinate(20, 0, 30, 10));
-        widgetRepository.save(aggregate);
+        stickyNoteRepository.save(aggregate);
         board.commitWidgetCreation("aggregateId");
 
         Widget domainEvent = new StickyNote("domainEventId", boardId, new Coordinate(30, 20, 40, 30));
-        widgetRepository.save(domainEvent);
+        stickyNoteRepository.save(domainEvent);
         board.commitWidgetCreation("domainEventId");
     }
 }

@@ -5,10 +5,10 @@ import ntut.csie.selab.entity.model.widget.Widget;
 
 import java.util.Optional;
 
-public interface WidgetRepository {
-    void save(Widget widget);
+public interface StickyNoteRepository {
+    void save(Widget stickyNote);
 
-    void delete(Widget widget);
+    void delete(Widget stickyNote);
 
     Optional<Widget> findById(final String stickyNoteId);
 }

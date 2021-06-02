@@ -14,7 +14,7 @@ import ntut.csie.selab.usecase.board.edit.zorder.ChangeZOrderOfWidgetInput;
 import ntut.csie.selab.usecase.board.edit.zorder.ChangeZOrderOfWidgetOutput;
 import ntut.csie.selab.usecase.board.edit.zorder.ChangeZOrderOfWidgetUseCase;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteInput;
 import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteUseCase;
@@ -179,9 +179,9 @@ public class ChangeZOrderOfWidgetUseCaseTest {
 
     private List<String> generateSequenceOfStickyNoteIn(String boardId, DomainEventBus domainEventBus) {
         List<String> generatedWidgetIds = new ArrayList<>();
-        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
+        StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
 
-        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(widgetRepository, domainEventBus);
+        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         CreateStickyNoteInput createStickyNoteInput = new CreateStickyNoteInput();
         CreateStickyNoteOutput createStickyNoteOutput = new CreateStickyNoteOutput();
         createStickyNoteInput.setBoardId(boardId);

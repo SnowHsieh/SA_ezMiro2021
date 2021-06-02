@@ -34,7 +34,8 @@ import {
   ChangeColorOfStickyNoteBy,
   ChangeZOrderOfStickyNoteBy,
   EditFontSizeOfStickyNoteBy,
-  CreateLine
+  CreateLine,
+  MoveLineBy
 } from '@/apis/Widget'
 import '@/models/StickyNote'
 import '@/models/Line'
@@ -228,16 +229,29 @@ export default {
       const activeWidget = this.canvas.getActiveObject()
       this.canvas.getObjects().forEach(function (o) {
         if (o.id === widgetDto.widgetId && (!activeWidget || activeWidget.id !== widgetDto.widgetId)) {
-          o.animate('left', widgetDto.topLeftX, {
-            duration: 200,
-            onChange: canvas.renderAll.bind(canvas),
-            easing: fabric.util.ease.easeInOutSine
-          })
-          o.animate('top', widgetDto.topLeftY, {
-            duration: 200,
-            onChange: canvas.renderAll.bind(canvas),
-            easing: fabric.util.ease.easeInOutSine
-          })
+          if (o.get('type') === 'stickyNote') {
+            o.animate('left', widgetDto.topLeftX, {
+              duration: 200,
+              onChange: canvas.renderAll.bind(canvas),
+              easing: fabric.util.ease.easeInOutSine
+            })
+            o.animate('top', widgetDto.topLeftY, {
+              duration: 200,
+              onChange: canvas.renderAll.bind(canvas),
+              easing: fabric.util.ease.easeInOutSine
+            })
+          } else if (o.get('type') === 'line') {
+            // o.animate({ x1: widgetDto.topLeftX, y1: widgetDto.topLeftY }, {
+            //   duration: 200,
+            //   onChange: canvas.renderAll.bind(canvas),
+            //   easing: fabric.util.ease.easeInOutSine
+            // })
+            // o.animate({ x2: widgetDto.bottomRightX, y2: widgetDto.bottomRightY }, {
+            //   duration: 200,
+            //   onChange: canvas.renderAll.bind(canvas),
+            //   easing: fabric.util.ease.easeInOutSine
+            // })
+          }
         }
       })
       this.canvas.renderAll()
@@ -309,24 +323,35 @@ export default {
 
       this.canvas.on('object:moved', async function (e) {
         const target = e.target
-        const stickyNoteId = target.id
+        const widgetId = target.id
         const point = target.lineCoords
         const topLeftX = point.tl.x
         const topLeftY = point.tl.y
         const bottomRightX = point.br.x
         const bottomRightY = point.br.y
-        await MoveStickyNoteBy(me.boardId, {
-          [stickyNoteId]: {
-            topLeftX: topLeftX,
-            topLeftY: topLeftY,
-            bottomRightX: bottomRightX,
-            bottomRightY: bottomRightY
-          }
-        })
+        if (target.get('type') === 'stickyNote') {
+          await MoveStickyNoteBy(me.boardId, {
+            [widgetId]: {
+              topLeftX: topLeftX,
+              topLeftY: topLeftY,
+              bottomRightX: bottomRightX,
+              bottomRightY: bottomRightY
+            }
+          })
+        } else if (target.get('type') === 'line') {
+          await MoveLineBy(me.boardId, {
+            [widgetId]: {
+              topLeftX: topLeftX,
+              topLeftY: topLeftY,
+              bottomRightX: bottomRightX,
+              bottomRightY: bottomRightY
+            }
+          })
+        }
       })
       this.canvas.on('object:moving', function (o) {
         const target = o.target
-        const stickyNoteId = target.id
+        const widgetId = target.id
         const point = target.lineCoords
         const topLeftX = point.tl.x
         const topLeftY = point.tl.y
@@ -339,7 +364,19 @@ export default {
           setTimeout(function () {
             me.isSamplingWidgetDelayFinish = true
             MoveStickyNoteBy(me.boardId, {
-              [stickyNoteId]: {
+              [widgetId]: {
+                topLeftX: topLeftX,
+                topLeftY: topLeftY,
+                bottomRightX: bottomRightX,
+                bottomRightY: bottomRightY
+              }
+            })
+          }, 200)
+        } else if (o.target.get('type') === 'line' && me.isSamplingWidgetDelayFinish) {
+          setTimeout(function () {
+            me.isSamplingWidgetDelayFinish = true
+            MoveLineBy(me.boardId, {
+              [widgetId]: {
                 topLeftX: topLeftX,
                 topLeftY: topLeftY,
                 bottomRightX: bottomRightX,

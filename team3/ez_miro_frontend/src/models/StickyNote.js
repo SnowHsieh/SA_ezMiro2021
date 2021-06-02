@@ -2,7 +2,7 @@ import { fabric } from 'fabric'
 const fontSize = 18
 
 fabric.StickyNote = fabric.util.createClass(fabric.Group, {
-  type: 'stickynote',
+  type: 'stickyNote',
   id: null,
   textObject: null,
   rectObject: null,

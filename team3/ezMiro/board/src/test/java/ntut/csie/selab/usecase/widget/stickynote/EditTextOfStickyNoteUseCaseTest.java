@@ -7,7 +7,7 @@ import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.JpaApplicationTest;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 import ntut.csie.selab.usecase.widget.stickynote.edit.text.EditTextOfStickyNoteInput;
 import ntut.csie.selab.usecase.widget.stickynote.edit.text.EditTextOfStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.stickynote.edit.text.EditTextOfStickyNoteUseCase;
@@ -32,13 +32,13 @@ public class EditTextOfStickyNoteUseCaseTest {
     @Test
     public void edit_text_of_sticky_note_should_succeed() {
         // Arrange
-        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
+        StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         String stickyNoteId = "1";
         Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
         Widget stickyNote = new StickyNote(stickyNoteId, "0", stickyNoteCoordinate);
-        widgetRepository.save(stickyNote);
+        stickyNoteRepository.save(stickyNote);
         DomainEventBus domainEventBus = new DomainEventBus();
-        EditTextOfStickyNoteUseCase editTextOfStickyNoteUseCase = new EditTextOfStickyNoteUseCase(widgetRepository, domainEventBus);
+        EditTextOfStickyNoteUseCase editTextOfStickyNoteUseCase = new EditTextOfStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         EditTextOfStickyNoteInput input = new EditTextOfStickyNoteInput();
         EditTextOfStickyNoteOutput output = new EditTextOfStickyNoteOutput();
         input.setStickyNoteId(stickyNoteId);

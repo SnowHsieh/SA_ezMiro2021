@@ -2,26 +2,26 @@ package ntut.csie.selab.usecase.widget.stickynote.move;
 
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 
 import java.util.Optional;
 
 public class MoveStickyNoteUseCase {
-    private WidgetRepository widgetRepository;
+    private StickyNoteRepository stickyNoteRepository;
     private DomainEventBus domainEventBus;
 
-    public MoveStickyNoteUseCase(WidgetRepository widgetRepository, DomainEventBus domainEventBus) {
-        this.widgetRepository = widgetRepository;
+    public MoveStickyNoteUseCase(StickyNoteRepository stickyNoteRepository, DomainEventBus domainEventBus) {
+        this.stickyNoteRepository = stickyNoteRepository;
         this.domainEventBus = domainEventBus;
     }
 
     public void execute(MoveStickyNoteInput input, MoveStickyNoteOutput output) {
-        Optional<Widget> stickyNote = widgetRepository.findById(input.getStickyNoteId());
+        Optional<Widget> stickyNote = stickyNoteRepository.findById(input.getStickyNoteId());
         if (stickyNote.isPresent()) {
             Widget selectedStickyNote = stickyNote.get();
             selectedStickyNote.clearDomainEvents();
             selectedStickyNote.move(input.getCoordinate());
-            widgetRepository.save(selectedStickyNote);
+            stickyNoteRepository.save(selectedStickyNote);
             domainEventBus.postAll(selectedStickyNote);
             output.setStickyNoteId(selectedStickyNote.getId());
             output.setCoordinate(selectedStickyNote.getCoordinate());

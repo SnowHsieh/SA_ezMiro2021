@@ -1,21 +1,25 @@
-package ntut.csie.selab.usecase.widget.stickynote;
+package ntut.csie.selab.usecase.widget.line;
 
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.LineRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
+import ntut.csie.selab.adapter.widget.LineRepositoryImpl;
 import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
 import ntut.csie.selab.entity.model.widget.Coordinate;
-import ntut.csie.selab.entity.model.widget.StickyNote;
+import ntut.csie.selab.entity.model.widget.Line;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
 import ntut.csie.selab.usecase.websocket.WebSocket;
+import ntut.csie.selab.usecase.widget.LineRepository;
 import ntut.csie.selab.usecase.widget.StickyNoteRepository;
-import ntut.csie.selab.usecase.widget.stickynote.move.MoveStickyNoteInput;
-import ntut.csie.selab.usecase.widget.stickynote.move.MoveStickyNoteOutput;
-import ntut.csie.selab.usecase.widget.stickynote.move.MoveStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.line.move.MoveLineInput;
+import ntut.csie.selab.usecase.widget.line.move.MoveLineOutput;
+import ntut.csie.selab.usecase.widget.line.move.MoveLineUseCase;
+import ntut.csie.selab.usecase.widget.stickynote.MoveStickyNoteUseCaseTest;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,42 +35,46 @@ import java.awt.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@ContextConfiguration(classes= JpaApplicationTest.class)
+@ContextConfiguration(classes = JpaApplicationTest.class)
 @Rollback(false)
-public class MoveStickyNoteUseCaseTest {
-
+public class MoveLineUseCaseTest {
     @Autowired
-    private StickyNoteRepositoryPeer stickyNoteRepositoryPeer;
+    private LineRepositoryPeer lineRepositoryPeer;
 
     @Autowired
     private BoardRepositoryPeer boardRepositoryPeer;
 
+    @Autowired
+    private StickyNoteRepositoryPeer stickyNoteRepositoryPeer;
+
     @Test
-    public void move_sticky_note_should_succeed() {
+    public void move_line_should_succeed() {
         // Arrange
         BoardRepository boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
+        LineRepository lineRepository = new LineRepositoryImpl(lineRepositoryPeer);
         StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         DomainEventBus domainEventBus = new DomainEventBus();
         WebSocket webSocket = new FakeBoardWebSocket();
-        NotifyUsersInBoard notifyUsersInBoard = new NotifyUsersInBoard(boardRepository, stickyNoteRepository, domainEventBus, webSocket);
+        NotifyUsersInBoard notifyUsersInBoard = new NotifyUsersInBoard(boardRepository, stickyNoteRepository, lineRepository, domainEventBus, webSocket);
         domainEventBus.register(notifyUsersInBoard);
 
-        String stickyNoteId = "1";
-        Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
-        Widget stickyNote = new StickyNote(stickyNoteId, "0", stickyNoteCoordinate);
-        stickyNoteRepository.save(stickyNote);
-        MoveStickyNoteUseCase moveStickyNoteUseCase = new MoveStickyNoteUseCase(stickyNoteRepository, domainEventBus);
-        MoveStickyNoteInput input = new MoveStickyNoteInput();
-        MoveStickyNoteOutput output = new MoveStickyNoteOutput();
-        input.setStickyNoteId(stickyNoteId);
-        input.setCoordinate(new Coordinate(4, 4, 5, 5));
+        MoveLineUseCase moveLineUseCase = new MoveLineUseCase(lineRepository, domainEventBus);
+        MoveLineInput input = new MoveLineInput();
+        MoveLineOutput output = new MoveLineOutput();
+        String boardId = "1";
+        String lineId = "lineId";
+        Coordinate lineCoordinate = new Coordinate(1, 1, 2, 2);
+        Widget line = new Line(lineId, boardId, lineCoordinate);
+        lineRepository.save(line);
+        input.setLineId(lineId);
+        input.setCoordinate(new Coordinate(100, 250, 200, 250));
 
         // Act
-        moveStickyNoteUseCase.execute(input, output);
+        moveLineUseCase.execute(input, output);
 
         // Assert
-        Assert.assertEquals(new Point(4, 4), output.getCoordinate().getTopLeft());
-        Assert.assertEquals(new Point(5, 5), output.getCoordinate().getBottomRight());
+        Assert.assertEquals(new Point(100, 250), output.getCoordinate().getTopLeft());
+        Assert.assertEquals(new Point(200, 250), output.getCoordinate().getBottomRight());
         Assert.assertEquals(2, domainEventBus.getCount());
     }
 

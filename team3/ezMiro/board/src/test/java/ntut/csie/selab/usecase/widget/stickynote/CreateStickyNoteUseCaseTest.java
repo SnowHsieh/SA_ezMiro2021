@@ -14,7 +14,7 @@ import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
 import ntut.csie.selab.usecase.websocket.WebSocket;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteInput;
 import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteOutput;
@@ -50,8 +50,8 @@ public class CreateStickyNoteUseCaseTest {
     public void create_sticky_note_should_succeed() {
         // Arrange
         DomainEventBus domainEventBus = new DomainEventBus();
-        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
-        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(widgetRepository, domainEventBus);
+        StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
+        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         CreateStickyNoteInput input = new CreateStickyNoteInput();
         CreateStickyNoteOutput output = new CreateStickyNoteOutput();
         input.setBoardId("1");
@@ -64,8 +64,8 @@ public class CreateStickyNoteUseCaseTest {
         Assert.assertEquals("1", output.getBoardId());
         Assert.assertEquals(new Point(1, 1), output.getCoordinate().getTopLeft());
         Assert.assertEquals(new Point(2, 2), output.getCoordinate().getBottomRight());
-        Assert.assertTrue(widgetRepository.findById(output.getStickyNoteId()).isPresent());
-        Assert.assertEquals(output.getStickyNoteId(), widgetRepository.findById(output.getStickyNoteId()).get().getId());
+        Assert.assertTrue(stickyNoteRepository.findById(output.getStickyNoteId()).isPresent());
+        Assert.assertEquals(output.getStickyNoteId(), stickyNoteRepository.findById(output.getStickyNoteId()).get().getId());
         Assert.assertEquals(1, domainEventBus.getCount());
     }
 
@@ -73,7 +73,7 @@ public class CreateStickyNoteUseCaseTest {
     public void create_sticky_note_in_board_should_notify_board_successfully() {
         // Arrange
         BoardRepository boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
-        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
+        StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         WebSocket webSocket = new FakeBoardWebSocket();
         String boardId = "1";
         boardRepository.save(createSimpleBoardWith(boardId));
@@ -81,10 +81,10 @@ public class CreateStickyNoteUseCaseTest {
         DomainEventBus domainEventBus = new DomainEventBus();
         NotifyBoard notifyBoard = new NotifyBoard(boardRepository, domainEventBus);
 
-        NotifyUsersInBoard notifyUsersInBoard = new NotifyUsersInBoard(boardRepository, widgetRepository, domainEventBus, webSocket);
+        NotifyUsersInBoard notifyUsersInBoard = new NotifyUsersInBoard(boardRepository, stickyNoteRepository, domainEventBus, webSocket);
         domainEventBus.register(notifyBoard);
         domainEventBus.register(notifyUsersInBoard);
-        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(widgetRepository, domainEventBus);
+        CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         CreateStickyNoteInput input = new CreateStickyNoteInput();
         CreateStickyNoteOutput output = new CreateStickyNoteOutput();
         input.setBoardId(boardId);

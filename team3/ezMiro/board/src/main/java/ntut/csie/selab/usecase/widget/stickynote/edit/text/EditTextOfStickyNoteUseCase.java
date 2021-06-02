@@ -3,29 +3,29 @@ package ntut.csie.selab.usecase.widget.stickynote.edit.text;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 
 import java.util.Optional;
 
 public class EditTextOfStickyNoteUseCase {
 
-    private WidgetRepository widgetRepository;
+    private StickyNoteRepository stickyNoteRepository;
     private DomainEventBus domainEventBus;
 
-    public EditTextOfStickyNoteUseCase(WidgetRepository widgetRepository, DomainEventBus domainEventBus) {
-        this.widgetRepository = widgetRepository;
+    public EditTextOfStickyNoteUseCase(StickyNoteRepository stickyNoteRepository, DomainEventBus domainEventBus) {
+        this.stickyNoteRepository = stickyNoteRepository;
         this.domainEventBus = domainEventBus;
     }
 
     public void execute(EditTextOfStickyNoteInput input, EditTextOfStickyNoteOutput output) {
-        Optional<Widget> stickyNote = widgetRepository.findById(input.getStickyNoteId());
+        Optional<Widget> stickyNote = stickyNoteRepository.findById(input.getStickyNoteId());
 
         if(stickyNote.isPresent()) {
             StickyNote selectedStickyNote = (StickyNote) stickyNote.get();
             selectedStickyNote.clearDomainEvents();
             selectedStickyNote.setText(input.getText());
 
-            widgetRepository.save(selectedStickyNote);
+            stickyNoteRepository.save(selectedStickyNote);
             domainEventBus.postAll(selectedStickyNote);
 
             output.setStickyNoteId(input.getStickyNoteId());

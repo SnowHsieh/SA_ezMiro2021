@@ -17,12 +17,12 @@ public class LineRepositoryImpl implements LineRepository {
     }
 
     @Override
-    public void save(Line line) {
+    public void save(Widget line) {
         peer.save(LineDataMapper.domainToData(line));
     }
 
     @Override
-    public void delete(Line line) {
+    public void delete(Widget line) {
         peer.deleteById(line.getId());
     }
 
