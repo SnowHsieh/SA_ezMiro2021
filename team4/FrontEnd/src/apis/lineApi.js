@@ -3,22 +3,35 @@ import { hostIp } from '../config/config.js'
 
 export const createLineApi = async (boardId, figure) => {
   try {
-    const srcPoint = {
-      x: figure.get('x1'),
-      y: figure.get('y1')
-    }
-    const destPoint = {
-      x: figure.get('x2'),
-      y: figure.get('y2')
-    }
-    const newPositionList = []
-    newPositionList.push(srcPoint)
-    newPositionList.push(destPoint)
+    // const srcPoint = {
+    //   x: figure.get('x1'),
+    //   y: figure.get('y1')
+    // }
+    // const destPoint = {
+    //   x: figure.get('x2'),
+    //   y: figure.get('y2')
+    // }
+    // const newPositionList = []
+    // newPositionList.push(srcPoint)
+    // newPositionList.push(destPoint)
     const res = await axios.post(`${hostIp}/board/${boardId}/createLine`,
       {
-        positionList: newPositionList,
-        strokeWidth: figure.get('strokeWidth'),
-        color: figure.get('stroke')
+        // positionList: newPositionList,
+        // strokeWidth: figure.get('strokeWidth'),
+        // color: figure.get('stroke')
+        positionList: [
+          // getCoords() [tl, tr, br, bl] of points
+          {
+            x: 100.0,
+            y: 100.0
+          }, {
+            x: 250.0,
+            y: 200.0
+          }
+        ],
+        strokeWidth: 5,
+        color: '#000000'
+
       }
     )
     return res

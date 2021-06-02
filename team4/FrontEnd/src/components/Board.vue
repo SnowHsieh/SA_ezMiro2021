@@ -56,7 +56,7 @@ import { changeLinePathApi, createLineApi, deleteLineApi } from '../apis/lineApi
 export default {
   data () {
     return {
-      boardId: '21b33e52-1a98-4efd-a61b-252ebbae6460',
+      boardId: '465d1a8f-0632-4b65-b71d-5d90fbe79331',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -151,7 +151,6 @@ export default {
     addLine (figure) {
       const srcPosition = figure.positionList[0]
       const destPosition = figure.positionList[1]
-
       const line = new fabric.Line([srcPosition.x, srcPosition.y, destPosition.x, destPosition.y], {
         id: figure.figureId,
         fill: figure.color,
@@ -164,7 +163,6 @@ export default {
         destPointId: null
         // evented: false  // false means event on line can't be triggered
       })
-
       this.canvas.add(line)
       this.canvas.add(
         this.makeCircle(line.x2, line.y2, line, null, line.get('id')),
@@ -388,50 +386,50 @@ export default {
               _this.canvas.setActiveObject(e.target) // right click
               _this.activeObjects = _this.canvas.getActiveObjects()
               _this.showContextMenu(e)
-            } else if (e.target === null && e.button === 1) {
-              // 點畫布的時候才畫線
-              var pointer = this.getPointer(e)
-              var positionX = pointer.x
-              var positionY = pointer.y
-              // console.log(positionX, positionY)
-              var circlePoint = new fabric.Circle({
-                radius: 5,
-                fill: 'blue',
-                left: positionX,
-                top: positionY,
-                selectable: true,
-                originX: 'center',
-                originY: 'center',
-                hoverCursor: 'auto'
-              })
-              _this.linelist.push(circlePoint)
-              if (_this.linelist.length > 1) {
-                var startPoint = _this.linelist[0]
-                var endPoint = _this.linelist[1]
-                console.log(startPoint, endPoint)
-                var lineFigure = new fabric.Line(
-                  [
-                    startPoint.get('left'),
-                    startPoint.get('top'),
-                    endPoint.get('left'),
-                    endPoint.get('top')
-                  ],
-                  {
-                    stroke: 'blue',
-                    strokeWidth: 4,
-                    hasControls: false,
-                    hasBorders: false,
-                    selectable: false,
-                    lockMovementX: true,
-                    lockMovementY: true,
-                    hoverCursor: 'default',
-                    originX: 'center',
-                    originY: 'center'
-                  }
-                )
-                _this.createLine(lineFigure)
-                _this.linelist.length = 0 // clear linelist
-              }
+            // else if (e.target === null && e.button === 1) {
+            //   // 點畫布的時候才畫線
+            //   var pointer = this.getPointer(e)
+            //   var positionX = pointer.x
+            //   var positionY = pointer.y
+            //   // console.log(positionX, positionY)
+            //   var circlePoint = new fabric.Circle({
+            //     radius: 5,
+            //     fill: 'blue',
+            //     left: positionX,
+            //     top: positionY,
+            //     selectable: true,
+            //     originX: 'center',
+            //     originY: 'center',
+            //     hoverCursor: 'auto'
+            //   })
+            //   _this.linelist.push(circlePoint)
+            //   if (_this.linelist.length > 1) {
+            //     var startPoint = _this.linelist[0]
+            //     var endPoint = _this.linelist[1]
+            //     console.log(startPoint, endPoint)
+            //     var lineFigure = new fabric.Line(
+            //       [
+            //         startPoint.get('left'),
+            //         startPoint.get('top'),
+            //         endPoint.get('left'),
+            //         endPoint.get('top')
+            //       ],
+            //       {
+            //         stroke: 'blue',
+            //         strokeWidth: 4,
+            //         hasControls: false,
+            //         hasBorders: false,
+            //         selectable: false,
+            //         lockMovementX: true,
+            //         lockMovementY: true,
+            //         hoverCursor: 'default',
+            //         originX: 'center',
+            //         originY: 'center'
+            //       }
+            //     )
+            //     _this.createLine(lineFigure)
+            //     _this.linelist.length = 0 // clear linelist
+            //   }
             } else {
               _this.hideContextMenu()
             }
@@ -444,7 +442,7 @@ export default {
       _this.canvas.on(
         {
           'mouse:up': function (e) {
-            if (e.target.type === 'circle') {
+            if (e.target && e.target.type === 'circle') {
               _this.canvas.getObjects().forEach(function (item) {
                 if (item.type === 'group' && e.target.intersectsWithObject(item)) {
                   item.attachPoint = e.target // stickynote attribure
@@ -497,9 +495,7 @@ export default {
       _this.canvas.on(
         {
           'object:moved': function (e) {
-            console.log('om:', e)
             if (e.target.type === 'circle') {
-              console.log('circle moved')
               const p = e.target // circle
               if (p.line1 && p.line1.set({ x2: p.left, y2: p.top })) {
                 _this.changeLinePath(p.line1)
@@ -757,27 +753,20 @@ export default {
           break
         case 'LineCreatedDomainEvent':
           console.log(receivedData)
-          // var lineFigure = new fabric.Line(
-          //     [
-          //       startPoint.get('left'),
-          //       startPoint.get('top'),
-          //       endPoint.get('left'),
-          //       endPoint.get('top')
-          //     ],
-          //     {
-          //       stroke: 'blue',
-          //       strokeWidth: 4,
-          //       hasControls: false,
-          //       hasBorders: false,
-          //       selectable: false,
-          //       lockMovementX: true,
-          //       lockMovementY: true,
-          //       hoverCursor: 'default',
-          //       originX: 'center',
-          //       originY: 'center'
-          //     }
-          // )
-          // _this.addLine(line)
+          var line = {
+            positionList: [
+              {
+                x: 100.0,
+                y: 100.0
+              }, {
+                x: 250.0,
+                y: 200.0
+              }
+            ],
+            strokeWidth: 5,
+            color: '#000000'
+          }
+          _this.addLine(line)
           break
         case 'LineDeletedDomainEvent':
           try {
@@ -792,76 +781,6 @@ export default {
           }
           break
       }
-      // if (receivedData.event === 'CursorMovedDomainEvent') {
-      //   _this.updateUserCursor(receivedData)
-      // } else if (receivedData.event === 'BoardEnteredDomainEvent') {
-      //   // console.log(receivedData)
-      // } else if (receivedData.event === 'CursorCreatedDomainEvent') {
-      //   _this.addUserCursor(receivedData)
-      //   this.updateCursorFlag = true
-      //   this.sendMouseData()
-      //
-      // } else if (receivedData.event === 'CursorDeletedDomainEvent') {
-      //   // console.log(receivedData)
-      //   _this.delUserCursor(receivedData.userId)
-      // } else if (receivedData.event === 'StickyNoteCreatedDomainEvent') {
-      //   const figure = {
-      //     figureId: receivedData.figureId,
-      //     content: '',
-      //     position: {
-      //       x: 100,
-      //       y: 100
-      //     },
-      //     style: {
-      //       fontSize: 20,
-      //       shape: 2,
-      //       width: 150.0,
-      //       height: 150.0,
-      //       color: '#ffa150'
-      //     }
-      //   }
-      //   _this.addStickyNote(figure)
-      // } else if (receivedData.event === 'StickyNoteDeletedDomainEvent') {
-      //   try {
-      //     const cursorObject = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
-      //     this.canvas.remove(cursorObject)
-      //   } catch (e) {
-      //     console.log(e)
-      //   }
-      // } else if (receivedData.event === 'StickyNoteResizedDomainEvent') {
-      //   // console.log(receivedData)
-      //   _this.updateStickyNoteSize(receivedData)
-      // } else if (receivedData.event === 'StickyNoteColorChangedDomainEvent') {
-      //
-      // } else if (receivedData.event === 'StickyNoteMovedDomainEvent') {
-      //   _this.updateStickyNotePosition(receivedData)
-      // } else if (receivedData.event === 'LineCreatedDomainEvent') {
-      //   const figure = {
-      //     positionList: [
-      //       {
-      //         x: 100.0,
-      //         y: 100.0
-      //       }, {
-      //         x: 250.0,
-      //         y: 200.0
-      //       }
-      //     ],
-      //     strokeWidth: 5,
-      //     color: '#000000'
-      //   }
-      //   _this.addLine(figure)
-      // } else if (receivedData.event === 'LineDeletedDomainEvent') {
-      //   try {
-      //     const lineObject0 = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
-      //     const endPointObjects = this.canvas.getObjects().filter(object => object.attachedLineId === receivedData.figureId)
-      //     console.log('endPointObjects: ', endPointObjects)
-      //     this.canvas.remove(lineObject0)
-      //     this.canvas.remove(endPointObjects[0])
-      //     this.canvas.remove(endPointObjects[1])
-      //   } catch (e) {
-      //     console.log(e)
-      //   }
-      // }
     },
     websocketclose: function (e) {
       console.log('connection closed ()')

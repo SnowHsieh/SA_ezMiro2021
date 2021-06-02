@@ -10,6 +10,7 @@ public class LineCreatedDomainEvent extends DomainEvent {
     private final UUID boardId;
     private final UUID figureId;
 
+
     public LineCreatedDomainEvent(UUID boardId, UUID figureId) {
         super(DateProvider.now());
         this.boardId = boardId;
