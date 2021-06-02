@@ -4,6 +4,7 @@ public class FigureDto {
 
     private String figureId;
     private String boardId;
+    private String figureType;
 
     public String getFigureId() {
         return figureId;
@@ -19,5 +20,13 @@ public class FigureDto {
 
     public void setBoardId(String boardId) {
         this.boardId = boardId;
+    }
+
+    public String getFigureType() {
+        return figureType;
+    }
+
+    public void setFigureType(String figureType) {
+        this.figureType = figureType;
     }
 }

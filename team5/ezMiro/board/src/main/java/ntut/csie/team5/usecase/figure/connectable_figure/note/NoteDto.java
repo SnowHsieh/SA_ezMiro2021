@@ -9,7 +9,6 @@ public class NoteDto extends FigureDto {
     private int height;
     private int width;
     private String color;
-    private String figureType;
     private String text;
 
     public int getLeftTopPositionX() {
@@ -50,14 +49,6 @@ public class NoteDto extends FigureDto {
 
     public void setColor(String color) {
         this.color = color;
-    }
-
-    public String getFigureType() {
-        return figureType;
-    }
-
-    public void setFigureType(String figureType) {
-        this.figureType = figureType;
     }
 
     public String getText() {

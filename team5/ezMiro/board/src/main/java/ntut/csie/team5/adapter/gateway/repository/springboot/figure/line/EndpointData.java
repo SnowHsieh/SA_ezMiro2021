@@ -3,8 +3,13 @@ package ntut.csie.team5.adapter.gateway.repository.springboot.figure.line;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Embeddable
+@Entity
+@Table(name = "endpoint")
 public class EndpointData implements Serializable {
+
+    @Id
+    @Column(name = "endpoint_id")
+    private String endpointId;
 
     @Column(name = "position_x")
     private int positionX;
@@ -18,10 +23,19 @@ public class EndpointData implements Serializable {
     public EndpointData() {
     }
 
-    public EndpointData(int positionX, int positionY, String connectedFigureId) {
+    public EndpointData(String endpointId, int positionX, int positionY, String connectedFigureId) {
+        this.endpointId = endpointId;
         this.positionX = positionX;
         this.positionY = positionY;
         this.connectedFigureId = connectedFigureId;
+    }
+
+    public String getEndpointId() {
+        return endpointId;
+    }
+
+    public void setEndpointId(String endpointId) {
+        this.endpointId = endpointId;
     }
 
     public int getPositionX() {

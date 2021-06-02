@@ -1,6 +1,7 @@
 package ntut.csie.team5.application.springboot.web.config;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
+import ntut.csie.team5.entity.model.figure.line.Line;
 import ntut.csie.team5.usecase.board.BoardRepository;
 import ntut.csie.team5.usecase.board.change_order.ChangeFigureZOrderUseCase;
 import ntut.csie.team5.usecase.board.change_order.ChangeFigureZOrderUseCaseImpl;
@@ -27,6 +28,15 @@ import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCa
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCaseImpl;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.resize.ResizeNoteUseCase;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.resize.ResizeNoteUseCaseImpl;
+import ntut.csie.team5.usecase.figure.line.DeleteLineUseCaseImpl;
+import ntut.csie.team5.usecase.figure.line.LineRepository;
+import ntut.csie.team5.usecase.figure.line.delete.DeleteLineUseCase;
+import ntut.csie.team5.usecase.figure.line.draw.DrawLineUseCase;
+import ntut.csie.team5.usecase.figure.line.draw.DrawLineUseCaseImpl;
+import ntut.csie.team5.usecase.figure.line.move.MoveLineUseCase;
+import ntut.csie.team5.usecase.figure.line.move.MoveLineUseCaseImpl;
+import ntut.csie.team5.usecase.figure.line.move_endpoint.MoveLineEndpointUseCase;
+import ntut.csie.team5.usecase.figure.line.move_endpoint.MoveLineEndpointUseCaseImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,6 +46,7 @@ public class UseCaseInjection {
 
     private BoardRepository boardRepository;
     private NoteRepository noteRepository;
+    private LineRepository lineRepository;
     private DomainEventBus eventBus;
 
     @Bean(name = "createBoardUseCase")
@@ -45,7 +56,7 @@ public class UseCaseInjection {
 
     @Bean(name = "getBoardContentUseCase")
     public GetBoardContentUseCase getBoardContentUseCase() {
-        return new GetBoardContentUseCaseImpl(boardRepository, noteRepository, eventBus);
+        return new GetBoardContentUseCaseImpl(boardRepository, noteRepository, lineRepository, eventBus);
     }
 
     @Bean(name = "enterBoardUseCase")
@@ -98,6 +109,26 @@ public class UseCaseInjection {
         return new ChangeFigureZOrderUseCaseImpl(boardRepository, eventBus);
     }
 
+    @Bean(name = "drawLineUseCase")
+    public DrawLineUseCase drawLineUseCase() {
+        return new DrawLineUseCaseImpl(lineRepository, eventBus);
+    }
+
+    @Bean(name = "moveLineUseCase")
+    public MoveLineUseCase moveLineUseCase() {
+        return new MoveLineUseCaseImpl(lineRepository, eventBus);
+    }
+
+    @Bean(name = "moveLineEndpointUseCase")
+    public MoveLineEndpointUseCase moveLineEndpointUseCase() {
+        return new MoveLineEndpointUseCaseImpl(lineRepository, eventBus);
+    }
+
+    @Bean(name = "deleteLineUseCase")
+    public DeleteLineUseCase deleteLineUseCase() {
+        return new DeleteLineUseCaseImpl(lineRepository, eventBus);
+    }
+
     @Autowired
     public void setBoardRepository(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
@@ -106,6 +137,11 @@ public class UseCaseInjection {
     @Autowired
     public void setFigureRepository(NoteRepository noteRepository) {
         this.noteRepository = noteRepository;
+    }
+
+    @Autowired
+    public void setLineRepository(LineRepository lineRepository) {
+        this.lineRepository = lineRepository;
     }
 
     @Autowired
