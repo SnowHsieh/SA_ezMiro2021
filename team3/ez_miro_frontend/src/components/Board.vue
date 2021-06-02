@@ -336,7 +336,9 @@ export default {
           // do nothing
         }
       })
+
       this.canvas.on('object:moving', function (o) {
+        o.target.setCoords()
         const target = o.target
         const widgetId = target.id
         const point = target.lineCoords
@@ -345,7 +347,36 @@ export default {
         const bottomRightX = point.br.x
         const bottomRightY = point.br.y
         if (o.target.get('type') === 'circle') {
-          me.canvas.renderAll()
+          me.canvas.forEachObject(function (obj) {
+            const pointer = o.pointer
+            const circle = o.target
+            if (obj === o.target) {
+              obj.set('opacity', 1)
+            } else if (circle.intersectsWithObject(obj) && obj.get('type') === 'stickyNote') {
+              const { mtr, ...coordsWithoutMtr } = obj.oCoords
+              const targerPoint = me.getCloestACrood(pointer, Object.values(coordsWithoutMtr))
+              circle.set({ left: targerPoint.x, top: targerPoint.y })
+              circle.setCoords()
+              circle.fire('moving', {
+                pointer: {
+                  x: circle.left,
+                  y: circle.top
+                }
+              })
+              obj.on('moving', function (o) {
+                const { mtr, ...coordsWithoutMtr } = obj.oCoords
+                const targerPoint = me.getCloestACrood(pointer, Object.values(coordsWithoutMtr))
+                circle.set({ left: targerPoint.x, top: targerPoint.y })
+                circle.setCoords()
+                circle.fire('moving', {
+                  pointer: {
+                    x: circle.left,
+                    y: circle.top
+                  }
+                })
+              })
+            }
+          })
         } else if (o.target.get('type') === 'stickyNote' && me.isSamplingWidgetDelayFinish) {
           me.isSamplingWidgetDelayFinish = false
           setTimeout(function () {
@@ -380,6 +411,18 @@ export default {
           bottomRightY: bottomRightY
         })
       })
+    },
+    getCloestACrood (point, aCoords) {
+      var result
+      var leastDistance = 2000000
+      aCoords.forEach(coord => {
+        const distance = Math.sqrt(Math.pow(point.x - coord.x, 2) + Math.pow(point.y - coord.y, 2))
+        if (distance < leastDistance) {
+          leastDistance = distance
+          result = coord
+        }
+      })
+      return result
     },
     async deleteWidget () {
       const res = await DeleteStickyNoteBy(this.selectedStickyNote.id, this.boardId)
@@ -495,11 +538,13 @@ export default {
 
       const me = this
       line.circleHead.on('moving', function (e) {
-        line.set({ x1: e.pointer.x, y1: e.pointer.y })
+        line.set({ x1: line.circleHead.left, y1: line.circleHead.top })
+        line.setCoords()
       })
 
       line.circleTail.on('moving', function (e) {
-        line.set({ x2: e.pointer.x, y2: e.pointer.y })
+        line.set({ x2: line.circleTail.left, y2: line.circleTail.top })
+        line.setCoords()
       })
 
       line.circleHead.on('moved', function (e) {
