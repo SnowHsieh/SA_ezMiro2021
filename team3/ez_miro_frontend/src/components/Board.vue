@@ -241,16 +241,10 @@ export default {
               easing: fabric.util.ease.easeInOutSine
             })
           } else if (o.get('type') === 'line') {
-            // o.animate({ x1: widgetDto.topLeftX, y1: widgetDto.topLeftY }, {
-            //   duration: 200,
-            //   onChange: canvas.renderAll.bind(canvas),
-            //   easing: fabric.util.ease.easeInOutSine
-            // })
-            // o.animate({ x2: widgetDto.bottomRightX, y2: widgetDto.bottomRightY }, {
-            //   duration: 200,
-            //   onChange: canvas.renderAll.bind(canvas),
-            //   easing: fabric.util.ease.easeInOutSine
-            // })
+            o.set({ x1: widgetDto.topLeftX, y1: widgetDto.topLeftY })
+            o.circleHead.set({ top: o.y1 - o.circleHead.radius, left: o.x1 - o.circleHead.radius })
+            o.set({ x2: widgetDto.bottomRightX, y2: widgetDto.bottomRightY })
+            o.circleTail.set({ top: o.y2 - o.circleTail.radius, left: o.x2 - o.circleTail.radius })
           }
         }
       })
@@ -339,14 +333,7 @@ export default {
             }
           })
         } else if (target.get('type') === 'line') {
-          await MoveLineBy(me.boardId, {
-            [widgetId]: {
-              topLeftX: topLeftX,
-              topLeftY: topLeftY,
-              bottomRightX: bottomRightX,
-              bottomRightY: bottomRightY
-            }
-          })
+          // do nothing
         }
       })
       this.canvas.on('object:moving', function (o) {
@@ -373,17 +360,7 @@ export default {
             })
           }, 200)
         } else if (o.target.get('type') === 'line' && me.isSamplingWidgetDelayFinish) {
-          setTimeout(function () {
-            me.isSamplingWidgetDelayFinish = true
-            MoveLineBy(me.boardId, {
-              [widgetId]: {
-                topLeftX: topLeftX,
-                topLeftY: topLeftY,
-                bottomRightX: bottomRightX,
-                bottomRightY: bottomRightY
-              }
-            })
-          }, 200)
+          o.set({ x1: topLeftX, y1: topLeftY, x2: bottomRightX, y2: bottomRightY })
         }
       })
 
@@ -500,7 +477,7 @@ export default {
       })
     },
     buildFabricObjectOfLine (widget) {
-      return new fabric.OurLine({
+      const line = new fabric.OurLine({
         id: widget.widgetId,
         coors: {
           topLeftX: widget.topLeftX,
@@ -512,9 +489,47 @@ export default {
         fill: 'red',
         stroke: 'black',
         strokeWidth: 5,
-        selectable: true,
-        evented: true
+        selectable: false,
+        evented: false
       })
+
+      const me = this
+      line.circleHead.on('moving', function (e) {
+        line.set({ x1: e.pointer.x, y1: e.pointer.y })
+      })
+
+      line.circleTail.on('moving', function (e) {
+        line.set({ x2: e.pointer.x, y2: e.pointer.y })
+      })
+
+      line.circleHead.on('moved', function (e) {
+        setTimeout(function () {
+          me.isSamplingWidgetDelayFinish = true
+          MoveLineBy(me.boardId, {
+            [line.id]: {
+              topLeftX: line.x1,
+              topLeftY: line.y1,
+              bottomRightX: line.x2,
+              bottomRightY: line.y2
+            }
+          })
+        }, 200)
+      })
+
+      line.circleTail.on('moved', function (e) {
+        setTimeout(function () {
+          me.isSamplingWidgetDelayFinish = true
+          MoveLineBy(me.boardId, {
+            [line.id]: {
+              topLeftX: line.x1,
+              topLeftY: line.y1,
+              bottomRightX: line.x2,
+              bottomRightY: line.y2
+            }
+          })
+        }, 200)
+      })
+      return line
     },
     getZOrderOf (widget) {
       return this.canvas.getObjects().indexOf(widget)

@@ -12,13 +12,6 @@ fabric.OurLine = fabric.util.createClass(fabric.Line, {
     this._initailizeCircle(element.coors)
     const coors = [element.coors.topLeftX, element.coors.topLeftY, element.coors.bottomRightX, element.coors.bottomRightY]
     this.callSuper('initialize', coors, options)
-    const thisLine = this
-    this.circleHead.on('moving', function (e) {
-      thisLine.set({ x1: e.pointer.x, y1: e.pointer.y })
-    })
-    this.circleTail.on('moving', function (e) {
-      thisLine.set({ x2: e.pointer.x, y2: e.pointer.y })
-    })
   },
   _setControlVisible (fabricObject) {
     fabricObject.setControlsVisibility({
@@ -35,19 +28,19 @@ fabric.OurLine = fabric.util.createClass(fabric.Line, {
   },
   _initailizeCircle (coors) {
     this.circleHead = new fabric.Circle({
-      left: coors.topLeftX,
-      top: coors.topLeftY,
-      strokeWidth: 5,
-      radius: 12,
+      left: coors.topLeftX - 6,
+      top: coors.topLeftY - 6,
+      strokeWidth: 2,
+      radius: 6,
       fill: '#fff',
       stroke: '#666'
     })
     this.circleHead.hasControls = this.circleHead.hasBorders = false
     this.circleTail = new fabric.Circle({
-      left: coors.bottomRightX,
-      top: coors.bottomRightY,
-      strokeWidth: 5,
-      radius: 12,
+      left: coors.bottomRightX - 6,
+      top: coors.bottomRightY - 6,
+      strokeWidth: 2,
+      radius: 6,
       fill: '#fff',
       stroke: '#666'
     })
