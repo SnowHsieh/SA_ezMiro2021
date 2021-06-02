@@ -52,11 +52,11 @@ import {
 } from '@/apis/stickyNoteApi'
 import { webSocketHostIp } from '../config/config.js'
 import uuidGenerator from '../utils/uuidGenerator.js'
-import { changeLinePathApi, createLineApi, deleteLineApi } from '../apis/lineApi'
+import { attachTextfigureApi, changeLinePathApi, createLineApi, deleteLineApi } from '../apis/lineApi'
 export default {
   data () {
     return {
-      boardId: '465d1a8f-0632-4b65-b71d-5d90fbe79331',
+      boardId: '4b1e0ade-7e45-4053-b148-3b0ca7ac006a',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -77,7 +77,8 @@ export default {
       updateCursorFlag: true,
       updateFigureFlag: true,
       snapDistance: 80,
-      linelist: []
+      linelist: [],
+      associationMap: []
     }
   },
   created () {
@@ -147,6 +148,15 @@ export default {
         console.log(err)
       }
     },
+    async attachText (figureId, textFigureId) {
+      try {
+        const res = await attachTextfigureApi(this.boardId, figureId, textFigureId)
+        console.log(res.data.message)
+      } catch (err) {
+        console.log(err)
+      }
+      console.log('changeLinePath success')
+    },
     // 畫直線
     addLine (figure) {
       const srcPosition = figure.positionList[0]
@@ -159,15 +169,22 @@ export default {
         hasControls: true, // 選中時是否可以放大縮小
         hasRotatingPoint: true, // 選中時是否可以旋轉
         hasBorders: true, // 選中時是否有邊框
-        srcPointId: null,
-        destPointId: null
+        srcPoint: null,
+        destPoint: null
         // evented: false  // false means event on line can't be triggered
       })
-      this.canvas.add(line)
+      line.srcPoint = this.makeCircle(line.x1, line.y1, null, line, line.get('id'))
+      line.destPoint = this.makeCircle(line.x2, line.y2, line, null, line.get('id'))
+      // console.log(line.srcPoint, line.destPoint)
       this.canvas.add(
-        this.makeCircle(line.x2, line.y2, line, null, line.get('id')),
-        this.makeCircle(line.x1, line.y1, null, line, line.get('id'))
+        line,
+        line.srcPoint,
+        line.destPoint
       )
+      this.associationMap.push({
+        key: line,
+        value: figure.attachedTextFigureIdList
+      })
       this.canvas.renderAll()
     },
     // 畫球
@@ -270,11 +287,26 @@ export default {
       figureDtos.forEach(figure => {
         if (figure.kind === 'LINE') {
           _this.addLine(figure)
-          // console.log(figure)
         } else if (figure.kind === 'STICKYNOTE') {
           _this.addStickyNote(figure)
         }
       })
+      this.associationMap.forEach(lineItem => {
+        lineItem.value.forEach(attachedTextFigureId => {
+          console.log(attachedTextFigureId)
+          _this.canvas.getObjects().filter(object => object.id === attachedTextFigureId).forEach(item => {
+            console.log('sObject', item)
+            item.attachPoint = item.intersectsWithObject(lineItem.key.srcPoint) ? lineItem.key.srcPoint : lineItem.key.destPoint
+            item.attachPoint.xOffset = (item.attachPoint.get('left') - item.get('left')) / item.width
+            item.attachPoint.yOffset = (item.attachPoint.get('top') - item.get('top')) / item.height
+            // item.attachPoint = lineItem.key.srcPoint === null ? lineItem.key.destPoint : lineItem.key.srcPoint
+            // console.log(lineItem.key.srcPoint, lineItem.key.destPoint)
+          }
+          )
+        })
+      }
+
+      )
     },
     addStickyNote (figure) {
       var shadow = new fabric.Shadow({
@@ -445,9 +477,14 @@ export default {
             if (e.target && e.target.type === 'circle') {
               _this.canvas.getObjects().forEach(function (item) {
                 if (item.type === 'group' && e.target.intersectsWithObject(item)) {
+                  console.log('mouse:up', item)
                   item.attachPoint = e.target // stickynote attribure
                   e.target.xOffset = (e.target.get('left') - item.get('left')) / item.width
                   e.target.yOffset = (e.target.get('top') - item.get('top')) / item.height
+                  console.log(e.target)
+                  var line = e.target.line1 ? e.target.line1 : e.target.line2
+                  console.log('line:', line)
+                  _this.attachText(line.get('id'), item.get('id'))
                 }
               })
             } else {
@@ -754,6 +791,7 @@ export default {
         case 'LineCreatedDomainEvent':
           console.log(receivedData)
           var line = {
+            id: receivedData.figureId,
             positionList: [
               {
                 x: 100.0,

@@ -79,3 +79,17 @@ export const changeLinePathApi = async (boardId, figure) => {
     console.log(err)
   }
 }
+
+export const attachTextfigureApi = async (boardId, lineId, textFigureId) => {
+  try {
+    const res = await axios.post(`${hostIp}/board/${boardId}/attachTextfigure`,
+      {
+        figureId: lineId,
+        textFigureId: textFigureId
+      }
+    )
+    return res
+  } catch (err) {
+    console.log(err)
+  }
+}

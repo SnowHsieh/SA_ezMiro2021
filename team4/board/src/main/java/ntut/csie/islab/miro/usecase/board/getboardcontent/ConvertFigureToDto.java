@@ -17,6 +17,7 @@ public class ConvertFigureToDto {
 
         //line
         dto.setPositionList(figure.getPositionList());
+        dto.setAttachedTextFigureIdList(figure.getAttachedTextFigureIdList());
         dto.setSrcArrowKind(figure.getSrcArrowKind());
         dto.setDestArrowKind(figure.getDestArrowKind());
         dto.setStrokeWidth(figure.getStrokeWidth());

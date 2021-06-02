@@ -14,6 +14,7 @@ public class FigureDto {
     private String kind;
     //line
     private List<Position> positionList;
+    private List<UUID> attachedTextFigureIdList;
     private ArrowKindEnum srcArrowKind ; //NONE,CIRCLE,ARROW
     private ArrowKindEnum destArrowKind; //NONE,CIRCLE,ARROW
     private int strokeWidth ;
@@ -30,6 +31,14 @@ public class FigureDto {
 
     public void setPositionList(List<Position> positionList) {
         this.positionList = positionList;
+    }
+
+    public List<UUID> getAttachedTextFigureIdList() {
+        return attachedTextFigureIdList;
+    }
+
+    public void setAttachedTextFigureIdList(List<UUID> attachedTextFigureIdList) {
+        this.attachedTextFigureIdList = attachedTextFigureIdList;
     }
 
     public ArrowKindEnum getSrcArrowKind() {
