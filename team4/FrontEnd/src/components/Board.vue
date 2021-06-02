@@ -56,7 +56,7 @@ import { changeLinePathApi, createLineApi, deleteLineApi } from '../apis/lineApi
 export default {
   data () {
     return {
-      boardId: 'cc4ca4ce-ecdc-42b8-9802-69fc9a20fb0c',
+      boardId: '90475d69-6a19-428e-956f-1f334f30ee5e',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -75,7 +75,9 @@ export default {
       myUserId: '7398cd26-da85-4c05-b04b-122e73888dfc',
       mouseData: null,
       updateCursorFlag: true,
-      updateFigureFlag: true
+      updateFigureFlag: true,
+      snapDistance: 80,
+      linelist: []
     }
   },
   created () {
@@ -149,7 +151,7 @@ export default {
     addLine (figure) {
       const srcPosition = figure.positionList[0]
       const destPosition = figure.positionList[1]
-      console.log(figure)
+
       const line = new fabric.Line([srcPosition.x, srcPosition.y, destPosition.x, destPosition.y], {
         id: figure.figureId,
         fill: figure.color,
@@ -157,36 +159,35 @@ export default {
         strokeWidth: figure.strokeWidth, // 筆觸寬度
         hasControls: true, // 選中時是否可以放大縮小
         hasRotatingPoint: true, // 選中時是否可以旋轉
-        hasBorders: true // 選中時是否有邊框
+        hasBorders: true, // 選中時是否有邊框
+        srcPointId: null,
+        destPointId: null
         // evented: false  // false means event on line can't be triggered
       })
-      console.log('line: ', line)
+
       this.canvas.add(line)
       this.canvas.add(
         this.makeCircle(line.x2, line.y2, line, null, line.get('id')),
         this.makeCircle(line.x1, line.y1, null, line, line.get('id'))
       )
       this.canvas.renderAll()
-      // return line
     },
     // 畫球
     makeCircle (left, top, line1, line2, lineId) {
-      var c = new fabric.Circle({
+      var circlePoint = new fabric.Circle({
         left: left,
         top: top,
-        strokeWidth: 5,
         radius: 5,
-        fill: '#f9f900',
-        stroke: '#f9f900',
+        stroke: 'white',
         originX: 'center',
         originY: 'center'
       })
-      c.attachedLineId = lineId
-      c.hasControls = c.hasBorders = false
-      c.line1 = line1
-      c.line2 = line2
+      circlePoint.attachedLineId = lineId
+      circlePoint.hasControls = circlePoint.hasBorders = false
+      circlePoint.line1 = line1
+      circlePoint.line2 = line2
 
-      return c
+      return circlePoint
     },
     async createStickyNote () {
       try {
@@ -269,7 +270,7 @@ export default {
       figureDtos.forEach(figure => {
         if (figure.kind === 'LINE') {
           _this.addLine(figure)
-          console.log(figure)
+          // console.log(figure)
         } else if (figure.kind === 'STICKYNOTE') {
           _this.addStickyNote(figure)
         }
@@ -315,6 +316,7 @@ export default {
       _this.addListenerOfSendBackward()
       _this.addListenerOfSendToBack()
       // listen event on canvas
+      _this.listenToMouseUp()
       _this.listenToMouseMove()
       _this.listenToMouseDown()
       _this.listenToObjectScaled()
@@ -384,11 +386,86 @@ export default {
               _this.canvas.setActiveObject(e.target) // right click
               _this.activeObjects = _this.canvas.getActiveObjects()
               _this.showContextMenu(e)
+            } else if (e.target === null && e.button === 1) {
+              // 點畫布的時候才畫線
+              var pointer = this.getPointer(e)
+              var positionX = pointer.x
+              var positionY = pointer.y
+              // console.log(positionX, positionY)
+              var circlePoint = new fabric.Circle({
+                radius: 5,
+                fill: 'blue',
+                left: positionX,
+                top: positionY,
+                selectable: true,
+                originX: 'center',
+                originY: 'center',
+                hoverCursor: 'auto'
+              })
+              _this.linelist.push(circlePoint)
+              if (_this.linelist.length > 1) {
+                var startPoint = _this.linelist[0]
+                var endPoint = _this.linelist[1]
+                console.log(startPoint, endPoint)
+                var lineFigure = new fabric.Line(
+                  [
+                    startPoint.get('left'),
+                    startPoint.get('top'),
+                    endPoint.get('left'),
+                    endPoint.get('top')
+                  ],
+                  {
+                    stroke: 'blue',
+                    strokeWidth: 4,
+                    hasControls: false,
+                    hasBorders: false,
+                    selectable: false,
+                    lockMovementX: true,
+                    lockMovementY: true,
+                    hoverCursor: 'default',
+                    originX: 'center',
+                    originY: 'center'
+                  }
+                )
+                _this.createLine(lineFigure)
+                _this.linelist.length = 0 // clear linelist
+              }
+            } else {
+              _this.hideContextMenu()
+            }
+          }
+        }
+      )
+    },
+    listenToMouseUp () {
+      var _this = this
+      _this.canvas.on(
+        {
+          'mouse:up': function (e) {
+            if (e.target !== null) {
+              _this.canvas.getObjects().every(function (item) {
+                if (item.type === 'group' && item.get('id') !== e.target.get('id')) {
+                  if (e.target.intersectsWithObject(item) && item.intersectsWithObject(e.target)) {
+                    _this.attachPoint(e.target, item)
+                    return false // every will stop when get false
+                  }
+                }
+              })
             } else {
               _this.hideContextMenu()
             }
           }
         })
+    },
+    attachPoint (srcPoint, destPoint) {
+      console.log('attachPoint')
+      var _this = this
+      if (srcPoint.line1 && srcPoint.line1.set({ x2: destPoint.left, y2: destPoint.top })) {
+        _this.changeLinePath(srcPoint.line1)
+      }
+      if (srcPoint.line2 && srcPoint.line2.set({ x1: destPoint.left, y1: destPoint.top })) {
+        _this.changeLinePath(srcPoint.line2)
+      }
     },
     listenToObjectScaled () {
       var _this = this
@@ -406,6 +483,7 @@ export default {
       _this.canvas.on(
         {
           'object:moving': function (e) {
+            // todo :object typeing checking : group(StickyNote vs Line)
             if (e.target.type === 'group') {
               if (_this.updateFigureFlag) {
                 _this.moveStickyNote(e.target)
@@ -677,20 +755,28 @@ export default {
           _this.updateStickyNotePosition(receivedData)
           break
         case 'LineCreatedDomainEvent':
-          var line = {
-            positionList: [
-              {
-                x: 100.0,
-                y: 100.0
-              }, {
-                x: 250.0,
-                y: 200.0
-              }
-            ],
-            strokeWidth: 5,
-            color: '#000000'
-          }
-          _this.addLine(line)
+          console.log(receivedData)
+          // var lineFigure = new fabric.Line(
+          //     [
+          //       startPoint.get('left'),
+          //       startPoint.get('top'),
+          //       endPoint.get('left'),
+          //       endPoint.get('top')
+          //     ],
+          //     {
+          //       stroke: 'blue',
+          //       strokeWidth: 4,
+          //       hasControls: false,
+          //       hasBorders: false,
+          //       selectable: false,
+          //       lockMovementX: true,
+          //       lockMovementY: true,
+          //       hoverCursor: 'default',
+          //       originX: 'center',
+          //       originY: 'center'
+          //     }
+          // )
+          // _this.addLine(line)
           break
         case 'LineDeletedDomainEvent':
           try {
