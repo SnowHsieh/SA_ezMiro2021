@@ -8,20 +8,17 @@ import java.util.Date;
 public abstract class Widget extends AggregateRoot<String> {
     protected String boardId;
     protected Coordinate coordinate;
-    protected String text;
     protected String color;
-    protected String textColor;
-    protected int fontSize;
+    protected String type;
 
-    public Widget(String id, String boardId, Coordinate coordinate) {
+    public Widget(String id, String boardId, Coordinate coordinate, String type) {
         super(id);
         this.boardId = boardId;
         this.coordinate = coordinate;
         this.color = "#FFFAAD";
-        this.textColor = "#000000";
-        this.text = "";
+        this.type = type;
 
-        addDomainEvent(new WidgetCreated(new Date(), boardId, id));
+        addDomainEvent(new WidgetCreated(new Date(), boardId, id, type));
     }
 
     public void delete() {
@@ -56,16 +53,6 @@ public abstract class Widget extends AggregateRoot<String> {
         addDomainEvent(new WidgetResized(new Date(), boardId, id));
     }
 
-    public void setText(String text) {
-        this.text = text;
-
-        addDomainEvent(new TextOfWidgetEdited(new Date(), boardId, id));
-    }
-
-    public String getText() {
-        return text;
-    }
-
     public String getColor() {
         return color;
     }
@@ -75,19 +62,11 @@ public abstract class Widget extends AggregateRoot<String> {
         addDomainEvent(new ColorOfWidgetChanged(new Date(), boardId, id));
     }
 
-    public String getTextColor() {
-        return textColor;
+    public String getType() {
+        return type;
     }
 
-    public void setTextColor(String textColor) {
-        this.textColor = textColor;
-    }
-
-    public int getFontSize() {
-        return fontSize;
-    }
-
-    public void setFontSize(int fontSize) {
-        this.fontSize = fontSize;
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -1,14 +1,14 @@
 package ntut.csie.selab.usecase.widget.query.getwidget;
 
-import ntut.csie.selab.adapter.gateway.repository.springboot.widget.WidgetRepositoryPeer;
-import ntut.csie.selab.adapter.presenter.widget.getwidget.WidgetViewModel;
-import ntut.csie.selab.adapter.widget.WidgetRepositoryImpl;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
+import ntut.csie.selab.adapter.presenter.widget.getwidget.StickyNoteViewModel;
+import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
 import ntut.csie.selab.entity.model.widget.Coordinate;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.usecase.JpaApplicationTest;
-import ntut.csie.selab.usecase.widget.WidgetDto;
-import ntut.csie.selab.usecase.widget.WidgetDtoMapper;
+import ntut.csie.selab.usecase.widget.StickyNoteDto;
+import ntut.csie.selab.usecase.widget.StickyNoteDtoMapper;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,27 +26,27 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class GetWidgetUseCaseTest {
 
     @Autowired
-    private WidgetRepositoryPeer widgetRepositoryPeer;
+    private StickyNoteRepositoryPeer stickyNoteRepositoryPeer;
 
     @Test
     public void get_sticky_note_should_succeed() {
         // Arrange
-        WidgetRepository widgetRepository = new WidgetRepositoryImpl(widgetRepositoryPeer);
+        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         GetWidgetUseCase getWidgetUseCase = new GetWidgetUseCase(widgetRepository);
         GetWidgetInput input = new GetWidgetInput();
         GetWidgetOutput output = new GetWidgetOutput();
         create_single_sticky_note(widgetRepository);
         input.setWidgetId("stickyNoteId");
-        WidgetDtoMapper widgetDtoMapper = new WidgetDtoMapper();
-        WidgetDto widgetDto;
+        StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
+        StickyNoteDto stickyNoteDto;
 
         // Act
         getWidgetUseCase.execute(input, output);
-        widgetDto = widgetDtoMapper.domainToDto(output.getWidget());
-        WidgetViewModel widgetViewModel = new WidgetViewModel(widgetDto);
+        stickyNoteDto = stickyNoteDtoMapper.domainToDto((StickyNote) output.getWidget());
+        StickyNoteViewModel stickyNoteViewModel = new StickyNoteViewModel(stickyNoteDto);
 
         // Assert
-        Assert.assertEquals("stickyNoteId", widgetViewModel.getWidgetDto().getWidgetId());
+        Assert.assertEquals("stickyNoteId", stickyNoteViewModel.getWidgetDto().getWidgetId());
     }
 
     private void create_single_sticky_note(WidgetRepository widgetRepository) {

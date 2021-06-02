@@ -7,29 +7,29 @@ import ntut.csie.selab.entity.model.board.event.WidgetDeletionCommitted;
 import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
 import ntut.csie.selab.entity.model.widget.event.WidgetDeleted;
 import ntut.csie.selab.model.DomainEventBus;
-import ntut.csie.selab.usecase.board.BoardAssociationRepository;
+import ntut.csie.selab.usecase.board.BoardRepository;
 
 import java.util.Date;
 import java.util.Optional;
 
 public class NotifyBoard {
 
-    private BoardAssociationRepository boardAssociationRepository;
+    private BoardRepository boardRepository;
     private DomainEventBus domainEventBus;
 
-    public NotifyBoard(BoardAssociationRepository boardAssociationRepository, DomainEventBus domainEventBus) {
-        this.boardAssociationRepository = boardAssociationRepository;
+    public NotifyBoard(BoardRepository boardRepository, DomainEventBus domainEventBus) {
+        this.boardRepository = boardRepository;
         this.domainEventBus = domainEventBus;
     }
 
     @Subscribe
     public void whenWidgetCreated(WidgetCreated widgetCreated) {
-        Optional<Board> board = boardAssociationRepository.findById(widgetCreated.getBoardId());
+        Optional<Board> board = boardRepository.findById(widgetCreated.getBoardId());
 
         if (board.isPresent()) {
             Board selectedBoard = board.get();
-            boardAssociationRepository.save(selectedBoard);
-            boardAssociationRepository.saveCommittedWidget(selectedBoard.getId(), widgetCreated.getWidgetId());
+            selectedBoard.commitWidgetCreation(widgetCreated.getWidgetId());
+            boardRepository.save(selectedBoard);
             domainEventBus.post(new WidgetCreationNotifiedToAllUser(new Date(), widgetCreated.getBoardId(), widgetCreated.getWidgetId()));
         } else {
             throw new RuntimeException("Board not found, board id = " + widgetCreated.getBoardId());
@@ -38,12 +38,12 @@ public class NotifyBoard {
 
     @Subscribe
     public void whenWidgetDeleted(WidgetDeleted widgetDeleted) {
-        Optional<Board> board = boardAssociationRepository.findById(widgetDeleted.getBoardId());
+        Optional<Board> board = boardRepository.findById(widgetDeleted.getBoardId());
 
         if (board.isPresent()) {
             Board selectedBoard = board.get();
-            boardAssociationRepository.save(selectedBoard);
-//            boardAssociationRepository.deleteCommittedWidget(selectedBoard.getId(), widgetDeleted.getWidgetId());
+            selectedBoard.commitWidgetDeletion(widgetDeleted.getWidgetId());
+            boardRepository.save(selectedBoard);
             domainEventBus.post(new WidgetDeletionCommitted(new Date()));
         } else {
             throw new RuntimeException("Board not found, board id = " + widgetDeleted.getBoardId());

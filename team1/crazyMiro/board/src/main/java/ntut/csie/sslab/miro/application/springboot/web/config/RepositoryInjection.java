@@ -6,8 +6,10 @@ import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRep
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryPeer;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.line.LineRepositoryImpl;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
+import ntut.csie.sslab.miro.usecase.line.LineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,16 +18,11 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource(value = "classpath:/application.properties")
 @Configuration("MiroRepositoryInjection")
 public class RepositoryInjection {
-//
+
   private BoardRepositoryPeer boardRepositoryPeer;
 
   private FigureRepositoryPeer figureRepositoryPeer;
 
-//
-//  private WorkflowRepositoryPeer workflowRepositoryPeer;
-//
-//  private CardRepositoryPeer cardRepositoryPeer;
-//
   @Autowired
   public void setBoardRepositoryPeer(BoardRepositoryPeer boardRepositoryPeer){
     this.boardRepositoryPeer = boardRepositoryPeer;
@@ -35,6 +32,13 @@ public class RepositoryInjection {
   public void setFigureRepositoryPeer(FigureRepositoryPeer figureRepositoryPeer){
     this.figureRepositoryPeer = figureRepositoryPeer;
   }
+
+
+//
+//  private WorkflowRepositoryPeer workflowRepositoryPeer;
+//
+//  private CardRepositoryPeer cardRepositoryPeer;
+//
 
 //  @Autowired
 //  public void setBoardMdbRepositoryPeer(BoardRepositoryMongoDbPeer boardRepositoryMongoDbPeer){
@@ -62,6 +66,11 @@ public class RepositoryInjection {
   @Bean(name="boardRepository")
   public BoardRepository boardRepository() {
     return new BoardRepositoryImpl(boardRepositoryPeer);
+  }
+
+  @Bean(name="lineRepository")
+  public LineRepository lineRepository() {
+    return new LineRepositoryImpl();
   }
 
   //

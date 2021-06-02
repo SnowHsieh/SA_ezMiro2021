@@ -1,26 +1,27 @@
 package ntut.csie.selab.application.springboot.web.config;
 
 import ntut.csie.selab.model.DomainEventBus;
-import ntut.csie.selab.usecase.board.BoardAssociationRepository;
 import ntut.csie.selab.usecase.board.BoardRepository;
-import ntut.csie.selab.usecase.board.enterboard.EnterBoardUseCase;
 import ntut.csie.selab.usecase.board.create.CreateBoardUseCase;
+import ntut.csie.selab.usecase.board.edit.zorder.ChangeZOrderOfWidgetUseCase;
+import ntut.csie.selab.usecase.board.enterboard.EnterBoardUseCase;
 import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.selab.usecase.board.movecursor.MoveCursorUseCase;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
 import ntut.csie.selab.usecase.websocket.WebSocket;
+import ntut.csie.selab.usecase.widget.LineRepository;
 import ntut.csie.selab.usecase.widget.WidgetRepository;
-import ntut.csie.selab.usecase.widget.create.CreateStickyNoteUseCase;
-import ntut.csie.selab.usecase.widget.delete.DeleteStickyNoteUseCase;
-import ntut.csie.selab.usecase.widget.edit.color.ChangeColorOfStickyNoteUseCase;
-import ntut.csie.selab.usecase.board.edit.zorder.ChangeZOrderOfWidgetUseCase;
-import ntut.csie.selab.usecase.widget.edit.fontsize.EditFontSizeOfStickyNoteUseCase;
-import ntut.csie.selab.usecase.widget.edit.text.EditTextOfStickyNoteUseCase;
-import ntut.csie.selab.usecase.widget.move.MoveStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.line.create.CreateLineUseCase;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetUseCase;
-import ntut.csie.selab.usecase.widget.resize.ResizeStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.stickynote.delete.DeleteStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.stickynote.edit.color.ChangeColorOfStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.stickynote.edit.fontsize.EditFontSizeOfStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.stickynote.edit.text.EditTextOfStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.stickynote.move.MoveStickyNoteUseCase;
+import ntut.csie.selab.usecase.widget.stickynote.resize.ResizeStickyNoteUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,19 +29,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration("MiroUseCaseInjection")
 public class UseCaseInjection {
     private BoardRepository boardRepository;
-    private BoardAssociationRepository boardAssociationRepository;
     private WidgetRepository widgetRepository;
+    private LineRepository lineRepository;
     private DomainEventBus eventBus;
     private WebSocket boardWebSocket;
 
     @Bean(name="createNotifyBoard")
     public NotifyBoard createNotifyBoard() {
-        return new NotifyBoard(boardAssociationRepository, eventBus);
+        return new NotifyBoard(boardRepository, eventBus);
     }
 
     @Bean(name="createNotifyUsersInBoard")
     public NotifyUsersInBoard createNotifyUsersInBoard() {
-        return new NotifyUsersInBoard(boardRepository, widgetRepository, eventBus, boardWebSocket);
+        return new NotifyUsersInBoard(boardRepository, widgetRepository, lineRepository, eventBus, boardWebSocket);
     }
 
     @Bean(name="GetBoardContentUseCase")
@@ -55,6 +56,9 @@ public class UseCaseInjection {
 
     @Bean(name="CreateStickyNoteUseCase")
     public CreateStickyNoteUseCase createStickyNoteUseCase() { return new CreateStickyNoteUseCase(widgetRepository, eventBus); }
+
+    @Bean(name="CreateLineUseCase")
+    public CreateLineUseCase createLineUseCase() { return new CreateLineUseCase(lineRepository, eventBus); }
 
     @Bean(name="MoveStickyNoteUseCase")
     public MoveStickyNoteUseCase moveStickyNoteUseCase() {
@@ -89,7 +93,7 @@ public class UseCaseInjection {
 
     @Bean(name="ChangeZOrderOfWidgetUseCase")
     public ChangeZOrderOfWidgetUseCase changeZOrderOfWidgetUseCase() {
-        return new ChangeZOrderOfWidgetUseCase(boardAssociationRepository, eventBus);
+        return new ChangeZOrderOfWidgetUseCase(boardRepository, eventBus);
     }
 
     @Bean("EditFontSizeOfStickyNoteUseCase")
@@ -113,12 +117,10 @@ public class UseCaseInjection {
     }
 
     @Autowired
-    public void setBoardAssociationRepository(BoardAssociationRepository boardAssociationRepository) {
-        this.boardAssociationRepository = boardAssociationRepository;
-    }
+    public void setWidgetRepository(WidgetRepository widgetRepository) { this.widgetRepository = widgetRepository; }
 
     @Autowired
-    public void setWidgetRepository(WidgetRepository widgetRepository) { this.widgetRepository = widgetRepository; }
+    public void setLineRepository(LineRepository lineRepository) { this.lineRepository = lineRepository; }
 
     @Autowired
     public void setEventBus(DomainEventBus eventBus) { this.eventBus = eventBus; }

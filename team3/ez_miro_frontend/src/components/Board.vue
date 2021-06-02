@@ -1,5 +1,7 @@
 <template>
   <div class="board" oncontextmenu="return false">
+    <button type="button" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.LINE)">Line</button>
+    <button type="button" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.STICKY_NOTE)">Sticky Note</button>
     <canvas id="canvas" ref='board'></canvas>
     <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
       <li @click="deleteWidget()" class="list-group-item">Delete</li>
@@ -31,15 +33,22 @@ import {
   EditTextOfStickyNoteBy,
   ChangeColorOfStickyNoteBy,
   ChangeZOrderOfStickyNoteBy,
-  EditFontSizeOfStickyNoteBy
+  EditFontSizeOfStickyNoteBy,
+  CreateLine
 } from '@/apis/Widget'
 import '@/models/StickyNote'
+import '@/models/Line'
 import { fabric } from 'fabric'
 import { webSocketHost } from '@/config/config'
 
 export default {
   data () {
     return {
+      CREATE_WIDGET_TYPE: {
+        NONE: null,
+        STICKY_NOTE: 0,
+        LINE: 1
+      },
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -56,10 +65,12 @@ export default {
       isSamplingCursorDelayFinish: true,
       isSamplingWidgetDelayFinish: true,
       user: null,
-      collaborator: []
+      collaborator: [],
+      widgetTypeOfCreation: 0
     }
   },
   async created () {
+    this.widgetTypeOfCreation = this.CREATE_WIDGET_TYPE.STICKY_NOTE
     this.boardId = this.$route.params.boardId
     this.boardContent = await GetBoardContent(this.boardId)
     this.initCanvas()
@@ -232,7 +243,11 @@ export default {
       this.canvas.renderAll()
     },
     addWidgetToCanvas (widgetDto) {
-      this.loadStickyNoteIntoCanvas(widgetDto)
+      if (widgetDto.type === 'stickyNote') {
+        this.loadStickyNoteIntoCanvas(widgetDto)
+      } else if (widgetDto.type === 'line') {
+        this.loadLineIntoCanvas(widgetDto)
+      }
     },
     bindCanvasEventListener () {
       const me = this
@@ -255,11 +270,20 @@ export default {
           textObject.enterEditing()
           textObject.selectAll()
         } else {
-          info.topLeftX = e.absolutePointer.x - width / 2
-          info.topLeftY = e.absolutePointer.y - width / 2
-          info.bottomRightX = info.topLeftX + width
-          info.bottomRightY = info.topLeftY + width
-          CreateStickyNote(me.boardId, info)
+          if (me.widgetTypeOfCreation === me.CREATE_WIDGET_TYPE.STICKY_NOTE) {
+            info.topLeftX = e.absolutePointer.x - width / 2
+            info.topLeftY = e.absolutePointer.y - width / 2
+            info.bottomRightX = info.topLeftX + width
+            info.bottomRightY = info.topLeftY + width
+            CreateStickyNote(me.boardId, info)
+          } else if (me.widgetTypeOfCreation === me.CREATE_WIDGET_TYPE.LINE) {
+            info.topLeftX = e.absolutePointer.x - 50
+            info.topLeftY = e.absolutePointer.y - 50
+            info.bottomRightX = e.absolutePointer.x + 50
+            info.bottomRightY = e.absolutePointer.y + 50
+            CreateLine(me.boardId, info)
+            me.setWidgetTypeOfCreation(me.CREATE_WIDGET_TYPE.STICKY_NOTE)
+          }
         }
       })
 
@@ -308,8 +332,9 @@ export default {
         const topLeftY = point.tl.y
         const bottomRightX = point.br.x
         const bottomRightY = point.br.y
-
-        if (me.isSamplingWidgetDelayFinish) {
+        if (o.target.get('type') === 'circle') {
+          me.canvas.renderAll()
+        } else if (o.target.get('type') === 'stickyNote' && me.isSamplingWidgetDelayFinish) {
           me.isSamplingWidgetDelayFinish = false
           setTimeout(function () {
             me.isSamplingWidgetDelayFinish = true
@@ -355,6 +380,11 @@ export default {
     },
     async loadStickyNoteIntoCanvas (widgetDto) {
       await this.canvas.add(this.buildFabricObjectOfStickyNote(widgetDto))
+      this.canvas.renderAll()
+    },
+    async loadLineIntoCanvas (widgetDto) {
+      const ourLine = this.buildFabricObjectOfLine(widgetDto)
+      await this.canvas.add(ourLine, ourLine.circleHead, ourLine.circleTail)
       this.canvas.renderAll()
     },
     setTarget (target) {
@@ -432,6 +462,23 @@ export default {
         fontSize: widget.fontSize
       })
     },
+    buildFabricObjectOfLine (widget) {
+      return new fabric.OurLine({
+        id: widget.widgetId,
+        coors: {
+          topLeftX: widget.topLeftX,
+          topLeftY: widget.topLeftY,
+          bottomRightX: widget.bottomRightX,
+          bottomRightY: widget.bottomRightY
+        }
+      }, {
+        fill: 'red',
+        stroke: 'black',
+        strokeWidth: 5,
+        selectable: true,
+        evented: true
+      })
+    },
     getZOrderOf (widget) {
       return this.canvas.getObjects().indexOf(widget)
     },
@@ -440,6 +487,9 @@ export default {
     },
     composeWidgetInfo (widget) {
       return JSON.stringify({ widgets: [widget.widgetDto] })
+    },
+    setWidgetTypeOfCreation (widgetType) {
+      this.widgetTypeOfCreation = widgetType
     }
   }
 }

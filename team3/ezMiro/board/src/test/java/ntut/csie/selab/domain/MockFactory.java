@@ -17,12 +17,12 @@ public class MockFactory {
 
     public static Widget createStickyNoteIn(Board board, String id) {
         Widget stickyNote = new StickyNote(id, board.getId(), new Coordinate(0, 0, 10, 10));
-        board.commitWidgetCreation(board.getId(), stickyNote.getId());
+        board.commitWidgetCreation(stickyNote.getId());
         return stickyNote;
     }
     public static Widget createStickyNoteIn(Board board, String id, Coordinate coordinate) {
         Widget stickyNote = new StickyNote(id, board.getId(), coordinate);
-        board.commitWidgetCreation(board.getId(), stickyNote.getId());
+        board.commitWidgetCreation(stickyNote.getId());
         return stickyNote;
     }
 
