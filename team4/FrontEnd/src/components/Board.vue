@@ -180,7 +180,9 @@ export default {
         radius: 5,
         stroke: 'white',
         originX: 'center',
-        originY: 'center'
+        originY: 'center',
+        xOffset: 0.0,
+        yOffset: 0.0
       })
       circlePoint.attachedLineId = lineId
       circlePoint.hasControls = circlePoint.hasBorders = false
@@ -446,6 +448,8 @@ export default {
               _this.canvas.getObjects().forEach(function (item) {
                 if (item.type === 'group' && e.target.intersectsWithObject(item)) {
                   item.attachPoint = e.target // stickynote attribure
+                  e.target.xOffset = (e.target.get('left') - item.get('left')) / item.width
+                  e.target.yOffset = (e.target.get('top') - item.get('top')) / item.height
                 }
               })
             } else {
@@ -477,8 +481,10 @@ export default {
                 _this.updateFigureFlag = false
                 if (e.target.attachPoint !== undefined) {
                   var attachPoint = e.target.attachPoint
-                  attachPoint.set('top', e.target.get('top'))
-                  attachPoint.set('left', e.target.get('left'))
+                  const newPositionX = e.target.get('left') + attachPoint.xOffset * e.target.width
+                  const newPositionY = e.target.get('top') + attachPoint.yOffset * e.target.height
+                  attachPoint.set('left', newPositionX)
+                  attachPoint.set('top', newPositionY)
                   _this.canvas.fire('object:moved', { target: attachPoint })
                 }
               }
