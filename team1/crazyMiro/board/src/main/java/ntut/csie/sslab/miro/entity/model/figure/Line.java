@@ -4,6 +4,7 @@ import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.figure.event.LineCreated;
 import ntut.csie.sslab.miro.entity.model.figure.event.LineDeleted;
 import ntut.csie.sslab.miro.entity.model.figure.event.LineMoved;
+import ntut.csie.sslab.miro.entity.model.figure.event.LineTargetPositionChanged;
 
 public class Line extends Figure {
 
@@ -60,6 +61,7 @@ public class Line extends Figure {
 
     public void setTargetPosition(Coordinate targetPosition) {
         this.targetPosition = targetPosition;
+        addDomainEvent(new LineTargetPositionChanged(getBoardId(), getLineId(), targetPosition));
     }
 
     public void deleteLine() {

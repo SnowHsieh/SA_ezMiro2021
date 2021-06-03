@@ -18,6 +18,8 @@ import ntut.csie.sslab.miro.usecase.board.showCursor.ShowCursorUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoardSessionBroadcaster;
 import ntut.csie.sslab.miro.usecase.figure.StickerRepository;
+import ntut.csie.sslab.miro.usecase.figure.line.changeTargetPosition.ChangeTargetPositionUseCase;
+import ntut.csie.sslab.miro.usecase.figure.line.changeTargetPosition.ChangeTargetPositionUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecolor.ChangeStickerColorUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecolor.ChangeStickerColorUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecontent.ChangeStickerContentUseCase;
@@ -146,6 +148,11 @@ public class UseCaseInjection {
     @Bean(name="moveLineUseCase")
     public MoveLineUseCase moveLineUseCase() {
         return new MoveLineUseCaseImpl(lineRepository, eventBus);
+    }
+
+    @Bean(name="changeTargetPositionUseCase")
+    public ChangeTargetPositionUseCase changeTargetPositionUseCase() {
+        return new ChangeTargetPositionUseCaseImpl(lineRepository, eventBus);
     }
 
     @Autowired
