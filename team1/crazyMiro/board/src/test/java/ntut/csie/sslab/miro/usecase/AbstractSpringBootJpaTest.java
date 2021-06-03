@@ -101,10 +101,10 @@ import ntut.csie.sslab.miro.usecase.figure.sticker.create.CreateStickerUseCaseIm
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerInput;
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCaseImpl;
-import ntut.csie.sslab.miro.usecase.line.LineRepository;
-import ntut.csie.sslab.miro.usecase.line.create.CreateLineInput;
-import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCase;
-import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.figure.line.LineRepository;
+import ntut.csie.sslab.miro.usecase.figure.line.create.CreateLineInput;
+import ntut.csie.sslab.miro.usecase.figure.line.create.CreateLineUseCase;
+import ntut.csie.sslab.miro.usecase.figure.line.create.CreateLineUseCaseImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;

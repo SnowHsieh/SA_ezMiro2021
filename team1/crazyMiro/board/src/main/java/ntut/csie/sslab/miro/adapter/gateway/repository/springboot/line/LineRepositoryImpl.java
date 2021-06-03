@@ -1,8 +1,7 @@
 package ntut.csie.sslab.miro.adapter.gateway.repository.springboot.line;
 
-import ntut.csie.sslab.miro.entity.model.figure.Figure;
-import ntut.csie.sslab.miro.entity.model.line.Line;
-import ntut.csie.sslab.miro.usecase.line.LineRepository;
+import ntut.csie.sslab.miro.entity.model.figure.Line;
+import ntut.csie.sslab.miro.usecase.figure.line.LineRepository;
 
 import java.util.ArrayList;
 import java.util.List;

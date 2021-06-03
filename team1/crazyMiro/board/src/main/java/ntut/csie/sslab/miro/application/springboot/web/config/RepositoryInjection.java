@@ -9,7 +9,7 @@ import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureR
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.line.LineRepositoryImpl;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
-import ntut.csie.sslab.miro.usecase.line.LineRepository;
+import ntut.csie.sslab.miro.usecase.figure.line.LineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
