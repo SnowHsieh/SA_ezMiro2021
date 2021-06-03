@@ -4,26 +4,26 @@ import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.miro.entity.model.figure.Sticker;
-import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
+import ntut.csie.sslab.miro.usecase.figure.StickerRepository;
 
 public class ChangeStickerSizeUseCaseImpl implements ChangeStickerSizeUseCase {
-    private FigureRepository figureRepository;
+    private StickerRepository stickerRepository;
     private DomainEventBus domainEventBus;
 
-    public ChangeStickerSizeUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
-        this.figureRepository = figureRepository;
+    public ChangeStickerSizeUseCaseImpl(StickerRepository stickerRepository, DomainEventBus domainEventBus) {
+        this.stickerRepository = stickerRepository;
         this.domainEventBus = domainEventBus;
     }
 
     @Override
     public void execute(ChangeStickerSizeInput input, CqrsCommandOutput output) {
         try{
-            Sticker sticker = (Sticker)figureRepository.findById(input.getFigureId()).get();
+            Sticker sticker = (Sticker) stickerRepository.findById(input.getFigureId()).get();
             if(sticker.getWidth() == input.getWidth() && sticker.getLength() == input.getLength())
                 return;
 
             sticker.changeSize(input.getWidth(), input.getLength());
-            figureRepository.save(sticker);
+            stickerRepository.save(sticker);
             domainEventBus.postAll(sticker);
             output.setId(input.getFigureId());
             output.setExitCode(ExitCode.SUCCESS);

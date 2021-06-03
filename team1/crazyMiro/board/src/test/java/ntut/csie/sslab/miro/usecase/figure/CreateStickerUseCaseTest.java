@@ -4,7 +4,6 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.figure.ConnectionFigure;
 import ntut.csie.sslab.miro.entity.model.figure.FigureType;
-import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.sslab.miro.usecase.figure.sticker.create.CreateStickerInput;
 import ntut.csie.sslab.miro.usecase.figure.sticker.create.CreateStickerUseCase;
@@ -28,7 +27,7 @@ public class CreateStickerUseCaseTest extends AbstractSpringBootJpaTest {
         long y = new Random().nextLong();
         Coordinate position = new Coordinate(x, y);
         int expectedOrder = 0;
-        CreateStickerUseCase createStickerUseCase = new CreateStickerUseCaseImpl(figureRepository, domainEventBus);
+        CreateStickerUseCase createStickerUseCase = new CreateStickerUseCaseImpl(stickerRepository, domainEventBus);
         CreateStickerInput input = createStickerUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);
@@ -40,9 +39,9 @@ public class CreateStickerUseCaseTest extends AbstractSpringBootJpaTest {
 
         createStickerUseCase.execute(input, output);
 
-        assertTrue(figureRepository.findById(output.getId()).isPresent());
+        assertTrue(stickerRepository.findById(output.getId()).isPresent());
         assertNotNull(output.getId());
-        ConnectionFigure sticker = figureRepository.findById(output.getId()).get();
+        ConnectionFigure sticker = stickerRepository.findById(output.getId()).get();
         assertEquals(content, sticker.getContent());
         assertEquals(length, sticker.getLength());
         assertEquals(width, sticker.getWidth());

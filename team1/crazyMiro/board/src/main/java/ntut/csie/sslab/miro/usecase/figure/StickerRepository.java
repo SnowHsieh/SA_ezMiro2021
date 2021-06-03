@@ -6,7 +6,7 @@ import ntut.csie.sslab.miro.entity.model.figure.Figure;
 
 import java.util.List;
 
-public interface FigureRepository extends AbstractRepository<ConnectionFigure, String> {
+public interface StickerRepository extends AbstractRepository<ConnectionFigure, String> {
     List<ConnectionFigure> getStickersByBoardId(String boardId);
 
     List<ConnectionFigure> getFiguresByBoardId(String boardId);

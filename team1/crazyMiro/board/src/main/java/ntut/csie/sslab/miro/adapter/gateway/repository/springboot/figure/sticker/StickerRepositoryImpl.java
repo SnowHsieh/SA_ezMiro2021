@@ -1,42 +1,41 @@
-package ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure;
+package ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.sticker;
 
 import ntut.csie.sslab.miro.entity.model.figure.ConnectionFigure;
-import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.entity.model.figure.FigureType;
-import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
+import ntut.csie.sslab.miro.usecase.figure.StickerRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class FigureRepositoryImpl implements FigureRepository {
+public class StickerRepositoryImpl implements StickerRepository {
 
 //    private List<Figure> figures;
-    private FigureRepositoryPeer peer;
+    private StickerRepositoryPeer peer;
 
-    public FigureRepositoryImpl(FigureRepositoryPeer figureRepositoryPeer) {
+    public StickerRepositoryImpl(StickerRepositoryPeer stickerRepositoryPeer) {
 //        figures = new ArrayList<>();
-        this.peer = figureRepositoryPeer;
+        this.peer = stickerRepositoryPeer;
     }
 
     @Override
     public List<ConnectionFigure> findAll() {
 //        return figures;
-        List<FigureData> figureDatas = new ArrayList<>();
-        peer.findAll().forEach(figureDatas::add);
-        return FigureMapper.transformToDomain(figureDatas);
+        List<StickerData> stickerData = new ArrayList<>();
+        peer.findAll().forEach(stickerData::add);
+        return StickerMapper.transformToDomain(stickerData);
     }
 
     @Override
     public Optional<ConnectionFigure> findById(String id) {
 //        return figures.stream().filter(x-> x.getFigureId().equals(id)).findFirst();
-        return peer.findById(id).map(FigureMapper::transformToDomain);
+        return peer.findById(id).map(StickerMapper::transformToDomain);
     }
 
     @Override
     public void save(ConnectionFigure data) {
-        peer.save(FigureMapper.transformToData(data));
+        peer.save(StickerMapper.transformToData(data));
     }
 
 //    @Override

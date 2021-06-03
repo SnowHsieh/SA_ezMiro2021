@@ -25,7 +25,7 @@ public class DeleteStickerUseCaseTest extends AbstractSpringBootJpaTest {
         String stickerId1 = createSticker(boardId, stickerDto1.getContent(), stickerDto1.getWidth(), stickerDto1.getLength(), stickerDto1.getColor(), stickerDto1.getPosition());
         String stickerId2 = createSticker(boardId, stickerDto2.getContent(), stickerDto2.getWidth(), stickerDto2.getLength(), stickerDto2.getColor(), stickerDto2.getPosition());
         int order = 0;
-        DeleteStickerUseCase deleteStickerUseCase = new DeleteStickerUseCaseImpl(figureRepository, domainEventBus);
+        DeleteStickerUseCase deleteStickerUseCase = new DeleteStickerUseCaseImpl(stickerRepository, domainEventBus);
         DeleteStickerInput input = deleteStickerUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setFigureId(stickerId1);
@@ -33,10 +33,10 @@ public class DeleteStickerUseCaseTest extends AbstractSpringBootJpaTest {
 
         deleteStickerUseCase.execute(input, output);
 
-        assertFalse(figureRepository.findById(output.getId()).isPresent());
-        assertTrue(figureRepository.findById(stickerId2).isPresent());
+        assertFalse(stickerRepository.findById(output.getId()).isPresent());
+        assertTrue(stickerRepository.findById(stickerId2).isPresent());
         assertEquals(stickerId1, output.getId());
         assertEquals(3, eventListener.getEventCount());
-        Figure sticker = figureRepository.findById(stickerId2).get();
+        Figure sticker = stickerRepository.findById(stickerId2).get();
     }
 }

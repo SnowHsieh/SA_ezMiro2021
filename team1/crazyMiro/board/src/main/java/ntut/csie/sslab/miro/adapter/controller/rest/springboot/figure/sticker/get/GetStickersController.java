@@ -6,7 +6,7 @@ import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import ntut.csie.sslab.miro.usecase.figure.ConvertStickerToDto;
 import ntut.csie.sslab.miro.usecase.figure.FigureDto;
-import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
+import ntut.csie.sslab.miro.usecase.figure.StickerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,12 +30,12 @@ import java.util.List;
 @RestController
 @CrossOrigin
 public class GetStickersController {
-    private FigureRepository figureRepository;
+    private StickerRepository stickerRepository;
     private BoardRepository boardRepository;
 
     @Autowired
-    public void setFigureQueryRepository(FigureRepository figureRepository) {
-        this.figureRepository = figureRepository;
+    public void setFigureQueryRepository(StickerRepository stickerRepository) {
+        this.stickerRepository = stickerRepository;
     }
 
     @Autowired
@@ -46,7 +46,7 @@ public class GetStickersController {
     @GetMapping(path = "${MIRO_PREFIX}/board/sticker/getall", produces = "application/json")
     public List<FigureDto> getStickers (@QueryParam("boardId") String boardId) {
 
-        List<ConnectionFigure> figures = figureRepository.getFiguresByBoardId(boardId);
+        List<ConnectionFigure> figures = stickerRepository.getFiguresByBoardId(boardId);
         List<CommittedFigure> committedFigures = boardRepository.findById(boardId).get().getCommittedFigures();
 
         List<Figure> result = new ArrayList<>();

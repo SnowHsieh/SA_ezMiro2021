@@ -33,7 +33,7 @@ public class GetStickersUseCaseTest extends AbstractSpringBootJpaTest {
         List<Figure> stickers = new ArrayList<>();
         Board board = boardRepository.findById(boardId).get();
         List<CommittedFigure> committedFigures = board.getCommittedFigures();
-        committedFigures.forEach(x-> stickers.add(figureRepository.findById(x.getFigureId()).get()));
+        committedFigures.forEach(x-> stickers.add(stickerRepository.findById(x.getFigureId()).get()));
 
         List<FigureDto> stickerDtos = ConvertStickerToDto.transform(stickers);
 

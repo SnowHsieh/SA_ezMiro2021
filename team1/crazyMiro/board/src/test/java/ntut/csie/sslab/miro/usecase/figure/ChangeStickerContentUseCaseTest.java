@@ -3,7 +3,6 @@ package ntut.csie.sslab.miro.usecase.figure;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.figure.ConnectionFigure;
-import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecontent.ChangeStickerContentInput;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecontent.ChangeStickerContentUseCase;
@@ -26,7 +25,7 @@ public class ChangeStickerContentUseCaseTest extends AbstractSpringBootJpaTest {
         FigureDto stickerDto = new FigureDto(null, "sticker1", 10, 10, "black", stickerPosition);
         String stickerId = createSticker(boardId, stickerDto.getContent(), stickerDto.getWidth(), stickerDto.getLength(), stickerDto.getColor(), stickerDto.getPosition());
         String newContent = "newContent";
-        ChangeStickerContentUseCase changeStickerContentUseCase = new ChangeStickerContentUseCaseImpl(figureRepository, domainEventBus);
+        ChangeStickerContentUseCase changeStickerContentUseCase = new ChangeStickerContentUseCaseImpl(stickerRepository, domainEventBus);
         ChangeStickerContentInput input = changeStickerContentUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setFigureId(stickerId);
@@ -34,9 +33,9 @@ public class ChangeStickerContentUseCaseTest extends AbstractSpringBootJpaTest {
 
         changeStickerContentUseCase.execute(input, output);
 
-        assertTrue(figureRepository.findById(output.getId()).isPresent());
+        assertTrue(stickerRepository.findById(output.getId()).isPresent());
         assertEquals(input.getFigureId(), output.getId());
-        ConnectionFigure sticker = figureRepository.findById(output.getId()).get();
+        ConnectionFigure sticker = stickerRepository.findById(output.getId()).get();
         assertEquals(newContent, sticker.getContent());
         assertEquals(3, eventListener.getEventCount());
 

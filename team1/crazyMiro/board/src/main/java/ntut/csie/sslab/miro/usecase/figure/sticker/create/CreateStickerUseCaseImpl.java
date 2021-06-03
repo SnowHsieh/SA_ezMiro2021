@@ -5,18 +5,17 @@ import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.figure.ConnectionFigure;
-import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.entity.model.figure.Sticker;
-import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
+import ntut.csie.sslab.miro.usecase.figure.StickerRepository;
 
 import java.util.UUID;
 
 public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
-    private FigureRepository figureRepository;
+    private StickerRepository stickerRepository;
     private DomainEventBus domainEventBus;
 
-    public CreateStickerUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
-        this.figureRepository = figureRepository;
+    public CreateStickerUseCaseImpl(StickerRepository stickerRepository, DomainEventBus domainEventBus) {
+        this.stickerRepository = stickerRepository;
         this.domainEventBus = domainEventBus;
     }
 
@@ -33,7 +32,7 @@ public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
                     input.getPosition()
             );
 
-            figureRepository.save(sticker);
+            stickerRepository.save(sticker);
             domainEventBus.postAll(sticker);
 
             output.setId(sticker.getId())

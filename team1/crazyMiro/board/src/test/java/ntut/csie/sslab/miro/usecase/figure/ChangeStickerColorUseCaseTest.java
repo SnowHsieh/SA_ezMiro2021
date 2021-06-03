@@ -26,7 +26,7 @@ public class ChangeStickerColorUseCaseTest extends AbstractSpringBootJpaTest {
         FigureDto stickerDto = new FigureDto(null, "sticker1", 10, 10, "black", stickerPosition);
         String stickerId = createSticker(boardId, stickerDto.getContent(), stickerDto.getWidth(), stickerDto.getLength(), stickerDto.getColor(), stickerDto.getPosition());
         String newColor = "yellow";
-        ChangeStickerColorUseCase changeStickerColorUseCase = new ChangeStickerColorUseCaseImpl(figureRepository, domainEventBus);
+        ChangeStickerColorUseCase changeStickerColorUseCase = new ChangeStickerColorUseCaseImpl(stickerRepository, domainEventBus);
         ChangeStickerColorInput input = changeStickerColorUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setFigureId(stickerId);
@@ -34,9 +34,9 @@ public class ChangeStickerColorUseCaseTest extends AbstractSpringBootJpaTest {
 
         changeStickerColorUseCase.execute(input, output);
 
-        assertTrue(figureRepository.findById(output.getId()).isPresent());
+        assertTrue(stickerRepository.findById(output.getId()).isPresent());
         assertEquals(input.getFigureId(), output.getId());
-        Figure sticker = figureRepository.findById(output.getId()).get();
+        Figure sticker = stickerRepository.findById(output.getId()).get();
         assertEquals(newColor, sticker.getColor());
         assertEquals(3, eventListener.getEventCount());
 

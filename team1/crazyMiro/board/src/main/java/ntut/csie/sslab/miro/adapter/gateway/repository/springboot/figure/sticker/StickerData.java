@@ -1,4 +1,4 @@
-package ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure;
+package ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.sticker;
 
 import ntut.csie.sslab.miro.entity.model.figure.FigureType;
 
@@ -8,8 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="figure")
-public class FigureData {
+@Table(name="sticker")
+public class StickerData {
 
     @Id
     @Column(name="figure_id")
@@ -39,10 +39,10 @@ public class FigureData {
     @Column(name="type")
     private FigureType type;
 
-    public FigureData() {
+    public StickerData() {
     }
 
-    public FigureData(String figureId, String boardId, String content, int width, int length, String color, long x, long y, FigureType type) {
+    public StickerData(String figureId, String boardId, String content, int width, int length, String color, long x, long y, FigureType type) {
         this.figureId = figureId;
         this.boardId = boardId;
         this.content = content;

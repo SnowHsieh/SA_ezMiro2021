@@ -3,7 +3,6 @@ package ntut.csie.sslab.miro.usecase.figure;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.figure.ConnectionFigure;
-import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changesize.ChangeStickerSizeInput;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changesize.ChangeStickerSizeUseCase;
@@ -26,7 +25,7 @@ public class ChangeStickerSizeUseCaseTest extends AbstractSpringBootJpaTest {
         String stickerId = createSticker(boardId, stickerDto.getContent(), stickerDto.getWidth(), stickerDto.getLength(), stickerDto.getColor(), stickerDto.getPosition());
         int newWidth = new Random().nextInt();
         int newLength = new Random().nextInt();
-        ChangeStickerSizeUseCase changeStickerSizeUseCase = new ChangeStickerSizeUseCaseImpl(figureRepository, domainEventBus);
+        ChangeStickerSizeUseCase changeStickerSizeUseCase = new ChangeStickerSizeUseCaseImpl(stickerRepository, domainEventBus);
         ChangeStickerSizeInput input = changeStickerSizeUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setFigureId(stickerId);
@@ -35,9 +34,9 @@ public class ChangeStickerSizeUseCaseTest extends AbstractSpringBootJpaTest {
 
         changeStickerSizeUseCase.execute(input, output);
 
-        assertTrue(figureRepository.findById(output.getId()).isPresent());
+        assertTrue(stickerRepository.findById(output.getId()).isPresent());
         assertEquals(input.getFigureId(), output.getId());
-        ConnectionFigure sticker = figureRepository.findById(output.getId()).get();
+        ConnectionFigure sticker = stickerRepository.findById(output.getId()).get();
         assertEquals(newWidth, sticker.getWidth());
         assertEquals(newLength, sticker.getLength());
         assertEquals(2, eventListener.getEventCount());
