@@ -67,8 +67,8 @@ public class Line extends Figure {
     }
 
     public void setPosition(Coordinate sourcePosition, Coordinate targetPosition) {
-        setSourcePosition(sourcePosition);
-        setTargetPosition(targetPosition);
+        this.targetPosition = targetPosition;
+        this.sourcePosition = sourcePosition;
         addDomainEvent(new LineMoved(getBoardId(), getFigureId(), sourcePosition, targetPosition));
     }
 
