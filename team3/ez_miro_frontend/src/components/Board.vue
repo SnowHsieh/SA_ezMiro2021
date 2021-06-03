@@ -381,6 +381,14 @@ export default {
                   }
                 })
               })
+              obj.on('moved', function (o) {
+                circle.fire('moved', {
+                  pointer: {
+                    x: circle.left,
+                    y: circle.top
+                  }
+                })
+              })
             }
           })
         } else if (o.target.get('type') === 'stickyNote' && me.isSamplingWidgetDelayFinish) {
@@ -558,6 +566,14 @@ export default {
           circle.set({ left: targerPoint.x, top: targerPoint.y })
           circle.setCoords()
           circle.fire('moving', {
+            pointer: {
+              x: circle.left,
+              y: circle.top
+            }
+          })
+        })
+        obj.on('moved', function (o) {
+          circle.fire('moved', {
             pointer: {
               x: circle.left,
               y: circle.top
