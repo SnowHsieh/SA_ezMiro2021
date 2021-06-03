@@ -3,8 +3,11 @@ package ntut.csie.sslab.miro.adapter.controller.rest.springboot.board.getcontent
 import ntut.csie.sslab.miro.adapter.presenter.board.BoardViewModel;
 import ntut.csie.sslab.miro.entity.model.board.Board;
 import ntut.csie.sslab.miro.entity.model.board.CommittedFigure;
-import ntut.csie.sslab.miro.entity.model.note.Note;
+import ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note.Note;
+import ntut.csie.sslab.miro.entity.model.figure.line.Line;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
+import ntut.csie.sslab.miro.usecase.line.ConvertLineToDTO;
+import ntut.csie.sslab.miro.usecase.line.LineDTO;
 import ntut.csie.sslab.miro.usecase.note.ConvertNoteToDTO;
 import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 import ntut.csie.sslab.miro.usecase.note.NoteDTO;
@@ -34,17 +37,23 @@ public class GetBoardContentController {
     @GetMapping(path = "${MIRO_PREFIX}/boards/{boardId}/getcontent", produces = "application/json")
     public BoardViewModel getContent(@PathVariable("boardId") String boardId) {
         Board board = boardRepository.findById(boardId).get();
-        List<NoteDTO> result = ConvertNoteToDTO.transform(figureRepository.findByBoardId(boardId).stream().map(f -> (Note)f).collect(Collectors.toList()));
+        List<NoteDTO> notes = ConvertNoteToDTO.transform(figureRepository.findByBoardId(boardId).stream().filter(f -> f instanceof Note).map(f -> (Note)f).collect(Collectors.toList()));
+        List<LineDTO> lines = ConvertLineToDTO.transform(figureRepository.findByBoardId(boardId).stream().filter(f -> f instanceof Line).map(f -> (Line)f).collect(Collectors.toList()));
         Map<String, CommittedFigure> committedFigureMap = board.getCommittedFigures();
 
-        for (NoteDTO noteDto : result) {
+        for (NoteDTO noteDto : notes) {
             noteDto.setZOrder(committedFigureMap.get(noteDto.getNoteId()).getZOrder());
+        }
+
+        for (LineDTO lineDTO : lines) {
+            lineDTO.setZOrder(committedFigureMap.get(lineDTO.getLineId()).getZOrder());
         }
 
         BoardViewModel boardViewModel = new BoardViewModel();
         boardViewModel.setBoardId(boardId);
         boardViewModel.setBoardChannel(board.getBoardChannel());
-        boardViewModel.setNotes(result);
+        boardViewModel.setNotes(notes);
+        boardViewModel.setLines(lines);
         return boardViewModel;
     }
 }

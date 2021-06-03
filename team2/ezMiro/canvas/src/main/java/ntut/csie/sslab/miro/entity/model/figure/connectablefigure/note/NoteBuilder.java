@@ -1,5 +1,6 @@
-package ntut.csie.sslab.miro.entity.model.note;
+package ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note;
 
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 import java.util.UUID;
 
 public class NoteBuilder {

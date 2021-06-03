@@ -1,19 +1,20 @@
-package ntut.csie.sslab.miro.entity.model.note;
+package ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note;
 
 import ntut.csie.sslab.ddd.model.DateProvider;
-import ntut.csie.sslab.miro.entity.model.figure.Figure;
-import ntut.csie.sslab.miro.entity.model.note.event.NoteEvents;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.connectablefigure.ConnectableFigure;
+import ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note.event.NoteEvents;
 
 import java.util.UUID;
 
-public class Note extends Figure {
+public class Note extends ConnectableFigure {
     private String description;
 
 
     public Note(String boardId, String noteId, String description, String color, Coordinate coordinate, double width, double height) {
         super(noteId, boardId, coordinate, color, width, height);
         this.description = description;
-        addDomainEvent(new NoteEvents.NoteCreated(UUID.randomUUID(),boardId, noteId, description, color, coordinate, width, height, DateProvider.now()));
+        addDomainEvent(new NoteEvents.NoteCreated(UUID.randomUUID(), noteId, description, color, coordinate, width, height, boardId, DateProvider.now()));
     }
 
     public String getDescription() {
@@ -62,6 +63,6 @@ public class Note extends Figure {
     }
 
     public void markAsRemoved(String boardId) {
-        addDomainEvent(new NoteEvents.NoteDeleted(UUID.randomUUID(), boardId, getId(), DateProvider.now()));
+        addDomainEvent(new NoteEvents.NoteDeleted(UUID.randomUUID(), getId(), boardId, DateProvider.now()));
     }
 }

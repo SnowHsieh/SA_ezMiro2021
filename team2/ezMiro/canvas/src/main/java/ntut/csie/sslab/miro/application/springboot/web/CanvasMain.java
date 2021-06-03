@@ -4,7 +4,9 @@ import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.NotifyBoardAdapter;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.NotifyCursorAdapter;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.NotifyEventBroadcasterAdapter;
+import ntut.csie.sslab.miro.adapter.gateway.eventbus.NotifyFigureAdapter;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.LineRepositoryPeer;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.NoteRepositoryPeer;
 import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +31,12 @@ public class CanvasMain extends SpringBootServletInitializer implements CommandL
     private FigureRepository figureRepository;
     private NotifyBoardAdapter notifyBoardAdapter;
     private NotifyCursorAdapter notifyCursorAdapter;
+    private NotifyFigureAdapter notifyFigureAdapter;
     private NotifyEventBroadcasterAdapter notifyEventBroadcasterAdapter;
 
     private BoardRepositoryPeer boardRepositoryPeer;
     private NoteRepositoryPeer noteRepositoryPeer;
+    private LineRepositoryPeer lineRepositoryPeer;
 
     @Autowired
     public void setBoardRepositoryPeer(BoardRepositoryPeer boardRepositoryPeer) {
@@ -42,6 +46,11 @@ public class CanvasMain extends SpringBootServletInitializer implements CommandL
     @Autowired
     public void setNoteRepositoryPeer(NoteRepositoryPeer noteRepositoryPeer) {
         this.noteRepositoryPeer = noteRepositoryPeer;
+    }
+
+    @Autowired
+    public void setLineRepositoryPeer(LineRepositoryPeer lineRepositoryPeer) {
+        this.lineRepositoryPeer = lineRepositoryPeer;
     }
 
     @Autowired
@@ -65,6 +74,11 @@ public class CanvasMain extends SpringBootServletInitializer implements CommandL
     }
 
     @Autowired
+    public void setNotifyFigureAdapter(NotifyFigureAdapter notifyFigureAdapter) {
+        this.notifyFigureAdapter = notifyFigureAdapter;
+    }
+
+    @Autowired
     public void setNotifyEventBroadcasterAdapter(NotifyEventBroadcasterAdapter notifyEventBroadcasterAdapter) {
         this.notifyEventBroadcasterAdapter = notifyEventBroadcasterAdapter;
     }
@@ -84,5 +98,6 @@ public class CanvasMain extends SpringBootServletInitializer implements CommandL
         domainEventBus.register(notifyBoardAdapter);
         domainEventBus.register(notifyCursorAdapter);
         domainEventBus.register(notifyEventBroadcasterAdapter);
+        domainEventBus.register(notifyFigureAdapter);
     }
 }

@@ -1,7 +1,7 @@
 package ntut.csie.sslab.miro.usecase.note;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 import ntut.csie.sslab.miro.usecase.AbstractUseCaseTest;
 import ntut.csie.sslab.miro.usecase.note.move.MoveNoteInput;
 import ntut.csie.sslab.miro.usecase.note.move.MoveNoteUseCase;
@@ -26,7 +26,7 @@ public class MoveNoteUseCaseTest extends AbstractUseCaseTest {
         moveNoteUseCase.execute(input, output);
 
         assertNotNull(output.getId());
-        assertEquals(coordinate, figureRepository.findById(output.getId()).get().getCoordinate());
+        assertEquals(coordinate, figureRepository.findNoteById(output.getId()).get().getCoordinate());
         assertEquals(1, eventListener.getEventCount());
     }
 }

@@ -3,7 +3,7 @@ package ntut.csie.sslab.miro.entity.model.cursor;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 import ntut.csie.sslab.ddd.model.DateProvider;
 import ntut.csie.sslab.miro.entity.model.cursor.event.CursorEvents;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 import java.util.UUID;
 
 public class Cursor extends AggregateRoot<String> {
@@ -16,7 +16,7 @@ public class Cursor extends AggregateRoot<String> {
         this.boardId = boardId;
         this.userId = userId;
         this.coordinate = coordinate;
-        addDomainEvent(new CursorEvents.CursorCreated(UUID.randomUUID(), cursorId, boardId, userId, coordinate, DateProvider.now()));
+        addDomainEvent(new CursorEvents.CursorCreated(UUID.randomUUID(), cursorId, userId, coordinate, boardId, DateProvider.now()));
     }
 
     public String getBoardId() {
@@ -45,7 +45,7 @@ public class Cursor extends AggregateRoot<String> {
 
     public void move(Coordinate coordinate) {
         setCoordinate(coordinate);
-        addDomainEvent(new CursorEvents.CursorMoved(UUID.randomUUID(), getId(), boardId, userId, coordinate, DateProvider.now()));
+        addDomainEvent(new CursorEvents.CursorMoved(UUID.randomUUID(), getId(), userId, coordinate, boardId, DateProvider.now()));
     }
 
     public void markAsRemoved() {

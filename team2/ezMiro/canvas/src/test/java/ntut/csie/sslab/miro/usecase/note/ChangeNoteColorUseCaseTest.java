@@ -24,7 +24,7 @@ public class ChangeNoteColorUseCaseTest extends AbstractUseCaseTest {
         changeNoteColorUseCase.execute(input, output);
 
         assertNotNull(output.getId());
-        assertEquals("#000000", figureRepository.findById(output.getId()).get().getColor());
+        assertEquals("#000000", figureRepository.findNoteById(output.getId()).get().getColor());
         assertEquals(1, eventListener.getEventCount());
     }
 }

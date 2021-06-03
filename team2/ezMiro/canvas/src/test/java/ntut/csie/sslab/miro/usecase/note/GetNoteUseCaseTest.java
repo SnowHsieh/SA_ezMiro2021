@@ -1,7 +1,7 @@
 package ntut.csie.sslab.miro.usecase.note;
 
 import ntut.csie.sslab.miro.adapter.presenter.note.GetNotePresenter;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 import ntut.csie.sslab.miro.usecase.AbstractUseCaseTest;
 import ntut.csie.sslab.miro.usecase.note.get.GetNoteInput;
 import ntut.csie.sslab.miro.usecase.note.get.GetNoteUseCase;

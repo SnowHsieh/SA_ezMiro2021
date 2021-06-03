@@ -1,7 +1,7 @@
 package ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure;
 
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
-import ntut.csie.sslab.miro.entity.model.note.Note;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note.Note;
 import java.util.ArrayList;
 import java.util.List;
 

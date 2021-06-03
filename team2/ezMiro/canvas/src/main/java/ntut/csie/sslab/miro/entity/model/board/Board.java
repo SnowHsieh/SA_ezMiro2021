@@ -75,9 +75,9 @@ public class Board extends AggregateRoot<String> {
         addDomainEvent(new BoardEvents.FigureCommittedToBack(UUID.randomUUID(), boardId, noteId, DateProvider.now()));
     }
 
-    public void removeNoteFromBoard(String boardId, String noteId) {
-        committedFigures.remove(noteId);
-        addDomainEvent(new BoardEvents.NoteRemovedFromBoard(UUID.randomUUID(), boardId, noteId, DateProvider.now()));
+    public void removeFigureFromBoard(String boardId, String figureId) {
+        committedFigures.remove(figureId);
+        addDomainEvent(new BoardEvents.FigureRemovedFromBoard(UUID.randomUUID(), boardId, figureId, DateProvider.now()));
     }
 
     public void enter(String userId) {

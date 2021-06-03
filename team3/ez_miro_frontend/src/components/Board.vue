@@ -381,6 +381,14 @@ export default {
                   }
                 })
               })
+              obj.on('moved', function (o) {
+                circle.fire('moved', {
+                  pointer: {
+                    x: circle.left,
+                    y: circle.top
+                  }
+                })
+              })
             }
           })
         } else if (o.target.get('type') === 'stickyNote' && me.isSamplingWidgetDelayFinish) {
@@ -537,7 +545,7 @@ export default {
     },
     connectCircleToWidget (circle) {
       if (circle.connectedWidgetId) {
-        const pointer = { x: 100, y: 100 }
+        const pointer = { x: circle.left, y: circle.top }
         // TODO 如果widget在line後面才new，會爆掉
         const obj = this.canvas.getObjects().find(widget => widget.id === circle.connectedWidgetId)
         const { mtr, ...coordsWithoutMtr } = obj.oCoords
@@ -558,6 +566,14 @@ export default {
           circle.set({ left: targerPoint.x, top: targerPoint.y })
           circle.setCoords()
           circle.fire('moving', {
+            pointer: {
+              x: circle.left,
+              y: circle.top
+            }
+          })
+        })
+        obj.on('moved', function (o) {
+          circle.fire('moved', {
             pointer: {
               x: circle.left,
               y: circle.top

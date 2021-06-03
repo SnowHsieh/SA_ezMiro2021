@@ -28,9 +28,9 @@ public class ChangeNoteSizeController {
         double height = 0;
 
         try {
-            JSONObject boardJSON = new JSONObject(noteInfo);
-            width = boardJSON.getJSONObject("size").getDouble("width");
-            height = boardJSON.getJSONObject("size").getDouble("height");
+            JSONObject noteJSON = new JSONObject(noteInfo);
+            width = noteJSON.getJSONObject("size").getDouble("width");
+            height = noteJSON.getJSONObject("size").getDouble("height");
         } catch (JSONException e) {
             e.printStackTrace();
         }

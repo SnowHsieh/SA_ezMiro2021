@@ -1,6 +1,6 @@
 package ntut.csie.sslab.miro.usecase.note;
 
-import ntut.csie.sslab.miro.entity.model.note.Note;
+import ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note.Note;
 import java.util.ArrayList;
 import java.util.List;
 

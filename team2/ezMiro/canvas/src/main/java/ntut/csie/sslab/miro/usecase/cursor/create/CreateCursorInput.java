@@ -1,7 +1,7 @@
 package ntut.csie.sslab.miro.usecase.cursor.create;
 
 import ntut.csie.sslab.ddd.usecase.Input;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 
 public interface CreateCursorInput extends Input {
     String getBoardId();

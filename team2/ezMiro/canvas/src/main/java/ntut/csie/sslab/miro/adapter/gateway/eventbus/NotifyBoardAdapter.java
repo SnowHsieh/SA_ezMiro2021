@@ -1,7 +1,8 @@
 package ntut.csie.sslab.miro.adapter.gateway.eventbus;
 
 import com.google.common.eventbus.Subscribe;
-import ntut.csie.sslab.miro.entity.model.note.event.*;
+import ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note.event.NoteEvents;
+import ntut.csie.sslab.miro.entity.model.figure.line.event.LineEvents;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,5 +32,15 @@ public class NotifyBoardAdapter {
     @Subscribe
     public void whenNoteDeleted(NoteEvents.NoteDeleted noteDeleted) {
         notifyBoard.whenNoteDeleted(noteDeleted);
+    }
+
+    @Subscribe
+    public void whenLineCreated(LineEvents.LineCreated lineCreated) {
+        notifyBoard.whenLineCreated(lineCreated);
+    }
+
+    @Subscribe
+    public void whenLineDeleted(LineEvents.LineDeleted lineDeleted) {
+        notifyBoard.whenLineDeleted(lineDeleted);
     }
 }
