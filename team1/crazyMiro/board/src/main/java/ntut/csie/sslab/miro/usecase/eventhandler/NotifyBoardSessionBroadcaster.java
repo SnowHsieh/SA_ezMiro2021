@@ -155,10 +155,17 @@ public class NotifyBoardSessionBroadcaster {
     }
 
     @Subscribe
-    public void whenLineTargetPositionChanged(LineTargetPositionChanged LineTargetPositionChanged) {
-        Board board = boardRepository.findById(LineTargetPositionChanged.getBoardId()).get();
+    public void whenLineTargetPositionChanged(LineTargetPositionChanged lineTargetPositionChanged) {
+        Board board = boardRepository.findById(lineTargetPositionChanged.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessions();
-        boardSessions.forEach(each->broadcast(LineTargetPositionChanged, each.getBoardSessionId()));
+        boardSessions.forEach(each->broadcast(lineTargetPositionChanged, each.getBoardSessionId()));
+    }
+
+    @Subscribe
+    public void whenLineSourcePositionChanged(LineSourcePositionChanged lineSourcePositionChanged) {
+        Board board = boardRepository.findById(lineSourcePositionChanged.getBoardId()).get();
+        List<BoardSession> boardSessions = board.getBoardSessions();
+        boardSessions.forEach(each->broadcast(lineSourcePositionChanged, each.getBoardSessionId()));
     }
 
     @Subscribe
