@@ -537,7 +537,7 @@ export default {
     },
     connectCircleToWidget (circle) {
       if (circle.connectedWidgetId) {
-        const pointer = { x: 100, y: 100 }
+        const pointer = { x: circle.left, y: circle.top }
         // TODO 如果widget在line後面才new，會爆掉
         const obj = this.canvas.getObjects().find(widget => widget.id === circle.connectedWidgetId)
         const { mtr, ...coordsWithoutMtr } = obj.oCoords
