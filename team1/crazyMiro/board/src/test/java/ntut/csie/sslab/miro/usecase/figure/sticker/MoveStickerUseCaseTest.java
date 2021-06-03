@@ -1,12 +1,13 @@
-package ntut.csie.sslab.miro.usecase.figure;
+package ntut.csie.sslab.miro.usecase.figure.sticker;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.figure.ConnectionFigure;
 import ntut.csie.sslab.miro.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.sslab.miro.usecase.figure.sticker.changesize.ChangeStickerSizeInput;
-import ntut.csie.sslab.miro.usecase.figure.sticker.changesize.ChangeStickerSizeUseCase;
-import ntut.csie.sslab.miro.usecase.figure.sticker.changesize.ChangeStickerSizeUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.figure.FigureDto;
+import ntut.csie.sslab.miro.usecase.figure.sticker.move.MoveStickerInput;
+import ntut.csie.sslab.miro.usecase.figure.sticker.move.MoveStickerUseCase;
+import ntut.csie.sslab.miro.usecase.figure.sticker.move.MoveStickerUseCaseImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
@@ -15,34 +16,32 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ChangeStickerSizeUseCaseTest extends AbstractSpringBootJpaTest {
+public class MoveStickerUseCaseTest extends AbstractSpringBootJpaTest {
 
     @Test
-    public void change_sticker_size() {
+    public void move_a_sticker() {
         String boardId = UUID.randomUUID().toString();
+        String userId = UUID.randomUUID().toString();
         Coordinate stickerPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
         FigureDto stickerDto = new FigureDto(null, "sticker1", 10, 10, "black", stickerPosition);
         String stickerId = createSticker(boardId, stickerDto.getContent(), stickerDto.getWidth(), stickerDto.getLength(), stickerDto.getColor(), stickerDto.getPosition());
-        int newWidth = new Random().nextInt();
-        int newLength = new Random().nextInt();
-        ChangeStickerSizeUseCase changeStickerSizeUseCase = new ChangeStickerSizeUseCaseImpl(stickerRepository, domainEventBus);
-        ChangeStickerSizeInput input = changeStickerSizeUseCase.newInput();
+        Coordinate newPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
+        MoveStickerUseCase moveStickerUseCase = new MoveStickerUseCaseImpl(stickerRepository, domainEventBus);
+        MoveStickerInput input = moveStickerUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
+        input.setUserId(userId);
         input.setFigureId(stickerId);
-        input.setWidth(newWidth);
-        input.setLength(newLength);
+        input.setPosition(newPosition);
 
-        changeStickerSizeUseCase.execute(input, output);
+        moveStickerUseCase.execute(input, output);
 
-        assertTrue(stickerRepository.findById(output.getId()).isPresent());
         assertEquals(input.getFigureId(), output.getId());
+        assertTrue(stickerRepository.findById(output.getId()).isPresent());
         ConnectionFigure sticker = stickerRepository.findById(output.getId()).get();
-        assertEquals(newWidth, sticker.getWidth());
-        assertEquals(newLength, sticker.getLength());
+        assertTrue(newPosition.equals(sticker.getPosition()));
         assertEquals(2, eventListener.getEventCount());
 
-        changeStickerSizeUseCase.execute(input, output);
+        moveStickerUseCase.execute(input, output);
         assertEquals(2, eventListener.getEventCount());
     }
-
 }

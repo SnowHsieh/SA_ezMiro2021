@@ -1,9 +1,10 @@
-package ntut.csie.sslab.miro.usecase.figure;
+package ntut.csie.sslab.miro.usecase.figure.sticker;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.figure.ConnectionFigure;
 import ntut.csie.sslab.miro.usecase.AbstractSpringBootJpaTest;
+import ntut.csie.sslab.miro.usecase.figure.FigureDto;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecontent.ChangeStickerContentInput;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecontent.ChangeStickerContentUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecontent.ChangeStickerContentUseCaseImpl;

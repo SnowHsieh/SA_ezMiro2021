@@ -1,4 +1,4 @@
-package ntut.csie.sslab.miro.usecase.figure;
+package ntut.csie.sslab.miro.usecase.figure.sticker;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.miro.entity.model.Coordinate;

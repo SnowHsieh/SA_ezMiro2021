@@ -1,10 +1,12 @@
-package ntut.csie.sslab.miro.usecase.figure;
+package ntut.csie.sslab.miro.usecase.figure.sticker;
 
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.board.Board;
 import ntut.csie.sslab.miro.entity.model.board.CommittedFigure;
 import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.usecase.AbstractSpringBootJpaTest;
+import ntut.csie.sslab.miro.usecase.figure.ConvertStickerToDto;
+import ntut.csie.sslab.miro.usecase.figure.FigureDto;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
