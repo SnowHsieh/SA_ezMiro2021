@@ -8,14 +8,14 @@ import java.util.Date;
 
 public class LineMoved extends DomainEvent {
     private final String boardId;
-    private final String lineId;
+    private final String figureId;
     private final Coordinate sourcePosition;
     private final Coordinate targetPosition;
 
-    public LineMoved(String boardId, String lineId, Coordinate sourcePosition, Coordinate targetPosition) {
+    public LineMoved(String boardId, String figureId, Coordinate sourcePosition, Coordinate targetPosition) {
         super(DateProvider.now());
         this.boardId = boardId;
-        this.lineId = lineId;
+        this.figureId = figureId;
         this.sourcePosition = sourcePosition;
         this.targetPosition = targetPosition;
     }
@@ -24,8 +24,8 @@ public class LineMoved extends DomainEvent {
         return boardId;
     }
 
-    public String getLineId() {
-        return lineId;
+    public String getFigureId() {
+        return figureId;
     }
 
     public Coordinate getSourcePosition() {
