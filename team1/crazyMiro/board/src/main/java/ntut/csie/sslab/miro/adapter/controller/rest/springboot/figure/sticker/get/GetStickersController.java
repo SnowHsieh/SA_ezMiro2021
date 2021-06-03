@@ -1,6 +1,7 @@
 package ntut.csie.sslab.miro.adapter.controller.rest.springboot.figure.sticker.get;
 
 import ntut.csie.sslab.miro.entity.model.board.CommittedFigure;
+import ntut.csie.sslab.miro.entity.model.figure.ConnectionFigure;
 import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import ntut.csie.sslab.miro.usecase.figure.ConvertStickerToDto;
@@ -45,7 +46,7 @@ public class GetStickersController {
     @GetMapping(path = "${MIRO_PREFIX}/board/sticker/getall", produces = "application/json")
     public List<FigureDto> getStickers (@QueryParam("boardId") String boardId) {
 
-        List<Figure> figures = figureRepository.getFiguresByBoardId(boardId);
+        List<ConnectionFigure> figures = figureRepository.getFiguresByBoardId(boardId);
         List<CommittedFigure> committedFigures = boardRepository.findById(boardId).get().getCommittedFigures();
 
         List<Figure> result = new ArrayList<>();

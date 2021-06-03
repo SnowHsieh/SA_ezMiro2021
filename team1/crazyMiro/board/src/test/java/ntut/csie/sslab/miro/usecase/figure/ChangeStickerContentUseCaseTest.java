@@ -2,6 +2,7 @@ package ntut.csie.sslab.miro.usecase.figure;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.ConnectionFigure;
 import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecontent.ChangeStickerContentInput;
@@ -35,7 +36,7 @@ public class ChangeStickerContentUseCaseTest extends AbstractSpringBootJpaTest {
 
         assertTrue(figureRepository.findById(output.getId()).isPresent());
         assertEquals(input.getFigureId(), output.getId());
-        Figure sticker = figureRepository.findById(output.getId()).get();
+        ConnectionFigure sticker = figureRepository.findById(output.getId()).get();
         assertEquals(newContent, sticker.getContent());
         assertEquals(3, eventListener.getEventCount());
 

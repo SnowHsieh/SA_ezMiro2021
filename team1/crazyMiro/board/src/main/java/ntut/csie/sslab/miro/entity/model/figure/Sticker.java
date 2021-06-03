@@ -3,9 +3,10 @@ package ntut.csie.sslab.miro.entity.model.figure;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.figure.event.*;
 
-public class Sticker extends Figure {
+public class Sticker extends ConnectionFigure {
+
     public Sticker(String boardId, String figureId, String content, int width, int length, String color, Coordinate position) {
-        super(boardId, figureId, content, width, length, color, position);
+        super(boardId, figureId, color, content, width, length, position);
         addDomainEvent(new StickerCreated(boardId, figureId, content, width, length, color, position));
     }
 

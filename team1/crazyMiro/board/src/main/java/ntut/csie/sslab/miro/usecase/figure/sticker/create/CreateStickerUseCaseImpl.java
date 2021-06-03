@@ -4,6 +4,7 @@ import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.ConnectionFigure;
 import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.entity.model.figure.Sticker;
 import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
@@ -23,7 +24,7 @@ public class CreateStickerUseCaseImpl implements CreateStickerUseCase {
     public void execute(CreateStickerInput input, CqrsCommandOutput output) {
         try{
             String stickerId = UUID.randomUUID().toString();
-            Figure sticker = new Sticker(input.getBoardId(),
+            ConnectionFigure sticker = new Sticker(input.getBoardId(),
                     stickerId,
                     input.getContent(),
                     input.getWidth(),

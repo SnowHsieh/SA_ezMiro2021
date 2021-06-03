@@ -1,6 +1,7 @@
 package ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure;
 
 import ntut.csie.sslab.miro.entity.model.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.ConnectionFigure;
 import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.entity.model.figure.FigureType;
 import ntut.csie.sslab.miro.entity.model.figure.Sticker;
@@ -10,8 +11,8 @@ import java.util.List;
 
 public class FigureMapper {
 
-    public static Figure transformToDomain(FigureData figureData) {
-        Figure figure = null;
+    public static ConnectionFigure transformToDomain(FigureData figureData) {
+        ConnectionFigure figure = null;
         Coordinate position = new Coordinate(figureData.getX(), figureData.getY());
         if(figureData.getType().equals(FigureType.Sticker)){
             figure = new Sticker(figureData.getBoardId(), figureData.getFigureId(), figureData.getContent(), figureData.getWidth(), figureData.getLength(), figureData.getColor(), position);
@@ -20,10 +21,10 @@ public class FigureMapper {
         return figure;
     }
 
-    public static List<Figure> transformToDomain(List<FigureData> figureDatas) {
-        List<Figure> figures = new ArrayList<>();
+    public static List<ConnectionFigure> transformToDomain(List<FigureData> figureDatas) {
+        List<ConnectionFigure> figures = new ArrayList<>();
         for(FigureData figureData : figureDatas) {
-            Figure figure = null;
+            ConnectionFigure figure = null;
             Coordinate position = new Coordinate(figureData.getX(), figureData.getY());
             if(figureData.getType().equals(FigureType.Sticker)){
                 figure = new Sticker(figureData.getBoardId(), figureData.getFigureId(), figureData.getContent(), figureData.getWidth(), figureData.getLength(), figureData.getColor(), position);
@@ -34,7 +35,7 @@ public class FigureMapper {
         return figures;
     }
 
-    public static FigureData transformToData(Figure figure) {
+    public static FigureData transformToData(ConnectionFigure figure) {
         return new FigureData(figure.getFigureId(),
                             figure.getBoardId(),
                             figure.getContent(),

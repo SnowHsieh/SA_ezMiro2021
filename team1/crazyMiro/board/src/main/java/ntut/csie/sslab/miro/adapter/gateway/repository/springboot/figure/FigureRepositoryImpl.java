@@ -1,5 +1,6 @@
 package ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure;
 
+import ntut.csie.sslab.miro.entity.model.figure.ConnectionFigure;
 import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.entity.model.figure.FigureType;
 import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
@@ -20,7 +21,7 @@ public class FigureRepositoryImpl implements FigureRepository {
     }
 
     @Override
-    public List<Figure> findAll() {
+    public List<ConnectionFigure> findAll() {
 //        return figures;
         List<FigureData> figureDatas = new ArrayList<>();
         peer.findAll().forEach(figureDatas::add);
@@ -28,17 +29,22 @@ public class FigureRepositoryImpl implements FigureRepository {
     }
 
     @Override
-    public Optional<Figure> findById(String id) {
+    public Optional<ConnectionFigure> findById(String id) {
 //        return figures.stream().filter(x-> x.getFigureId().equals(id)).findFirst();
         return peer.findById(id).map(FigureMapper::transformToDomain);
     }
 
     @Override
-    public void save(Figure data) {
-//        figures.removeIf(figure -> figure.getFigureId().equals(data.getFigureId()));
-//        figures.add(data);
+    public void save(ConnectionFigure data) {
         peer.save(FigureMapper.transformToData(data));
     }
+
+//    @Override
+//    public void save(ConnectionFigure data) {
+////        figures.removeIf(figure -> figure.getFigureId().equals(data.getFigureId()));
+////        figures.add(data);
+//        peer.save(FigureMapper.transformToData(data));
+//    }
 
     @Override
     public void deleteById(String id) {
@@ -47,7 +53,7 @@ public class FigureRepositoryImpl implements FigureRepository {
     }
 
     @Override
-    public List<Figure> getStickersByBoardId(String boardId) {
+    public List<ConnectionFigure> getStickersByBoardId(String boardId) {
 //        List<Figure> result = figures.stream()
 //                .filter(x -> x.getBoardId().equals(boardId) &&
 //                        x.getType().equals(FigureType.Sticker))
@@ -59,7 +65,7 @@ public class FigureRepositoryImpl implements FigureRepository {
     }
 
     @Override
-    public List<Figure> getFiguresByBoardId(String boardId) {
+    public List<ConnectionFigure> getFiguresByBoardId(String boardId) {
 //        List<Figure> result = figures.stream()
 //                .filter(x -> x.getBoardId().equals(boardId))
 //                .collect(Collectors.toList());
