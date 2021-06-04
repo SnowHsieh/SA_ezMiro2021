@@ -13,10 +13,12 @@ public class LineData {
     @Column(name = "board_id")
     private String boardId;
 
-    @Column(name = "endpoint_data_a")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "endpoint_data_a_id", referencedColumnName = "endpoint_id")
     private EndpointData endpointDataA;
 
-    @Column(name = "endpoint_data_b")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "endpoint_data_b_id", referencedColumnName = "endpoint_id")
     private EndpointData endpointDataB;
 
     public LineData() {
