@@ -42,7 +42,7 @@ public class LineData {
 
     }
 
-    public LineData(String boardId, String lineId, List<PositionData> positionDataList, int strokeWidth, String color, int srcEndpointKind, int destEndpointKind) {
+    public LineData(String boardId, String lineId, List<PositionData> positionDataList, int strokeWidth, String color, int srcEndpointKind, int destEndpointKind, List<AttachedTextFigureIdData> attachedTextFigureIdDataList) {
         this.lineId = lineId;
         this.boardId = boardId;
         this.strokeWidth = strokeWidth;
@@ -50,7 +50,7 @@ public class LineData {
         this.srcEndpointKind = srcEndpointKind;
         this.destEndpointKind = destEndpointKind;
         this.positionDataList = positionDataList;
-        this.attachedTextFigureIdDataList = new HashSet<>();
+        this.attachedTextFigureIdDataList = new HashSet<AttachedTextFigureIdData>(attachedTextFigureIdDataList);
     }
 
     public String getLineId() {
@@ -114,6 +114,6 @@ public class LineData {
     }
 
     public void setAttachedTextFigureIdDataList(List<AttachedTextFigureIdData> attachedTextFigureIdDataList) {
-        this.attachedTextFigureIdDataList = new HashSet<>(attachedTextFigureIdDataList);
+        this.attachedTextFigureIdDataList = new HashSet<AttachedTextFigureIdData>(attachedTextFigureIdDataList);
     }
 }

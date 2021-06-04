@@ -65,7 +65,9 @@ public class Line extends Figure {
 
     @Override
     public void attachTextFigure(UUID figureId) {
-        this.getAttachedTextFigureIdList().add(figureId);
-        addDomainEvent(new TextfigureAttachedByLineDomainEvent(this.getBoardId(), this.getFigureId(), this.getAttachedTextFigureIdList()));
+        List<UUID> attachedTextFigureIdList = this.getAttachedTextFigureIdList();
+        attachedTextFigureIdList.add(figureId);
+        this.setAttachedTextFigureIdList(attachedTextFigureIdList);
+        addDomainEvent(new TextfigureAttachedByLineDomainEvent(this.getBoardId(), this.getFigureId(), attachedTextFigureIdList));
     }
 }

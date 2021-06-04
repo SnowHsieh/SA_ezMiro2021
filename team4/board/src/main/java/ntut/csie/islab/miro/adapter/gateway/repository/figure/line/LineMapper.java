@@ -59,6 +59,16 @@ public class LineMapper {
             positionDataList.add(item);
         }
 
+        List<AttachedTextFigureIdData> attachedTextFigureDataIdList = new ArrayList<>();
+        List<UUID> attachedTextFigureIdList = line.getAttachedTextFigureIdList();
+        for (int i =0 ; i < attachedTextFigureIdList.size() ; i++) {
+            AttachedTextFigureIdData item = new AttachedTextFigureIdData(
+                    line.getFigureId().toString(),
+                    attachedTextFigureIdList.get(i).toString()
+            );
+            attachedTextFigureDataIdList.add(item);
+        }
+
         LineData lineData = new LineData(
                 line.getBoardId().toString(),
                 line.getId().toString(),
@@ -66,21 +76,10 @@ public class LineMapper {
                 line.getStrokeWidth(),
                 line.getColor(),
                 line.getSrcArrowKind().ordinal(),
-                line.getDestArrowKind().ordinal()
+                line.getDestArrowKind().ordinal(),
+                attachedTextFigureDataIdList
         );
 
-        List<AttachedTextFigureIdData> attachedTextFigureDataIdList = new ArrayList<>();
-        List<UUID> attachedTextFigureIdList = line.getAttachedTextFigureIdList();
-        for (int i =0 ; i < attachedTextFigureIdList.size() ; i++) {
-            AttachedTextFigureIdData item = new AttachedTextFigureIdData(
-                   line.getFigureId().toString(),
-                    attachedTextFigureIdList.get(i).toString()
-                    );
-            attachedTextFigureDataIdList.add(item);
-        }
-
-
-        lineData.setAttachedTextFigureIdDataList(attachedTextFigureDataIdList);
         return lineData;
     }
 }

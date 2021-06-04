@@ -56,7 +56,7 @@ import { attachTextfigureApi, changeLinePathApi, createLineApi, deleteLineApi } 
 export default {
   data () {
     return {
-      boardId: '4b1e0ade-7e45-4053-b148-3b0ca7ac006a',
+      boardId: 'b95476ae-9b55-466d-859b-644b82154f9a',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -155,12 +155,13 @@ export default {
       } catch (err) {
         console.log(err)
       }
-      console.log('changeLinePath success')
+      console.log('attachTextFigure success')
     },
     // 畫直線
     addLine (figure) {
       const srcPosition = figure.positionList[0]
-      const destPosition = figure.positionList[1]
+      // todo: fix it
+      const destPosition = !figure.positionList[2] ? figure.positionList[1] : figure.positionList[2]
       const line = new fabric.Line([srcPosition.x, srcPosition.y, destPosition.x, destPosition.y], {
         id: figure.figureId,
         fill: figure.color,
@@ -296,9 +297,11 @@ export default {
           console.log(attachedTextFigureId)
           _this.canvas.getObjects().filter(object => object.id === attachedTextFigureId).forEach(item => {
             console.log('sObject', item)
-            item.attachPoint = item.intersectsWithObject(lineItem.key.srcPoint) ? lineItem.key.srcPoint : lineItem.key.destPoint
-            item.attachPoint.xOffset = (item.attachPoint.get('left') - item.get('left')) / item.width
-            item.attachPoint.yOffset = (item.attachPoint.get('top') - item.get('top')) / item.height
+            if (item.intersectsWithObject(lineItem.key.srcPoint) || item.intersectsWithObject(lineItem.key.destPoint)) {
+              item.attachPoint = item.intersectsWithObject(lineItem.key.srcPoint) ? lineItem.key.srcPoint : lineItem.key.destPoint
+              item.attachPoint.xOffset = (item.attachPoint.get('left') - item.get('left')) / item.width
+              item.attachPoint.yOffset = (item.attachPoint.get('top') - item.get('top')) / item.height
+            }
             // item.attachPoint = lineItem.key.srcPoint === null ? lineItem.key.destPoint : lineItem.key.srcPoint
             // console.log(lineItem.key.srcPoint, lineItem.key.destPoint)
           }
@@ -475,16 +478,19 @@ export default {
         {
           'mouse:up': function (e) {
             if (e.target && e.target.type === 'circle') {
-              _this.canvas.getObjects().forEach(function (item) {
+              _this.canvas.getObjects().some(function (item) {
                 if (item.type === 'group' && e.target.intersectsWithObject(item)) {
                   console.log('mouse:up', item)
                   item.attachPoint = e.target // stickynote attribure
                   e.target.xOffset = (e.target.get('left') - item.get('left')) / item.width
                   e.target.yOffset = (e.target.get('top') - item.get('top')) / item.height
                   console.log(e.target)
-                  var line = e.target.line1 ? e.target.line1 : e.target.line2
+                  const line = e.target.line1 ? e.target.line1 : e.target.line2
                   console.log('line:', line)
-                  _this.attachText(line.get('id'), item.get('id'))
+                  if (line) {
+                    _this.attachText(line.get('id'), item.get('id'))
+                    return true
+                  }
                 }
               })
             } else {
@@ -534,11 +540,19 @@ export default {
           'object:moved': function (e) {
             if (e.target.type === 'circle') {
               const p = e.target // circle
-              if (p.line1 && p.line1.set({ x2: p.left, y2: p.top })) {
-                _this.changeLinePath(p.line1)
+              if (p.line1) {
+                p.line1.set({ x2: p.left, y2: p.top })
+                setTimeout(function () {
+                  _this.changeLinePath(p.line1)
+                  console.log(p.line1)
+                }, 100)
               }
-              if (p.line2 && p.line2.set({ x1: p.left, y1: p.top })) {
-                _this.changeLinePath(p.line2)
+              if (p.line2) {
+                p.line2.set({ x1: p.left, y1: p.top })
+                setTimeout(function () {
+                  console.log(p.line2)
+                  _this.changeLinePath(p.line2)
+                }, 100)
               }
               _this.canvas.renderAll()
             }
@@ -791,7 +805,7 @@ export default {
         case 'LineCreatedDomainEvent':
           console.log(receivedData)
           var line = {
-            id: receivedData.figureId,
+            figureId: receivedData.figureId,
             positionList: [
               {
                 x: 100.0,
