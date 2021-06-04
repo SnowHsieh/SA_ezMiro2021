@@ -52,11 +52,16 @@ import {
 } from '@/apis/stickyNoteApi'
 import { webSocketHostIp } from '../config/config.js'
 import uuidGenerator from '../utils/uuidGenerator.js'
-import { attachTextfigureApi, changeLinePathApi, createLineApi, deleteLineApi } from '../apis/lineApi'
+import {
+  attachTextfigure,
+  changeLinePath,
+  createLineApi,
+  deleteLine
+} from '@/apis/lineApi'
 export default {
   data () {
     return {
-      boardId: 'f9b98e02-117e-4e9c-9a31-271d1672dfc0',
+      boardId: '9b283903-027b-43ab-a92f-61e825c6f145',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -124,38 +129,8 @@ export default {
         console.log(err)
       }
     },
-    async createLine (figure) {
-      try {
-        const res = await createLineApi(this.boardId)
-        console.log(res.data.message)
-      } catch (err) {
-        console.log(err)
-      }
-    },
-    async deleteLine (figure) {
-      try {
-        const res = await deleteLineApi(this.boardId, figure)
-        console.log(res.data.message)
-      } catch (err) {
-        console.log(err)
-      }
-    },
-    async changeLinePath (figure) {
-      try {
-        const res = await changeLinePathApi(this.boardId, figure)
-        console.log(res.data.message)
-      } catch (err) {
-        console.log(err)
-      }
-    },
-    async attachText (figureId, textFigureId) {
-      try {
-        const res = await attachTextfigureApi(this.boardId, figureId, textFigureId)
-        console.log(res.data.message)
-      } catch (err) {
-        console.log(err)
-      }
-      console.log('attachTextFigure success')
+    async createLine () {
+      return createLineApi(this.boardId)
     },
     // 畫直線
     // change line path no enter
@@ -525,7 +500,7 @@ export default {
                   const line = e.target.line1 ? e.target.line1 : e.target.line2
                   console.log('line:', line)
                   if (line) {
-                    _this.attachText(line.get('id'), item.get('id'))
+                    attachTextfigure(_this.boardId, line.get('id'), item.get('id'))
                     return true
                   }
                 }
@@ -585,7 +560,7 @@ export default {
                 p.line2.points[1].y = p.top
                 setTimeout(function () {
                   console.log('object:moved=', p.line2)
-                  _this.changeLinePath(p.line2)
+                  changeLinePath(_this.boardId, p.line2)
                 }, 100)
               }
               if (p.line1 && !p.line2) {
@@ -593,7 +568,7 @@ export default {
                 p.line1.points[2].y = p.top
                 // p.line1.set({ x2: p.left, y2: p.top })
                 setTimeout(function () {
-                  _this.changeLinePath(p.line1)
+                  changeLinePath(_this.boardId, p.line1)
                   console.log(p.line1)
                 }, 100)
               }
@@ -603,7 +578,7 @@ export default {
                 // p.line2.set({ x1: p.left, y1: p.top })
                 setTimeout(function () {
                   console.log(p.line2)
-                  _this.changeLinePath(p.line2)
+                  changeLinePath(_this.boardId, p.line2)
                 }, 100)
               }
               _this.canvas.renderAll()
@@ -650,7 +625,7 @@ export default {
             if (target.type === 'group') {
               _this.deleteStickyNote(target)
             } else {
-              _this.deleteLine(target)
+              deleteLine(_this.boardId, target)
             }
           }
         })

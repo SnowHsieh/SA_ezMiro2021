@@ -27,7 +27,7 @@ export const createLineApi = async (boardId) => {
   }
 }
 
-export const deleteLineApi = async (boardId, figure) => {
+export const deleteLine = async (boardId, figure) => {
   try {
     const res = await axios.post(`${hostIp}/board/${boardId}/deleteLine`,
       {
@@ -40,7 +40,7 @@ export const deleteLineApi = async (boardId, figure) => {
   }
 }
 
-export const changeLinePathApi = async (boardId, figure) => {
+export const changeLinePath = async (boardId, figure) => {
   try {
     const newPositionList = figure.points
     const res = await axios.post(`${hostIp}/board/${boardId}/changeLinePath`,
@@ -55,7 +55,7 @@ export const changeLinePathApi = async (boardId, figure) => {
   }
 }
 
-export const attachTextfigureApi = async (boardId, lineId, textFigureId) => {
+export const attachTextfigure = async (boardId, lineId, textFigureId) => {
   try {
     const res = await axios.post(`${hostIp}/board/${boardId}/attachTextfigure`,
       {

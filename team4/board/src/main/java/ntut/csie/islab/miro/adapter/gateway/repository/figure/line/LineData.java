@@ -33,7 +33,7 @@ public class LineData {
 
     @OrderBy("pointOrder")
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<PositionData> positionDataList;
+    private Set<PositionData> positionDataList;
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<AttachedTextFigureIdData> attachedTextFigureIdDataList;
@@ -49,7 +49,7 @@ public class LineData {
         this.color = color;
         this.srcEndpointKind = srcEndpointKind;
         this.destEndpointKind = destEndpointKind;
-        this.positionDataList = positionDataList;
+        this.positionDataList = new HashSet<PositionData>(positionDataList);
         this.attachedTextFigureIdDataList = new HashSet<AttachedTextFigureIdData>(attachedTextFigureIdDataList);
     }
 
@@ -102,11 +102,11 @@ public class LineData {
     }
 
     public List<PositionData> getPositionDataList() {
-        return positionDataList;
+        return new ArrayList<>(positionDataList);
     }
 
     public void setPositionList(List<PositionData> positionDataList) {
-        this.positionDataList = positionDataList;
+        this.positionDataList = new HashSet<PositionData>(positionDataList);
     }
 
     public List<AttachedTextFigureIdData> getAttachedTextFigureIdDataList() {

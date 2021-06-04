@@ -38,7 +38,6 @@ public class AttachTextfigureController {
             e.printStackTrace();
         }
         System.out.println("attachTextfigure:" + figureId  + ";"+ textFigureId);
-        System.out.println("attachTextfigure:" + figureId  + ";"+ textFigureId);
         AttachTextfigureInput input = attachTextfigureUseCase.newInput();
         input.setBoardId(boardId);
         input.setFigureId(figureId);

@@ -30,6 +30,7 @@ public class AttachTextfigureUseCase {
             return;
         }
         line.attachTextFigure(input.getTextFigureId());
+        System.out.println("getAttachedTextFigureIdList size:" + line.getAttachedTextFigureIdList().size());
         lineRepository.save((Line) line);
         domainEventBus.postAll(line);
         output.setId(line.getId().toString());

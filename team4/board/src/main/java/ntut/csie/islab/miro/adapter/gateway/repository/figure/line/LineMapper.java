@@ -20,6 +20,7 @@ public class LineMapper {
                     )
             );
         }
+
         Line line = new Line(
                 UUID.fromString(lineData.getBoardId()),
                 UUID.fromString(lineData.getLineId()),
