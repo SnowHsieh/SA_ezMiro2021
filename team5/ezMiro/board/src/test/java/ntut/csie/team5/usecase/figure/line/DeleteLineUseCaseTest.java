@@ -6,6 +6,7 @@ import ntut.csie.team5.entity.model.figure.line.Endpoint;
 import ntut.csie.team5.usecase.AbstractTest;
 import ntut.csie.team5.usecase.figure.line.delete.DeleteLineInput;
 import ntut.csie.team5.usecase.figure.line.delete.DeleteLineUseCase;
+import ntut.csie.team5.usecase.figure.line.delete.DeleteLineUseCaseImpl;
 import org.junit.Test;
 
 import java.util.UUID;

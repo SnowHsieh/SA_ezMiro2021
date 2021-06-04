@@ -2,6 +2,7 @@ package ntut.csie.team5.entity.model.figure.line;
 
 import ntut.csie.team5.entity.model.figure.Figure;
 import ntut.csie.team5.entity.model.figure.FigureType;
+import ntut.csie.team5.entity.model.figure.line.event.LineConnected;
 import ntut.csie.team5.entity.model.figure.line.event.LineDrew;
 import ntut.csie.team5.entity.model.figure.line.event.LineEndpointMoved;
 import ntut.csie.team5.entity.model.figure.line.event.LineMoved;
@@ -43,6 +44,16 @@ public class Line extends Figure {
         addDomainEvent(new LineMoved(getId(), offsetX, offsetY, getBoardId(), getFigureType()));
     }
 
+    public void connectToFigure(String endpointId, String connectFigureId) {
+        if (this.endpointA.getId().equals(endpointId)) {
+            this.endpointA.setConnectedFigureId(connectFigureId);
+            addDomainEvent(new LineConnected(getId(), getEndpointA().getId(), connectFigureId, getBoardId(), getFigureType()));
+        } else if (this.endpointB.getId().equals(endpointId)) {
+            this.endpointB.setConnectedFigureId(connectFigureId);
+            addDomainEvent(new LineConnected(getId(), getEndpointB().getId(), connectFigureId, getBoardId(), getFigureType()));
+        }
+    }
+
     public Endpoint getEndpointA() {
         return endpointA;
     }
@@ -58,5 +69,4 @@ public class Line extends Figure {
     public void setEndpointB(Endpoint endpointB) {
         this.endpointB = endpointB;
     }
-
 }

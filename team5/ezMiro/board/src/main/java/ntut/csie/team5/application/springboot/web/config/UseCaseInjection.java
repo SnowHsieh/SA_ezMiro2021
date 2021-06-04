@@ -1,7 +1,6 @@
 package ntut.csie.team5.application.springboot.web.config;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.team5.entity.model.figure.line.Line;
 import ntut.csie.team5.usecase.board.BoardRepository;
 import ntut.csie.team5.usecase.board.change_order.ChangeFigureZOrderUseCase;
 import ntut.csie.team5.usecase.board.change_order.ChangeFigureZOrderUseCaseImpl;
@@ -28,7 +27,7 @@ import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCa
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCaseImpl;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.resize.ResizeNoteUseCase;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.resize.ResizeNoteUseCaseImpl;
-import ntut.csie.team5.usecase.figure.line.DeleteLineUseCaseImpl;
+import ntut.csie.team5.usecase.figure.line.delete.DeleteLineUseCaseImpl;
 import ntut.csie.team5.usecase.figure.line.LineRepository;
 import ntut.csie.team5.usecase.figure.line.delete.DeleteLineUseCase;
 import ntut.csie.team5.usecase.figure.line.draw.DrawLineUseCase;
