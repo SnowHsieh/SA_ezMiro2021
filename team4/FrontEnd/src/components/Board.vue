@@ -56,7 +56,7 @@ import { attachTextfigureApi, changeLinePathApi, createLineApi, deleteLineApi } 
 export default {
   data () {
     return {
-      boardId: 'b95476ae-9b55-466d-859b-644b82154f9a',
+      boardId: '90f6d76b-e4c3-4e41-b14a-065838db199f',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -161,25 +161,50 @@ export default {
     addLine (figure) {
       const srcPosition = figure.positionList[0]
       // todo: fix it
-      const destPosition = !figure.positionList[2] ? figure.positionList[1] : figure.positionList[2]
-      const line = new fabric.Line([srcPosition.x, srcPosition.y, destPosition.x, destPosition.y], {
+      // const destPosition = !figure.positionList[2] ? figure.positionList[1] : figure.positionList[2]
+      // const destPosition = figure.positionList[figure.positionList.length-1]
+      var positionList = []
+
+      positionList.push({ x: srcPosition.x, y: srcPosition.y })
+      positionList.push({
+        x: (srcPosition.x + destPosition.x) / 3,
+        y: (srcPosition.y + destPosition.y) / 3
+      })
+      positionList.push({
+        x: destPosition.x,
+        y: destPosition.y
+      })
+
+      var line = new fabric.Polyline(positionList, {
         id: figure.figureId,
-        fill: figure.color,
+        fill: 'transparent',
         stroke: figure.color, // 筆觸顏色
         strokeWidth: figure.strokeWidth, // 筆觸寬度
-        hasControls: true, // 選中時是否可以放大縮小
+        hasControls: false, // 選中時是否可以放大縮小
         hasRotatingPoint: true, // 選中時是否可以旋轉
         hasBorders: true, // 選中時是否有邊框
         srcPoint: null,
         destPoint: null
         // evented: false  // false means event on line can't be triggered
       })
-      line.srcPoint = this.makeCircle(line.x1, line.y1, null, line, line.get('id'))
-      line.destPoint = this.makeCircle(line.x2, line.y2, line, null, line.get('id'))
+      console.log(line)
+
+      // for (let i = 0; i < line.points.length; i++) {
+      //   line.positionList
+      //   if (objects[i].get('objectType') !== 'cursor') {
+      //     figureList.push(objects[i].get('id'))
+      //   }
+      //
+      // }
+
+      line.srcPoint = this.makeCircle(line.points[0].x, line.points[0].y, null, line, line.get('id'))
+      line.midPoint = this.makeCircle(line.points[1].x, line.points[1].y, line, line, line.get('id'))
+      line.destPoint = this.makeCircle(line.points[2].x, line.points[2].y, line, null, line.get('id'))
       // console.log(line.srcPoint, line.destPoint)
       this.canvas.add(
         line,
         line.srcPoint,
+        line.midPoint,
         line.destPoint
       )
       this.associationMap.push({
@@ -194,7 +219,7 @@ export default {
         left: left,
         top: top,
         radius: 5,
-        stroke: 'white',
+        stroke: 'blue',
         originX: 'center',
         originY: 'center',
         xOffset: 0.0,
@@ -540,15 +565,30 @@ export default {
           'object:moved': function (e) {
             if (e.target.type === 'circle') {
               const p = e.target // circle
-              if (p.line1) {
-                p.line1.set({ x2: p.left, y2: p.top })
+
+              if (p.line2 && p.line1) {
+                p.line1.points[1].x = p.left
+                p.line1.points[1].y = p.top
+                p.line2.points[1].x = p.left
+                p.line2.points[1].y = p.top
+                setTimeout(function () {
+                  console.log(p.line2)
+                  _this.changeLinePath(p.line2)
+                }, 100)
+              }
+              if (p.line1 && !p.line2) {
+                p.line1.points[2].x = p.left
+                p.line1.points[2].y = p.top
+                // p.line1.set({ x2: p.left, y2: p.top })
                 setTimeout(function () {
                   _this.changeLinePath(p.line1)
                   console.log(p.line1)
                 }, 100)
               }
-              if (p.line2) {
-                p.line2.set({ x1: p.left, y1: p.top })
+              if (p.line2 && !p.line1) {
+                p.line2.points[0].x = p.left
+                p.line2.points[0].y = p.top
+                // p.line2.set({ x1: p.left, y1: p.top })
                 setTimeout(function () {
                   console.log(p.line2)
                   _this.changeLinePath(p.line2)
