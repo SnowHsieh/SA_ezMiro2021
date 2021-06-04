@@ -31,14 +31,14 @@ export default {
   },
   mounted() {
     EventBus.on(customEvents.canvasTools.stickyNote, (payload) => {
-      this.canvas = this.canvasProp
+      this.canvas = this.canvasProp;
       this.canvas.on("mouse:down", () => {
         if (this.editingText === true) {
-          this.leaveEditingMode()
+          this.leaveEditingMode();
         }
-      })
-      this.canvas.isDrawingMode = false
-      this.createStickyNote(payload)
+      });
+      this.canvas.isDrawingMode = false;
+      this.createStickyNote(payload);
     });
   },
   methods: {
@@ -87,7 +87,7 @@ export default {
         this.textBox.enterEditing();
 
         this.canvas.renderAll();
-      })
+      });
     },
     fontResizeStickyNote(textBox, group) {
       let lineNumber = 0;
@@ -144,49 +144,49 @@ export default {
         this.overText = false;
       });
       textBox.on("changed", () => {
-        console.log("changed")
-        this.textBoxChange = true
-        this.fontResizeStickyNote(textBox, group)
-      })
+        console.log("changed");
+        this.textBoxChange = true;
+        this.fontResizeStickyNote(textBox, group);
+      });
 
       textBox.set({
         hasControls: false,
         hasBorders: false,
         lockMovementX: true,
         lockMovementY: true,
-      })
+      });
     },
     resetData() {
-      this.groupObject = null
-      this.textBox = null
-      this.textBoxChange = false
+      this.groupObject = null;
+      this.textBox = null;
+      this.textBoxChange = false;
     },
     getStickyNote(color) {
-      let stickynote = ""
+      let stickynote = "";
       switch (String(color)) {
         case "#000000":
-          stickynote = stickynoteBlack
-          break
+          stickynote = stickynoteBlack;
+          break;
         case "#8A0000":
-          stickynote = stickynoteRed
-          break
+          stickynote = stickynoteRed;
+          break;
         case "#8CB8DE":
-          stickynote = stickynoteBlue
-          break
+          stickynote = stickynoteBlue;
+          break;
         case "#FFD54F":
-          stickynote = stickynoteYellow
-          break
+          stickynote = stickynoteYellow;
+          break;
         case "#58CA68":
-          stickynote = stickynoteGreen
-          break
+          stickynote = stickynoteGreen;
+          break;
         case "#FFFFFF":
-          stickynote = stickynoteWhite
-          break
+          stickynote = stickynoteWhite;
+          break;
         default:
-          stickynote = stickynoteBlack
-          break
+          stickynote = stickynoteBlack;
+          break;
       }
-      return stickynote
+      return stickynote;
     },
     createStickyNote(payload) {
       fabric.loadSVGFromURL(
@@ -210,13 +210,13 @@ export default {
           });
 
           if (payload.color === "#000000") {
-            text.set({ fill: "rgb(255,255,255)" })
+            text.set({ fill: "rgb(255,255,255)" });
           }
 
           SVGObject.set({
             left: text.left - 10,
             top: text.top - 10,
-          })
+          });
 
           const group = new fabric.Group([SVGObject, text], {
             scaleX: 0.5,
@@ -224,16 +224,16 @@ export default {
             selectable: true,
             evented: true,
             // whitebirdData: { id: uuid, type: "NOTE" }
-          })
+          });
 
-          this.addStickyNoteSettings(group)
-          this.addTextBoxSettings(text, group)
-          this.resetData()
-          this.canvas.add(group).setActiveObject(group)
-          this.canvas.renderAll()
+          this.addStickyNoteSettings(group);
+          this.addTextBoxSettings(text, group);
+          this.resetData();
+          this.canvas.add(group).setActiveObject(group);
+          this.canvas.renderAll();
         }
-      )
+      );
     },
   },
-}
+};
 </script>

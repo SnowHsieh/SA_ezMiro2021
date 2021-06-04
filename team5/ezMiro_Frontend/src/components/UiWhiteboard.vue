@@ -1,11 +1,11 @@
 <template>
   <div class="ui-whiteboard component" :class="backgroundImage">
     <canvas id="canvas"></canvas>
-    <UiDrawingTool :canvasProp="canvas" />
-    <UiRectangleTool :canvasProp="canvas" />
-    <UiCircleTool :canvasProp="canvas" />
-    <UiTextboxTool :canvasProp="canvas" />
-    <UiStickyNoteTool :canvasProp="canvas" />
+    <UiDrawingTool :canvas-prop="canvas" />
+    <UiRectangleTool :canvas-prop="canvas" />
+    <UiCircleTool :canvas-prop="canvas" />
+    <UiTextboxTool :canvas-prop="canvas" />
+    <UiStickyNoteTool :canvas-prop="canvas" />
   </div>
 </template>
 
@@ -39,7 +39,7 @@ export default {
     this.canvas = markRaw(
       new fabric.Canvas("canvas", {
         width: 1247,
-        height: 1100
+        height: 1100,
       })
     );
 

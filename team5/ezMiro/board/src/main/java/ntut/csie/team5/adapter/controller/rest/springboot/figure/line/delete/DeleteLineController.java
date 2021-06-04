@@ -6,6 +6,7 @@ import ntut.csie.team5.usecase.figure.line.delete.DeleteLineInput;
 import ntut.csie.team5.usecase.figure.line.delete.DeleteLineUseCase;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ public class DeleteLineController {
 
     private DeleteLineUseCase deleteLineUseCase;
 
+    @Autowired
     public void setDeleteLineUseCase(DeleteLineUseCase deleteLineUseCase) {
         this.deleteLineUseCase = deleteLineUseCase;
     }

@@ -15,7 +15,7 @@ export default {
   data() {
     return {
       canvas: null,
-    }
+    };
   },
   mounted() {
     EventBus.on(customEvents.canvasTools.rectangle, (payload) => {

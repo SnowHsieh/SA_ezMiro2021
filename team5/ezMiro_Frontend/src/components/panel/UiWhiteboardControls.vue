@@ -179,17 +179,19 @@
                         alt="black"
                       />
                     </div>
-                    <div 
+                    <div
                       class="tools--item--button mg25-5"
-                      @click="selectColor('#8CB8DE')">
+                      @click="selectColor('#8CB8DE')"
+                    >
                       <img
                         src="../../assets/images/stickynote/blue.svg"
                         alt="blue"
                       />
                     </div>
-                    <div 
+                    <div
                       class="tools--item--button mg25-5"
-                      @click="selectColor('#58CA68')">
+                      @click="selectColor('#58CA68')"
+                    >
                       <img
                         src="../../assets/images/stickynote/green.svg"
                         alt="green"
@@ -197,25 +199,28 @@
                     </div>
                   </li>
                   <li class="tools--item mgt-0">
-                    <div 
+                    <div
                       class="tools--item--button mg25-5"
-                      @click="selectColor('#8A0000')">
+                      @click="selectColor('#8A0000')"
+                    >
                       <img
                         src="../../assets/images/stickynote/red.svg"
                         alt="red"
                       />
                     </div>
-                    <div 
+                    <div
                       class="tools--item--button mg25-5"
-                      @click="selectColor('#FFD54F')">
+                      @click="selectColor('#FFD54F')"
+                    >
                       <img
                         src="../../assets/images/stickynote/yellow.svg"
                         alt="yellow"
                       />
                     </div>
-                    <div 
+                    <div
                       class="tools--item--button mg25-5"
-                      @click="selectColor('#FFFFFF')">
+                      @click="selectColor('#FFFFFF')"
+                    >
                       <img
                         src="../../assets/images/stickynote/white.svg"
                         alt="white"
@@ -228,9 +233,7 @@
 
               <!-- Background -->
               <li class="tools--item">
-                <div 
-                  class="tools--item--button"
-                  @click="swapBackground">
+                <div class="tools--item--button" @click="swapBackground">
                   <font-awesome-icon icon="border-all" />
                 </div>
               </li>
@@ -328,11 +331,11 @@ export default {
         this.imageBackgroundIndex = 0;
       }
 
-      const states = ['eisenhower', 'blank', 'dots'];
+      const states = ["eisenhower", "blank", "dots"];
       const element = states[this.imageBackgroundIndex];
       EventBus.emit(customEvents.canvas.imageBackgroundChanged, element);
       this.imageBackgroundIndex += 1;
-    }
+    },
   },
 };
 </script>

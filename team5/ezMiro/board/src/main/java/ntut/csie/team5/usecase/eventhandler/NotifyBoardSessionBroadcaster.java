@@ -10,6 +10,8 @@ import ntut.csie.team5.entity.model.board.event.BoardLeft;
 import ntut.csie.team5.entity.model.board.event.CursorMoved;
 import ntut.csie.team5.entity.model.figure.event.FigureCreated;
 import ntut.csie.team5.entity.model.figure.event.FigureDeleted;
+import ntut.csie.team5.entity.model.figure.line.event.LineDrew;
+import ntut.csie.team5.entity.model.figure.line.event.LineEndpointMoved;
 import ntut.csie.team5.entity.model.figure.note.event.NoteColorChanged;
 import ntut.csie.team5.entity.model.figure.note.event.NoteMoved;
 import ntut.csie.team5.entity.model.figure.note.event.NoteResized;
@@ -79,6 +81,16 @@ public class NotifyBoardSessionBroadcaster {
     @Subscribe
     public void whenBoardLeft(BoardLeft boardLeft) {
         broadcastEvent(boardLeft.boardId(), boardLeft);
+    }
+
+    @Subscribe
+    public void whenLineDrew(LineDrew lineDrew) {
+        broadcastEvent(lineDrew.boardId(), lineDrew);
+    }
+
+    @Subscribe
+    public void whenLineEndpointMoved(LineEndpointMoved lineEndpointMoved) {
+        broadcastEvent(lineEndpointMoved.boardId(), lineEndpointMoved);
     }
 
     private void broadcastEvent(String boardId, DomainEvent domainEvent) {
