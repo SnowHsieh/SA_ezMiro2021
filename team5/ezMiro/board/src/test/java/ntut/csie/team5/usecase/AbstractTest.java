@@ -2,6 +2,7 @@ package ntut.csie.team5.usecase;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
+import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.team5.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.team5.adapter.gateway.repository.springboot.figure.line.LineRepositoryImpl;
@@ -11,6 +12,7 @@ import ntut.csie.team5.adapter.gateway.repository.springboot.figure.note.NoteRep
 import ntut.csie.team5.adapter.project.ProjectRepositoryImpl;
 import ntut.csie.team5.entity.model.figure.FigureType;
 import ntut.csie.team5.entity.model.figure.line.Endpoint;
+import ntut.csie.team5.entity.model.figure.line.Line;
 import ntut.csie.team5.usecase.board.BoardRepository;
 import ntut.csie.team5.usecase.board.create.CreateBoardInput;
 import ntut.csie.team5.usecase.board.create.CreateBoardUseCase;
@@ -24,6 +26,9 @@ import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteInput
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCase;
 import ntut.csie.team5.usecase.figure.connectable_figure.note.post.PostNoteUseCaseImpl;
 import ntut.csie.team5.usecase.figure.line.LineRepository;
+import ntut.csie.team5.usecase.figure.line.connect.ConnectLineInput;
+import ntut.csie.team5.usecase.figure.line.connect.ConnectLineUseCase;
+import ntut.csie.team5.usecase.figure.line.connect.ConnectLineUseCaseImpl;
 import ntut.csie.team5.usecase.figure.line.draw.DrawLineInput;
 import ntut.csie.team5.usecase.figure.line.draw.DrawLineUseCase;
 import ntut.csie.team5.usecase.figure.line.draw.DrawLineUseCaseImpl;
@@ -41,6 +46,9 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -172,5 +180,25 @@ public abstract class AbstractTest {
 
         drawLineUseCase.execute(drawLineInput, drawLineOutput);
         return drawLineOutput.getId();
+    }
+
+    public String connectLineToFigure() {
+        ConnectLineUseCase connectLineUseCase = new ConnectLineUseCaseImpl(lineRepository, domainEventBus);
+        ConnectLineInput connectLineInput = connectLineUseCase.newInput();
+        CqrsCommandPresenter connectLineOutput = CqrsCommandPresenter.newInstance();
+
+        String noteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
+
+        Endpoint endpointA = new Endpoint(UUID.randomUUID().toString(), 0, 0, "");
+        Endpoint endpointB = new Endpoint(UUID.randomUUID().toString(), 10, 10, "");
+        String lineId = drawLine(boardId, endpointA, endpointB);
+        Line line = lineRepository.findById(lineId).orElse(null);
+
+        connectLineInput.setLineId(lineId);
+        connectLineInput.setEndpointId(line.getEndpointA().getId());
+        connectLineInput.setFigureId(noteId);
+
+        connectLineUseCase.execute(connectLineInput, connectLineOutput);
+        return connectLineOutput.getId();
     }
 }

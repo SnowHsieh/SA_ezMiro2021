@@ -17,7 +17,7 @@ public class EndpointData implements Serializable {
     @Column(name = "position_y")
     private int positionY;
 
-    @Column(name = "connected_figure_id")
+    @Column(name = "connected_figure_id", columnDefinition = "LONGVARBINARY")
     private String connectedFigureId;
 
     public EndpointData() {

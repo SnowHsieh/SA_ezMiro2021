@@ -6,6 +6,7 @@ import ntut.csie.team5.entity.model.figure.line.event.LineConnected;
 import ntut.csie.team5.entity.model.figure.line.event.LineDrew;
 import ntut.csie.team5.entity.model.figure.line.event.LineEndpointMoved;
 import ntut.csie.team5.entity.model.figure.line.event.LineMoved;
+import ntut.csie.team5.entity.model.figure.line.event.LineDisconnected;
 
 public class Line extends Figure {
 
@@ -51,6 +52,18 @@ public class Line extends Figure {
         } else if (this.endpointB.getId().equals(endpointId)) {
             this.endpointB.setConnectedFigureId(connectFigureId);
             addDomainEvent(new LineConnected(getId(), getEndpointB().getId(), connectFigureId, getBoardId(), getFigureType()));
+        }
+    }
+
+    public void disconnectToFigure(String endpointId) {
+        if (this.endpointA.getId().equals(endpointId)) {
+            String connectedFigureId = this.endpointA.getConnectedFigureId();
+            this.endpointA.setConnectedFigureId("");
+            addDomainEvent(new LineDisconnected(getId(), getEndpointA().getId(), connectedFigureId, getBoardId(), getFigureType()));
+        } else if (this.endpointB.getId().equals(endpointId)) {
+            String connectedFigureId = this.endpointB.getConnectedFigureId();
+            this.endpointB.setConnectedFigureId("");
+            addDomainEvent(new LineDisconnected(getId(), getEndpointB().getId(), connectedFigureId, getBoardId(), getFigureType()));
         }
     }
 
