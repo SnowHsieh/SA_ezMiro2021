@@ -56,7 +56,7 @@ import { attachTextfigureApi, changeLinePathApi, createLineApi, deleteLineApi } 
 export default {
   data () {
     return {
-      boardId: '90f6d76b-e4c3-4e41-b14a-065838db199f',
+      boardId: 'f9b98e02-117e-4e9c-9a31-271d1672dfc0',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -126,7 +126,7 @@ export default {
     },
     async createLine (figure) {
       try {
-        const res = await createLineApi(this.boardId, figure)
+        const res = await createLineApi(this.boardId)
         console.log(res.data.message)
       } catch (err) {
         console.log(err)
@@ -158,24 +158,9 @@ export default {
       console.log('attachTextFigure success')
     },
     // 畫直線
+    // change line path no enter
     addLine (figure) {
-      const srcPosition = figure.positionList[0]
-      // todo: fix it
-      // const destPosition = !figure.positionList[2] ? figure.positionList[1] : figure.positionList[2]
-      // const destPosition = figure.positionList[figure.positionList.length-1]
-      var positionList = []
-
-      positionList.push({ x: srcPosition.x, y: srcPosition.y })
-      positionList.push({
-        x: (srcPosition.x + destPosition.x) / 3,
-        y: (srcPosition.y + destPosition.y) / 3
-      })
-      positionList.push({
-        x: destPosition.x,
-        y: destPosition.y
-      })
-
-      var line = new fabric.Polyline(positionList, {
+      var line = new fabric.Polyline(figure.positionList, {
         id: figure.figureId,
         fill: 'transparent',
         stroke: figure.color, // 筆觸顏色
@@ -188,23 +173,28 @@ export default {
         // evented: false  // false means event on line can't be triggered
       })
       console.log(line)
-
-      // for (let i = 0; i < line.points.length; i++) {
-      //   line.positionList
-      //   if (objects[i].get('objectType') !== 'cursor') {
-      //     figureList.push(objects[i].get('id'))
-      //   }
-      //
-      // }
-
-      line.srcPoint = this.makeCircle(line.points[0].x, line.points[0].y, null, line, line.get('id'))
-      line.midPoint = this.makeCircle(line.points[1].x, line.points[1].y, line, line, line.get('id'))
-      line.destPoint = this.makeCircle(line.points[2].x, line.points[2].y, line, null, line.get('id'))
+      this.canvas.add(
+        line
+      )
+      const _this = this
+      let i = 0
+      line.srcPoint = this.makeDarkCircle(line.points[i].x, line.points[i].y, null, line, line.get('id'))
+      for (i = 1; i < figure.positionList.length - 1; i++) {
+        _this.canvas.add(
+          _this.makeLightCircle(line.points[i].x, line.points[i].y, line, line, line.get('id'))
+        )
+        i++
+        if (i === figure.positionList.length - 1) {
+          break
+        }
+        _this.canvas.add(
+          _this.makeDarkCircle(line.points[i].x, line.points[i].y, line, line, line.get('id'))
+        )
+      }
+      line.destPoint = this.makeDarkCircle(line.points[i].x, line.points[i].y, line, null, line.get('id'))
       // console.log(line.srcPoint, line.destPoint)
       this.canvas.add(
-        line,
         line.srcPoint,
-        line.midPoint,
         line.destPoint
       )
       this.associationMap.push({
@@ -214,12 +204,34 @@ export default {
       this.canvas.renderAll()
     },
     // 畫球
-    makeCircle (left, top, line1, line2, lineId) {
+    makeDarkCircle (left, top, line1, line2, lineId) {
       var circlePoint = new fabric.Circle({
         left: left,
         top: top,
         radius: 5,
         stroke: 'blue',
+        fill: 'blue',
+        originX: 'center',
+        originY: 'center',
+        xOffset: 0.0,
+        yOffset: 0.0
+      })
+      circlePoint.attachedLineId = lineId
+      circlePoint.hasControls = circlePoint.hasBorders = false
+      circlePoint.line1 = line1
+      circlePoint.line2 = line2
+
+      return circlePoint
+    },
+    makeLightCircle (left, top, line1, line2, lineId) {
+      var circlePoint = new fabric.Circle({
+        left: left,
+        top: top,
+        radius: 10,
+        borderColor: 'red',
+        borderScaleFactor: 10,
+        fill: 'red',
+        stroke: 'red',
         originX: 'center',
         originY: 'center',
         xOffset: 0.0,
@@ -565,14 +577,14 @@ export default {
           'object:moved': function (e) {
             if (e.target.type === 'circle') {
               const p = e.target // circle
-
+              // 整條線移動
               if (p.line2 && p.line1) {
                 p.line1.points[1].x = p.left
                 p.line1.points[1].y = p.top
                 p.line2.points[1].x = p.left
                 p.line2.points[1].y = p.top
                 setTimeout(function () {
-                  console.log(p.line2)
+                  console.log('object:moved=', p.line2)
                   _this.changeLinePath(p.line2)
                 }, 100)
               }
@@ -843,7 +855,6 @@ export default {
           _this.updateStickyNotePosition(receivedData)
           break
         case 'LineCreatedDomainEvent':
-          console.log(receivedData)
           var line = {
             figureId: receivedData.figureId,
             positionList: [
@@ -851,8 +862,11 @@ export default {
                 x: 100.0,
                 y: 100.0
               }, {
-                x: 250.0,
+                x: 200.0,
                 y: 200.0
+              }, {
+                x: 300.0,
+                y: 300.0
               }
             ],
             strokeWidth: 5,
