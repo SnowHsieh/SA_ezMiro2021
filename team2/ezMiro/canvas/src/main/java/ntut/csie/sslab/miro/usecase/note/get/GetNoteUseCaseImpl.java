@@ -1,6 +1,6 @@
 package ntut.csie.sslab.miro.usecase.note.get;
 
-import ntut.csie.sslab.miro.entity.model.note.Note;
+import ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note.Note;
 import ntut.csie.sslab.miro.usecase.note.ConvertNoteToDTO;
 import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 import java.util.stream.Collectors;

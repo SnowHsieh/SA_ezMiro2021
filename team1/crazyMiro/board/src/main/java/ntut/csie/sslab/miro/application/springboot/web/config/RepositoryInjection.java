@@ -4,12 +4,12 @@ import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryPeer;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.line.LineRepositoryImpl;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.sticker.StickerRepositoryImpl;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.sticker.StickerRepositoryPeer;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.line.LineRepositoryImpl;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
-import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
-import ntut.csie.sslab.miro.usecase.line.LineRepository;
+import ntut.csie.sslab.miro.usecase.figure.StickerRepository;
+import ntut.csie.sslab.miro.usecase.figure.line.LineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ public class RepositoryInjection {
 
   private BoardRepositoryPeer boardRepositoryPeer;
 
-  private FigureRepositoryPeer figureRepositoryPeer;
+  private StickerRepositoryPeer stickerRepositoryPeer;
 
   @Autowired
   public void setBoardRepositoryPeer(BoardRepositoryPeer boardRepositoryPeer){
@@ -29,8 +29,8 @@ public class RepositoryInjection {
   }
 
   @Autowired
-  public void setFigureRepositoryPeer(FigureRepositoryPeer figureRepositoryPeer){
-    this.figureRepositoryPeer = figureRepositoryPeer;
+  public void setFigureRepositoryPeer(StickerRepositoryPeer stickerRepositoryPeer){
+    this.stickerRepositoryPeer = stickerRepositoryPeer;
   }
 
 
@@ -59,8 +59,8 @@ public class RepositoryInjection {
 //
 //
   @Bean(name="figureRepository")
-  public FigureRepository figureRepository() {
-    return new FigureRepositoryImpl(figureRepositoryPeer);
+  public StickerRepository figureRepository() {
+    return new StickerRepositoryImpl(stickerRepositoryPeer);
   }
 
   @Bean(name="boardRepository")

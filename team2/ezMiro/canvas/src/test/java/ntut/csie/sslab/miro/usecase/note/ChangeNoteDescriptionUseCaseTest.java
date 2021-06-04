@@ -1,7 +1,7 @@
 package ntut.csie.sslab.miro.usecase.note;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.miro.entity.model.note.Note;
+import ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note.Note;
 import ntut.csie.sslab.miro.usecase.AbstractUseCaseTest;
 import ntut.csie.sslab.miro.usecase.note.edit.description.ChangeNoteDescriptionInput;
 import ntut.csie.sslab.miro.usecase.note.edit.description.ChangeNoteDescriptionUseCase;

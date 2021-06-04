@@ -25,8 +25,8 @@ public class ChangeNoteSizeUseCaseTest extends AbstractUseCaseTest {
         changeNoteSizeUseCase.execute(input, output);
 
         assertNotNull(output.getId());
-        assertEquals(200,  figureRepository.findById(output.getId()).get().getHeight());
-        assertEquals(200,  figureRepository.findById(output.getId()).get().getWidth());
+        assertEquals(200,  figureRepository.findNoteById(output.getId()).get().getHeight());
+        assertEquals(200,  figureRepository.findNoteById(output.getId()).get().getWidth());
         assertEquals(1, eventListener.getEventCount());
     }
 }

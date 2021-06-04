@@ -79,9 +79,9 @@ import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryPeer;
-import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.line.LineRepositoryImpl;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.sticker.StickerRepositoryImpl;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.sticker.StickerRepositoryPeer;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.line.LineRepositoryImpl;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import ntut.csie.sslab.miro.usecase.board.create.CreateBoardInput;
@@ -94,17 +94,17 @@ import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardInput;
 import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCase;
 import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
-import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
+import ntut.csie.sslab.miro.usecase.figure.StickerRepository;
 import ntut.csie.sslab.miro.usecase.figure.sticker.create.CreateStickerInput;
 import ntut.csie.sslab.miro.usecase.figure.sticker.create.CreateStickerUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.create.CreateStickerUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerInput;
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCaseImpl;
-import ntut.csie.sslab.miro.usecase.line.LineRepository;
-import ntut.csie.sslab.miro.usecase.line.create.CreateLineInput;
-import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCase;
-import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.figure.line.LineRepository;
+import ntut.csie.sslab.miro.usecase.figure.line.create.CreateLineInput;
+import ntut.csie.sslab.miro.usecase.figure.line.create.CreateLineUseCase;
+import ntut.csie.sslab.miro.usecase.figure.line.create.CreateLineUseCaseImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -128,7 +128,7 @@ import java.util.List;
 public abstract class AbstractSpringBootJpaTest {
 
     protected BoardRepository boardRepository;
-    protected FigureRepository figureRepository;
+    protected StickerRepository stickerRepository;
     protected DomainEventBus domainEventBus;
     protected EventListener eventListener;
     protected BoardSessionBroadcaster boardSessionBroadcaster;
@@ -142,14 +142,14 @@ public abstract class AbstractSpringBootJpaTest {
 //    protected BoardRepositoryMongoDbPeer boardRepositoryMongoDbPeer;
 
     @Autowired
-    protected FigureRepositoryPeer figureRepositoryPeer;
+    protected StickerRepositoryPeer stickerRepositoryPeer;
 
     public NotifyBoardAdapter notifyBoardAdapter;
 
     @BeforeEach
     public void setUp() {
         boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
-        figureRepository = new FigureRepositoryImpl(figureRepositoryPeer);
+        stickerRepository = new StickerRepositoryImpl(stickerRepositoryPeer);
         lineRepository = new LineRepositoryImpl();
         domainEventBus = new GoogleEventBus();
         eventListener = new EventListener();
@@ -195,7 +195,7 @@ public abstract class AbstractSpringBootJpaTest {
         }
     }
     protected String createSticker(String boardId, String content, int width, int length, String color, Coordinate position) {
-        CreateStickerUseCase createStickerUseCase = new CreateStickerUseCaseImpl(figureRepository, domainEventBus);
+        CreateStickerUseCase createStickerUseCase = new CreateStickerUseCaseImpl(stickerRepository, domainEventBus);
         CreateStickerInput input = createStickerUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);
@@ -223,7 +223,7 @@ public abstract class AbstractSpringBootJpaTest {
     }
 
     protected String deleteSticker(String stickerId) {
-        DeleteStickerUseCase deleteStickerUseCase = new DeleteStickerUseCaseImpl(figureRepository, domainEventBus);
+        DeleteStickerUseCase deleteStickerUseCase = new DeleteStickerUseCaseImpl(stickerRepository, domainEventBus);
         DeleteStickerInput input = deleteStickerUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setFigureId(stickerId);

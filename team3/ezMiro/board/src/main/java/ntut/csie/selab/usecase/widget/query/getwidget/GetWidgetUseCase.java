@@ -1,19 +1,19 @@
 package ntut.csie.selab.usecase.widget.query.getwidget;
 
 import ntut.csie.selab.entity.model.widget.Widget;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 
 import java.util.Optional;
 
 public class GetWidgetUseCase {
-    private WidgetRepository widgetRepository;
+    private StickyNoteRepository stickyNoteRepository;
 
-    public GetWidgetUseCase(WidgetRepository widgetRepository) {
-        this.widgetRepository = widgetRepository;
+    public GetWidgetUseCase(StickyNoteRepository stickyNoteRepository) {
+        this.stickyNoteRepository = stickyNoteRepository;
     }
 
     public void execute(GetWidgetInput input, GetWidgetOutput output) {
-        Optional<Widget> widget = widgetRepository.findById(input.getWidgetId());
+        Optional<Widget> widget = stickyNoteRepository.findById(input.getWidgetId());
 
         if (widget.isPresent()) {
             output.setWidget(widget.get());

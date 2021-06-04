@@ -12,7 +12,7 @@ import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
 import ntut.csie.selab.usecase.websocket.WebSocket;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 import ntut.csie.selab.usecase.widget.stickynote.resize.ResizeStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.resize.ResizeStickyNoteInput;
 import ntut.csie.selab.usecase.widget.stickynote.resize.ResizeStickyNoteOutput;
@@ -45,17 +45,17 @@ public class ResizeStickyNoteUseCaseTest {
     public void resize_sticky_note_should_succed() {
         // Arrange
         BoardRepository boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
-        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
+        StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         DomainEventBus domainEventBus = new DomainEventBus();
         WebSocket webSocket = new FakeBoardWebSocket();
-        NotifyUsersInBoard notifyUsersInBoard = new NotifyUsersInBoard(boardRepository, widgetRepository, domainEventBus, webSocket);
+        NotifyUsersInBoard notifyUsersInBoard = new NotifyUsersInBoard(boardRepository, stickyNoteRepository, domainEventBus, webSocket);
         domainEventBus.register(notifyUsersInBoard);
 
         String stickyNoteId = "77946-45641-7546";
         Coordinate coordinate = new Coordinate(10, 10, 100, 100);
         Widget stickyNote = new StickyNote(stickyNoteId, "0", coordinate);
-        widgetRepository.save(stickyNote);
-        ResizeStickyNoteUseCase resizeStickyNoteUseCase = new ResizeStickyNoteUseCase(widgetRepository, domainEventBus);
+        stickyNoteRepository.save(stickyNote);
+        ResizeStickyNoteUseCase resizeStickyNoteUseCase = new ResizeStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         ResizeStickyNoteInput input = new ResizeStickyNoteInput();
         ResizeStickyNoteOutput output = new ResizeStickyNoteOutput();
         input.setStickyNoteId(stickyNoteId);

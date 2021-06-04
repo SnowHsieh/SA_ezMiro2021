@@ -3,17 +3,17 @@ package ntut.csie.selab.usecase.widget.stickynote.create;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 
 
 import java.util.UUID;
 
 public class CreateStickyNoteUseCase {
-    WidgetRepository widgetRepository;
+    StickyNoteRepository stickyNoteRepository;
     DomainEventBus domainEventBus;
 
-    public CreateStickyNoteUseCase(WidgetRepository widgetRepository, DomainEventBus domainEventBus) {
-        this.widgetRepository = widgetRepository;
+    public CreateStickyNoteUseCase(StickyNoteRepository stickyNoteRepository, DomainEventBus domainEventBus) {
+        this.stickyNoteRepository = stickyNoteRepository;
         this.domainEventBus = domainEventBus;
     }
 
@@ -21,7 +21,7 @@ public class CreateStickyNoteUseCase {
         String stickyNoteId = UUID.randomUUID().toString();
         Widget widget = new StickyNote(stickyNoteId, input.getBoardId(), input.getCoordinate());
 
-        widgetRepository.save(widget);
+        stickyNoteRepository.save(widget);
         domainEventBus.postAll(widget);
 
         output.setStickyNoteId(widget.getId());

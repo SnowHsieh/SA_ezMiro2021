@@ -2,9 +2,9 @@ package ntut.csie.sslab.miro.usecase.note.create;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
-import ntut.csie.sslab.miro.entity.model.figure.Figure;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
-import ntut.csie.sslab.miro.entity.model.note.NoteBuilder;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note.Note;
+import ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note.NoteBuilder;
 import ntut.csie.sslab.miro.usecase.note.FigureRepository;
 
 public class CreateNoteUseCaseImpl implements CreateNoteUseCase {
@@ -18,7 +18,7 @@ public class CreateNoteUseCaseImpl implements CreateNoteUseCase {
 
     @Override
     public void execute(CreateNoteInput input, CqrsCommandOutput output) {
-        Figure note = NoteBuilder.newInstance()
+        Note note = NoteBuilder.newInstance()
                 .boardId(input.getBoardId())
                 .description("")
                 .color("#6FB7B7")

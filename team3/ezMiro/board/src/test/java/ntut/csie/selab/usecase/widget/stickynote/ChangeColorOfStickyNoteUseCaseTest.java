@@ -7,7 +7,7 @@ import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.JpaApplicationTest;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 import ntut.csie.selab.usecase.widget.stickynote.edit.color.ChangeColorOfStickyNoteInput;
 import ntut.csie.selab.usecase.widget.stickynote.edit.color.ChangeColorOfStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.stickynote.edit.color.ChangeColorOfStickyNoteUseCase;
@@ -32,13 +32,13 @@ public class ChangeColorOfStickyNoteUseCaseTest {
     @Test
     public void change_color_of_sticky_note_should_succeed() {
         // Arrange
-        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
+        StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         String stickyNodeId = "1";
         Coordinate coordinate = new Coordinate(1, 1, 2, 2);
         Widget stickyNote = new StickyNote(stickyNodeId, "0", coordinate);
-        widgetRepository.save(stickyNote);
+        stickyNoteRepository.save(stickyNote);
         DomainEventBus domainEventBus = new DomainEventBus();
-        ChangeColorOfStickyNoteUseCase changeColorOfStickyNoteUseCase = new ChangeColorOfStickyNoteUseCase(widgetRepository, domainEventBus);
+        ChangeColorOfStickyNoteUseCase changeColorOfStickyNoteUseCase = new ChangeColorOfStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         ChangeColorOfStickyNoteInput input = new ChangeColorOfStickyNoteInput();
         ChangeColorOfStickyNoteOutput output = new ChangeColorOfStickyNoteOutput();
         input.setStickyNoteId(stickyNodeId);

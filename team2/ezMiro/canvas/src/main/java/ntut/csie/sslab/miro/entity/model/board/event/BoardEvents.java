@@ -148,13 +148,13 @@ public interface BoardEvents extends DomainEvent {
 
 /////////////////////////////////////////////////////////////////
 
-    class NoteRemovedFromBoard implements BoardEvents {
+    class FigureRemovedFromBoard implements BoardEvents {
         private final UUID id;
         private final String boardId;
         private final String noteId;
         private final Instant occurredOn;
 
-        public NoteRemovedFromBoard(UUID id, String boardId, String noteId, Instant occurredOn) {
+        public FigureRemovedFromBoard(UUID id, String boardId, String noteId, Instant occurredOn) {
             this.id = id;
             this.boardId = boardId;
             this.noteId = noteId;

@@ -7,7 +7,6 @@ import ntut.csie.selab.entity.model.board.Cursor;
 import ntut.csie.selab.entity.model.board.event.BoardCursorMoved;
 import ntut.csie.selab.entity.model.board.event.BoardEntered;
 import ntut.csie.selab.entity.model.board.event.WidgetCreationNotifiedToAllUser;
-import ntut.csie.selab.entity.model.widget.Line;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.entity.model.widget.WidgetType;
@@ -29,21 +28,21 @@ import java.util.Set;
 public class NotifyUsersInBoard {
 
     private BoardRepository boardRepository;
-    private WidgetRepository widgetRepository;
+    private StickyNoteRepository stickyNoteRepository;
     private LineRepository lineRepository;
     private DomainEventBus domainEventBus;
     private WebSocket webSocket;
 
-    public NotifyUsersInBoard(BoardRepository boardRepository, WidgetRepository widgetRepository, DomainEventBus domainEventBus, WebSocket webSocket) {
+    public NotifyUsersInBoard(BoardRepository boardRepository, StickyNoteRepository stickyNoteRepository, DomainEventBus domainEventBus, WebSocket webSocket) {
         this.boardRepository = boardRepository;
-        this.widgetRepository = widgetRepository;
+        this.stickyNoteRepository = stickyNoteRepository;
         this.domainEventBus = domainEventBus;
         this.webSocket = webSocket;
     }
 
-    public NotifyUsersInBoard(BoardRepository boardRepository, WidgetRepository widgetRepository, LineRepository lineRepository, DomainEventBus domainEventBus, WebSocket webSocket) {
+    public NotifyUsersInBoard(BoardRepository boardRepository, StickyNoteRepository stickyNoteRepository, LineRepository lineRepository, DomainEventBus domainEventBus, WebSocket webSocket) {
         this.boardRepository = boardRepository;
-        this.widgetRepository = widgetRepository;
+        this.stickyNoteRepository = stickyNoteRepository;
         this.lineRepository = lineRepository;
         this.domainEventBus = domainEventBus;
         this.webSocket = webSocket;
@@ -53,7 +52,7 @@ public class NotifyUsersInBoard {
     public void notifyWidgetCreationToAllUser(WidgetCreated widgetCreated) {
         Optional<Widget> widget;
         if (widgetCreated.getType().equals(WidgetType.STICKY_NOTE.getType())) {
-            widget = widgetRepository.findById(widgetCreated.getWidgetId());
+            widget = stickyNoteRepository.findById(widgetCreated.getWidgetId());
         } else {
             widget = lineRepository.findById(widgetCreated.getWidgetId());
         }
@@ -95,7 +94,7 @@ public class NotifyUsersInBoard {
 
     @Subscribe
     public void notifyWidgetDeletionToAllUser(WidgetDeleted widgetDeleted) {
-        Optional<Widget> widget = widgetRepository.findById(widgetDeleted.getWidgetId());
+        Optional<Widget> widget = stickyNoteRepository.findById(widgetDeleted.getWidgetId());
 
         if (widget.isPresent()) {
             throw new RuntimeException("Widget not deleted, widget id = " + widgetDeleted.getWidgetId());
@@ -121,25 +120,43 @@ public class NotifyUsersInBoard {
 
     @Subscribe
     public void notifyWidgetMovementToAllUser(WidgetMoved widgetMoved) {
-        Optional<Widget> widget = widgetRepository.findById(widgetMoved.getWidgetId());
+        Optional<Widget> widget;
+        if (widgetMoved.getType().equals(WidgetType.STICKY_NOTE.getType())) {
+            widget = stickyNoteRepository.findById(widgetMoved.getWidgetId());
+
+        } else {
+            widget = lineRepository.findById(widgetMoved.getWidgetId());
+        }
 
         if (!widget.isPresent()) {
             throw new RuntimeException("Widget not found, widget id = " + widgetMoved.getWidgetId());
         }
 
-        StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
-        StickyNoteDto stickyNoteDto = stickyNoteDtoMapper.domainToDto((StickyNote) widget.get());
 
         ObjectMapper objectMapper = new ObjectMapper();
         JSONObject message = new JSONObject();
         JSONArray widgetsInfo = new JSONArray();
 
-        try {
-            widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(stickyNoteDto)));
-            message.put("widgets", widgetsInfo);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (widgetMoved.getType().equals(WidgetType.STICKY_NOTE.getType())) {
+            try {
+                StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
+                StickyNoteDto stickyNoteDto = stickyNoteDtoMapper.domainToDto(widget.get());
+                widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(stickyNoteDto)));
+                message.put("widgets", widgetsInfo);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                LineDtoMapper lineDtoMapper = new LineDtoMapper();
+                LineDto lineDto = lineDtoMapper.domainToDto(widget.get());
+                widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(lineDto)));
+                message.put("widgets", widgetsInfo);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
         domainEventBus.post(new WidgetMovementNotifiedToAllUser(new Date()));
         webSocket.sendMessageForAllUsersIn(widgetMoved.getBoardId(), message);
     }
@@ -171,7 +188,7 @@ public class NotifyUsersInBoard {
 
     @Subscribe
     public void notifyWidgetResizedToAllUser(WidgetResized widgetResized) {
-        Optional<Widget> widget = widgetRepository.findById(widgetResized.getWidgetId());
+        Optional<Widget> widget = stickyNoteRepository.findById(widgetResized.getWidgetId());
 
         if (!widget.isPresent()) {
             throw new RuntimeException("Widget not found, widget id = " + widgetResized.getWidgetId());
@@ -197,7 +214,7 @@ public class NotifyUsersInBoard {
 
     @Subscribe
     public void notifyTextOfWidgetModifiedToAllUser(TextOfWidgetEdited textOfWidgetEdited) {
-        Optional<Widget> widget = widgetRepository.findById(textOfWidgetEdited.getWidgetId());
+        Optional<Widget> widget = stickyNoteRepository.findById(textOfWidgetEdited.getWidgetId());
 
         if (widget.isPresent()) {
             Widget selectedWidget = widget.get();
@@ -241,7 +258,7 @@ public class NotifyUsersInBoard {
 
     @Subscribe
     public void notifyColorOfWidgetModifiedToAllUser(ColorOfWidgetChanged colorOfWidgetChanged) {
-        Optional<Widget> widget = widgetRepository.findById(colorOfWidgetChanged.getWidgetId());
+        Optional<Widget> widget = stickyNoteRepository.findById(colorOfWidgetChanged.getWidgetId());
 
         if (widget.isPresent()) {
             Widget selectedWidget = widget.get();

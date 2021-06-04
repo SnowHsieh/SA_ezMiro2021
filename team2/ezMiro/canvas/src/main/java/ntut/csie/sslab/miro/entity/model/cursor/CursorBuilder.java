@@ -1,6 +1,6 @@
 package ntut.csie.sslab.miro.entity.model.cursor;
 
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 import java.util.UUID;
 
 public class CursorBuilder {

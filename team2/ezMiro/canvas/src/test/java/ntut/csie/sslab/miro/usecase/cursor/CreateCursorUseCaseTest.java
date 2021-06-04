@@ -1,7 +1,7 @@
 package ntut.csie.sslab.miro.usecase.cursor;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 import ntut.csie.sslab.miro.usecase.AbstractUseCaseTest;
 import ntut.csie.sslab.miro.usecase.cursor.create.CreateCursorInput;
 import ntut.csie.sslab.miro.usecase.cursor.create.CreateCursorUseCase;

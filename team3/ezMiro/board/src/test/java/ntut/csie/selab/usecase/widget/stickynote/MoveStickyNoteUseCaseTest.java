@@ -12,7 +12,7 @@ import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
 import ntut.csie.selab.usecase.websocket.WebSocket;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 import ntut.csie.selab.usecase.widget.stickynote.move.MoveStickyNoteInput;
 import ntut.csie.selab.usecase.widget.stickynote.move.MoveStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.stickynote.move.MoveStickyNoteUseCase;
@@ -45,17 +45,17 @@ public class MoveStickyNoteUseCaseTest {
     public void move_sticky_note_should_succeed() {
         // Arrange
         BoardRepository boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
-        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
+        StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         DomainEventBus domainEventBus = new DomainEventBus();
         WebSocket webSocket = new FakeBoardWebSocket();
-        NotifyUsersInBoard notifyUsersInBoard = new NotifyUsersInBoard(boardRepository, widgetRepository, domainEventBus, webSocket);
+        NotifyUsersInBoard notifyUsersInBoard = new NotifyUsersInBoard(boardRepository, stickyNoteRepository, domainEventBus, webSocket);
         domainEventBus.register(notifyUsersInBoard);
 
         String stickyNoteId = "1";
         Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
         Widget stickyNote = new StickyNote(stickyNoteId, "0", stickyNoteCoordinate);
-        widgetRepository.save(stickyNote);
-        MoveStickyNoteUseCase moveStickyNoteUseCase = new MoveStickyNoteUseCase(widgetRepository, domainEventBus);
+        stickyNoteRepository.save(stickyNote);
+        MoveStickyNoteUseCase moveStickyNoteUseCase = new MoveStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         MoveStickyNoteInput input = new MoveStickyNoteInput();
         MoveStickyNoteOutput output = new MoveStickyNoteOutput();
         input.setStickyNoteId(stickyNoteId);

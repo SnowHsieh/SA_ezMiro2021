@@ -16,7 +16,7 @@ import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
 import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
 import ntut.csie.selab.usecase.websocket.WebSocket;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 import ntut.csie.selab.usecase.widget.stickynote.delete.DeleteStickyNoteInput;
 import ntut.csie.selab.usecase.widget.stickynote.delete.DeleteStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.stickynote.delete.DeleteStickyNoteUseCase;
@@ -50,14 +50,14 @@ public class DeleteStickyNoteUseCaseTest {
     @Test
     public void delete_sticky_note_should_successd() {
         // Arrange
-        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
+        StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         String stickyNoteId = "1";
         Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
         Widget stickyNote = new StickyNote(stickyNoteId, "0", stickyNoteCoordinate);
-        widgetRepository.save(stickyNote);
+        stickyNoteRepository.save(stickyNote);
 
         DomainEventBus domainEventBus = new DomainEventBus();
-        DeleteStickyNoteUseCase deleteStickyNoteUseCase = new DeleteStickyNoteUseCase(widgetRepository, domainEventBus);
+        DeleteStickyNoteUseCase deleteStickyNoteUseCase = new DeleteStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         DeleteStickyNoteInput input = new DeleteStickyNoteInput();
         DeleteStickyNoteOutput output = new DeleteStickyNoteOutput();
         input.setStickyNoteId("1");
@@ -67,7 +67,7 @@ public class DeleteStickyNoteUseCaseTest {
 
         // Assert
         Assert.assertNotNull(output.getStickyNoteId());
-        Assert.assertFalse(widgetRepository.findById(output.getStickyNoteId()).isPresent());
+        Assert.assertFalse(stickyNoteRepository.findById(output.getStickyNoteId()).isPresent());
     }
 
     @Test
@@ -79,19 +79,19 @@ public class DeleteStickyNoteUseCaseTest {
 
         boardRepository.save(createBoardHasStickNoteWith(boardId, stickyNoteId));
 
-        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
+        StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         WebSocket webSocket = new FakeBoardWebSocket();
         Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
         Widget stickyNote = new StickyNote(stickyNoteId, boardId, stickyNoteCoordinate);
-        widgetRepository.save(stickyNote);
+        stickyNoteRepository.save(stickyNote);
         stickyNote.clearDomainEvents();
 
         DomainEventBus domainEventBus = new DomainEventBus();
         NotifyBoard notifyBoard = new NotifyBoard(boardRepository, domainEventBus);
-        NotifyUsersInBoard notifyUsersInBoard = new NotifyUsersInBoard(boardRepository, widgetRepository, domainEventBus, webSocket);
+        NotifyUsersInBoard notifyUsersInBoard = new NotifyUsersInBoard(boardRepository, stickyNoteRepository, domainEventBus, webSocket);
         domainEventBus.register(notifyBoard);
         domainEventBus.register(notifyUsersInBoard);
-        DeleteStickyNoteUseCase deleteStickyNoteUseCase = new DeleteStickyNoteUseCase(widgetRepository, domainEventBus);
+        DeleteStickyNoteUseCase deleteStickyNoteUseCase = new DeleteStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         DeleteStickyNoteInput input = new DeleteStickyNoteInput();
         DeleteStickyNoteOutput output = new DeleteStickyNoteOutput();
         input.setStickyNoteId(stickyNoteId);
@@ -101,7 +101,7 @@ public class DeleteStickyNoteUseCaseTest {
 
         // Assert
         Assert.assertNotNull(output.getStickyNoteId());
-        Assert.assertFalse(widgetRepository.findById(output.getStickyNoteId()).isPresent());
+        Assert.assertFalse(stickyNoteRepository.findById(output.getStickyNoteId()).isPresent());
         Assert.assertEquals(0, boardRepository.findById(boardId).get().getWidgetIds().size());
         Assert.assertEquals(3, domainEventBus.getCount());
     }

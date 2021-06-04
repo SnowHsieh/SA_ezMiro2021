@@ -5,14 +5,14 @@ import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.figure.Sticker;
-import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
+import ntut.csie.sslab.miro.usecase.figure.StickerRepository;
 
 public class MoveStickerUseCaseImpl implements MoveStickerUseCase {
-    private FigureRepository figureRepository;
+    private StickerRepository stickerRepository;
     private DomainEventBus domainEventBus;
 
-    public MoveStickerUseCaseImpl(FigureRepository figureRepository, DomainEventBus domainEventBus) {
-        this.figureRepository = figureRepository;
+    public MoveStickerUseCaseImpl(StickerRepository stickerRepository, DomainEventBus domainEventBus) {
+        this.stickerRepository = stickerRepository;
         this.domainEventBus = domainEventBus;
     }
 
@@ -20,13 +20,13 @@ public class MoveStickerUseCaseImpl implements MoveStickerUseCase {
     @Override
     public void execute(MoveStickerInput input, CqrsCommandOutput output) {
         try{
-            Sticker sticker = (Sticker)figureRepository.findById(input.getFigureId()).get();
+            Sticker sticker = (Sticker) stickerRepository.findById(input.getFigureId()).get();
             if(sticker.getPosition().equals(input.getPosition()))
                 return;
 
 
             sticker.move(input.getPosition(), input.getUserId());
-            figureRepository.save(sticker);
+            stickerRepository.save(sticker);
             domainEventBus.postAll(sticker);
             output.setId(input.getFigureId())
                 .setExitCode(ExitCode.SUCCESS);

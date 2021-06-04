@@ -4,7 +4,7 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.miro.entity.model.board.event.BoardEvents;
 import ntut.csie.sslab.miro.entity.model.cursor.Cursor;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 import ntut.csie.sslab.miro.usecase.cursor.create.CreateCursorInput;
 import ntut.csie.sslab.miro.usecase.cursor.create.CreateCursorUseCase;
 import ntut.csie.sslab.miro.usecase.cursor.create.CreateCursorUseCaseImpl;

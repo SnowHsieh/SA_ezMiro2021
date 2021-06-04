@@ -9,7 +9,7 @@ import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.widget.StickyNoteDto;
 import ntut.csie.selab.usecase.widget.StickyNoteDtoMapper;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,11 +31,11 @@ public class GetWidgetUseCaseTest {
     @Test
     public void get_sticky_note_should_succeed() {
         // Arrange
-        WidgetRepository widgetRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
-        GetWidgetUseCase getWidgetUseCase = new GetWidgetUseCase(widgetRepository);
+        StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
+        GetWidgetUseCase getWidgetUseCase = new GetWidgetUseCase(stickyNoteRepository);
         GetWidgetInput input = new GetWidgetInput();
         GetWidgetOutput output = new GetWidgetOutput();
-        create_single_sticky_note(widgetRepository);
+        create_single_sticky_note(stickyNoteRepository);
         input.setWidgetId("stickyNoteId");
         StickyNoteDtoMapper stickyNoteDtoMapper = new StickyNoteDtoMapper();
         StickyNoteDto stickyNoteDto;
@@ -49,11 +49,11 @@ public class GetWidgetUseCaseTest {
         Assert.assertEquals("stickyNoteId", stickyNoteViewModel.getWidgetDto().getWidgetId());
     }
 
-    private void create_single_sticky_note(WidgetRepository widgetRepository) {
+    private void create_single_sticky_note(StickyNoteRepository stickyNoteRepository) {
         String boardId = "boardId";
         String stickyNoteId = "stickyNoteId";
 
         Widget readModel = new StickyNote(stickyNoteId, boardId, new Coordinate(0, 20, 10, 30));
-        widgetRepository.save(readModel);
+        stickyNoteRepository.save(readModel);
     }
 }

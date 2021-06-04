@@ -5,7 +5,7 @@ import ntut.csie.sslab.ddd.model.DateProvider;
 import ntut.csie.sslab.ddd.model.RemoteDomainEvent;
 import ntut.csie.sslab.miro.entity.model.board.Board;
 import ntut.csie.sslab.miro.entity.model.cursor.event.CursorEvents;
-import ntut.csie.sslab.miro.entity.model.note.event.NoteEvents;
+import ntut.csie.sslab.miro.entity.model.figure.connectablefigure.note.event.NoteEvents;
 import ntut.csie.sslab.miro.usecase.EventBroadcaster;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import ntut.csie.sslab.miro.usecase.cursor.CursorRepository;

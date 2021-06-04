@@ -2,27 +2,27 @@ package ntut.csie.selab.usecase.widget.stickynote.resize;
 
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 
 import java.util.Optional;
 
 public class ResizeStickyNoteUseCase {
 
-    private WidgetRepository widgetRepository;
+    private StickyNoteRepository stickyNoteRepository;
     private DomainEventBus eventBus;
 
-    public ResizeStickyNoteUseCase(WidgetRepository widgetRepository, DomainEventBus eventBus) {
-        this.widgetRepository = widgetRepository;
+    public ResizeStickyNoteUseCase(StickyNoteRepository stickyNoteRepository, DomainEventBus eventBus) {
+        this.stickyNoteRepository = stickyNoteRepository;
         this.eventBus = eventBus;
     }
 
     public void execute(ResizeStickyNoteInput input, ResizeStickyNoteOutput output) {
-        Optional<Widget> widget = widgetRepository.findById(input.getStickyNoteId());
+        Optional<Widget> widget = stickyNoteRepository.findById(input.getStickyNoteId());
         if (widget.isPresent()) {
             Widget stickyNote = widget.get();
             stickyNote.clearDomainEvents();
             stickyNote.resize(input.getCoordinate());
-            widgetRepository.save(stickyNote);
+            stickyNoteRepository.save(stickyNote);
             eventBus.postAll(stickyNote);
 
             output.setStickyNoteId(input.getStickyNoteId());

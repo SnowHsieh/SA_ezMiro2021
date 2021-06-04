@@ -5,11 +5,11 @@ import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteDa
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
-import ntut.csie.selab.usecase.widget.WidgetRepository;
+import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 
 import java.util.Optional;
 
-public class StickyNoteRepositoryImpl implements WidgetRepository {
+public class StickyNoteRepositoryImpl implements StickyNoteRepository {
 
     private StickyNoteRepositoryPeer peer;
 
@@ -18,17 +18,17 @@ public class StickyNoteRepositoryImpl implements WidgetRepository {
     }
 
     @Override
-    public void save(Widget widget) {
+    public void save(Widget stickyNote) {
         try {
-            peer.save(StickyNoteDataMapper.domainToData((StickyNote)widget));
+            peer.save(StickyNoteDataMapper.domainToData((StickyNote) stickyNote));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void delete(Widget widget) {
-        peer.deleteById(widget.getId());
+    public void delete(Widget stickyNote) {
+        peer.deleteById(stickyNote.getId());
     }
 
     @Override

@@ -2,7 +2,7 @@ package ntut.csie.sslab.miro.adapter.controller.rest.springboot.note.move;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 import ntut.csie.sslab.miro.usecase.note.move.MoveNoteInput;
 import ntut.csie.sslab.miro.usecase.note.move.MoveNoteUseCase;
 import org.json.JSONException;
@@ -29,9 +29,9 @@ public class MoveNoteController {
         double coordinateY = 0;
 
         try {
-            JSONObject boardJSON = new JSONObject(noteInfo);
-            coordinateX = boardJSON.getJSONObject("coordinate").getDouble("x");
-            coordinateY = boardJSON.getJSONObject("coordinate").getDouble("y");
+            JSONObject noteJSON = new JSONObject(noteInfo);
+            coordinateX = noteJSON.getJSONObject("coordinate").getDouble("x");
+            coordinateY = noteJSON.getJSONObject("coordinate").getDouble("y");
         } catch (JSONException e) {
             e.printStackTrace();
         }

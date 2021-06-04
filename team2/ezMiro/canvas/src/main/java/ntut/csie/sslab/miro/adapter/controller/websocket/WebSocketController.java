@@ -1,7 +1,7 @@
 package ntut.csie.sslab.miro.adapter.controller.websocket;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 import ntut.csie.sslab.miro.usecase.board.enter.EnterBoardInput;
 import ntut.csie.sslab.miro.usecase.board.enter.EnterBoardUseCase;
 import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardInput;

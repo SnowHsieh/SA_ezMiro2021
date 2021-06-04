@@ -5,6 +5,7 @@ import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRep
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.cursor.CursorRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.FigureRepositoryImpl;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.LineRepositoryPeer;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.NoteRepositoryPeer;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
 import ntut.csie.sslab.miro.usecase.cursor.CursorRepository;
@@ -24,6 +25,9 @@ public class RepositoryInjection {
     @Autowired
     private NoteRepositoryPeer noteRepositoryPeer;
 
+    @Autowired
+    private LineRepositoryPeer lineRepositoryPeer;
+
     @Bean(name="boardRepository")
     public BoardRepository boardRepository() {
         return new BoardRepositoryImpl(boardRepositoryPeer);
@@ -31,7 +35,7 @@ public class RepositoryInjection {
 
     @Bean(name="figureRepository")
     public FigureRepository figureRepository() {
-        return new FigureRepositoryImpl(noteRepositoryPeer);
+        return new FigureRepositoryImpl(noteRepositoryPeer, lineRepositoryPeer);
     }
 
     @Bean(name="cursorRepository")

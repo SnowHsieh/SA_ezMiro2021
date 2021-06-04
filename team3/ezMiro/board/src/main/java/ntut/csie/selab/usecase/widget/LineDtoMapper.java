@@ -14,7 +14,9 @@ public class LineDtoMapper {
                 line.getCoordinate().getTopLeft().x,
                 line.getCoordinate().getTopLeft().y,
                 line.getCoordinate().getBottomRight().x,
-                line.getCoordinate().getBottomRight().y
+                line.getCoordinate().getBottomRight().y,
+                line.getHeadWidget() == null ? null : line.getHeadWidget().getId(),
+                line.getTailWidget() == null ? null : line.getTailWidget().getId()
         );
     }
 

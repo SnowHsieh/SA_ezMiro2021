@@ -17,7 +17,11 @@ import ntut.csie.sslab.miro.usecase.board.showCursor.ShowCursorUseCase;
 import ntut.csie.sslab.miro.usecase.board.showCursor.ShowCursorUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoardSessionBroadcaster;
-import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
+import ntut.csie.sslab.miro.usecase.figure.StickerRepository;
+import ntut.csie.sslab.miro.usecase.figure.line.changeSourcePosition.ChangeSourcePositionUseCase;
+import ntut.csie.sslab.miro.usecase.figure.line.changeSourcePosition.ChangeSourcePositionUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.figure.line.changeTargetPosition.ChangeTargetPositionUseCase;
+import ntut.csie.sslab.miro.usecase.figure.line.changeTargetPosition.ChangeTargetPositionUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecolor.ChangeStickerColorUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecolor.ChangeStickerColorUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecontent.ChangeStickerContentUseCase;
@@ -30,11 +34,13 @@ import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.figure.sticker.move.MoveStickerUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.move.MoveStickerUseCaseImpl;
-import ntut.csie.sslab.miro.usecase.line.DeleteLineUseCaseImpl;
-import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCaseImpl;
-import ntut.csie.sslab.miro.usecase.line.LineRepository;
-import ntut.csie.sslab.miro.usecase.line.create.CreateLineUseCase;
-import ntut.csie.sslab.miro.usecase.line.delete.DeleteLineUseCase;
+import ntut.csie.sslab.miro.usecase.figure.line.DeleteLineUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.figure.line.create.CreateLineUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.figure.line.LineRepository;
+import ntut.csie.sslab.miro.usecase.figure.line.create.CreateLineUseCase;
+import ntut.csie.sslab.miro.usecase.figure.line.delete.DeleteLineUseCase;
+import ntut.csie.sslab.miro.usecase.figure.line.move.MoveLineUseCase;
+import ntut.csie.sslab.miro.usecase.figure.line.move.MoveLineUseCaseImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,7 +51,7 @@ public class UseCaseInjection {
 
 
     @Autowired
-    private FigureRepository figureRepository;
+    private StickerRepository stickerRepository;
 
     @Autowired
     private BoardRepository boardRepository;
@@ -67,37 +73,37 @@ public class UseCaseInjection {
 
     @Bean(name="createNotifyBoardSessionBroadcaster")
     public NotifyBoardSessionBroadcaster createNotifyBoardSessionBroadcaster() {
-        return new NotifyBoardSessionBroadcaster(boardSessionBroadcaster, boardRepository, figureRepository);
+        return new NotifyBoardSessionBroadcaster(boardSessionBroadcaster, boardRepository, stickerRepository);
     }
 
     @Bean(name="createStickerUseCase")
     public CreateStickerUseCase createStickerUseCase() {
-        return new CreateStickerUseCaseImpl(figureRepository, eventBus);
+        return new CreateStickerUseCaseImpl(stickerRepository, eventBus);
     }
 
     @Bean(name="changeStickerContentUseCase")
     public ChangeStickerContentUseCase changeStickerContentUseCase() {
-        return new ChangeStickerContentUseCaseImpl(figureRepository, eventBus);
+        return new ChangeStickerContentUseCaseImpl(stickerRepository, eventBus);
     }
 
     @Bean(name="moveStickerUseCase")
     public MoveStickerUseCase moveStickerUseCase() {
-        return new MoveStickerUseCaseImpl(figureRepository, eventBus);
+        return new MoveStickerUseCaseImpl(stickerRepository, eventBus);
     }
 
     @Bean(name="changeStickerSizeUseCase")
     public ChangeStickerSizeUseCase changeStickerSizeUseCase() {
-        return new ChangeStickerSizeUseCaseImpl(figureRepository, eventBus);
+        return new ChangeStickerSizeUseCaseImpl(stickerRepository, eventBus);
     }
 
     @Bean(name="changeStickerColorUseCase")
     public ChangeStickerColorUseCase changeStickerColorUseCase() {
-        return new ChangeStickerColorUseCaseImpl(figureRepository, eventBus);
+        return new ChangeStickerColorUseCaseImpl(stickerRepository, eventBus);
     }
 
     @Bean(name="deleteStickerUseCase")
     public DeleteStickerUseCase deleteStickerUseCase() {
-        return new DeleteStickerUseCaseImpl(figureRepository, eventBus);
+        return new DeleteStickerUseCaseImpl(stickerRepository, eventBus);
     }
 
 
@@ -139,6 +145,21 @@ public class UseCaseInjection {
     @Bean(name="deleteLineUseCase")
     public DeleteLineUseCase deleteLineUseCase() {
         return new DeleteLineUseCaseImpl(lineRepository, eventBus);
+    }
+
+    @Bean(name="moveLineUseCase")
+    public MoveLineUseCase moveLineUseCase() {
+        return new MoveLineUseCaseImpl(lineRepository, eventBus);
+    }
+
+    @Bean(name="changeTargetPositionUseCase")
+    public ChangeTargetPositionUseCase changeTargetPositionUseCase() {
+        return new ChangeTargetPositionUseCaseImpl(lineRepository, eventBus);
+    }
+
+    @Bean(name="changeSourcePositionUseCase")
+    public ChangeSourcePositionUseCase changeSourcePositionUseCase() {
+        return new ChangeSourcePositionUseCaseImpl(lineRepository, eventBus);
     }
 
     @Autowired

@@ -13,11 +13,12 @@ import ntut.csie.sslab.miro.entity.model.board.event.cursor.CursorMoved;
 import ntut.csie.sslab.miro.entity.model.board.event.cursor.CursorShowed;
 import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.entity.model.figure.event.*;
-import ntut.csie.sslab.miro.entity.model.line.event.LineCreated;
-import ntut.csie.sslab.miro.entity.model.line.event.LineDeleted;
+import ntut.csie.sslab.miro.entity.model.figure.event.LineCreated;
+import ntut.csie.sslab.miro.entity.model.figure.event.LineDeleted;
+import ntut.csie.sslab.miro.entity.model.figure.event.LineMoved;
 import ntut.csie.sslab.miro.usecase.BoardSessionBroadcaster;
 import ntut.csie.sslab.miro.usecase.board.BoardRepository;
-import ntut.csie.sslab.miro.usecase.figure.FigureRepository;
+import ntut.csie.sslab.miro.usecase.figure.StickerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -27,13 +28,13 @@ public class NotifyBoardSessionBroadcaster {
 
     private BoardSessionBroadcaster boardSessionBroadcaster;
     private BoardRepository boardRepository;
-    private FigureRepository figureRepository;
+    private StickerRepository stickerRepository;
 
     @Autowired
-    public NotifyBoardSessionBroadcaster(BoardSessionBroadcaster boardSessionBroadcasters, BoardRepository boardRepository, FigureRepository figureRepository) {
+    public NotifyBoardSessionBroadcaster(BoardSessionBroadcaster boardSessionBroadcasters, BoardRepository boardRepository, StickerRepository stickerRepository) {
         this.boardSessionBroadcaster = boardSessionBroadcasters;
         this.boardRepository = boardRepository;
-        this.figureRepository = figureRepository;
+        this.stickerRepository = stickerRepository;
     }
 
     @Subscribe
@@ -45,7 +46,7 @@ public class NotifyBoardSessionBroadcaster {
 
     @Subscribe
     public void whenStickerMoved(StickerMoved stickerMoved){
-        Figure figure = figureRepository.findById(stickerMoved.getFigureId()).get();
+        Figure figure = stickerRepository.findById(stickerMoved.getFigureId()).get();
         Board board = boardRepository.findById(figure.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessions();
         boardSessions = boardSessions.stream().filter(x->!x.getUserId().equals(stickerMoved.getUserId())).collect(Collectors.toList());
@@ -54,7 +55,7 @@ public class NotifyBoardSessionBroadcaster {
 
     @Subscribe
     public void whenStickerContentChanged(StickerContentChanged stickerContentChanged){
-        Figure figure = figureRepository.findById(stickerContentChanged.getFigureId()).get();
+        Figure figure = stickerRepository.findById(stickerContentChanged.getFigureId()).get();
         Board board = boardRepository.findById(figure.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessions();
         boardSessions.forEach(each->broadcast(stickerContentChanged, each.getBoardSessionId()));
@@ -62,7 +63,7 @@ public class NotifyBoardSessionBroadcaster {
 
     @Subscribe
     public void whenStickerColorChanged(StickerColorChanged stickerColorChanged){
-        Figure figure = figureRepository.findById(stickerColorChanged.getFigureId()).get();
+        Figure figure = stickerRepository.findById(stickerColorChanged.getFigureId()).get();
         Board board = boardRepository.findById(figure.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessions();
         boardSessions.forEach(each->broadcast(stickerColorChanged, each.getBoardSessionId()));
@@ -70,7 +71,7 @@ public class NotifyBoardSessionBroadcaster {
 
     @Subscribe
     public void whenStickerSizeChanged(StickerSizeChanged stickerSizeChanged){
-        Figure figure = figureRepository.findById(stickerSizeChanged.getFigureId()).get();
+        Figure figure = stickerRepository.findById(stickerSizeChanged.getFigureId()).get();
         Board board = boardRepository.findById(figure.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessions();
         boardSessions.forEach(each->broadcast(stickerSizeChanged, each.getBoardSessionId()));
@@ -144,6 +145,27 @@ public class NotifyBoardSessionBroadcaster {
         Board board = boardRepository.findById(lineDeleted.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessions();
         boardSessions.forEach(each->broadcast(lineDeleted, each.getBoardSessionId()));
+    }
+
+    @Subscribe
+    public void whenLineMoved(LineMoved lineMoved) {
+        Board board = boardRepository.findById(lineMoved.getBoardId()).get();
+        List<BoardSession> boardSessions = board.getBoardSessions();
+        boardSessions.forEach(each->broadcast(lineMoved, each.getBoardSessionId()));
+    }
+
+    @Subscribe
+    public void whenLineTargetPositionChanged(LineTargetPositionChanged lineTargetPositionChanged) {
+        Board board = boardRepository.findById(lineTargetPositionChanged.getBoardId()).get();
+        List<BoardSession> boardSessions = board.getBoardSessions();
+        boardSessions.forEach(each->broadcast(lineTargetPositionChanged, each.getBoardSessionId()));
+    }
+
+    @Subscribe
+    public void whenLineSourcePositionChanged(LineSourcePositionChanged lineSourcePositionChanged) {
+        Board board = boardRepository.findById(lineSourcePositionChanged.getBoardId()).get();
+        List<BoardSession> boardSessions = board.getBoardSessions();
+        boardSessions.forEach(each->broadcast(lineSourcePositionChanged, each.getBoardSessionId()));
     }
 
     @Subscribe

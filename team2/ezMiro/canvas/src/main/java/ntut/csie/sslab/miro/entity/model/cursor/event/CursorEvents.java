@@ -1,7 +1,7 @@
 package ntut.csie.sslab.miro.entity.model.cursor.event;
 
 import ntut.csie.sslab.ddd.model.DomainEvent;
-import ntut.csie.sslab.miro.entity.model.note.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.Coordinate;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -16,7 +16,7 @@ public interface CursorEvents extends DomainEvent {
         private final Coordinate coordinate;
         private final Instant occurredOn;
 
-        public CursorCreated(UUID id, String cursorId, String boardId, String userId, Coordinate coordinate, Instant occurredOn) {
+        public CursorCreated(UUID id, String cursorId, String userId, Coordinate coordinate, String boardId, Instant occurredOn) {
             this.id = id;
             this.cursorId = cursorId;
             this.boardId = boardId;
@@ -62,7 +62,7 @@ public interface CursorEvents extends DomainEvent {
         private final Coordinate coordinate;
         private final Instant occurredOn;
 
-        public CursorMoved(UUID id, String cursorId, String boardId, String userId, Coordinate coordinate, Instant occurredOn) {
+        public CursorMoved(UUID id, String cursorId, String userId, Coordinate coordinate, String boardId, Instant occurredOn) {
             this.id = id;
             this.cursorId = cursorId;
             this.boardId = boardId;

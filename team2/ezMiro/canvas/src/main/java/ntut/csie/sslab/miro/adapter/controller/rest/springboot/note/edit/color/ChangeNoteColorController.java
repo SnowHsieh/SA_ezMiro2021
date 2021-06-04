@@ -27,8 +27,8 @@ public class ChangeNoteColorController {
         String color = "#FFF9B1";
 
         try {
-            JSONObject boardJSON = new JSONObject(noteInfo);
-            color = boardJSON.getString("color");
+            JSONObject noteJSON = new JSONObject(noteInfo);
+            color = noteJSON.getString("color");
         } catch (JSONException e) {
             e.printStackTrace();
         }
