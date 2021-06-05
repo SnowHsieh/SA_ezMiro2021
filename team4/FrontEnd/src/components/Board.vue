@@ -496,6 +496,30 @@ export default {
           'mouse:up': function (e) {
             if (e.target && e.target.type === 'circle') {
               _this.canvas.getObjects().filter(x => x.type === 'group').some(function (stickyNote) {
+                let res
+                const promise1 = new Promise((resolve, reject) => {
+                  if (stickyNote.attachPointSet.has(e.target)) {
+                    stickyNote.attachPointSet.delete(e.target)
+                    const line = e.target.line1 ? e.target.line1 : e.target.line2
+                    if (line.srcPoint === e.target) {
+                      res = unattachTextfigure(_this.boardId, line.get('id'), 'source')
+                      console.log('506', res)
+                      resolve(res)
+                    } else if (line.destPoint === e.target) {
+                      res = unattachTextfigure(_this.boardId, line.get('id'), 'destination')
+                      console.log('510', res)
+                      resolve(res)
+                    }
+                  }
+                })
+                // console.log('res', res)
+                // console.log('res', res.status)
+                console.log('promise1', promise1)
+                promise1.then((res) => {
+                  console.log('Yay! ' + res)
+                  // console.log('Yay! ' + res.data)
+                })
+                // solve change sn
                 if (e.target.intersectsWithObject(stickyNote)) {
                   stickyNote.attachPointSet.add(e.target)
                   e.target.xOffset = (e.target.get('left') - stickyNote.get('left')) / stickyNote.width

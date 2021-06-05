@@ -78,7 +78,8 @@ export const unattachTextfigure = async (boardId, lineId, attachEndPointKind) =>
         attachEndPointKind: attachEndPointKind
       }
     )
-    return res
+    console.log('unattachTextfigure api: ', res.status)
+    return res.status
   } catch (err) {
     console.log(err)
   }
