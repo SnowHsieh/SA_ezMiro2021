@@ -62,7 +62,7 @@ import {
 export default {
   data () {
     return {
-      boardId: 'b8ffd09e-9063-45c1-b59c-13ac1e454685',
+      boardId: '496daa2a-1c81-4fa9-8d22-e9f94ceff97d',
       canvasContext: null,
       boardContent: null,
       canvas: null,

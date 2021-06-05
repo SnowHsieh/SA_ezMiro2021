@@ -32,6 +32,7 @@ public class ChangeFigureOrderListOnBoardUseCase {
 
 
         board.setCommittedFigureListOrder(input.getCommittedFigureListOrder());
+        this.boardRepository.save(board);
         this.domainEventBus.postAll(board);
         output.setId(input.getBoardId().toString());
         output.setExitCode(ExitCode.SUCCESS);

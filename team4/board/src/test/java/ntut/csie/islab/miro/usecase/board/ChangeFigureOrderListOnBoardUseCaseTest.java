@@ -57,6 +57,7 @@ public class ChangeFigureOrderListOnBoardUseCaseTest extends AbstractSpringBootJ
         assertEquals(figureId_0,resultFigureOrderList.get(0).getFigureId());
         assertEquals(figureId_1,resultFigureOrderList.get(1).getFigureId());
 
+        // todo : test_modifyFigureUseCase not test board saved in repository
 
     }
 }
