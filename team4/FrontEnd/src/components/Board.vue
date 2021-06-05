@@ -54,6 +54,7 @@ import { webSocketHostIp } from '../config/config.js'
 import uuidGenerator from '../utils/uuidGenerator.js'
 import {
   attachTextfigure,
+  unattachTextfigure,
   changeLinePath,
   createLineApi,
   deleteLine
@@ -61,7 +62,7 @@ import {
 export default {
   data () {
     return {
-      boardId: '5871e77e-0d89-49a3-98d3-6f34637f88c6',
+      boardId: 'b8ffd09e-9063-45c1-b59c-13ac1e454685',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -277,7 +278,7 @@ export default {
         const objects = this.canvas.getObjects()
         const figureList = []
         for (let i = 0; i < objects.length; i++) {
-          if (objects[i].get('objectType') !== 'cursor') {
+          if (objects[i].get('objectType') !== 'cursor' && objects[i].get('id')) {
             figureList.push(objects[i].get('id'))
           }
         }
@@ -493,6 +494,8 @@ export default {
         {
           'mouse:up': function (e) {
             if (e.target && e.target.type === 'circle') {
+              let isPointAttached = false
+              // isPointAttached is designed to check if endpoint is attached, when isPointAttached is true means endpoint is attached.
               _this.canvas.getObjects().filter(x => x.type === 'group').some(function (stickyNote) {
                 if (e.target.intersectsWithObject(stickyNote)) {
                   stickyNote.attachPoint = e.target // this is a circle
@@ -501,15 +504,27 @@ export default {
                   const line = e.target.line1 ? e.target.line1 : e.target.line2
                   if (line.srcPoint === e.target) {
                     attachTextfigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'source')
+                    isPointAttached = true
                     return true
                   } else if (line.destPoint === e.target) {
                     attachTextfigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'destination')
+                    isPointAttached = true
                     return true
                   }
                 }
               })
-            } else {
-              _this.hideContextMenu()
+
+              if (isPointAttached === false) {
+                const line = e.target.line1 ? e.target.line1 : e.target.line2
+                _this.canvas.getObjects().filter(x => (x.attachPoint && x.attachPoint === e.target)).forEach(function (stickyNote) {
+                  stickyNote.attachPoint = undefined
+                  if (line.srcPoint === e.target) {
+                    unattachTextfigure(_this.boardId, line.get('id'), 'source')
+                  } else if (line.destPoint === e.target) {
+                    unattachTextfigure(_this.boardId, line.get('id'), 'destination')
+                  }
+                })
+              }
             }
           }
         })

@@ -69,3 +69,17 @@ export const attachTextfigure = async (boardId, lineId, textFigureId, attachEndP
     console.log(err)
   }
 }
+
+export const unattachTextfigure = async (boardId, lineId, attachEndPointKind) => {
+  try {
+    const res = await axios.post(`${hostIp}/board/${boardId}/unattachTextfigure`,
+      {
+        figureId: lineId,
+        attachEndPointKind: attachEndPointKind
+      }
+    )
+    return res
+  } catch (err) {
+    console.log(err)
+  }
+}
