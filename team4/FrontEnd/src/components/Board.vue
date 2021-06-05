@@ -61,7 +61,7 @@ import {
 export default {
   data () {
     return {
-      boardId: '4a18d70e-e8f6-43b8-9155-89c4817276d1',
+      boardId: '5871e77e-0d89-49a3-98d3-6f34637f88c6',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -159,9 +159,9 @@ export default {
           _this.makeLightCircle(line.points[i].x, line.points[i].y, line, line, line.get('id'))
         )
         i++
-        // if (i === figure.positionList.length - 1) {
-        //   break
-        // }
+        if (i === figure.positionList.length - 1) {
+          break
+        }
         _this.canvas.add(
           _this.makeDarkCircle(line.points[i].x, line.points[i].y, line, line, line.get('id'))
         )
@@ -172,9 +172,13 @@ export default {
         line.srcPoint,
         line.destPoint
       )
+
       this.associationMap.push({
         key: line,
-        value: figure.attachedTextFigureIdList
+        value: {
+          srcTextFigureId: figure.srcTextFigureId,
+          destTextFigureId: figure.destTextFigureId
+        }
       })
       this.canvas.renderAll()
     },
@@ -305,22 +309,22 @@ export default {
         }
       })
       this.associationMap.forEach(lineItem => {
-        lineItem.value.forEach(attachedTextFigureId => {
-          console.log(attachedTextFigureId)
-          _this.canvas.getObjects().filter(object => object.id === attachedTextFigureId).forEach(item => {
-            console.log('sObject', item)
-            if (item.intersectsWithObject(lineItem.key.srcPoint) || item.intersectsWithObject(lineItem.key.destPoint)) {
-              item.attachPoint = item.intersectsWithObject(lineItem.key.srcPoint) ? lineItem.key.srcPoint : lineItem.key.destPoint
-              item.attachPoint.xOffset = (item.attachPoint.get('left') - item.get('left')) / item.width
-              item.attachPoint.yOffset = (item.attachPoint.get('top') - item.get('top')) / item.height
-            }
-            // item.attachPoint = lineItem.key.srcPoint === null ? lineItem.key.destPoint : lineItem.key.srcPoint
-            // console.log(lineItem.key.srcPoint, lineItem.key.destPoint)
+        _this.canvas.getObjects().filter(object => object.type === 'group').forEach(stickyNoteOnCanvas => {
+          console.log('314 stickyNoteOnCanvas.id', stickyNoteOnCanvas.id, ' lineItem.value.srcTextFigureId ', lineItem.value.srcTextFigureId, lineItem.value.destTextFigureId)
+          if (lineItem.value.srcTextFigureId && lineItem.value.srcTextFigureId === stickyNoteOnCanvas.id) {
+            console.log('sObject1', stickyNoteOnCanvas)
+            stickyNoteOnCanvas.attachPoint = lineItem.key.srcPoint
+            stickyNoteOnCanvas.attachPoint.xOffset = (stickyNoteOnCanvas.attachPoint.get('left') - stickyNoteOnCanvas.get('left')) / stickyNoteOnCanvas.width
+            stickyNoteOnCanvas.attachPoint.yOffset = (stickyNoteOnCanvas.attachPoint.get('top') - stickyNoteOnCanvas.get('top')) / stickyNoteOnCanvas.height
           }
-          )
+          if (lineItem.value.destTextFigureId && lineItem.value.destTextFigureId === stickyNoteOnCanvas.id) {
+            console.log('sObject2', stickyNoteOnCanvas)
+            stickyNoteOnCanvas.attachPoint = lineItem.key.destPoint
+            stickyNoteOnCanvas.attachPoint.xOffset = (stickyNoteOnCanvas.attachPoint.get('left') - stickyNoteOnCanvas.get('left')) / stickyNoteOnCanvas.width
+            stickyNoteOnCanvas.attachPoint.yOffset = (stickyNoteOnCanvas.attachPoint.get('top') - stickyNoteOnCanvas.get('top')) / stickyNoteOnCanvas.height
+          }
         })
       }
-
       )
     },
     addStickyNote (figure) {
@@ -341,8 +345,7 @@ export default {
         fontSize: figure.style.fontSize,
         originX: 'center',
         originY: 'center'
-      }
-      )
+      })
       var group = new fabric.Group([rect, text], {
         id: figure.figureId,
         content: figure.content,
@@ -433,50 +436,50 @@ export default {
               _this.canvas.setActiveObject(e.target) // right click
               _this.activeObjects = _this.canvas.getActiveObjects()
               _this.showContextMenu(e)
-            // else if (e.target === null && e.button === 1) {
-            //   // 點畫布的時候才畫線
-            //   var pointer = this.getPointer(e)
-            //   var positionX = pointer.x
-            //   var positionY = pointer.y
-            //   // console.log(positionX, positionY)
-            //   var circlePoint = new fabric.Circle({
-            //     radius: 5,
-            //     fill: 'blue',
-            //     left: positionX,
-            //     top: positionY,
-            //     selectable: true,
-            //     originX: 'center',
-            //     originY: 'center',
-            //     hoverCursor: 'auto'
-            //   })
-            //   _this.linelist.push(circlePoint)
-            //   if (_this.linelist.length > 1) {
-            //     var startPoint = _this.linelist[0]
-            //     var endPoint = _this.linelist[1]
-            //     console.log(startPoint, endPoint)
-            //     var lineFigure = new fabric.Line(
-            //       [
-            //         startPoint.get('left'),
-            //         startPoint.get('top'),
-            //         endPoint.get('left'),
-            //         endPoint.get('top')
-            //       ],
-            //       {
-            //         stroke: 'blue',
-            //         strokeWidth: 4,
-            //         hasControls: false,
-            //         hasBorders: false,
-            //         selectable: false,
-            //         lockMovementX: true,
-            //         lockMovementY: true,
-            //         hoverCursor: 'default',
-            //         originX: 'center',
-            //         originY: 'center'
-            //       }
-            //     )
-            //     _this.createLine(lineFigure)
-            //     _this.linelist.length = 0 // clear linelist
-            //   }
+              // else if (e.target === null && e.button === 1) {
+              //   // 點畫布的時候才畫線
+              //   var pointer = this.getPointer(e)
+              //   var positionX = pointer.x
+              //   var positionY = pointer.y
+              //   // console.log(positionX, positionY)
+              //   var circlePoint = new fabric.Circle({
+              //     radius: 5,
+              //     fill: 'blue',
+              //     left: positionX,
+              //     top: positionY,
+              //     selectable: true,
+              //     originX: 'center',
+              //     originY: 'center',
+              //     hoverCursor: 'auto'
+              //   })
+              //   _this.linelist.push(circlePoint)
+              //   if (_this.linelist.length > 1) {
+              //     var startPoint = _this.linelist[0]
+              //     var endPoint = _this.linelist[1]
+              //     console.log(startPoint, endPoint)
+              //     var lineFigure = new fabric.Line(
+              //       [
+              //         startPoint.get('left'),
+              //         startPoint.get('top'),
+              //         endPoint.get('left'),
+              //         endPoint.get('top')
+              //       ],
+              //       {
+              //         stroke: 'blue',
+              //         strokeWidth: 4,
+              //         hasControls: false,
+              //         hasBorders: false,
+              //         selectable: false,
+              //         lockMovementX: true,
+              //         lockMovementY: true,
+              //         hoverCursor: 'default',
+              //         originX: 'center',
+              //         originY: 'center'
+              //       }
+              //     )
+              //     _this.createLine(lineFigure)
+              //     _this.linelist.length = 0 // clear linelist
+              //   }
             } else {
               _this.hideContextMenu()
             }
@@ -490,17 +493,17 @@ export default {
         {
           'mouse:up': function (e) {
             if (e.target && e.target.type === 'circle') {
-              _this.canvas.getObjects().some(function (item) {
-                if (item.type === 'group' && e.target.intersectsWithObject(item)) {
-                  console.log('mouse:up', item)
-                  item.attachPoint = e.target // this is a circle
-                  e.target.xOffset = (e.target.get('left') - item.get('left')) / item.width
-                  e.target.yOffset = (e.target.get('top') - item.get('top')) / item.height
-                  console.log(e.target)
+              _this.canvas.getObjects().filter(x => x.type === 'group').some(function (stickyNote) {
+                if (e.target.intersectsWithObject(stickyNote)) {
+                  stickyNote.attachPoint = e.target // this is a circle
+                  e.target.xOffset = (e.target.get('left') - stickyNote.get('left')) / stickyNote.width
+                  e.target.yOffset = (e.target.get('top') - stickyNote.get('top')) / stickyNote.height
                   const line = e.target.line1 ? e.target.line1 : e.target.line2
-                  console.log('line:', line)
-                  if (line) {
-                    attachTextfigure(_this.boardId, line.get('id'), item.get('id'))
+                  if (line.srcPoint === e.target) {
+                    attachTextfigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'source')
+                    return true
+                  } else if (line.destPoint === e.target) {
+                    attachTextfigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'destination')
                     return true
                   }
                 }

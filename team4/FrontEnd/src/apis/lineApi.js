@@ -55,12 +55,13 @@ export const changeLinePath = async (boardId, figure) => {
   }
 }
 
-export const attachTextfigure = async (boardId, lineId, textFigureId) => {
+export const attachTextfigure = async (boardId, lineId, textFigureId, attachEndPointKind) => {
   try {
     const res = await axios.post(`${hostIp}/board/${boardId}/attachTextfigure`,
       {
         figureId: lineId,
-        textFigureId: textFigureId
+        textFigureId: textFigureId,
+        attachEndPointKind: attachEndPointKind
       }
     )
     return res
