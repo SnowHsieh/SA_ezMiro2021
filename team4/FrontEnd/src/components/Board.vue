@@ -62,7 +62,7 @@ import {
 export default {
   data () {
     return {
-      boardId: '496daa2a-1c81-4fa9-8d22-e9f94ceff97d',
+      boardId: '7e888852-e099-4f26-a513-c37e5f65ec86',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -314,15 +314,15 @@ export default {
           console.log('314 stickyNoteOnCanvas.id', stickyNoteOnCanvas.id, ' lineItem.value.srcTextFigureId ', lineItem.value.srcTextFigureId, lineItem.value.destTextFigureId)
           if (lineItem.value.srcTextFigureId && lineItem.value.srcTextFigureId === stickyNoteOnCanvas.id) {
             console.log('sObject1', stickyNoteOnCanvas)
-            stickyNoteOnCanvas.attachPoint = lineItem.key.srcPoint
-            stickyNoteOnCanvas.attachPoint.xOffset = (stickyNoteOnCanvas.attachPoint.get('left') - stickyNoteOnCanvas.get('left')) / stickyNoteOnCanvas.width
-            stickyNoteOnCanvas.attachPoint.yOffset = (stickyNoteOnCanvas.attachPoint.get('top') - stickyNoteOnCanvas.get('top')) / stickyNoteOnCanvas.height
+            lineItem.key.srcPoint.xOffset = (lineItem.key.srcPoint.get('left') - stickyNoteOnCanvas.get('left')) / stickyNoteOnCanvas.width
+            lineItem.key.srcPoint.yOffset = (lineItem.key.srcPoint.get('top') - stickyNoteOnCanvas.get('top')) / stickyNoteOnCanvas.height
+            stickyNoteOnCanvas.attachPointSet.add(lineItem.key.srcPoint)
           }
           if (lineItem.value.destTextFigureId && lineItem.value.destTextFigureId === stickyNoteOnCanvas.id) {
             console.log('sObject2', stickyNoteOnCanvas)
-            stickyNoteOnCanvas.attachPoint = lineItem.key.destPoint
-            stickyNoteOnCanvas.attachPoint.xOffset = (stickyNoteOnCanvas.attachPoint.get('left') - stickyNoteOnCanvas.get('left')) / stickyNoteOnCanvas.width
-            stickyNoteOnCanvas.attachPoint.yOffset = (stickyNoteOnCanvas.attachPoint.get('top') - stickyNoteOnCanvas.get('top')) / stickyNoteOnCanvas.height
+            lineItem.key.destPoint.xOffset = (lineItem.key.destPoint.get('left') - stickyNoteOnCanvas.get('left')) / stickyNoteOnCanvas.width
+            lineItem.key.destPoint.yOffset = (lineItem.key.destPoint.get('top') - stickyNoteOnCanvas.get('top')) / stickyNoteOnCanvas.height
+            stickyNoteOnCanvas.attachPointSet.add(lineItem.key.destPoint)
           }
         })
       }
@@ -352,7 +352,8 @@ export default {
         content: figure.content,
         top: figure.position.y,
         left: figure.position.x,
-        subTargetCheck: true
+        subTargetCheck: true,
+        attachPointSet: new Set()
       })
       this.canvas.add(group)
       this.canvas.renderAll()
@@ -494,37 +495,38 @@ export default {
         {
           'mouse:up': function (e) {
             if (e.target && e.target.type === 'circle') {
-              let isPointAttached = false
-              // isPointAttached is designed to check if endpoint is attached, when isPointAttached is true means endpoint is attached.
               _this.canvas.getObjects().filter(x => x.type === 'group').some(function (stickyNote) {
                 if (e.target.intersectsWithObject(stickyNote)) {
-                  stickyNote.attachPoint = e.target // this is a circle
+                  stickyNote.attachPointSet.add(e.target)
                   e.target.xOffset = (e.target.get('left') - stickyNote.get('left')) / stickyNote.width
                   e.target.yOffset = (e.target.get('top') - stickyNote.get('top')) / stickyNote.height
                   const line = e.target.line1 ? e.target.line1 : e.target.line2
                   if (line.srcPoint === e.target) {
-                    attachTextfigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'source')
-                    isPointAttached = true
+                    setTimeout(function () {
+                      attachTextfigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'source')
+                    }, 500)
                     return true
                   } else if (line.destPoint === e.target) {
-                    attachTextfigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'destination')
-                    isPointAttached = true
+                    setTimeout(function () {
+                      attachTextfigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'destination')
+                    }, 500)
                     return true
                   }
                 }
               })
-
-              if (isPointAttached === false) {
-                const line = e.target.line1 ? e.target.line1 : e.target.line2
-                _this.canvas.getObjects().filter(x => (x.attachPoint && x.attachPoint === e.target)).forEach(function (stickyNote) {
-                  stickyNote.attachPoint = undefined
-                  if (line.srcPoint === e.target) {
-                    unattachTextfigure(_this.boardId, line.get('id'), 'source')
-                  } else if (line.destPoint === e.target) {
-                    unattachTextfigure(_this.boardId, line.get('id'), 'destination')
-                  }
-                })
-              }
+              // if (isPointAttached === false) {
+              //   const line = e.target.line1 ? e.target.line1 : e.target.line2
+              //   _this.canvas.getObjects().filter(x => x.attachPointSet !== undefined).forEach(function (stickyNote) {
+              //     if (stickyNote.attachPointSet.has(e.target)) {
+              //       stickyNote.attachPointSet.delete(e.target)
+              //       if (line.srcPoint === e.target) {
+              //         unattachTextfigure(_this.boardId, line.get('id'), 'source')
+              //       } else if (line.destPoint === e.target) {
+              //         unattachTextfigure(_this.boardId, line.get('id'), 'destination')
+              //       }
+              //     }
+              //   })
+              // }
             }
           }
         })
@@ -550,14 +552,13 @@ export default {
               if (_this.updateFigureFlag) {
                 _this.moveStickyNote(e.target)
                 _this.updateFigureFlag = false
-                if (e.target.attachPoint !== undefined) {
-                  var attachPoint = e.target.attachPoint
+                e.target.attachPointSet.forEach(function (attachPoint) {
                   const newPositionX = e.target.get('left') + attachPoint.xOffset * e.target.width
                   const newPositionY = e.target.get('top') + attachPoint.yOffset * e.target.height
                   attachPoint.set('left', newPositionX)
                   attachPoint.set('top', newPositionY)
                   _this.canvas.fire('object:moved', { target: attachPoint })
-                }
+                })
               }
             }
           }
