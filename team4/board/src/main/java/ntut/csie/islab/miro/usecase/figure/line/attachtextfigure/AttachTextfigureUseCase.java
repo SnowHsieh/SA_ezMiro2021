@@ -26,11 +26,11 @@ public class AttachTextfigureUseCase {
         if (null == line) {
             output.setId(input.getFigureId().toString())
                     .setExitCode(ExitCode.FAILURE)
-                    .setMessage("Delete line failed: line not found, line id = " + input.getFigureId());
+                    .setMessage("Attach line to figure failed: line not found, line id = " + input.getFigureId());
             return;
         }
-        line.attachTextFigure(input.getTextFigureId());
-        System.out.println("getAttachedTextFigureIdList size:" + line.getAttachedTextFigureIdList().size());
+        line.attachTextFigure(input.getTextFigureId(),input.getAttachEndPointKind());
+
         lineRepository.save((Line) line);
         domainEventBus.postAll(line);
         output.setId(line.getId().toString());

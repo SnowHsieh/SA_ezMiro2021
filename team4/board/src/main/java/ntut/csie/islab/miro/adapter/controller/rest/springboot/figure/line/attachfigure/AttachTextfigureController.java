@@ -29,19 +29,22 @@ public class AttachTextfigureController {
                                                  @RequestBody String lineInfo) {
         UUID figureId = null;
         UUID textFigureId = null;
+        String attachEndPointKind ="";
         try {
             JSONObject lineJSON = new JSONObject(lineInfo);
             figureId = UUID.fromString(lineJSON.getString("figureId"));
             textFigureId = UUID.fromString(lineJSON.getString("textFigureId"));
+            attachEndPointKind = lineJSON.getString("attachEndPointKind");
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println("attachTextfigure:" + figureId  + ";"+ textFigureId);
+        System.out.println("attachTextfigure:" + figureId  + ";"+ textFigureId+"; "+attachEndPointKind);
         AttachTextfigureInput input = attachTextfigureUseCase.newInput();
         input.setBoardId(boardId);
         input.setFigureId(figureId);
         input.setTextFigureId(textFigureId);
+        input.setAttachEndPointKind(attachEndPointKind);
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
         attachTextfigureUseCase.execute(input, presenter);
         return presenter.buildViewModel();

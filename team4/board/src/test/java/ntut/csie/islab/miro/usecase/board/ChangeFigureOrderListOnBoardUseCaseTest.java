@@ -30,7 +30,6 @@ public class ChangeFigureOrderListOnBoardUseCaseTest extends AbstractSpringBootJ
 
     @Test
     public void test_modifyFigureUseCase(){
-
         assertEquals(0,board.getCommittedFigures().size());
         ChangeFigureOrderListOnBoardUseCase changeFigureOrderListOnBoardUseCase = new ChangeFigureOrderListOnBoardUseCase(boardRepository, domainEventBus);
         ChangeFigureOrderListOnBoardInput input = changeFigureOrderListOnBoardUseCase.newInput();

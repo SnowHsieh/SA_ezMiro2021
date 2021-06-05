@@ -61,7 +61,7 @@ import {
 export default {
   data () {
     return {
-      boardId: '9b283903-027b-43ab-a92f-61e825c6f145',
+      boardId: '4a18d70e-e8f6-43b8-9155-89c4817276d1',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -159,9 +159,9 @@ export default {
           _this.makeLightCircle(line.points[i].x, line.points[i].y, line, line, line.get('id'))
         )
         i++
-        if (i === figure.positionList.length - 1) {
-          break
-        }
+        // if (i === figure.positionList.length - 1) {
+        //   break
+        // }
         _this.canvas.add(
           _this.makeDarkCircle(line.points[i].x, line.points[i].y, line, line, line.get('id'))
         )
@@ -493,7 +493,7 @@ export default {
               _this.canvas.getObjects().some(function (item) {
                 if (item.type === 'group' && e.target.intersectsWithObject(item)) {
                   console.log('mouse:up', item)
-                  item.attachPoint = e.target // stickynote attribure
+                  item.attachPoint = e.target // this is a circle
                   e.target.xOffset = (e.target.get('left') - item.get('left')) / item.width
                   e.target.yOffset = (e.target.get('top') - item.get('top')) / item.height
                   console.log(e.target)

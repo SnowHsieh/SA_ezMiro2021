@@ -7,7 +7,7 @@ public class AttachTextfigureInput {
     private UUID boardId;
     private UUID figureId;
     private UUID textFigureId;
-
+    private String attachEndPointKind;
     public UUID getBoardId() {
         return boardId;
     }
@@ -30,5 +30,13 @@ public class AttachTextfigureInput {
 
     public void setTextFigureId(UUID textFigureId) {
         this.textFigureId = textFigureId;
+    }
+
+    public String getAttachEndPointKind() {
+        return attachEndPointKind;
+    }
+
+    public void setAttachEndPointKind(String attachEndPointKind) {
+        this.attachEndPointKind = attachEndPointKind;
     }
 }

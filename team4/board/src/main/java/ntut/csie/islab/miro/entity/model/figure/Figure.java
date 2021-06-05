@@ -14,7 +14,8 @@ public abstract class Figure extends AggregateRoot<UUID> {
     private UUID boardId;
     // line
     private List<Position> positionList;
-    private List<UUID> attachedTextFigureIdList;
+    private UUID srcTextFigureId;
+    private UUID destTextFigureId;
     private ArrowKindEnum srcArrowKind; //NONE,CIRCLE,ARROW
     private ArrowKindEnum destArrowKind; //NONE,CIRCLE,ARROW
     private int strokeWidth;
@@ -34,7 +35,6 @@ public abstract class Figure extends AggregateRoot<UUID> {
         this.destArrowKind = ArrowKindEnum.NONE;
         this.strokeWidth = strokeWidth;
         this.color = color;
-        this.attachedTextFigureIdList = new ArrayList<>();
     }
 
     public Figure(UUID boardId, UUID figureId, List<Position> positionList, int strokeWidth, String color) {
@@ -45,7 +45,6 @@ public abstract class Figure extends AggregateRoot<UUID> {
         this.destArrowKind = ArrowKindEnum.NONE;
         this.strokeWidth = strokeWidth;
         this.color = color;
-        this.attachedTextFigureIdList = new ArrayList<>();
     }
 
     // textFigure
@@ -117,14 +116,6 @@ public abstract class Figure extends AggregateRoot<UUID> {
         this.color = color;
     }
 
-    public List<UUID> getAttachedTextFigureIdList() {
-        return attachedTextFigureIdList;
-    }
-
-    public void setAttachedTextFigureIdList(List<UUID> attachedTextFigureIdList) {
-        this.attachedTextFigureIdList = attachedTextFigureIdList;
-    }
-
     public Position getPosition() {
         return position;
     }
@@ -149,6 +140,22 @@ public abstract class Figure extends AggregateRoot<UUID> {
         this.style = style;
     }
 
+    public UUID getSrcTextFigureId() {
+        return srcTextFigureId;
+    }
+
+    public void setSrcTextFigureId(UUID srcTextFigureId) {
+        this.srcTextFigureId = srcTextFigureId;
+    }
+
+    public UUID getDestTextFigureId() {
+        return destTextFigureId;
+    }
+
+    public void setDestTextFigureId(UUID destTextFigureId) {
+        this.destTextFigureId = destTextFigureId;
+    }
+
     public abstract void markAsRemoved(UUID boardId, UUID figureId);
 
     public abstract void changeContent(String newContent);
@@ -163,5 +170,5 @@ public abstract class Figure extends AggregateRoot<UUID> {
 
     public abstract void changeLinePath(List<Position> positionList);
 
-    public abstract void attachTextFigure(UUID figureId);
+    public abstract void attachTextFigure(UUID figureId,String attachEndPointKind);
 }

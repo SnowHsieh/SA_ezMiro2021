@@ -78,9 +78,9 @@ public class StickyNote extends TextFigure {
     }
 
     @Override
-    public void attachTextFigure(UUID figureId) {
-
+    public void attachTextFigure(UUID figureId, String attachEndPointKind) {
     }
+
 
     private Boolean isValidSide(double newWidth,double newHeight){
         return newWidth > 0 && newHeight > 0;

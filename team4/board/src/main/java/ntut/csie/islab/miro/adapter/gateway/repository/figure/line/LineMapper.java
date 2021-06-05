@@ -28,12 +28,14 @@ public class LineMapper {
                 lineData.getStrokeWidth(),
                 lineData.getColor()
         );
-        List<UUID> attachedTextFigureIdList = new ArrayList<>();
-        for (AttachedTextFigureIdData attachedTextFigureIdData : lineData.getAttachedTextFigureIdDataList()) {
-            attachedTextFigureIdList.add(UUID.fromString(attachedTextFigureIdData.getAttachedTextFigureId()));
+
+        if(!lineData.getSrcTextFigureId().equals("")) {
+            line.setSrcTextFigureId(UUID.fromString(lineData.getSrcTextFigureId()));
+        }
+        if(!lineData.getDestTextFigureId().equals("")) {
+            line.setDestTextFigureId(UUID.fromString(lineData.getDestTextFigureId()));
         }
 
-        line.setAttachedTextFigureIdList(attachedTextFigureIdList);
         line.clearDomainEvents();
         return line;
     }
@@ -60,16 +62,6 @@ public class LineMapper {
             positionDataList.add(item);
         }
 
-        List<AttachedTextFigureIdData> attachedTextFigureDataIdList = new ArrayList<>();
-        List<UUID> attachedTextFigureIdList = line.getAttachedTextFigureIdList();
-        for (int i =0 ; i < attachedTextFigureIdList.size() ; i++) {
-            AttachedTextFigureIdData item = new AttachedTextFigureIdData(
-                    line.getFigureId().toString(),
-                    attachedTextFigureIdList.get(i).toString()
-            );
-            attachedTextFigureDataIdList.add(item);
-        }
-
         LineData lineData = new LineData(
                 line.getBoardId().toString(),
                 line.getId().toString(),
@@ -77,9 +69,16 @@ public class LineMapper {
                 line.getStrokeWidth(),
                 line.getColor(),
                 line.getSrcArrowKind().ordinal(),
-                line.getDestArrowKind().ordinal(),
-                attachedTextFigureDataIdList
+                line.getDestArrowKind().ordinal()
         );
+
+        if(line.getSrcTextFigureId()!=null) {
+            lineData.setSrcTextFigureId(line.getSrcTextFigureId().toString());
+        }
+        if(line.getDestTextFigureId()!=null) {
+            lineData.setDestTextFigureId(line.getDestTextFigureId().toString());
+        }
+
 
         return lineData;
     }

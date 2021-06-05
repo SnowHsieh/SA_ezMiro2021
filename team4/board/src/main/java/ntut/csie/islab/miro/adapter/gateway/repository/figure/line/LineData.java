@@ -31,18 +31,20 @@ public class LineData {
     @Column(name = "dest_endpoint_kind")
     private int destEndpointKind;
 
+    @Column(name = "src_text_figureId")
+    private String srcTextFigureId;
+
+    @Column(name = "dest_text_figureId")
+    private String destTextFigureId;
+
     @OrderBy("pointOrder")
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<PositionData> positionDataList;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
-    private Set<AttachedTextFigureIdData> attachedTextFigureIdDataList;
-
     public LineData(){
-
     }
 
-    public LineData(String boardId, String lineId, List<PositionData> positionDataList, int strokeWidth, String color, int srcEndpointKind, int destEndpointKind, List<AttachedTextFigureIdData> attachedTextFigureIdDataList) {
+    public LineData(String boardId, String lineId, List<PositionData> positionDataList, int strokeWidth, String color, int srcEndpointKind, int destEndpointKind) {
         this.lineId = lineId;
         this.boardId = boardId;
         this.strokeWidth = strokeWidth;
@@ -50,7 +52,8 @@ public class LineData {
         this.srcEndpointKind = srcEndpointKind;
         this.destEndpointKind = destEndpointKind;
         this.positionDataList = new HashSet<PositionData>(positionDataList);
-        this.attachedTextFigureIdDataList = new HashSet<AttachedTextFigureIdData>(attachedTextFigureIdDataList);
+        this.srcTextFigureId= "";
+        this.destTextFigureId= "";
     }
 
     public String getLineId() {
@@ -101,19 +104,23 @@ public class LineData {
         this.destEndpointKind = destEndpointKind;
     }
 
-    public List<PositionData> getPositionDataList() {
-        return new ArrayList<>(positionDataList);
+    public List<PositionData> getPositionDataList () {
+        return new ArrayList<>(this.positionDataList);
     }
 
-    public void setPositionList(List<PositionData> positionDataList) {
-        this.positionDataList = new HashSet<PositionData>(positionDataList);
+    public String getSrcTextFigureId() {
+        return srcTextFigureId;
     }
 
-    public List<AttachedTextFigureIdData> getAttachedTextFigureIdDataList() {
-        return new ArrayList<>(attachedTextFigureIdDataList);
+    public void setSrcTextFigureId(String srcTextFigureId) {
+        this.srcTextFigureId = srcTextFigureId;
     }
 
-    public void setAttachedTextFigureIdDataList(List<AttachedTextFigureIdData> attachedTextFigureIdDataList) {
-        this.attachedTextFigureIdDataList = new HashSet<AttachedTextFigureIdData>(attachedTextFigureIdDataList);
+    public String getDestTextFigureId() {
+        return destTextFigureId;
+    }
+
+    public void setDestTextFigureId(String destTextFigureId) {
+        this.destTextFigureId = destTextFigureId;
     }
 }

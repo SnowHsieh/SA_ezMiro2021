@@ -51,14 +51,15 @@ public class AttachTextfigureUseCaseTest extends AbstractSpringBootJpaTest {
         input.setBoardId(boardId);
         input.setFigureId(UUID.fromString(newLine.getId()));
         input.setTextFigureId(UUID.fromString(newStickyNote.getId()));
+        input.setAttachEndPointKind("destination");
+
         attachTextfigureUseCase.execute(input, output);
         assertNotNull(output.getId());
         assertEquals(ExitCode.SUCCESS, output.getExitCode());
 
         Line resultLine = lineRepository.findById(UUID.fromString(output.getId())).get();
         assertNotNull(resultLine);
-        assertEquals(1, resultLine.getAttachedTextFigureIdList().size());
-        assertEquals(UUID.fromString(newStickyNote.getId()), resultLine.getAttachedTextFigureIdList().get(0));
+        assertEquals(UUID.fromString(newStickyNote.getId()), resultLine.getDestTextFigureId());
 
     }
 }

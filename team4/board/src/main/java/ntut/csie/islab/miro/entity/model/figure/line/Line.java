@@ -64,10 +64,18 @@ public class Line extends Figure {
     }
 
     @Override
-    public void attachTextFigure(UUID textFigureId) {
-        List<UUID> attachedTextFigureIdList = this.getAttachedTextFigureIdList();
-        attachedTextFigureIdList.add(textFigureId);
-        this.setAttachedTextFigureIdList(attachedTextFigureIdList);
-        addDomainEvent(new TextfigureAttachedByLineDomainEvent(this.getBoardId(), this.getFigureId(), attachedTextFigureIdList));
+    public void attachTextFigure(UUID figureId, String attachEndPointKind) {
+        if (attachEndPointKind.equals("source")){
+            this.setSrcTextFigureId(figureId);
+        }
+        else if (attachEndPointKind.equals("destination")){
+            this.setDestTextFigureId(figureId);
+        }
+        else{
+            //todo: alert bug
+        }
+        addDomainEvent(new TextfigureAttachedByLineDomainEvent(this.getBoardId(), this.getFigureId(),this.getSrcTextFigureId(),this.getDestTextFigureId()));
     }
+
+
 }

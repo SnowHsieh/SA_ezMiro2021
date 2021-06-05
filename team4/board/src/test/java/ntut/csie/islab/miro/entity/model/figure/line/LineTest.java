@@ -56,7 +56,7 @@ public class LineTest {
         String color = "#000000";
         Figure line = new Line(boardId,positionList,strokeWidth,color);
         TextFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
-        line.attachTextFigure(sn.getFigureId());
-        assertEquals(1, line.getAttachedTextFigureIdList().size());
+        line.attachTextFigure(sn.getFigureId(),"source");
+        assertEquals(sn.getFigureId(),line.getSrcTextFigureId());
     }
 }

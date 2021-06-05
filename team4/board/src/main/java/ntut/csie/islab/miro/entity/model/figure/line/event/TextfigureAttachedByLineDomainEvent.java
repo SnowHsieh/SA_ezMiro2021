@@ -11,13 +11,15 @@ import java.util.UUID;
 public class TextfigureAttachedByLineDomainEvent extends DomainEvent {
     private final UUID boardId;
     private final UUID figureId;
-    private final List<UUID> attachedTextFigureIdList;
+    private final UUID srcTextFigureId;
+    private final UUID destTextFigureId;
 
-    public TextfigureAttachedByLineDomainEvent(UUID boardId, UUID figureId, List<UUID> attachedTextFigureIdList) {
+    public TextfigureAttachedByLineDomainEvent(UUID boardId, UUID figureId, UUID srcTextFigureId, UUID destTextFigureId) {
         super(DateProvider.now());
         this.boardId = boardId;
         this.figureId = figureId;
-        this.attachedTextFigureIdList = attachedTextFigureIdList;
+        this.srcTextFigureId = srcTextFigureId;
+        this.destTextFigureId = destTextFigureId;
     }
 
     public UUID getBoardId() {
@@ -28,7 +30,11 @@ public class TextfigureAttachedByLineDomainEvent extends DomainEvent {
         return figureId;
     }
 
-    public List<UUID> getAttachedTextFigureIdList() {
-        return attachedTextFigureIdList;
+    public UUID getSrcTextFigureId() {
+        return srcTextFigureId;
+    }
+
+    public UUID getDestTextFigureId() {
+        return destTextFigureId;
     }
 }
