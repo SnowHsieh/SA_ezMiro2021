@@ -2,8 +2,6 @@ package ntut.csie.islab.miro.entity.model.figure.line;
 
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.figure.Figure;
-import ntut.csie.islab.miro.entity.model.figure.line.ArrowKindEnum;
-import ntut.csie.islab.miro.entity.model.figure.line.Line;
 import ntut.csie.islab.miro.entity.model.figure.textfigure.ShapeKindEnum;
 import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
 import ntut.csie.islab.miro.entity.model.figure.textfigure.TextFigure;
@@ -58,5 +56,18 @@ public class LineTest {
         TextFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
         line.attachTextFigure(sn.getFigureId(),"source");
         assertEquals(sn.getFigureId(),line.getSrcTextFigureId());
+    }
+    @Test
+    public void test_line_unattach_from_textfigure() {
+        UUID boardId = UUID.randomUUID();
+        List<Position> positionList = new ArrayList<>();
+        int strokeWidth = 5;
+        String color = "#000000";
+        Figure line = new Line(boardId,positionList,strokeWidth,color);
+        TextFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
+        line.attachTextFigure(sn.getFigureId(),"source");
+        assertEquals(sn.getFigureId(),line.getSrcTextFigureId());
+        line.unattachTextFigure("source");
+        assertEquals(null,line.getSrcTextFigureId());
     }
 }

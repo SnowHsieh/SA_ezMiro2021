@@ -171,4 +171,6 @@ public abstract class Figure extends AggregateRoot<UUID> {
     public abstract void changeLinePath(List<Position> positionList);
 
     public abstract void attachTextFigure(UUID figureId,String attachEndPointKind);
+
+    public abstract void unattachTextFigure(String attachEndPointKind);
 }

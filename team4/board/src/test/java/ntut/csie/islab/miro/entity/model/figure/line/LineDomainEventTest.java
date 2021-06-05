@@ -2,10 +2,10 @@ package ntut.csie.islab.miro.entity.model.figure.line;
 
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.figure.Figure;
-import ntut.csie.islab.miro.entity.model.figure.line.Line;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineDeletedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.line.event.TextfigureAttachedByLineDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.line.event.TextfigureUnattachedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.textfigure.ShapeKindEnum;
 import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
 import ntut.csie.islab.miro.entity.model.figure.textfigure.TextFigure;
@@ -58,5 +58,20 @@ public class LineDomainEventTest {
         assertEquals(2, line.getDomainEvents().size());
         assertEquals(TextfigureAttachedByLineDomainEvent.class, line.getDomainEvents().get(1).getClass());
     }
+    @Test
+    public void line_unattach_a_textfigure_then_publishes_a_textfigure_unattached_by_line_domain_event(){
+        UUID boardId = UUID.randomUUID();
+        List<Position> positionList = new ArrayList<>();
+        int strokeWidth = 5;
+        String color = "#000000";
+        Figure line = new Line(boardId, positionList, strokeWidth, color);
+        TextFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
+        line.attachTextFigure(sn.getFigureId(),"source");
+        line.unattachTextFigure("source");
+
+        assertEquals(3, line.getDomainEvents().size());
+        assertEquals(TextfigureUnattachedDomainEvent.class, line.getDomainEvents().get(2).getClass());
+    }
+
 
 }

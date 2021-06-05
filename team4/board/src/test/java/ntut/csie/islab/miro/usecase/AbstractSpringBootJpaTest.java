@@ -11,6 +11,8 @@ import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.figure.textfigure.ShapeKindEnum;
 import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
 import ntut.csie.islab.miro.usecase.figure.line.LineRepository;
+import ntut.csie.islab.miro.usecase.figure.line.attachtextfigure.AttachTextfigureInput;
+import ntut.csie.islab.miro.usecase.figure.line.attachtextfigure.AttachTextfigureUseCase;
 import ntut.csie.islab.miro.usecase.figure.line.create.CreateLineInput;
 import ntut.csie.islab.miro.usecase.figure.line.create.CreateLineUseCase;
 import ntut.csie.islab.miro.usecase.figure.textfigure.StickyNoteRepository;
@@ -150,6 +152,19 @@ public abstract class AbstractSpringBootJpaTest {
         input.setStrokeWidth(strokeWidth);
         input.setColor(color);
         createLineUseCase.execute(input, output);
+        return output;
+    }
+
+    public CqrsCommandPresenter generateAttachTextfigureUseCase(UUID boardId, UUID figureId, UUID textFigureId,String attachEndPointKind) {
+        AttachTextfigureUseCase attachTextfigureUseCase = new AttachTextfigureUseCase(domainEventBus, lineRepository);
+        AttachTextfigureInput input = attachTextfigureUseCase.newInput();
+        CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
+        input.setBoardId(boardId);
+        input.setFigureId(figureId);
+        input.setTextFigureId(textFigureId);
+        input.setAttachEndPointKind(attachEndPointKind);
+
+        attachTextfigureUseCase.execute(input, output);
         return output;
     }
 

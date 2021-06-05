@@ -3,10 +3,7 @@ package ntut.csie.islab.miro.entity.model.figure.line;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.entity.model.figure.Figure;
-import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
-import ntut.csie.islab.miro.entity.model.figure.line.event.LineDeletedDomainEvent;
-import ntut.csie.islab.miro.entity.model.figure.line.event.LinePathChangedDomainEvent;
-import ntut.csie.islab.miro.entity.model.figure.line.event.TextfigureAttachedByLineDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.line.event.*;
 import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteMovedDomainEvent;
 
 
@@ -75,6 +72,20 @@ public class Line extends Figure {
             //todo: alert bug
         }
         addDomainEvent(new TextfigureAttachedByLineDomainEvent(this.getBoardId(), this.getFigureId(),this.getSrcTextFigureId(),this.getDestTextFigureId()));
+    }
+
+    @Override
+    public void unattachTextFigure(String attachEndPointKind) {
+        if (attachEndPointKind.equals("source")){
+            this.setSrcTextFigureId(null);
+        }
+        else if (attachEndPointKind.equals("destination")){
+            this.setDestTextFigureId(null);
+        }
+        else{
+            //todo: alert bug
+        }
+        addDomainEvent(new TextfigureUnattachedDomainEvent(this.getBoardId(), this.getFigureId(),this.getSrcTextFigureId(),this.getDestTextFigureId()));
     }
 
 

@@ -13,6 +13,7 @@ import ntut.csie.islab.miro.usecase.figure.line.attachtextfigure.AttachTextfigur
 import ntut.csie.islab.miro.usecase.figure.line.changepath.ChangeLinePathUseCase;
 import ntut.csie.islab.miro.usecase.figure.line.create.CreateLineUseCase;
 import ntut.csie.islab.miro.usecase.figure.line.delete.DeleteLineUseCase;
+import ntut.csie.islab.miro.usecase.figure.line.unattachtextfigure.UnattachTextfigureUseCase;
 import ntut.csie.islab.miro.usecase.figure.textfigure.StickyNoteRepository;
 import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.changecolor.ChangeStickyNoteColorUseCase;
 import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.changecontent.ChangeStickyNoteContentUseCase;
@@ -119,6 +120,10 @@ public class UseCaseInjection {
     @Bean(name="attachTextfigureUseCase")
     public AttachTextfigureUseCase attachTextfigureUseCase() {
         return new AttachTextfigureUseCase(eventBus, lineRepository);
+    }
+    @Bean(name="unattachTextfigureUseCase")
+    public UnattachTextfigureUseCase unattachTextfigureUseCase() {
+        return new UnattachTextfigureUseCase(eventBus, lineRepository);
     }
 //    @Bean(name="createNotifyBoardSessionBroadcaster")
 //    public NotifyBoardSessionBroadcaster createNotifyBoardSessionBroadcaster() {
