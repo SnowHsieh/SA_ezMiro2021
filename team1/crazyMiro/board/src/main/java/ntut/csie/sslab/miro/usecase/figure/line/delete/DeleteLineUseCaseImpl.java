@@ -1,9 +1,10 @@
-package ntut.csie.sslab.miro.usecase.figure.line;
+package ntut.csie.sslab.miro.usecase.figure.line.delete;
 
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.sslab.miro.entity.model.figure.Line;
+import ntut.csie.sslab.miro.usecase.figure.line.LineRepository;
 import ntut.csie.sslab.miro.usecase.figure.line.delete.DeleteLineUseCase;
 import ntut.csie.sslab.miro.usecase.figure.line.delete.DeleteLineInput;
 

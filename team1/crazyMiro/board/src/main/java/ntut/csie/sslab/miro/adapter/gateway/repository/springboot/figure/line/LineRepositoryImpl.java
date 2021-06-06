@@ -41,4 +41,9 @@ public class LineRepositoryImpl implements LineRepository {
     public List<Line> getLineByBoardId(String boardId) {
         return lines.stream().filter(x-> x.getBoardId().equals(boardId)).collect(Collectors.toList());
     }
+
+    @Override
+    public List<Line> findByFigureId(String figureId) {
+        return lines.stream().filter(x-> x.getSourceId().equals(figureId) || x.getTargetId().equals(figureId)).collect(Collectors.toList());
+    }
 }

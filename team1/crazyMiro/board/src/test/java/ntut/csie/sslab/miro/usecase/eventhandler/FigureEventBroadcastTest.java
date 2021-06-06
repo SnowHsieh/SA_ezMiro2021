@@ -3,6 +3,7 @@ package ntut.csie.sslab.miro.usecase.eventhandler;
 import ntut.csie.sslab.miro.entity.model.board.event.FigureCommitted;
 import ntut.csie.sslab.miro.entity.model.board.event.FigureUnCommitted;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
+import ntut.csie.sslab.miro.entity.model.figure.event.LineDeleted;
 import ntut.csie.sslab.miro.entity.model.figure.event.StickerCreated;
 import ntut.csie.sslab.miro.entity.model.figure.event.StickerDeleted;
 import ntut.csie.sslab.miro.usecase.AbstractSpringBootJpaTest;
@@ -15,19 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FigureEventBroadcastTest extends AbstractSpringBootJpaTest {
-
-//    @Test
-//    public void create_a_card_broadcasts_a_card_created_model_and_a_card_committed_model(){
-//        String workflowId = createWorkflow(boardId, "workflowName", userId);
-//        String firstRootStageId = createStage(workflowId);
-//        fakeBoardSessionBroadcaster.clearDomainEventModels();
-//
-//        createCard(workflowId, firstRootStageId);
-//
-//        assertEquals(2, fakeBoardSessionBroadcaster.getRemoteDomainEvents().size());
-//        assertEquals(CardEvents.CardCreated.class.getSimpleName(), fakeBoardSessionBroadcaster.getRemoteDomainEvents().get(0).getEventSimpleName());
-//        assertEquals(WorkflowEvents.CardCommitted.class.getSimpleName(), fakeBoardSessionBroadcaster.getRemoteDomainEvents().get(1).getEventSimpleName());
-//    }
 
     @Test
     public void create_a_sticker_broadcasts_a_sticker_created_event_and_a_figure_committed_model(){
@@ -54,6 +42,23 @@ public class FigureEventBroadcastTest extends AbstractSpringBootJpaTest {
         assertEquals(2, eventListener.getEventCount());
         assertTrue(eventListener.getEvent(0) instanceof StickerDeleted);
         assertTrue(eventListener.getEvent(1) instanceof FigureUnCommitted);
+    }
+
+    @Test
+    public  void delete_a_sticker_broadcasts_a_sticker_deleted_event_and_a_line_deleted_event(){
+        String boardId = createBoard(UUID.randomUUID().toString(), "boardName");
+        Coordinate stickerPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
+        String sourceStickerId = createSticker(boardId, "ddd", 100, 200, "red", stickerPosition);
+        String targetStickerId = createSticker(boardId, "ddd", 100, 200, "red", stickerPosition);
+        String lineID = createLine(boardId, sourceStickerId, targetStickerId, null, null);
+        eventListener.clearEventCount();
+
+        deleteSticker(sourceStickerId);
+
+        assertEquals(3,eventListener.getEventCount());
+        assertTrue(eventListener.getEvent(0) instanceof StickerDeleted);
+        assertTrue(eventListener.getEvent(1) instanceof FigureUnCommitted);
+        assertTrue(eventListener.getEvent(2) instanceof LineDeleted);
     }
 
 

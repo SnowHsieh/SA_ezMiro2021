@@ -77,6 +77,7 @@ import ntut.csie.sslab.ddd.model.DomainEvent;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
+import ntut.csie.sslab.miro.adapter.gateway.eventbus.google.NotifyLineAdapter;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.sticker.StickerRepositoryImpl;
@@ -94,6 +95,7 @@ import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardInput;
 import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCase;
 import ntut.csie.sslab.miro.usecase.board.leave.LeaveBoardUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
+import ntut.csie.sslab.miro.usecase.eventhandler.NotifyLine;
 import ntut.csie.sslab.miro.usecase.figure.StickerRepository;
 import ntut.csie.sslab.miro.usecase.figure.sticker.create.CreateStickerInput;
 import ntut.csie.sslab.miro.usecase.figure.sticker.create.CreateStickerUseCase;
@@ -146,6 +148,8 @@ public abstract class AbstractSpringBootJpaTest {
 
     public NotifyBoardAdapter notifyBoardAdapter;
 
+    public NotifyLineAdapter notifyLineAdapter;
+
     @BeforeEach
     public void setUp() {
         boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
@@ -154,7 +158,9 @@ public abstract class AbstractSpringBootJpaTest {
         domainEventBus = new GoogleEventBus();
         eventListener = new EventListener();
         notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));
+        notifyLineAdapter = new NotifyLineAdapter(new NotifyLine(lineRepository, domainEventBus));
         domainEventBus.register(notifyBoardAdapter);
+        domainEventBus.register(notifyLineAdapter);
         domainEventBus.register(eventListener);
 //        boardMdbRepository = new BoardRepositoryMdbImpl(boardRepositoryMongoDbPeer);
     }

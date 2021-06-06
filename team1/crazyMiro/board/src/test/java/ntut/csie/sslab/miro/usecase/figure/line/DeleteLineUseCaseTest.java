@@ -5,6 +5,7 @@ import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.sslab.miro.usecase.figure.line.delete.DeleteLineUseCase;
 import ntut.csie.sslab.miro.usecase.figure.line.delete.DeleteLineInput;
+import ntut.csie.sslab.miro.usecase.figure.line.delete.DeleteLineUseCaseImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;

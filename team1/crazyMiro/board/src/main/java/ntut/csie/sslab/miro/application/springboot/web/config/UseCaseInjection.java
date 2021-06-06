@@ -17,6 +17,7 @@ import ntut.csie.sslab.miro.usecase.board.showCursor.ShowCursorUseCase;
 import ntut.csie.sslab.miro.usecase.board.showCursor.ShowCursorUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoard;
 import ntut.csie.sslab.miro.usecase.eventhandler.NotifyBoardSessionBroadcaster;
+import ntut.csie.sslab.miro.usecase.eventhandler.NotifyLine;
 import ntut.csie.sslab.miro.usecase.figure.StickerRepository;
 import ntut.csie.sslab.miro.usecase.figure.line.changeSourcePosition.ChangeSourcePositionUseCase;
 import ntut.csie.sslab.miro.usecase.figure.line.changeSourcePosition.ChangeSourcePositionUseCaseImpl;
@@ -34,7 +35,7 @@ import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.delete.DeleteStickerUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.figure.sticker.move.MoveStickerUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.move.MoveStickerUseCaseImpl;
-import ntut.csie.sslab.miro.usecase.figure.line.DeleteLineUseCaseImpl;
+import ntut.csie.sslab.miro.usecase.figure.line.delete.DeleteLineUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.figure.line.create.CreateLineUseCaseImpl;
 import ntut.csie.sslab.miro.usecase.figure.line.LineRepository;
 import ntut.csie.sslab.miro.usecase.figure.line.create.CreateLineUseCase;
@@ -70,6 +71,9 @@ public class UseCaseInjection {
     public NotifyBoard createNotifyBoard() {
         return new NotifyBoard(boardRepository, eventBus);
     }
+
+    @Bean(name="createNotifyLine")
+    public NotifyLine createNotifyLine() {return new NotifyLine(lineRepository, eventBus);}
 
     @Bean(name="createNotifyBoardSessionBroadcaster")
     public NotifyBoardSessionBroadcaster createNotifyBoardSessionBroadcaster() {
