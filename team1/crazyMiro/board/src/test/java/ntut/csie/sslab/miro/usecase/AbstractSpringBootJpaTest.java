@@ -80,6 +80,7 @@ import ntut.csie.sslab.miro.adapter.gateway.eventbus.google.NotifyBoardAdapter;
 import ntut.csie.sslab.miro.adapter.gateway.eventbus.google.NotifyLineAdapter;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.line.LineRepositoryPeer;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.sticker.StickerRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.sticker.StickerRepositoryPeer;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.line.LineRepositoryImpl;
@@ -146,6 +147,9 @@ public abstract class AbstractSpringBootJpaTest {
     @Autowired
     protected StickerRepositoryPeer stickerRepositoryPeer;
 
+    @Autowired
+    protected LineRepositoryPeer lineRepositoryPeer;
+
     public NotifyBoardAdapter notifyBoardAdapter;
 
     public NotifyLineAdapter notifyLineAdapter;
@@ -154,7 +158,7 @@ public abstract class AbstractSpringBootJpaTest {
     public void setUp() {
         boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
         stickerRepository = new StickerRepositoryImpl(stickerRepositoryPeer);
-        lineRepository = new LineRepositoryImpl();
+        lineRepository = new LineRepositoryImpl(lineRepositoryPeer);
         domainEventBus = new GoogleEventBus();
         eventListener = new EventListener();
         notifyBoardAdapter = new NotifyBoardAdapter(new NotifyBoard(boardRepository, domainEventBus));

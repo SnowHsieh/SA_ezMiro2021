@@ -4,6 +4,7 @@ import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
+import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.line.LineRepositoryPeer;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.sticker.StickerRepositoryImpl;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.sticker.StickerRepositoryPeer;
 import ntut.csie.sslab.miro.adapter.gateway.repository.springboot.figure.line.LineRepositoryImpl;
@@ -23,6 +24,8 @@ public class RepositoryInjection {
 
   private StickerRepositoryPeer stickerRepositoryPeer;
 
+  private LineRepositoryPeer lineRepositoryPeer;
+
   @Autowired
   public void setBoardRepositoryPeer(BoardRepositoryPeer boardRepositoryPeer){
     this.boardRepositoryPeer = boardRepositoryPeer;
@@ -31,6 +34,11 @@ public class RepositoryInjection {
   @Autowired
   public void setFigureRepositoryPeer(StickerRepositoryPeer stickerRepositoryPeer){
     this.stickerRepositoryPeer = stickerRepositoryPeer;
+  }
+
+  @Autowired
+  public void setLineRepositoryPeer(LineRepositoryPeer lineRepositoryPeer){
+    this.lineRepositoryPeer = lineRepositoryPeer;
   }
 
 
@@ -70,7 +78,7 @@ public class RepositoryInjection {
 
   @Bean(name="lineRepository")
   public LineRepository lineRepository() {
-    return new LineRepositoryImpl();
+    return new LineRepositoryImpl(lineRepositoryPeer);
   }
 
   //

@@ -22,6 +22,10 @@ public class CreateLineUseCaseImpl implements CreateLineUseCase {
     @Override
     public void execute(CreateLineInput input, CqrsCommandOutput output) {
         try{
+            if(input.getSourcePosition() == null && input.getTargetPosition() == null){
+                input.setSourcePosition(new Coordinate(-1, -1));
+                input.setTargetPosition(new Coordinate(-1, -1));
+            }
             Line line = new Line(input.getBoardId(),
                     UUID.randomUUID().toString(),
                     input.getSourceId(),

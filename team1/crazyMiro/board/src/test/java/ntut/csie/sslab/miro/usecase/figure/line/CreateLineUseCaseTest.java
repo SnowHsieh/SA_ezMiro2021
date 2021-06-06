@@ -35,8 +35,10 @@ public class CreateLineUseCaseTest extends AbstractSpringBootJpaTest {
         Line line = lineRepository.findById(output.getId()).get();
         assertEquals(sourceFigureId, line.getSourceId());
         assertEquals(targetFigureId, line.getTargetId());
-        assertNull(line.getSourcePosition());
-        assertNull(line.getTargetPosition());
+        assertEquals(-1, line.getSourcePosition().getX());
+        assertEquals(-1, line.getSourcePosition().getY());
+        assertEquals(-1, line.getTargetPosition().getX());
+        assertEquals(-1, line.getTargetPosition().getY());
         assertEquals(1, eventListener.getEventCount());
 
 
