@@ -4,7 +4,7 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.miro.entity.model.Coordinate;
 import ntut.csie.sslab.miro.entity.model.figure.ConnectionFigure;
 import ntut.csie.sslab.miro.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.sslab.miro.usecase.figure.FigureDto;
+import ntut.csie.sslab.miro.usecase.figure.ConnectionFigureDto;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecontent.ChangeStickerContentInput;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecontent.ChangeStickerContentUseCase;
 import ntut.csie.sslab.miro.usecase.figure.sticker.changecontent.ChangeStickerContentUseCaseImpl;
@@ -23,7 +23,7 @@ public class ChangeStickerContentUseCaseTest extends AbstractSpringBootJpaTest {
         createBoard(boardId, "test_board");
         eventListener.clearEventCount();
         Coordinate stickerPosition = new Coordinate(new Random().nextLong(), new Random().nextLong());
-        FigureDto stickerDto = new FigureDto(null, "sticker1", 10, 10, "black", stickerPosition);
+        ConnectionFigureDto stickerDto = new ConnectionFigureDto(null, "sticker1", 10, 10, "black", stickerPosition);
         String stickerId = createSticker(boardId, stickerDto.getContent(), stickerDto.getWidth(), stickerDto.getLength(), stickerDto.getColor(), stickerDto.getPosition());
         String newContent = "newContent";
         ChangeStickerContentUseCase changeStickerContentUseCase = new ChangeStickerContentUseCaseImpl(stickerRepository, domainEventBus);

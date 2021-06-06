@@ -1,33 +1,37 @@
 package ntut.csie.sslab.miro.adapter.presenter.board.getcontent;
 
 import ntut.csie.sslab.ddd.adapter.presenter.ViewModel;
+import ntut.csie.sslab.miro.usecase.figure.ConnectionFigureDto;
+import ntut.csie.sslab.miro.usecase.figure.line.LineDto;
+
+import java.util.List;
 
 public class BoardContentViewModel implements ViewModel {
-//    private String boardId;
-//    private List<WorkflowDto> workflows;
-//    private List<BoardMemberDto> boardMembers;
-//
-//    public String getBoardId() {
-//        return boardId;
-//    }
-//
-//    public void setBoardId(String boardId) {
-//        this.boardId = boardId;
-//    }
-//
-//    public List<WorkflowDto> getWorkflows() {
-//        return workflows;
-//    }
-//
-//    public void setWorkflows(List<WorkflowDto> workflows) {
-//        this.workflows = workflows;
-//    }
-//
-//    public List<BoardMemberDto> getBoardMembers() {
-//        return boardMembers;
-//    }
-//
-//    public void setBoardMembers(List<BoardMemberDto> boardMembers) {
-//        this.boardMembers = boardMembers;
-//    }
+    private String boardId;
+    private List<ConnectionFigureDto> stickers;
+    private List<LineDto> lines;
+
+    public String getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(String boardId) {
+        this.boardId = boardId;
+    }
+
+    public List<ConnectionFigureDto> getStickers() {
+        return stickers;
+    }
+
+    public void setStickers(List<ConnectionFigureDto> stickers) {
+        this.stickers = stickers;
+    }
+
+    public List<LineDto> getLines() {
+        return lines;
+    }
+
+    public void setLines(List<LineDto> lines) {
+        this.lines = lines;
+    }
 }

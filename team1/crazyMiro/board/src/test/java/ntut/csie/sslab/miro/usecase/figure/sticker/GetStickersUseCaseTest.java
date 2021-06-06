@@ -6,7 +6,7 @@ import ntut.csie.sslab.miro.entity.model.board.CommittedFigure;
 import ntut.csie.sslab.miro.entity.model.figure.Figure;
 import ntut.csie.sslab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.sslab.miro.usecase.figure.ConvertStickerToDto;
-import ntut.csie.sslab.miro.usecase.figure.FigureDto;
+import ntut.csie.sslab.miro.usecase.figure.ConnectionFigureDto;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -26,8 +26,8 @@ public class GetStickersUseCaseTest extends AbstractSpringBootJpaTest {
         createBoard(boardId, "test_board");
         Coordinate sticker1Position = new Coordinate(new Random().nextLong(), new Random().nextLong());
         Coordinate sticker2Position = new Coordinate(new Random().nextLong(), new Random().nextLong());
-        FigureDto stickerDto1 = new FigureDto(null, "sticker1", 10, 10, "black", sticker1Position);
-        FigureDto stickerDto2 = new FigureDto(null, "sticker2", 20, 20, "blue", sticker2Position);
+        ConnectionFigureDto stickerDto1 = new ConnectionFigureDto(null, "sticker1", 10, 10, "black", sticker1Position);
+        ConnectionFigureDto stickerDto2 = new ConnectionFigureDto(null, "sticker2", 20, 20, "blue", sticker2Position);
         String stickerId1 = createSticker(boardId, stickerDto1.getContent(), stickerDto1.getWidth(), stickerDto1.getLength(), stickerDto1.getColor(), stickerDto1.getPosition());
         String stickerId2 = createSticker(boardId, stickerDto2.getContent(), stickerDto2.getWidth(), stickerDto2.getLength(), stickerDto2.getColor(), stickerDto2.getPosition());
 
@@ -37,7 +37,7 @@ public class GetStickersUseCaseTest extends AbstractSpringBootJpaTest {
         List<CommittedFigure> committedFigures = board.getCommittedFigures();
         committedFigures.forEach(x-> stickers.add(stickerRepository.findById(x.getFigureId()).get()));
 
-        List<FigureDto> stickerDtos = ConvertStickerToDto.transform(stickers);
+        List<ConnectionFigureDto> stickerDtos = ConvertStickerToDto.transform(stickers);
 
         assertEquals(2, stickerDtos.size());
         assertEquals(stickerId1, stickerDtos.get(0).getFigureId());
