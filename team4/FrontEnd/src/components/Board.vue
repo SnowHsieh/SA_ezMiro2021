@@ -62,7 +62,7 @@ import {
 export default {
   data () {
     return {
-      boardId: 'a74d0e4e-3710-40c5-a11d-f644c7aa62f0',
+      boardId: 'c48fa029-43f6-4f76-84a5-1f62c57667bd',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -751,7 +751,6 @@ export default {
           _this.updateUserCursor(receivedData)
           break
         case 'BoardEnteredDomainEvent':
-          // console.log(receivedData)
           break
         case 'CursorCreatedDomainEvent':
           _this.addUserCursor(receivedData)
@@ -790,7 +789,6 @@ export default {
           }
           break
         case 'StickyNoteResizedDomainEvent':
-          // console.log(receivedData)
           _this.updateStickyNoteSize(receivedData)
           break
         case 'StickyNoteColorChangedDomainEvent':
@@ -823,12 +821,51 @@ export default {
           break
         case 'LineDeletedDomainEvent':
           try {
-            const lineObject0 = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
-            const endPointObjects = this.canvas.getObjects().filter(object => object.attachedLineId === receivedData.figureId)
+            const lineObject0 = _this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
+            const endPointObjects = _this.canvas.getObjects().filter(object => object.attachedLineId === receivedData.figureId)
             console.log('endPointObjects: ', endPointObjects)
-            this.canvas.remove(lineObject0)
-            this.canvas.remove(endPointObjects[0])
-            this.canvas.remove(endPointObjects[1])
+            _this.canvas.remove(lineObject0)
+            endPointObjects.forEach(function (endPoint) {
+              _this.canvas.remove(endPoint)
+            })
+          } catch (e) {
+            console.log(e)
+          }
+          break
+        case 'LinePathChangedDomainEvent':
+          console.log(receivedData)
+          try {
+            _this.canvas.getObjects().filter(x => x.get('id') === receivedData.figureId).forEach(function (line) {
+              line.set('points', receivedData.newPositionList)
+              const pointObjectsOnLine = _this.canvas.getObjects().filter(object => object.attachedLineId === receivedData.figureId) // 4 points
+              for (let i = 0; i < receivedData.newPositionList.length; i++) {
+                const ep = pointObjectsOnLine.filter(point => point.index === i)[0]
+                ep.set('left', receivedData.newPositionList[i].x)
+                ep.set('top', receivedData.newPositionList[i].y)
+              }
+            })
+            _this.canvas.renderAll()
+          } catch (e) {
+            console.log(e)
+          }
+          break
+        case 'TextfigureAttachedByLineDomainEvent':
+          console.log(receivedData)
+          try {
+            const line = _this.canvas.getObjects().filter(line => line.get('id') === receivedData.figureId)[0]
+            let attachedStickyNote
+            if (receivedData.srcTextFigureId) {
+              attachedStickyNote = _this.canvas.getObjects().filter(stickyNote => stickyNote.get('id') === receivedData.srcTextFigureId)[0]
+              attachedStickyNote.attachPointSet.add(line.srcPoint)
+              line.srcPoint.xOffset = (line.srcPoint.get('left') - attachedStickyNote.get('left')) / attachedStickyNote.width
+              line.srcPoint.yOffset = (line.srcPoint.get('top') - attachedStickyNote.get('top')) / attachedStickyNote.height
+            } else if (receivedData.destTextFigureId) {
+              attachedStickyNote = _this.canvas.getObjects().filter(stickyNote => stickyNote.get('id') === receivedData.destTextFigureId)[0]
+              attachedStickyNote.attachPointSet.add(line.destPoint)
+              line.destPoint.xOffset = (line.destPoint.get('left') - attachedStickyNote.get('left')) / attachedStickyNote.width
+              line.destPoint.yOffset = (line.destPoint.get('top') - attachedStickyNote.get('top')) / attachedStickyNote.height
+            }
+            _this.canvas.renderAll()
           } catch (e) {
             console.log(e)
           }

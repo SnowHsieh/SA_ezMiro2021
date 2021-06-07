@@ -3,6 +3,8 @@ package ntut.csie.islab.miro.usecase.eventhandler;
 import com.google.common.eventbus.Subscribe;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineDeletedDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.line.event.LinePathChangedDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.line.event.TextfigureAttachedByLineDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.*;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.usecase.figure.textfigure.StickyNoteRepository;
@@ -52,7 +54,6 @@ public class NotifyBoardSessionBroadcaster {
 
     @Subscribe
     public void whenStickyNoteMoved(StickyNoteMovedDomainEvent stickyNoteMovedDomainEvent){
-        UUID boardId = stickyNoteMovedDomainEvent.getBoardId();
         UUID figureId = stickyNoteMovedDomainEvent.getFigureId();
         TextFigure figure = figureRepository.findById(figureId).get();
         Board board = boardRepository.findById(figure.getBoardId()).get();
@@ -62,7 +63,6 @@ public class NotifyBoardSessionBroadcaster {
 
     @Subscribe
     public void whenStickyNoteContentChanged(StickyNoteContentChangedDomainEvent stickyNoteContentChangedDomainEvent){
-        UUID boardId = stickyNoteContentChangedDomainEvent.getBoardId();
         UUID figureId = stickyNoteContentChangedDomainEvent.getFigureId();
         TextFigure figure = figureRepository.findById(figureId).get();
         Board board = boardRepository.findById(figure.getBoardId()).get();
@@ -135,6 +135,19 @@ public class NotifyBoardSessionBroadcaster {
         Board board = boardRepository.findById(lineDeletedDomainEvent.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
         boardSessions.forEach(each->broadcast(lineDeletedDomainEvent, each.getBoardSessionId().getId()));
+    }
+
+    @Subscribe
+    public void whenLinePathChanged(LinePathChangedDomainEvent linePathChangedDomainEvent){
+        Board board = boardRepository.findById(linePathChangedDomainEvent.getBoardId()).get();
+        List<BoardSession> boardSessions = board.getBoardSessionList();
+        boardSessions.forEach(each->broadcast(linePathChangedDomainEvent, each.getBoardSessionId().getId()));
+    }
+    @Subscribe
+    public void whenTextfigureAttachedByLine(TextfigureAttachedByLineDomainEvent textfigureAttachedByLineDomainEvent){
+        Board board = boardRepository.findById(textfigureAttachedByLineDomainEvent.getBoardId()).get();
+        List<BoardSession> boardSessions = board.getBoardSessionList();
+        boardSessions.forEach(each->broadcast(textfigureAttachedByLineDomainEvent, each.getBoardSessionId().getId()));
     }
 
     private void broadcast(DomainEvent domainEvent, String sessionId){
