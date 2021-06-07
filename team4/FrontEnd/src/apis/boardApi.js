@@ -10,13 +10,14 @@ export const getBoardContentApi = async (boardId) => {
   }
 }
 
-export const changeFigureOrderApi = async (boardId, figureList) => {
+export const changeFigureOrder = async (boardId, figureList) => {
   try {
     const res = await axios.post(`${hostIp}/boards/${boardId}/changeFigureOrder`,
       {
         figureOrderList: figureList
       }
     )
+    console.log(res.data.message)
     return res
   } catch (err) {
     console.log(err)

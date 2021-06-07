@@ -43,7 +43,7 @@
 
 <script>
 import { fabric } from 'fabric'
-import { changeFigureOrderApi, getBoardContentApi } from '@/apis/boardApi'
+import { changeFigureOrder, getBoardContentApi } from '@/apis/boardApi'
 import {
   createStickyNoteApi,
   changeStickyNoteContentApi,
@@ -62,7 +62,7 @@ import {
 export default {
   data () {
     return {
-      boardId: '7e888852-e099-4f26-a513-c37e5f65ec86',
+      boardId: '2059bcad-57fe-486f-852e-ccb102d356ab',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -109,7 +109,7 @@ export default {
     this.socket.onerror = this.websocketonerror
     this.socket.onmessage = this.websocketonmessage
     this.socket.onclose = this.websocketclose
-    this.timer = setInterval(this.updateFlag, 100)
+    this.timer = setInterval(this.updateFlag, 300)
   },
   methods: {
     updateFlag () {
@@ -273,20 +273,15 @@ export default {
         console.log(err)
       }
     },
-    async changeFigureOrder () {
-      try {
-        const objects = this.canvas.getObjects()
-        const figureList = []
-        for (let i = 0; i < objects.length; i++) {
-          if (objects[i].get('objectType') !== 'cursor' && objects[i].get('id')) {
-            figureList.push(objects[i].get('id'))
-          }
+    getFigureListOnCanvas () {
+      const objects = this.canvas.getObjects()
+      const figureList = []
+      for (let i = 0; i < objects.length; i++) {
+        if (objects[i].get('objectType') !== 'cursor' && objects[i].get('id')) {
+          figureList.push(objects[i].get('id'))
         }
-        const res = await changeFigureOrderApi(this.boardId, figureList)
-        console.log(res.data.message)
-      } catch (err) {
-        console.log(err)
       }
+      return figureList
     },
     initCanvas () {
       const width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
@@ -438,50 +433,6 @@ export default {
               _this.canvas.setActiveObject(e.target) // right click
               _this.activeObjects = _this.canvas.getActiveObjects()
               _this.showContextMenu(e)
-              // else if (e.target === null && e.button === 1) {
-              //   // 點畫布的時候才畫線
-              //   var pointer = this.getPointer(e)
-              //   var positionX = pointer.x
-              //   var positionY = pointer.y
-              //   // console.log(positionX, positionY)
-              //   var circlePoint = new fabric.Circle({
-              //     radius: 5,
-              //     fill: 'blue',
-              //     left: positionX,
-              //     top: positionY,
-              //     selectable: true,
-              //     originX: 'center',
-              //     originY: 'center',
-              //     hoverCursor: 'auto'
-              //   })
-              //   _this.linelist.push(circlePoint)
-              //   if (_this.linelist.length > 1) {
-              //     var startPoint = _this.linelist[0]
-              //     var endPoint = _this.linelist[1]
-              //     console.log(startPoint, endPoint)
-              //     var lineFigure = new fabric.Line(
-              //       [
-              //         startPoint.get('left'),
-              //         startPoint.get('top'),
-              //         endPoint.get('left'),
-              //         endPoint.get('top')
-              //       ],
-              //       {
-              //         stroke: 'blue',
-              //         strokeWidth: 4,
-              //         hasControls: false,
-              //         hasBorders: false,
-              //         selectable: false,
-              //         lockMovementX: true,
-              //         lockMovementY: true,
-              //         hoverCursor: 'default',
-              //         originX: 'center',
-              //         originY: 'center'
-              //       }
-              //     )
-              //     _this.createLine(lineFigure)
-              //     _this.linelist.length = 0 // clear linelist
-              //   }
             } else {
               _this.hideContextMenu()
             }
@@ -520,6 +471,7 @@ export default {
                   // console.log('Yay! ' + res.data)
                 })
                 // solve change sn
+                // 中點不能被attach
                 if (e.target.intersectsWithObject(stickyNote)) {
                   stickyNote.attachPointSet.add(e.target)
                   e.target.xOffset = (e.target.get('left') - stickyNote.get('left')) / stickyNote.width
@@ -609,7 +561,14 @@ export default {
               if (p.line1 && !p.line2) {
                 p.line1.points[2].x = p.left
                 p.line1.points[2].y = p.top
-                // p.line1.set({ x2: p.left, y2: p.top })
+                // 更新整條線的座標 找出該線上的點，並更新
+                // console.log(p.points())
+                // if (p.line1.srcPoint === p) {
+                //   console.log(p.points())
+                //   p.line1.points[2].x = p.left
+                //   p.line1.points[2].y = p.top
+                // }
+                // console.log('565:1:', p.line1.srcPoint === p, p.line1.destPoint === p)
                 setTimeout(function () {
                   changeLinePath(_this.boardId, p.line1)
                   console.log(p.line1)
@@ -618,6 +577,8 @@ export default {
               if (p.line2 && !p.line1) {
                 p.line2.points[0].x = p.left
                 p.line2.points[0].y = p.top
+                // console.log(p.points())
+                // console.log('575:1:', p.line2.srcPoint === p, p.line2.destPoint === p)
                 // p.line2.set({ x1: p.left, y1: p.top })
                 setTimeout(function () {
                   console.log(p.line2)
@@ -681,7 +642,7 @@ export default {
       var newHandler = function () {
         _this.activeObjects.forEach((target) => {
           target.bringToFront()
-          _this.changeFigureOrder()
+          changeFigureOrder(_this.boardId, _this.getFigureListOnCanvas())
         })
         _this.hideContextMenu()
       }
@@ -693,7 +654,7 @@ export default {
         _this.activeObjects.forEach((target) => {
           if (target.selectable) {
             target.bringForward()
-            _this.changeFigureOrder()
+            changeFigureOrder(_this.boardId, _this.getFigureListOnCanvas())
           }
         })
         _this.hideContextMenu()
@@ -705,7 +666,7 @@ export default {
       var newHandler = function () {
         _this.activeObjects.forEach((target) => {
           target.sendBackwards()
-          _this.changeFigureOrder()
+          changeFigureOrder(_this.boardId, _this.getFigureListOnCanvas())
         })
         _this.hideContextMenu()
       }
@@ -716,7 +677,7 @@ export default {
       var newHandler = function () {
         _this.activeObjects.forEach((target) => {
           target.sendToBack()
-          _this.changeFigureOrder()
+          changeFigureOrder(_this.boardId, _this.getFigureListOnCanvas())
         })
         _this.hideContextMenu()
       }
