@@ -15,6 +15,9 @@ export const createLineApi = async (boardId) => {
           }, {
             x: 300.0,
             y: 300.0
+          }, {
+            x: 400.0,
+            y: 400.0
           }
         ],
         strokeWidth: 5,

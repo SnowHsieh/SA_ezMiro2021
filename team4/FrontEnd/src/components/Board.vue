@@ -62,7 +62,7 @@ import {
 export default {
   data () {
     return {
-      boardId: '2059bcad-57fe-486f-852e-ccb102d356ab',
+      boardId: 'a74d0e4e-3710-40c5-a11d-f644c7aa62f0',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -148,27 +148,19 @@ export default {
         destPoint: null
         // evented: false  // false means event on line can't be triggered
       })
-      console.log(line)
       this.canvas.add(
         line
       )
       const _this = this
-      let i = 0
-      line.srcPoint = this.makeDarkCircle(line.points[i].x, line.points[i].y, null, line, line.get('id'))
-      for (i = 1; i < figure.positionList.length - 1; i++) {
+      for (let i = 1; i < figure.positionList.length - 1; i++) {
         _this.canvas.add(
-          _this.makeLightCircle(line.points[i].x, line.points[i].y, line, line, line.get('id'))
-        )
-        i++
-        if (i === figure.positionList.length - 1) {
-          break
-        }
-        _this.canvas.add(
-          _this.makeDarkCircle(line.points[i].x, line.points[i].y, line, line, line.get('id'))
+          _this.makeCircle(line.points[i].x, line.points[i].y, line, i)
         )
       }
-      line.destPoint = this.makeDarkCircle(line.points[i].x, line.points[i].y, line, null, line.get('id'))
-      // console.log(line.srcPoint, line.destPoint)
+      // todo: refactor it with index
+      line.srcPoint = this.makeDarkCircle(line.points[0].x, line.points[0].y, null, line, line.get('id'), 0)
+      line.destPoint = this.makeDarkCircle(line.points[figure.positionList.length - 1].x, line.points[figure.positionList.length - 1].y, line, null, line.get('id'), figure.positionList.length - 1)
+
       this.canvas.add(
         line.srcPoint,
         line.destPoint
@@ -184,7 +176,7 @@ export default {
       this.canvas.renderAll()
     },
     // 畫球
-    makeDarkCircle (left, top, line1, line2, lineId) {
+    makeDarkCircle (left, top, line1, line2, lineId, index) {
       var circlePoint = new fabric.Circle({
         left: left,
         top: top,
@@ -194,33 +186,35 @@ export default {
         originX: 'center',
         originY: 'center',
         xOffset: 0.0,
-        yOffset: 0.0
+        yOffset: 0.0,
+        index: index
       })
       circlePoint.attachedLineId = lineId
       circlePoint.hasControls = circlePoint.hasBorders = false
       circlePoint.line1 = line1
       circlePoint.line2 = line2
+      circlePoint.line = !line2 ? line1 : line2
 
       return circlePoint
     },
-    makeLightCircle (left, top, line1, line2, lineId) {
+    makeCircle (left, top, line, index) {
       var circlePoint = new fabric.Circle({
         left: left,
         top: top,
         radius: 10,
-        borderColor: 'red',
+        borderColor: 'gray',
         borderScaleFactor: 10,
-        fill: 'red',
-        stroke: 'red',
+        fill: 'gray',
+        stroke: 'gray',
         originX: 'center',
         originY: 'center',
         xOffset: 0.0,
-        yOffset: 0.0
+        yOffset: 0.0,
+        index: index
       })
-      circlePoint.attachedLineId = lineId
+      circlePoint.attachedLineId = line.get('id')
       circlePoint.hasControls = circlePoint.hasBorders = false
-      circlePoint.line1 = line1
-      circlePoint.line2 = line2
+      circlePoint.line = line
 
       return circlePoint
     },
@@ -267,7 +261,6 @@ export default {
     async deleteStickyNote (figure) {
       try {
         const res = await deleteStickyNoteApi(this.boardId, figure)
-        this.canvas.remove(figure)
         console.log(res.data.message)
       } catch (err) {
         console.log(err)
@@ -547,44 +540,15 @@ export default {
           'object:moved': function (e) {
             if (e.target.type === 'circle') {
               const p = e.target // circle
-              // 整條線移動
-              if (p.line2 && p.line1) {
-                p.line1.points[1].x = p.left
-                p.line1.points[1].y = p.top
-                p.line2.points[1].x = p.left
-                p.line2.points[1].y = p.top
-                setTimeout(function () {
-                  console.log('object:moved=', p.line2)
-                  changeLinePath(_this.boardId, p.line2)
-                }, 100)
-              }
-              if (p.line1 && !p.line2) {
-                p.line1.points[2].x = p.left
-                p.line1.points[2].y = p.top
-                // 更新整條線的座標 找出該線上的點，並更新
-                // console.log(p.points())
-                // if (p.line1.srcPoint === p) {
-                //   console.log(p.points())
-                //   p.line1.points[2].x = p.left
-                //   p.line1.points[2].y = p.top
-                // }
-                // console.log('565:1:', p.line1.srcPoint === p, p.line1.destPoint === p)
-                setTimeout(function () {
-                  changeLinePath(_this.boardId, p.line1)
-                  console.log(p.line1)
-                }, 100)
-              }
-              if (p.line2 && !p.line1) {
-                p.line2.points[0].x = p.left
-                p.line2.points[0].y = p.top
-                // console.log(p.points())
-                // console.log('575:1:', p.line2.srcPoint === p, p.line2.destPoint === p)
-                // p.line2.set({ x1: p.left, y1: p.top })
-                setTimeout(function () {
-                  console.log(p.line2)
-                  changeLinePath(_this.boardId, p.line2)
-                }, 100)
-              }
+              // check point index :pindex
+              // update line points [pindex]
+              // render
+              console.log()
+              p.line.points[p.index].x = p.left
+              p.line.points[p.index].y = p.top
+              setTimeout(function () {
+                changeLinePath(_this.boardId, p.line)
+              }, 100)
               _this.canvas.renderAll()
             }
           }
@@ -818,8 +782,9 @@ export default {
           break
         case 'StickyNoteDeletedDomainEvent':
           try {
-            const cursorObject = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
-            this.canvas.remove(cursorObject)
+            const stickyNoteObject = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
+            console.log('sn delete de', stickyNoteObject)
+            this.canvas.remove(stickyNoteObject)
           } catch (e) {
             console.log(e)
           }
@@ -846,6 +811,9 @@ export default {
               }, {
                 x: 300.0,
                 y: 300.0
+              }, {
+                x: 400.0,
+                y: 400.0
               }
             ],
             strokeWidth: 5,
