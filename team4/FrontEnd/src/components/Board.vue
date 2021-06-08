@@ -374,6 +374,7 @@ export default {
               var oldtop = e.target.top
               var rect = e.target.item(0)
               var dimensionText = e.target.item(1)
+              var originalAttachPointSet = e.target.attachPointSet
               _this.ungroup(e.target)
               _this.canvas.setActiveObject(dimensionText)
               dimensionText.enterEditing()
@@ -383,7 +384,8 @@ export default {
                   content: dimensionText.text,
                   id: rect.id,
                   left: oldleft,
-                  top: oldtop
+                  top: oldtop,
+                  attachPointSet: originalAttachPointSet
                 })
                 _this.canvas.remove(rect)
                 _this.canvas.remove(dimensionText)
@@ -672,6 +674,31 @@ export default {
         console.log(e)
       }
     },
+    updateStickyNoteColor (figure) {
+      try {
+        this.canvas.getObjects().forEach(function (group) {
+          if (group.get('id') === figure.figureId) {
+            group.item(0).set('fill', figure.newColor)// rect
+          }
+        })
+        this.canvas.renderAll()
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    updateStickyNoteContent (figure) {
+      try {
+        this.canvas.getObjects().forEach(function (group) {
+          if (group.get('id') === figure.figureId) {
+            group.set('content', figure.newContent)
+            group.item(1).set('text', figure.newContent)
+          }
+        })
+        this.canvas.renderAll()
+      } catch (e) {
+        console.log(e)
+      }
+    },
     addUserCursor (data) {
       const left = data.newPosition !== undefined ? data.newPosition.x : 0.0
       const top = data.newPosition !== undefined ? data.newPosition.y : 0.0
@@ -785,10 +812,14 @@ export default {
         case 'StickyNoteResizedDomainEvent':
           _this.updateStickyNoteSize(receivedData)
           break
-        case 'StickyNoteColorChangedDomainEvent':
-          break
         case 'StickyNoteMovedDomainEvent':
           _this.updateStickyNotePosition(receivedData)
+          break
+        case 'StickyNoteColorChangedDomainEvent':
+          _this.updateStickyNoteColor(receivedData)
+          break
+        case 'StickyNoteContentChangedDomainEvent':
+          _this.updateStickyNoteContent(receivedData)
           break
         case 'LineCreatedDomainEvent':
           var line = {
@@ -864,7 +895,6 @@ export default {
             console.log(e)
           }
           break
-
         case 'TextfigureUnattachedDomainEvent':
           console.log(receivedData)
           try {
@@ -872,14 +902,10 @@ export default {
             let attachedStickyNote
             if (receivedData.attachEndPointKind === 'source') {
               attachedStickyNote = _this.canvas.getObjects().filter(stickyNote => stickyNote.get('id') === receivedData.textFigureIdToBeUnattached)[0]
-              console.log('881be:', attachedStickyNote.attachPointSet)
               attachedStickyNote.attachPointSet.delete(line.srcPoint)
-              console.log('af:', attachedStickyNote.attachPointSet)
             } else if (receivedData.attachEndPointKind === 'destination') {
               attachedStickyNote = _this.canvas.getObjects().filter(stickyNote => stickyNote.get('id') === receivedData.textFigureIdToBeUnattached)[0]
-              console.log('886be:', attachedStickyNote.attachPointSet)
               attachedStickyNote.attachPointSet.delete(line.destPoint)
-              console.log('af:', attachedStickyNote.attachPointSet)
             }
             _this.canvas.renderAll()
           } catch (e) {

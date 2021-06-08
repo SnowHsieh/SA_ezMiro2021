@@ -60,17 +60,14 @@ public class NotifyBoardSessionBroadcaster {
 
     @Subscribe
     public void whenStickyNoteContentChanged(StickyNoteContentChangedDomainEvent stickyNoteContentChangedDomainEvent){
-        UUID figureId = stickyNoteContentChangedDomainEvent.getFigureId();
-        TextFigure figure = figureRepository.findById(figureId).get();
-        Board board = boardRepository.findById(figure.getBoardId()).get();
+        Board board = boardRepository.findById(stickyNoteContentChangedDomainEvent.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
         boardSessions.forEach(each->broadcast(stickyNoteContentChangedDomainEvent, each.getBoardSessionId().getId()));
     }
 
     @Subscribe
     public void whenStickyNoteColorChanged(StickyNoteColorChangedDomainEvent stickyNoteColorChangedDomainEvent){
-        TextFigure figure = figureRepository.findById(stickyNoteColorChangedDomainEvent.getFigureId()).get();
-        Board board = boardRepository.findById(figure.getBoardId()).get();
+        Board board = boardRepository.findById(stickyNoteColorChangedDomainEvent.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
         boardSessions.forEach(each->broadcast(stickyNoteColorChangedDomainEvent, each.getBoardSessionId().getId()));
     }
