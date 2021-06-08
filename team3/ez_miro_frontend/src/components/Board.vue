@@ -301,7 +301,6 @@ export default {
 
       this.canvas.on('mouse:up', async function (e) {
         const target = e.target
-        console.log(target)
         if (e.button === 1) { // 左鍵
           me.isDisplayRightClickMenu = false
           if (target) {
@@ -406,7 +405,27 @@ export default {
             })
           }, 200)
         } else if (o.target.get('type') === 'line' && me.isSamplingWidgetDelayFinish) {
-          o.set({ x1: topLeftX, y1: topLeftY, x2: bottomRightX, y2: bottomRightY })
+          console.log(o)
+          console.log(point)
+          const line = o.target
+          line.circleHead.set({ left: topLeftX - line.circleHead.radius, top: topLeftY - line.circleHead.radius })
+          line.circleHead.setCoords()
+          line.circleTail.set({ left: bottomRightX - line.circleHead.radius, top: bottomRightY - line.circleHead.radius })
+          line.circleTail.setCoords()
+          if (me.isSamplingLineDelayFinish) {
+            me.isSamplingLineDelayFinish = false
+            setTimeout(function () {
+              me.isSamplingLineDelayFinish = true
+              MoveLineBy(me.boardId, {
+                [line.id]: {
+                  topLeftX: line.circleHead.left,
+                  topLeftY: line.circleHead.top,
+                  bottomRightX: line.circleTail.left,
+                  bottomRightY: line.circleTail.top
+                }
+              })
+            }, 200)
+          }
         }
       })
 
@@ -497,7 +516,6 @@ export default {
         objects.forEach(item => {
           canvas.remove(item)
         })
-        console.log(objects[0])
         canvas.add(new fabric.StickyNote({
           id: group.id,
           left: objects[0].left,
@@ -508,6 +526,9 @@ export default {
           text: objects[1].text,
           textColor: objects[1].fill
         }))
+        canvas.getObjects().filter(object => object.get('connectedWidgetId') === group.id).forEach(circle => {
+          me.connectCircleToWidget(circle)
+        })
         canvas.renderAll()
         await EditTextOfStickyNoteBy(group.id, me.boardId, objects[1].text)
       })
@@ -599,8 +620,8 @@ export default {
         fill: 'red',
         stroke: 'black',
         strokeWidth: 5,
-        selectable: false,
-        evented: false
+        selectable: true,
+        evented: true
       })
 
       const me = this
