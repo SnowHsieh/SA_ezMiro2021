@@ -301,13 +301,14 @@ export default {
 
       this.canvas.on('mouse:up', async function (e) {
         const target = e.target
-        if (e.button === 1) {
+        console.log(target)
+        if (e.button === 1) { // 左鍵
           me.isDisplayRightClickMenu = false
           if (target) {
             me.setTarget(target)
             me.oldPoint = target.lineCoords
           }
-        } else if (e.button === 3) { // 臭到不行
+        } else if (e.button === 3 && target !== null) { // 右鍵
           me.isDisplayRightClickMenu = true
           const point = e.absolutePointer
           me.rightClickMenuStyle.top = point.y + 'px'
@@ -496,12 +497,13 @@ export default {
         objects.forEach(item => {
           canvas.remove(item)
         })
+        console.log(objects[0])
         canvas.add(new fabric.StickyNote({
           id: group.id,
           left: objects[0].left,
           top: objects[0].top,
-          height: objects[0].height,
-          width: objects[0].width,
+          height: objects[0].height * objects[0].scaleY,
+          width: objects[0].width * objects[0].scaleX,
           fill: objects[0].fill,
           text: objects[1].text,
           textColor: objects[1].fill
@@ -605,11 +607,39 @@ export default {
       line.circleHead.on('moving', function (e) {
         line.set({ x1: line.circleHead.left, y1: line.circleHead.top })
         line.setCoords()
+        if (me.isSamplingLineDelayFinish) {
+          me.isSamplingLineDelayFinish = false
+          setTimeout(function () {
+            me.isSamplingLineDelayFinish = true
+            MoveLineBy(me.boardId, {
+              [line.id]: {
+                topLeftX: line.x1,
+                topLeftY: line.y1,
+                bottomRightX: line.x2,
+                bottomRightY: line.y2
+              }
+            })
+          }, 200)
+        }
       })
 
       line.circleTail.on('moving', function (e) {
         line.set({ x2: line.circleTail.left, y2: line.circleTail.top })
         line.setCoords()
+        if (me.isSamplingLineDelayFinish) {
+          me.isSamplingLineDelayFinish = false
+          setTimeout(function () {
+            me.isSamplingLineDelayFinish = true
+            MoveLineBy(me.boardId, {
+              [line.id]: {
+                topLeftX: line.x1,
+                topLeftY: line.y1,
+                bottomRightX: line.x2,
+                bottomRightY: line.y2
+              }
+            })
+          }, 200)
+        }
       })
 
       this.connectCircleToWidget(line.circleHead)
@@ -617,7 +647,6 @@ export default {
 
       line.circleHead.on('moved', function (e) {
         setTimeout(function () {
-          me.isSamplingLineDelayFinish = true
           MoveLineBy(me.boardId, {
             [line.id]: {
               topLeftX: line.x1,
@@ -631,7 +660,6 @@ export default {
 
       line.circleTail.on('moved', function (e) {
         setTimeout(function () {
-          me.isSamplingLineDelayFinish = true
           MoveLineBy(me.boardId, {
             [line.id]: {
               topLeftX: line.x1,
