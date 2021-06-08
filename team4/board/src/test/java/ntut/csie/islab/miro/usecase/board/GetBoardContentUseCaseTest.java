@@ -4,8 +4,8 @@ import ntut.csie.islab.miro.adapter.presenter.getcontent.GetBoardContentPresente
 import ntut.csie.islab.miro.adapter.presenter.getcontent.BoardContentViewModel;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.Position;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.Style;
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardInput;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;

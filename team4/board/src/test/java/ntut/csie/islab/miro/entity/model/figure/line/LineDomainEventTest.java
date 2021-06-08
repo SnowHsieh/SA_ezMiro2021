@@ -2,14 +2,15 @@ package ntut.csie.islab.miro.entity.model.figure.line;
 
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.figure.Figure;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.ConnectableFigure;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.Style;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.stickynote.StickyNote;
+import ntut.csie.islab.miro.entity.model.figure.line.event.ConnectableFigureAttachedByLineDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.line.event.ConnectableFigureUnattachedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineDeletedDomainEvent;
-import ntut.csie.islab.miro.entity.model.figure.line.event.TextfigureAttachedByLineDomainEvent;
-import ntut.csie.islab.miro.entity.model.figure.line.event.TextfigureUnattachedDomainEvent;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.TextFigure;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.StickyNote;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -52,11 +53,11 @@ public class LineDomainEventTest {
         int strokeWidth = 5;
         String color = "#000000";
         Figure line = new Line(boardId, positionList, strokeWidth, color);
-        TextFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
-        line.attachTextFigure(sn.getFigureId(),"source");
+        ConnectableFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
+        line.attachConnectableFigure(sn.getFigureId(),"source");
 
         assertEquals(2, line.getDomainEvents().size());
-        assertEquals(TextfigureAttachedByLineDomainEvent.class, line.getDomainEvents().get(1).getClass());
+        assertEquals(ConnectableFigureAttachedByLineDomainEvent.class, line.getDomainEvents().get(1).getClass());
     }
     @Test
     public void line_unattach_a_textfigure_then_publishes_a_textfigure_unattached_by_line_domain_event(){
@@ -65,12 +66,12 @@ public class LineDomainEventTest {
         int strokeWidth = 5;
         String color = "#000000";
         Figure line = new Line(boardId, positionList, strokeWidth, color);
-        TextFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
-        line.attachTextFigure(sn.getFigureId(),"source");
-        line.unattachTextFigure("source");
+        ConnectableFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
+        line.attachConnectableFigure(sn.getFigureId(),"source");
+        line.unattachConnectableFigure("source");
 
         assertEquals(3, line.getDomainEvents().size());
-        assertEquals(TextfigureUnattachedDomainEvent.class, line.getDomainEvents().get(2).getClass());
+        assertEquals(ConnectableFigureUnattachedDomainEvent.class, line.getDomainEvents().get(2).getClass());
     }
 
 

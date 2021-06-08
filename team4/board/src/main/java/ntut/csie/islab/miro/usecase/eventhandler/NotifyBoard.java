@@ -1,14 +1,14 @@
 package ntut.csie.islab.miro.usecase.eventhandler;
 
 import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.stickynote.event.StickyNoteCreatedDomainEvent;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.stickynote.event.StickyNoteDeletedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineDeletedDomainEvent;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.event.FigureCommittedDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.event.FigureUncommittedDomainEvent;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteCreatedDomainEvent;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteDeletedDomainEvent;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 
 import java.util.Optional;

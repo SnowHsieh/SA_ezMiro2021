@@ -29,11 +29,11 @@ public class LineMapper {
                 lineData.getColor()
         );
 
-        if(!lineData.getSrcTextFigureId().equals("")) {
-            line.setSrcTextFigureId(UUID.fromString(lineData.getSrcTextFigureId()));
+        if(!lineData.getSrcConnectableFigureId().equals("")) {
+            line.setSrcConnectableFigureId(UUID.fromString(lineData.getSrcConnectableFigureId()));
         }
-        if(!lineData.getDestTextFigureId().equals("")) {
-            line.setDestTextFigureId(UUID.fromString(lineData.getDestTextFigureId()));
+        if(!lineData.getDestConnectableFigureId().equals("")) {
+            line.setDestConnectableFigureId(UUID.fromString(lineData.getDestConnectableFigureId()));
         }
 
         line.clearDomainEvents();
@@ -72,11 +72,11 @@ public class LineMapper {
                 line.getDestArrowKind().ordinal()
         );
 
-        if(line.getSrcTextFigureId()!=null) {
-            lineData.setSrcTextFigureId(line.getSrcTextFigureId().toString());
+        if(line.getSrcConnectableFigureId()!=null) {
+            lineData.setSrcConnectableFigureId(line.getSrcConnectableFigureId().toString());
         }
-        if(line.getDestTextFigureId()!=null) {
-            lineData.setDestTextFigureId(line.getDestTextFigureId().toString());
+        if(line.getDestConnectableFigureId()!=null) {
+            lineData.setDestConnectableFigureId(line.getDestConnectableFigureId().toString());
         }
 
 

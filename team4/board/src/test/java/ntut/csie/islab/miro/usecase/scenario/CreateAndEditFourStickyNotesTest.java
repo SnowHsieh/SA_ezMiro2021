@@ -1,7 +1,7 @@
 package ntut.csie.islab.miro.usecase.scenario;
 
-import ntut.csie.islab.miro.entity.model.figure.textfigure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.Style;
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;

@@ -2,10 +2,10 @@ package ntut.csie.islab.miro.entity.model.figure.line;
 
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.figure.Figure;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.TextFigure;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.StickyNote;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.Style;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.ConnectableFigure;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.stickynote.StickyNote;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -53,9 +53,9 @@ public class LineTest {
         int strokeWidth = 5;
         String color = "#000000";
         Figure line = new Line(boardId,positionList,strokeWidth,color);
-        TextFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
-        line.attachTextFigure(sn.getFigureId(),"source");
-        assertEquals(sn.getFigureId(),line.getSrcTextFigureId());
+        ConnectableFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
+        line.attachConnectableFigure(sn.getFigureId(),"source");
+        assertEquals(sn.getFigureId(),line.getSrcConnectableFigureId());
     }
     @Test
     public void test_line_unattach_from_textfigure() {
@@ -64,10 +64,10 @@ public class LineTest {
         int strokeWidth = 5;
         String color = "#000000";
         Figure line = new Line(boardId,positionList,strokeWidth,color);
-        TextFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
-        line.attachTextFigure(sn.getFigureId(),"source");
-        assertEquals(sn.getFigureId(),line.getSrcTextFigureId());
-        line.unattachTextFigure("source");
-        assertEquals(null,line.getSrcTextFigureId());
+        ConnectableFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
+        line.attachConnectableFigure(sn.getFigureId(),"source");
+        assertEquals(sn.getFigureId(),line.getSrcConnectableFigureId());
+        line.unattachConnectableFigure("source");
+        assertEquals(null,line.getSrcConnectableFigureId());
     }
 }

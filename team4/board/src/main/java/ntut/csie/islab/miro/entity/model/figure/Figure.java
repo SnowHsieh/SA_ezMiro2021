@@ -3,10 +3,9 @@ package ntut.csie.islab.miro.entity.model.figure;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.entity.model.figure.line.ArrowKindEnum;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.Style;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,13 +13,13 @@ public abstract class Figure extends AggregateRoot<UUID> {
     private UUID boardId;
     // line
     private List<Position> positionList;
-    private UUID srcTextFigureId;
-    private UUID destTextFigureId;
+    private UUID srcConnectableFigureId;
+    private UUID destConnectableFigureId;
     private ArrowKindEnum srcArrowKind; //NONE,CIRCLE,ARROW
     private ArrowKindEnum destArrowKind; //NONE,CIRCLE,ARROW
     private int strokeWidth;
     private String color;
-    // textFigure
+    // connectableFigure
     private Position position;
     private String content;
     private Style style;
@@ -47,7 +46,7 @@ public abstract class Figure extends AggregateRoot<UUID> {
         this.color = color;
     }
 
-    // textFigure
+    // connectableFigure
     public Figure(UUID boardId, Position position, String content, Style style) {
         super(UUID.randomUUID());
         this.boardId = boardId;
@@ -140,20 +139,20 @@ public abstract class Figure extends AggregateRoot<UUID> {
         this.style = style;
     }
 
-    public UUID getSrcTextFigureId() {
-        return srcTextFigureId;
+    public UUID getSrcConnectableFigureId() {
+        return srcConnectableFigureId;
     }
 
-    public void setSrcTextFigureId(UUID srcTextFigureId) {
-        this.srcTextFigureId = srcTextFigureId;
+    public void setSrcConnectableFigureId(UUID srcConnectableFigureId) {
+        this.srcConnectableFigureId = srcConnectableFigureId;
     }
 
-    public UUID getDestTextFigureId() {
-        return destTextFigureId;
+    public UUID getDestConnectableFigureId() {
+        return destConnectableFigureId;
     }
 
-    public void setDestTextFigureId(UUID destTextFigureId) {
-        this.destTextFigureId = destTextFigureId;
+    public void setDestConnectableFigureId(UUID destConnectableFigureId) {
+        this.destConnectableFigureId = destConnectableFigureId;
     }
 
     public abstract void markAsRemoved(UUID boardId, UUID figureId);
@@ -170,7 +169,7 @@ public abstract class Figure extends AggregateRoot<UUID> {
 
     public abstract void changeLinePath(List<Position> positionList);
 
-    public abstract void attachTextFigure(UUID figureId,String attachEndPointKind);
+    public abstract void attachConnectableFigure(UUID figureId, String attachEndPointKind);
 
-    public abstract void unattachTextFigure(String attachEndPointKind);
+    public abstract void unattachConnectableFigure(String attachEndPointKind);
 }

@@ -1,7 +1,6 @@
 package ntut.csie.islab.miro.adapter.gateway.repository.figure.line;
 
 
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,17 +30,17 @@ public class LineData {
     @Column(name = "dest_endpoint_kind")
     private int destEndpointKind;
 
-    @Column(name = "src_text_figureId")
-    private String srcTextFigureId;
+    @Column(name = "src_connectable_figure_id")
+    private String srcConnectableFigureId;
 
-    @Column(name = "dest_text_figureId")
-    private String destTextFigureId;
+    @Column(name = "dest_connectable_figure_id")
+    private String destConnectableFigureId;
 
     @OrderBy("pointOrder")
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<PositionData> positionDataList;
 
-    public LineData(){
+    public LineData() {
     }
 
     public LineData(String boardId, String lineId, List<PositionData> positionDataList, int strokeWidth, String color, int srcEndpointKind, int destEndpointKind) {
@@ -52,8 +51,8 @@ public class LineData {
         this.srcEndpointKind = srcEndpointKind;
         this.destEndpointKind = destEndpointKind;
         this.positionDataList = new HashSet<PositionData>(positionDataList);
-        this.srcTextFigureId= "";
-        this.destTextFigureId= "";
+        this.srcConnectableFigureId = "";
+        this.destConnectableFigureId = "";
     }
 
     public String getLineId() {
@@ -104,23 +103,23 @@ public class LineData {
         this.destEndpointKind = destEndpointKind;
     }
 
-    public List<PositionData> getPositionDataList () {
+    public List<PositionData> getPositionDataList() {
         return new ArrayList<>(this.positionDataList);
     }
 
-    public String getSrcTextFigureId() {
-        return srcTextFigureId;
+    public String getSrcConnectableFigureId() {
+        return srcConnectableFigureId;
     }
 
-    public void setSrcTextFigureId(String srcTextFigureId) {
-        this.srcTextFigureId = srcTextFigureId;
+    public void setSrcConnectableFigureId(String srcConnectableFigureId) {
+        this.srcConnectableFigureId = srcConnectableFigureId;
     }
 
-    public String getDestTextFigureId() {
-        return destTextFigureId;
+    public String getDestConnectableFigureId() {
+        return destConnectableFigureId;
     }
 
-    public void setDestTextFigureId(String destTextFigureId) {
-        this.destTextFigureId = destTextFigureId;
+    public void setDestConnectableFigureId(String destConnectableFigureId) {
+        this.destConnectableFigureId = destConnectableFigureId;
     }
 }

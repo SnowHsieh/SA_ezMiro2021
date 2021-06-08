@@ -2,13 +2,13 @@ package ntut.csie.islab.miro.application.springboot.web.config;
 
 import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryImpl;
 import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryPeer;
-import ntut.csie.islab.miro.adapter.gateway.repository.figure.textfigure.stickynote.StickyNoteRepositoryImpl;
-import ntut.csie.islab.miro.adapter.gateway.repository.figure.textfigure.stickynote.StickyNoteRepositoryPeer;
+import ntut.csie.islab.miro.adapter.gateway.repository.figure.connectablefigure.stickynote.StickyNoteRepositoryImpl;
+import ntut.csie.islab.miro.adapter.gateway.repository.figure.connectablefigure.stickynote.StickyNoteRepositoryPeer;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryImpl;
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryPeer;
 import ntut.csie.islab.miro.usecase.figure.line.LineRepository;
-import ntut.csie.islab.miro.usecase.figure.textfigure.StickyNoteRepository;
+import ntut.csie.islab.miro.usecase.figure.connectablefigure.StickyNoteRepository;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,7 +4,6 @@ import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.entity.model.figure.Figure;
 import ntut.csie.islab.miro.entity.model.figure.line.event.*;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.stickynote.event.StickyNoteMovedDomainEvent;
 
 
 import java.util.List;
@@ -61,36 +60,36 @@ public class Line extends Figure {
     }
 
     @Override
-    public void attachTextFigure(UUID figureId, String attachEndPointKind) {
+    public void attachConnectableFigure(UUID figureId, String attachEndPointKind) {
         if (attachEndPointKind.equals("source")){
-            this.setSrcTextFigureId(figureId);
+            this.setSrcConnectableFigureId(figureId);
         }
         else if (attachEndPointKind.equals("destination")){
-            this.setDestTextFigureId(figureId);
+            this.setDestConnectableFigureId(figureId);
         }
         else{
             //todo: alert bug
         }
-        addDomainEvent(new TextfigureAttachedByLineDomainEvent(this.getBoardId(), this.getFigureId(),this.getSrcTextFigureId(),this.getDestTextFigureId()));
+        addDomainEvent(new ConnectableFigureAttachedByLineDomainEvent(this.getBoardId(), this.getFigureId(),this.getSrcConnectableFigureId(),this.getDestConnectableFigureId()));
     }
 
     @Override
-    public void unattachTextFigure(String attachEndPointKind) {
+    public void unattachConnectableFigure(String attachEndPointKind) {
         UUID unattachedTextFigureId = null;
 
 
         if (attachEndPointKind.equals("source")){
-            unattachedTextFigureId =  this.getSrcTextFigureId();
-            this.setSrcTextFigureId(null);
+            unattachedTextFigureId =  this.getSrcConnectableFigureId();
+            this.setSrcConnectableFigureId(null);
         }
         else if (attachEndPointKind.equals("destination")){
-            unattachedTextFigureId =  this.getDestTextFigureId();
-            this.setDestTextFigureId(null);
+            unattachedTextFigureId =  this.getDestConnectableFigureId();
+            this.setDestConnectableFigureId(null);
         }
         else{
             //todo: alert bug
         }
-        addDomainEvent(new TextfigureUnattachedDomainEvent(this.getBoardId(), this.getFigureId(),unattachedTextFigureId,attachEndPointKind));
+        addDomainEvent(new ConnectableFigureUnattachedDomainEvent(this.getBoardId(), this.getFigureId(),unattachedTextFigureId,attachEndPointKind));
     }
 
 

@@ -2,7 +2,7 @@ package ntut.csie.islab.miro.usecase.figure;
 
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.figure.line.ArrowKindEnum;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.Style;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,13 +14,13 @@ public class FigureDto {
     private String kind;
     //line
     private List<Position> positionList;
-    private UUID srcTextFigureId;
-    private UUID destTextFigureId;
+    private UUID srcConnectableFigureId;
+    private UUID destConnectableFigureId;
     private ArrowKindEnum srcArrowKind ; //NONE,CIRCLE,ARROW
     private ArrowKindEnum destArrowKind; //NONE,CIRCLE,ARROW
     private int strokeWidth ;
     private String color ;
-    //textFigure
+    //connectableFigure
     private Position position;
     private String content;
     private Style style;
@@ -34,20 +34,20 @@ public class FigureDto {
         this.positionList = positionList;
     }
 
-    public UUID getSrcTextFigureId() {
-        return srcTextFigureId;
+    public UUID getSrcConnectableFigureId() {
+        return srcConnectableFigureId;
     }
 
-    public void setSrcTextFigureId(UUID srcTextFigureId) {
-        this.srcTextFigureId = srcTextFigureId;
+    public void setSrcConnectableFigureId(UUID srcConnectableFigureId) {
+        this.srcConnectableFigureId = srcConnectableFigureId;
     }
 
-    public UUID getDestTextFigureId() {
-        return destTextFigureId;
+    public UUID getDestConnectableFigureId() {
+        return destConnectableFigureId;
     }
 
-    public void setDestTextFigureId(UUID destTextFigureId) {
-        this.destTextFigureId = destTextFigureId;
+    public void setDestConnectableFigureId(UUID destConnectableFigureId) {
+        this.destConnectableFigureId = destConnectableFigureId;
     }
 
     public ArrowKindEnum getSrcArrowKind() {

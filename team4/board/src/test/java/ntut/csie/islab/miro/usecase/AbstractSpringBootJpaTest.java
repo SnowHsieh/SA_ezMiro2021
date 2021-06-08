@@ -5,28 +5,28 @@ import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryImpl
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryPeer;
 import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryImpl;
 import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryPeer;
-import ntut.csie.islab.miro.adapter.gateway.repository.figure.textfigure.stickynote.StickyNoteRepositoryImpl;
-import ntut.csie.islab.miro.adapter.gateway.repository.figure.textfigure.stickynote.StickyNoteRepositoryPeer;
+import ntut.csie.islab.miro.adapter.gateway.repository.figure.connectablefigure.stickynote.StickyNoteRepositoryImpl;
+import ntut.csie.islab.miro.adapter.gateway.repository.figure.connectablefigure.stickynote.StickyNoteRepositoryPeer;
 import ntut.csie.islab.miro.entity.model.Position;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.ShapeKindEnum;
-import ntut.csie.islab.miro.entity.model.figure.textfigure.Style;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.ShapeKindEnum;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.Style;
 import ntut.csie.islab.miro.usecase.figure.line.LineRepository;
-import ntut.csie.islab.miro.usecase.figure.line.attachtextfigure.AttachTextfigureInput;
-import ntut.csie.islab.miro.usecase.figure.line.attachtextfigure.AttachTextfigureUseCase;
+import ntut.csie.islab.miro.usecase.figure.line.attachconnectablefigure.AttachConnectableFigureInput;
+import ntut.csie.islab.miro.usecase.figure.line.attachconnectablefigure.AttachConnectablefigureUseCase;
 import ntut.csie.islab.miro.usecase.figure.line.create.CreateLineInput;
 import ntut.csie.islab.miro.usecase.figure.line.create.CreateLineUseCase;
-import ntut.csie.islab.miro.usecase.figure.textfigure.StickyNoteRepository;
+import ntut.csie.islab.miro.usecase.figure.connectablefigure.StickyNoteRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardInput;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.eventhandler.NotifyBoard;
-import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.changecolor.ChangeStickyNoteColorInput;
-import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.changecolor.ChangeStickyNoteColorUseCase;
-import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.changecontent.ChangeStickyNoteContentInput;
-import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.changecontent.ChangeStickyNoteContentUseCase;
-import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.create.CreateStickyNoteInput;
-import ntut.csie.islab.miro.usecase.figure.textfigure.stickynote.create.CreateStickyNoteUseCase;
+import ntut.csie.islab.miro.usecase.figure.connectablefigure.stickynote.changecolor.ChangeStickyNoteColorInput;
+import ntut.csie.islab.miro.usecase.figure.connectablefigure.stickynote.changecolor.ChangeStickyNoteColorUseCase;
+import ntut.csie.islab.miro.usecase.figure.connectablefigure.stickynote.changecontent.ChangeStickyNoteContentInput;
+import ntut.csie.islab.miro.usecase.figure.connectablefigure.stickynote.changecontent.ChangeStickyNoteContentUseCase;
+import ntut.csie.islab.miro.usecase.figure.connectablefigure.stickynote.create.CreateStickyNoteInput;
+import ntut.csie.islab.miro.usecase.figure.connectablefigure.stickynote.create.CreateStickyNoteUseCase;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
@@ -156,15 +156,15 @@ public abstract class AbstractSpringBootJpaTest {
     }
 
     public CqrsCommandPresenter generateAttachTextfigureUseCase(UUID boardId, UUID figureId, UUID textFigureId,String attachEndPointKind) {
-        AttachTextfigureUseCase attachTextfigureUseCase = new AttachTextfigureUseCase(domainEventBus, lineRepository);
-        AttachTextfigureInput input = attachTextfigureUseCase.newInput();
+        AttachConnectablefigureUseCase attachConnectablefigureUseCase = new AttachConnectablefigureUseCase(domainEventBus, lineRepository);
+        AttachConnectableFigureInput input = attachConnectablefigureUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);
         input.setFigureId(figureId);
-        input.setTextFigureId(textFigureId);
+        input.setConnectableFigureId(textFigureId);
         input.setAttachEndPointKind(attachEndPointKind);
 
-        attachTextfigureUseCase.execute(input, output);
+        attachConnectablefigureUseCase.execute(input, output);
         return output;
     }
 

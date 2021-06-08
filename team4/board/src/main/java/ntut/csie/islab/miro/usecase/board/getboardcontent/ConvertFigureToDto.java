@@ -17,18 +17,18 @@ public class ConvertFigureToDto {
 
         //line
         dto.setPositionList(figure.getPositionList());
-        if(figure.getSrcTextFigureId()!=null){
-            dto.setSrcTextFigureId(figure.getSrcTextFigureId());
+        if(figure.getSrcConnectableFigureId()!=null){
+            dto.setSrcConnectableFigureId(figure.getSrcConnectableFigureId());
         }
-        if(figure.getDestTextFigureId()!=null){
-            dto.setDestTextFigureId(figure.getDestTextFigureId());
+        if(figure.getDestConnectableFigureId()!=null){
+            dto.setDestConnectableFigureId(figure.getDestConnectableFigureId());
         }
 
         dto.setSrcArrowKind(figure.getSrcArrowKind());
         dto.setDestArrowKind(figure.getDestArrowKind());
         dto.setStrokeWidth(figure.getStrokeWidth());
         dto.setColor(figure.getColor());
-        //textFigure
+        //connectableFigure
         dto.setContent(figure.getContent());
         dto.setPosition(figure.getPosition());
         dto.setStyle(figure.getStyle());
