@@ -440,48 +440,42 @@ export default {
           'mouse:up': function (e) {
             if (e.target && e.target.type === 'circle') {
               _this.canvas.getObjects().filter(x => x.type === 'group').some(function (stickyNote) {
-                let res
                 const promise1 = new Promise((resolve, reject) => {
                   if (stickyNote.attachPointSet.has(e.target)) {
                     stickyNote.attachPointSet.delete(e.target)
                     const line = e.target.line1 ? e.target.line1 : e.target.line2
                     if (line.srcPoint === e.target) {
-                      res = unattachTextfigure(_this.boardId, line.get('id'), 'source')
-                      console.log('506', res)
-                      resolve(res)
+                      unattachTextfigure(_this.boardId, line.get('id'), 'source')
+                      resolve('Success')
                     } else if (line.destPoint === e.target) {
-                      res = unattachTextfigure(_this.boardId, line.get('id'), 'destination')
-                      console.log('510', res)
-                      resolve(res)
+                      unattachTextfigure(_this.boardId, line.get('id'), 'destination')
+                      resolve('Success')
+                    }
+                  } else {
+                    resolve('Success')
+                  }
+                })
+                promise1.then((res) => {
+                  if (e.target.intersectsWithObject(stickyNote)) {
+                    stickyNote.attachPointSet.add(e.target)
+                    e.target.xOffset = (e.target.get('left') - stickyNote.get('left')) / stickyNote.width
+                    e.target.yOffset = (e.target.get('top') - stickyNote.get('top')) / stickyNote.height
+                    const line = e.target.line1 ? e.target.line1 : e.target.line2
+                    if (line.srcPoint === e.target) {
+                      setTimeout(function () {
+                        attachTextfigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'source')
+                      }, 500)
+                      return true
+                    } else if (line.destPoint === e.target) {
+                      setTimeout(function () {
+                        attachTextfigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'destination')
+                      }, 500)
+                      return true
                     }
                   }
                 })
-                // console.log('res', res)
-                // console.log('res', res.status)
-                console.log('promise1', promise1)
-                promise1.then((res) => {
-                  console.log('Yay! ' + res)
-                  // console.log('Yay! ' + res.data)
-                })
                 // solve change sn
                 // 中點不能被attach
-                if (e.target.intersectsWithObject(stickyNote)) {
-                  stickyNote.attachPointSet.add(e.target)
-                  e.target.xOffset = (e.target.get('left') - stickyNote.get('left')) / stickyNote.width
-                  e.target.yOffset = (e.target.get('top') - stickyNote.get('top')) / stickyNote.height
-                  const line = e.target.line1 ? e.target.line1 : e.target.line2
-                  if (line.srcPoint === e.target) {
-                    setTimeout(function () {
-                      attachTextfigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'source')
-                    }, 500)
-                    return true
-                  } else if (line.destPoint === e.target) {
-                    setTimeout(function () {
-                      attachTextfigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'destination')
-                    }, 500)
-                    return true
-                  }
-                }
               })
               // if (isPointAttached === false) {
               //   const line = e.target.line1 ? e.target.line1 : e.target.line2
@@ -833,7 +827,7 @@ export default {
           }
           break
         case 'LinePathChangedDomainEvent':
-          console.log(receivedData)
+          // console.log(receivedData)
           try {
             _this.canvas.getObjects().filter(x => x.get('id') === receivedData.figureId).forEach(function (line) {
               line.set('points', receivedData.newPositionList)
@@ -864,6 +858,28 @@ export default {
               attachedStickyNote.attachPointSet.add(line.destPoint)
               line.destPoint.xOffset = (line.destPoint.get('left') - attachedStickyNote.get('left')) / attachedStickyNote.width
               line.destPoint.yOffset = (line.destPoint.get('top') - attachedStickyNote.get('top')) / attachedStickyNote.height
+            }
+            _this.canvas.renderAll()
+          } catch (e) {
+            console.log(e)
+          }
+          break
+
+        case 'TextfigureUnattachedDomainEvent':
+          console.log(receivedData)
+          try {
+            const line = _this.canvas.getObjects().filter(line => line.get('id') === receivedData.figureId)[0]
+            let attachedStickyNote
+            if (receivedData.attachEndPointKind === 'source') {
+              attachedStickyNote = _this.canvas.getObjects().filter(stickyNote => stickyNote.get('id') === receivedData.textFigureIdToBeUnattached)[0]
+              console.log('881be:', attachedStickyNote.attachPointSet)
+              attachedStickyNote.attachPointSet.delete(line.srcPoint)
+              console.log('af:', attachedStickyNote.attachPointSet)
+            } else if (receivedData.attachEndPointKind === 'destination') {
+              attachedStickyNote = _this.canvas.getObjects().filter(stickyNote => stickyNote.get('id') === receivedData.textFigureIdToBeUnattached)[0]
+              console.log('886be:', attachedStickyNote.attachPointSet)
+              attachedStickyNote.attachPointSet.delete(line.destPoint)
+              console.log('af:', attachedStickyNote.attachPointSet)
             }
             _this.canvas.renderAll()
           } catch (e) {

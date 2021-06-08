@@ -8,15 +8,15 @@ import java.util.UUID;
 public class TextfigureUnattachedDomainEvent extends DomainEvent {
     private final UUID boardId;
     private final UUID figureId;
-    private final UUID srcTextFigureId;
-    private final UUID destTextFigureId;
+    private final UUID textFigureIdToBeUnattached;
+    private final String attachEndPointKind;
 
-    public TextfigureUnattachedDomainEvent(UUID boardId, UUID figureId, UUID srcTextFigureId, UUID destTextFigureId) {
+    public TextfigureUnattachedDomainEvent(UUID boardId, UUID figureId, UUID textFigureIdToBeUnattached, String attachEndPointKind) {
         super(DateProvider.now());
         this.boardId = boardId;
         this.figureId = figureId;
-        this.srcTextFigureId = srcTextFigureId;
-        this.destTextFigureId = destTextFigureId;
+        this.textFigureIdToBeUnattached = textFigureIdToBeUnattached;
+        this.attachEndPointKind = attachEndPointKind;
     }
     public UUID getBoardId() {
         return boardId;
@@ -26,11 +26,11 @@ public class TextfigureUnattachedDomainEvent extends DomainEvent {
         return figureId;
     }
 
-    public UUID getSrcTextFigureId() {
-        return srcTextFigureId;
+    public UUID getTextFigureIdToBeUnattached() {
+        return textFigureIdToBeUnattached;
     }
 
-    public UUID getDestTextFigureId() {
-        return destTextFigureId;
+    public String getAttachEndPointKind() {
+        return attachEndPointKind;
     }
 }
