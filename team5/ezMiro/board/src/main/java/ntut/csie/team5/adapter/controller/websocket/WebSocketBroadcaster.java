@@ -21,8 +21,9 @@ public class WebSocketBroadcaster implements BoardSessionBroadcaster {
         if (null == session) {
             return;
         }
-
-        session.getAsyncRemote().sendObject(domainEvent);
+        if (session.isOpen()) {
+            session.getAsyncRemote().sendObject(domainEvent);
+        }
     }
 
     public void addSession(String boardSessionId, Session session) {

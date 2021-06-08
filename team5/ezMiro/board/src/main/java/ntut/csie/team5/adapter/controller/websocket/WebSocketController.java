@@ -88,6 +88,7 @@ public class WebSocketController {
 
     @OnMessage
     public void onMessage(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String userId, String message, Session session) {
+
         MoveCursorInput input = moveCursorUseCase.newInput();
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
         String boardSessionId = ((WebSocketBroadcaster) boardSessionBroadcaster).getBoardSessionIdBySessionId(session.getId());

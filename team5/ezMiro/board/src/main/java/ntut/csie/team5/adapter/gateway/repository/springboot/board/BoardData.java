@@ -17,6 +17,7 @@ public class BoardData {
     @Column(name="board_name")
     private String name;
 
+    @OrderBy("z_order ASC")
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private Set<CommittedFigureData> committedFigureDatas;
 

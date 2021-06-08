@@ -46,9 +46,13 @@ public class GetBoardContentUseCaseImpl implements GetBoardContentUseCase, GetBo
 
         List<FigureDto> figureDtos = new ArrayList<>();
         for (CommittedFigure committedFigure : board.getCommittedFigures()) {
+            System.out.println(committedFigure.zOrder());
             Figure figure = noteRepository.findById(committedFigure.figureId()).orElse(null);
             if (null == figure) {
                 figure = lineRepository.findById(committedFigure.figureId()).orElse(null);
+                System.out.println("line");
+            } else {
+                System.out.println("note");
             }
             if (null == figure) {
                 output.setBoardId(input.getBoardId())
