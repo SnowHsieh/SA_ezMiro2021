@@ -405,27 +405,27 @@ export default {
             })
           }, 200)
         } else if (o.target.get('type') === 'line' && me.isSamplingWidgetDelayFinish) {
-          console.log(o)
-          console.log(point)
           const line = o.target
-          line.circleHead.set({ left: topLeftX - line.circleHead.radius, top: topLeftY - line.circleHead.radius })
+          var strandsDistance = line.calcLinePoints()
+          var lineCenterX = (topLeftX + bottomRightX) / 2
+          var lineCenterY = (topLeftY + bottomRightY) / 2
+
+          line.circleHead.set({ left: lineCenterX + strandsDistance.x1 - line.circleHead.radius, top: lineCenterY + strandsDistance.y1 - line.circleHead.radius })
           line.circleHead.setCoords()
-          line.circleTail.set({ left: bottomRightX - line.circleHead.radius, top: bottomRightY - line.circleHead.radius })
+          line.circleTail.set({ left: lineCenterX + strandsDistance.x2 - line.circleTail.radius, top: lineCenterY + strandsDistance.y2 - line.circleTail.radius })
           line.circleTail.setCoords()
-          if (me.isSamplingLineDelayFinish) {
-            me.isSamplingLineDelayFinish = false
-            setTimeout(function () {
-              me.isSamplingLineDelayFinish = true
-              MoveLineBy(me.boardId, {
-                [line.id]: {
-                  topLeftX: line.circleHead.left,
-                  topLeftY: line.circleHead.top,
-                  bottomRightX: line.circleTail.left,
-                  bottomRightY: line.circleTail.top
-                }
-              })
-            }, 200)
-          }
+          line.circleHead.fire('moving', {
+            pointer: {
+              x: lineCenterX + strandsDistance.x1,
+              y: lineCenterY + strandsDistance.y1
+            }
+          })
+          line.circleTail.fire('moving', {
+            pointer: {
+              x: lineCenterX + strandsDistance.x2,
+              y: lineCenterY + strandsDistance.y2
+            }
+          })
         }
       })
 

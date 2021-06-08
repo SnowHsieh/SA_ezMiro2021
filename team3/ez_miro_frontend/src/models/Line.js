@@ -42,6 +42,7 @@ fabric.OurLine = fabric.util.createClass(fabric.Line, {
       stroke: '#666'
     })
     this.circleHead.hasControls = this.circleHead.hasBorders = false
+
     this.circleTail = new fabric.Circle({
       left: coors.bottomRightX - 6,
       top: coors.bottomRightY - 6,
