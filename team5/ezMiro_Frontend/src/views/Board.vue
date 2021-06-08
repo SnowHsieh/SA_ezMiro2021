@@ -1,20 +1,15 @@
 <template>
-  <div class="board-container">
-    <div class="container-content">
-      <UiWhiteboardControls />
-      <UiWhiteboard />
-    </div>
+  <div>
+    <ez-miro-canvas v-bind:boardId="this.$route.params.id"/>
   </div>
 </template>
-
 <script>
-import UiWhiteboardControls from "@/components/panel/UiWhiteboardControls.vue";
-import UiWhiteboard from "@/components/UiWhiteboard.vue";
+import EzMiroCanvas from '@/components/board/EzMiroCanvas.vue'
 
 export default {
+  name: 'Board',
   components: {
-    UiWhiteboardControls,
-    UiWhiteboard,
-  },
-};
+    EzMiroCanvas
+  }
+}
 </script>

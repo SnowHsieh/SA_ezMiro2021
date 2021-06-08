@@ -1,28 +1,24 @@
-# frontend
+# ezmiro_frontend
 
-## Environment
-* Node.js: v15.11.0
-* NPM: v7.6.0
-* yarn: v1.22.10
-* @vue/cli: v4.5.12
-
-## Requirement Install
+## Project setup
 ```
-# Install Yarn
-npm install -g yarn
-
-# Install vue
-yarn global add @vue/cli
+yarn install
 ```
 
-## Build Setup
+### Compiles and hot-reloads for development
 ```
-# Install Dependencies
-$ yarn install
-
-# Using the GUI
-$ vue ui
+yarn serve
 ```
 
-![tutorial1](img/tutorial1.png)
-![tutorial2](img/tutorial2.png)
+### Compiles and minifies for production
+```
+yarn build
+```
+
+### Lints and fixes files
+```
+yarn lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

@@ -1,5 +1,5 @@
 {
-  "name": "miro-front",
+  "name": "ezmiro_frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,30 +8,40 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@vue/reactivity": "^3.0.11",
+    "axios": "^0.21.1",
+    "core-js": "^3.6.5",
+    "fabric": "^4.5.0",
+    "mitt": "^2.1.0",
+    "vue": "^2.6.11",
+    "vue-axios": "^3.2.4",
+    "vue-router": "^3.2.0",
+    "vuetify": "^2.4.0",
+    "vuex": "^3.4.0"
+  },
+  "devDependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@fortawesome/vue-fontawesome": "^3.0.0-3",
-    "axios": "^0.21.1",
-    "core-js": "^3.10.1",
-    "fabric": "^4.4.0",
-    "mitt": "^2.1.0",
-    "vue": "^3.0.0",
-    "vue-axios": "^3.2.4",
-    "vue-router": "^4.0.0-0"
-  },
-  "devDependencies": {
+    "@fortawesome/vue-fontawesome": "^2.0.2",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
-    "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/eslint-config-standard": "^5.1.2",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-vue": "^7.9.0",
-    "prettier": "^2.2.1"
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "sass": "~1.32.0",
+    "sass-loader": "^10.0.0",
+    "vue-cli-plugin-vuetify": "~2.4.1",
+    "vue-template-compiler": "^2.6.11",
+    "vuetify-loader": "^1.7.0"
   },
   "eslintConfig": {
     "root": true,
@@ -39,13 +49,13 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/recommended",
-      "eslint:recommended",
-      "@vue/prettier"
+      "plugin:vue/essential",
+      "@vue/standard"
     ],
     "parserOptions": {
       "parser": "babel-eslint"
-    }
+    },
+    "rules": {}
   },
   "browserslist": [
     "> 1%",
