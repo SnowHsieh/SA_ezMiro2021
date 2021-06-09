@@ -301,7 +301,6 @@ export default {
 
       this.canvas.on('mouse:up', async function (e) {
         const target = e.target
-        console.log(target)
         if (e.button === 1) { // 左鍵
           me.isDisplayRightClickMenu = false
           if (target) {
@@ -406,7 +405,27 @@ export default {
             })
           }, 200)
         } else if (o.target.get('type') === 'line' && me.isSamplingWidgetDelayFinish) {
-          o.set({ x1: topLeftX, y1: topLeftY, x2: bottomRightX, y2: bottomRightY })
+          const line = o.target
+          var strandsDistance = line.calcLinePoints()
+          var lineCenterX = (topLeftX + bottomRightX) / 2
+          var lineCenterY = (topLeftY + bottomRightY) / 2
+
+          line.circleHead.set({ left: lineCenterX + strandsDistance.x1 - line.circleHead.radius, top: lineCenterY + strandsDistance.y1 - line.circleHead.radius })
+          line.circleHead.setCoords()
+          line.circleTail.set({ left: lineCenterX + strandsDistance.x2 - line.circleTail.radius, top: lineCenterY + strandsDistance.y2 - line.circleTail.radius })
+          line.circleTail.setCoords()
+          line.circleHead.fire('moving', {
+            pointer: {
+              x: lineCenterX + strandsDistance.x1,
+              y: lineCenterY + strandsDistance.y1
+            }
+          })
+          line.circleTail.fire('moving', {
+            pointer: {
+              x: lineCenterX + strandsDistance.x2,
+              y: lineCenterY + strandsDistance.y2
+            }
+          })
         }
       })
 
@@ -497,7 +516,6 @@ export default {
         objects.forEach(item => {
           canvas.remove(item)
         })
-        console.log(objects[0])
         canvas.add(new fabric.StickyNote({
           id: group.id,
           left: objects[0].left,
@@ -508,6 +526,9 @@ export default {
           text: objects[1].text,
           textColor: objects[1].fill
         }))
+        canvas.getObjects().filter(object => object.get('connectedWidgetId') === group.id).forEach(circle => {
+          me.connectCircleToWidget(circle)
+        })
         canvas.renderAll()
         await EditTextOfStickyNoteBy(group.id, me.boardId, objects[1].text)
       })
@@ -599,8 +620,8 @@ export default {
         fill: 'red',
         stroke: 'black',
         strokeWidth: 5,
-        selectable: false,
-        evented: false
+        selectable: true,
+        evented: true
       })
 
       const me = this
