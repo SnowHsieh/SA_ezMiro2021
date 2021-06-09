@@ -38,8 +38,8 @@ public class DrawLineController {
             JSONObject endpointAJson = lineJSON.getJSONObject("endpointA");
             JSONObject endpointBJson = lineJSON.getJSONObject("endpointB");
 
-            endpointA = new Endpoint(UUID.randomUUID().toString(), endpointAJson.getInt("positionX"), endpointAJson.getInt("positionY"), endpointAJson.getString("connectedFigureId"));
-            endpointB = new Endpoint(UUID.randomUUID().toString(), endpointBJson.getInt("positionX"), endpointBJson.getInt("positionY"), endpointBJson.getString("connectedFigureId"));
+            endpointA = new Endpoint(endpointAJson.getString("id"), endpointAJson.getInt("positionX"), endpointAJson.getInt("positionY"), endpointAJson.getString("connectedFigureId"));
+            endpointB = new Endpoint(endpointBJson.getString("id"), endpointBJson.getInt("positionX"), endpointBJson.getInt("positionY"), endpointBJson.getString("connectedFigureId"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

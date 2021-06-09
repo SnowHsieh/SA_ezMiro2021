@@ -22,7 +22,8 @@ export default fabric.util.createClass(fabric.Group, {
   _recalcTextboxPosition: _recalcTextboxPosition,
   movePosition: movePosition,
   resize: resize,
-  changeText: changeText
+  changeText: changeText,
+  changeColor: changeColor
 })
 
 function initialize (figureId, x, y, width, height, color, text) {
@@ -156,6 +157,14 @@ function changeText (text) {
     text: text
   })
   this._recalcTextboxPosition()
+}
+
+function changeColor (color) {
+  this.rect.set({
+    stroke: color,
+    fill: color
+  })
+  noteAPI.changeNoteColor(this.figureId, color)
 }
 
 function _registerMovedEvent () {

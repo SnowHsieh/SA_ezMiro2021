@@ -48,7 +48,7 @@ function initialize (figureId, endpointA, endpointB) {
 
 const Endpoint = fabric.util.createClass(fabric.Circle, {
   type: 'endpoint',
-  endpointId: '',
+  id: '',
   connectedFigureId: '',
   line: null,
   connectedFigure: null,
@@ -66,7 +66,7 @@ const Endpoint = fabric.util.createClass(fabric.Circle, {
       selectable: true,
       evented: true
     })
-    this.endpointId = endpoint.endpointId
+    this.id = endpoint.id
     this.connectedFigureId = endpoint.connectedFigureId
     this.line = line
     this.hasBorders = false
@@ -142,7 +142,7 @@ function _registerMovedEvent () {
       y1: this.endpointA.top
     })
     this.setCoords()
-    lineAPI.moveLineEndpoint(this.figureId, this.endpointA.endpointId, this.endpointA.left, this.endpointA.top)
+    lineAPI.moveLineEndpoint(this.figureId, this.endpointA.id, this.endpointA.left, this.endpointA.top)
   })
 
   this.endpointA.on('moved', () => {
@@ -160,7 +160,7 @@ function _registerMovedEvent () {
         this.endpointA.connectedFigure.off('moving', this.endpointA._handleFigureMoving)
         this.endpointA.connectedFigure = null
         this.endpointA._handleFigureMoving = null
-        lineAPI.disconnectLine(this.figureId, this.endpointA.endpointId)
+        lineAPI.disconnectLine(this.figureId, this.endpointA.id)
       }
       if (connectedFigure !== null) {
         this.endpointA.connectedFigure = connectedFigure
@@ -169,12 +169,17 @@ function _registerMovedEvent () {
         this.set({
           evented: false
         })
-        lineAPI.connectLine(this.figureId, this.endpointA.endpointId, connectedFigure.figureId)
+        lineAPI.connectLine(this.figureId, this.endpointA.id, connectedFigure.figureId)
       }
     }
     if (this.endpointA.connectedFigure !== null) {
       this.endpointA._handleFigureMoving()
       this.canvas.renderAll()
+    }
+    if (this.endpointA.connectedFigure === null && this.endpointB.connectedFigure === null) {
+      this.set({
+        evented: true
+      })
     }
   })
 
@@ -184,7 +189,7 @@ function _registerMovedEvent () {
       y2: this.endpointB.top
     })
     this.setCoords()
-    lineAPI.moveLineEndpoint(this.figureId, this.endpointB.endpointId, this.endpointB.left, this.endpointB.top)
+    lineAPI.moveLineEndpoint(this.figureId, this.endpointB.id, this.endpointB.left, this.endpointB.top)
   })
 
   this.endpointB.on('moved', () => {
@@ -202,7 +207,7 @@ function _registerMovedEvent () {
         this.endpointB.connectedFigure.off('moving', this.endpointB._handleFigureMoving)
         this.endpointB.connectedFigure = null
         this.endpointB._handleFigureMoving = null
-        lineAPI.disconnectLine(this.figureId, this.endpointB.endpointId)
+        lineAPI.disconnectLine(this.figureId, this.endpointB.id)
       }
       if (connectedFigure !== null) {
         this.endpointB.connectedFigure = connectedFigure
@@ -211,12 +216,17 @@ function _registerMovedEvent () {
         this.set({
           evented: false
         })
-        lineAPI.connectLine(this.figureId, this.endpointB.endpointId, connectedFigure.figureId)
+        lineAPI.connectLine(this.figureId, this.endpointB.id, connectedFigure.figureId)
       }
     }
     if (this.endpointB.connectedFigure !== null) {
       this.endpointB._handleFigureMoving()
       this.canvas.renderAll()
+    }
+    if (this.endpointA.connectedFigure === null && this.endpointB.connectedFigure === null) {
+      this.set({
+        evented: true
+      })
     }
   })
 }
@@ -272,15 +282,15 @@ function move (offsetX, offsetY) {
   this.endpointB.setCoords()
 }
 // websocket
-function moveEndpoint (endpointId, positionX, positionY) {
-  if (this.endpointA.endpointId === endpointId) {
+function moveEndpoint (id, positionX, positionY) {
+  if (this.endpointA.id === id) {
     this.endpointA.set({ left: positionX, top: positionY, visible: true })
     this.set({
       x1: this.endpointA.left,
       y1: this.endpointA.top
     })
     this.setCoords()
-  } else if (this.endpointB.endpointId === endpointId) {
+  } else if (this.endpointB.id === id) {
     this.endpointB.set({ left: positionX, top: positionY, visible: true })
     this.set({
       x2: this.endpointB.left,
@@ -307,7 +317,6 @@ function getClosestACoord (point, oCoords) {
   let minDistance = Number.MAX_VALUE
   let aCoord = oCoords[0]
   oCoords.forEach((coord) => {
-    console.log(coord)
     const x = point.x - coord.x
     const y = point.y - coord.y
     const distance = Math.sqrt((x * x) + (y * y))

@@ -2,17 +2,17 @@ package ntut.csie.team5.usecase.figure.line;
 
 public class EndpointDto {
 
-    private String endpointId;
+    private String id;
     private int positionX;
     private int positionY;
     private String connectedFigureId;
 
-    public String getEndpointId() {
-        return endpointId;
+    public String getId() {
+        return id;
     }
 
-    public void setEndpointId(String endpointId) {
-        this.endpointId = endpointId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public int getPositionX() {

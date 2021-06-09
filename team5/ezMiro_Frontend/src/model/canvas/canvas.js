@@ -2,6 +2,7 @@ import { fabric } from 'fabric'
 import Note from './note.js'
 import Line from './line.js'
 import miroAPI from '@/utils/apis.js'
+import { uuid } from 'vue-uuid'
 
 export default fabric.util.createClass(fabric.Canvas, {
   boardId: '',
@@ -13,6 +14,7 @@ export default fabric.util.createClass(fabric.Canvas, {
   moveNote: moveNote,
   resizeNote: resizeNote,
   changeNoteText: changeNoteText,
+  changeNoteColor: changeNoteColor,
   drawLine: drawLine,
   addLine: addLine,
   moveLine: moveLine,
@@ -68,7 +70,16 @@ function changeNoteText (figureId, text) {
   }
 }
 
+function changeNoteColor (figureId, color) {
+  const note = this.getFigure(figureId)
+  if (note !== undefined && note.isType('note')) {
+    note.changeColor(color)
+  }
+}
+
 async function drawLine (endpointA, endpointB) {
+  endpointA.id = uuid.v4()
+  endpointB.id = uuid.v4()
   const figureId = await miroAPI.line.drawLine(this.boardId, endpointA, endpointB)
   console.log(figureId)
   this.addLine(figureId, endpointA, endpointB)

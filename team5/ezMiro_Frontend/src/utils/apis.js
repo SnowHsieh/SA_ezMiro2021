@@ -20,20 +20,8 @@ const board = {
     })
     return figures
   },
-  bringFigureForward (boardId, figureId) {
-    api.board.bringFigureForward({
-      boardId: boardId,
-      figureId: figureId
-    })
-  },
   bringFigureToFront (boardId, figureId) {
     api.board.bringFigureToFront({
-      boardId: boardId,
-      figureId: figureId
-    })
-  },
-  sendFigureBackwards (boardId, figureId) {
-    api.board.sendFigureBackwards({
       boardId: boardId,
       figureId: figureId
     })

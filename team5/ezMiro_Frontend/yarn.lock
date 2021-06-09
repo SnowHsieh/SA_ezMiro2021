@@ -1150,6 +1150,11 @@
   dependencies:
     source-map "^0.6.1"
 
+"@types/uuid@^8.0.0":
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.0.tgz#215c231dff736d5ba92410e6d602050cce7e273f"
+  integrity sha512-eQ9qFW/fhfGJF8WKHGEHZEyVWfZxrT+6CLIJGBcZPfxUh/+BnEj+UCGYMlr9qZuX/2AltsvwrGqp0LhEW8D0zQ==
+
 "@types/webpack-dev-server@^3.11.0":
   version "3.11.4"
   resolved "https://registry.nlark.com/@types/webpack-dev-server/download/@types/webpack-dev-server-3.11.4.tgz?cache=0&sync_timestamp=1621243863291&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fwebpack-dev-server%2Fdownload%2F%40types%2Fwebpack-dev-server-3.11.4.tgz#90d47dd660b696d409431ab8c1e9fa3615103a07"
@@ -8807,6 +8812,11 @@ uuid@^3.3.2, uuid@^3.4.0:
   resolved "https://registry.nlark.com/uuid/download/uuid-3.4.0.tgz?cache=0&sync_timestamp=1622213399220&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fuuid%2Fdownload%2Fuuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha1-sj5DWK+oogL+ehAK8fX4g/AgB+4=
 
+uuid@^8.1.0:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
+
 v8-compile-cache@^2.0.3:
   version "2.3.0"
   resolved "https://registry.npm.taobao.org/v8-compile-cache/download/v8-compile-cache-2.3.0.tgz?cache=0&sync_timestamp=1614994185213&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fv8-compile-cache%2Fdownload%2Fv8-compile-cache-2.3.0.tgz#2de19618c66dc247dcfb6f99338035d8245a2cee"
@@ -8920,6 +8930,14 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha1-HuO8mhbsv1EYvjNLsV+cRvgvWCU=
+
+vue-uuid@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/vue-uuid/-/vue-uuid-2.0.2.tgz#0cfb739e660a3af1d4e3342743578114f79b2438"
+  integrity sha512-PRf1CHg3uKi77bVRyAuW2u/T2PO9LxMr7cw9t9rNdpZTkNDyw1Fx6eJVL+8JOtM9VxxPkoZ/rwhXJ5l+X5AYzQ==
+  dependencies:
+    "@types/uuid" "^8.0.0"
+    uuid "^8.1.0"
 
 vue@^2.6.11:
   version "2.6.13"

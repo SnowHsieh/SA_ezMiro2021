@@ -1,19 +1,25 @@
 package ntut.csie.team5.entity.model.figure.line;
 
-import ntut.csie.sslab.ddd.model.Entity;
-import ntut.csie.team5.entity.model.board.BoardSessionId;
+public class Endpoint {
 
-public class Endpoint extends Entity<String> {
-
+    private String id;
     private int positionX;
     private int positionY;
     private String connectedFigureId;
 
-    public Endpoint(String endpointId, int positionX, int positionY, String connectedFigureId) {
-        super(endpointId);
+    public Endpoint(String id, int positionX, int positionY, String connectedFigureId) {
+        this.id = id;
         this.positionX = positionX;
         this.positionY = positionY;
         this.connectedFigureId = connectedFigureId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public int getPositionX() {

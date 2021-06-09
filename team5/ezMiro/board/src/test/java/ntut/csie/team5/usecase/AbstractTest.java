@@ -2,7 +2,6 @@ package ntut.csie.team5.usecase;
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
-import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.adapter.gateway.repository.springboot.board.BoardRepositoryImpl;
 import ntut.csie.team5.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.team5.adapter.gateway.repository.springboot.figure.line.LineRepositoryImpl;

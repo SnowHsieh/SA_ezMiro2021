@@ -1,11 +1,51 @@
 <template>
   <div>
-    <div class="absolute">
-      <canvas id="canvas" class="test"/>
-    </div>
-    <div class="absolute active_cursors_canvas">
-      <canvas id="active_cursors_canvas"/>
-    </div>
+    <v-card
+      @contextmenu="show"
+    >
+      <div class="absolute">
+        <canvas id="canvas" class="test"/>
+      </div>
+      <div class="absolute active_cursors_canvas">
+        <canvas id="active_cursors_canvas"/>
+      </div>
+    </v-card>
+    <v-menu
+      v-model="showMenu"
+      :position-x="x"
+      :position-y="y"
+      absolute
+      offset-y
+    >
+      <div class="d-flex flex-column">
+        <v-menu
+          top
+          :offset-x="true"
+          open-on-hover
+          v-if="showChangeNoteMenu"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              v-bind="attrs"
+              v-on="on"
+            >
+              change color
+            </v-btn>
+          </template>
+          <div class="d-flex flex-column">
+            <v-btn
+              v-for="(item, index) in items"
+              :key="index"
+              @click="changeNoteColor(item.color)"
+            >
+              <font-awesome-icon size="2x" :icon="['fas', 'sticky-note']" :style="{ color: item.color }"/>
+            </v-btn>
+          </div>
+        </v-menu>
+        <v-btn @click="bringToFront">bring to front</v-btn>
+        <v-btn @click="sendToBack">send to back</v-btn>
+      </div>
+    </v-menu>
   </div>
 </template>
 <script>
@@ -20,20 +60,34 @@ export default {
   name: 'EzMiroCanvas',
   props: ['boardId'],
   data: () => ({
+    showMenu: false,
+    showChangeNoteMenu: false,
+    x: 0,
+    y: 0,
+    toggle_one: 0,
+    items: [
+      { title: 'Read Model', color: '#CADF58' },
+      { title: 'Command', color: '#6CD5F5' },
+      { title: 'Domain Event', color: '#FD9E4B' },
+      { title: 'Policy', color: '#C08AC9' },
+      { title: 'Aggregate', color: '#FFF9B2' }
+    ],
     canvas: null,
     activeCursorCanvas: null,
     mousePosition: {
       x: 0,
       y: 0
     },
+    activeObject: null,
+    noteColor: '#CADF58',
     webSocket: null,
     canvasToolMode: event.canvasToolMode.mouseModel
   }),
   async mounted () {
     console.log(this.boardId)
     const boardId = this.boardId
-    this.canvas = markRaw(new Canvas('canvas', 1600, 1200, boardId))
-    this.activeCursorCanvas = markRaw(new CursorCanvas('active_cursors_canvas', 1600, 1200))
+    this.canvas = markRaw(new Canvas('canvas', 6000, 6000, boardId))
+    this.activeCursorCanvas = markRaw(new CursorCanvas('active_cursors_canvas', 6000, 6000))
     this.registerEventBus()
     this.registerCanvasEvent()
     this.registerWindowEvent()
@@ -41,11 +95,32 @@ export default {
     this.setWebSocket()
   },
   methods: {
+    show (e) {
+      e.preventDefault()
+      const activeObjects = this.canvas.getActiveObjects()
+      if (activeObjects.length === 1) {
+        if (activeObjects[0].isType('note') || activeObjects[0].isType('line')) {
+          if (activeObjects[0].isType('note')) {
+            this.showChangeNoteMenu = true
+          } else {
+            this.showChangeNoteMenu = false
+          }
+          this.activeObject = activeObjects[0]
+          this.showMenu = false
+          this.x = e.clientX
+          this.y = e.clientY
+          this.$nextTick(() => {
+            this.showMenu = true
+          })
+        }
+      }
+    },
     registerEventBus () {
       eventbus.on(event.canvasToolMode.mouseMode, () => {
         this.canvasToolMode = event.canvasToolMode.mouseMode
       })
-      eventbus.on(event.canvasToolMode.postNoteMode, () => {
+      eventbus.on(event.canvasToolMode.postNoteMode, (e) => {
+        this.noteColor = e.color
         this.canvasToolMode = event.canvasToolMode.postNoteMode
       })
       eventbus.on(event.canvasToolMode.drawLineMode, () => {
@@ -87,13 +162,14 @@ export default {
     mouseDownEvent (e) {
       if (this.canvasToolMode === event.canvasToolMode.postNoteMode) {
         eventbus.emit(event.canvasEvent.mouseDown)
-        this.canvas.postNote(e.pointer.x, e.pointer.y, 100, 100, '#00ff33')
+        this.canvas.postNote(e.pointer.x, e.pointer.y, 100, 100, this.noteColor)
       } else if (this.canvasToolMode === event.canvasToolMode.drawLineMode) {
         eventbus.emit(event.canvasEvent.mouseDown)
         this.canvas.drawLine({ positionX: e.pointer.x, positionY: e.pointer.y, connectedFigureId: '' }, { positionX: e.pointer.x + 100, positionY: e.pointer.y + 100, connectedFigureId: '' })
       }
     },
     async getBoardContent () {
+      console.log('getBoardContent')
       const boardContent = await miroApi.board.getBoardContent(this.boardId)
       this.canvas.clear()
       boardContent.forEach(figure => {
@@ -209,6 +285,20 @@ export default {
         preMousePosition.x = this.mousePosition.x
         preMousePosition.y = this.mousePosition.y
       }, 200)
+    },
+    changeNoteColor (color) {
+      if (this.activeObject.isType('note')) {
+        this.canvas.changeNoteColor(this.activeObject.figureId, color)
+        this.canvas.renderAll()
+      }
+    },
+    bringToFront () {
+      this.canvas.bringToFront(this.activeObject)
+      miroApi.board.bringFigureToFront(this.boardId, this.activeObject.figureId)
+    },
+    sendToBack () {
+      this.canvas.sendToBack(this.activeObject)
+      miroApi.board.sendFigureToBack(this.boardId, this.activeObject.figureId)
     }
   }
 }
