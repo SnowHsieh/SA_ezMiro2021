@@ -7,7 +7,9 @@ import ntut.csie.selab.entity.model.widget.Line;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.usecase.widget.LineRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class LineRepositoryImpl implements LineRepository {
     private LineRepositoryPeer peer;
@@ -34,5 +36,16 @@ public class LineRepositoryImpl implements LineRepository {
             return Optional.of(selectedLine);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<Widget> findAllByHeadWidgetOrTailWidget(final String widgetId) {
+        List<LineData> lineDatas = peer.findAllByHeadWidgetIdOrTailWidgetId(widgetId, widgetId);
+        return lineDatas.stream().map(LineDataMapper::dataToDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public void saveAll(List<Widget> lines) {
+        peer.saveAll(lines.stream().map(LineDataMapper::domainToData).collect(Collectors.toList()));
     }
 }

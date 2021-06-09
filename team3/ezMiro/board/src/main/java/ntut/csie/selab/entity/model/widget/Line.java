@@ -1,45 +1,59 @@
 package ntut.csie.selab.entity.model.widget;
 
 import ntut.csie.selab.entity.model.widget.event.LineLinked;
+import ntut.csie.selab.entity.model.widget.event.LinkedStickyNoteIdDeleted;
 
 import java.util.Date;
 
 public class Line extends Widget {
 
-    private Widget headWidget;
-    private Widget tailWidget;
+    private String headWidgetId;
+    private String tailWidgetId;
 
     public Line(String id, String boardId, Coordinate coordinate) {
         super(id, boardId, coordinate, WidgetType.LINE.getType());
     }
 
-    public Widget getHeadWidget() {
-        return headWidget;
+    public String getHeadWidgetId() {
+        return headWidgetId;
     }
 
-    public void setHeadWidget(Widget headWidget) {
-        this.headWidget = headWidget;
+    public void setHeadWidgetId(String headWidgetId) {
+        this.headWidgetId = headWidgetId;
     }
 
-    public Widget getTailWidget() {
-        return tailWidget;
+    public String getTailWidgetId() {
+        return tailWidgetId;
     }
 
-    public void setTailWidget(Widget tailWidget) {
-        this.tailWidget = tailWidget;
+    public void setTailWidgetId(String tailWidgetId) {
+        this.tailWidgetId = tailWidgetId;
     }
 
-    public void link(String endPoint, Widget widget) {
+    public void link(String endPoint, String widgetId) {
         if(endPoint.equals("head")) {
-            headWidget = widget;
+            headWidgetId = widgetId;
         } else {
-            tailWidget = widget;
+            tailWidgetId = widgetId;
         }
 
         addDomainEvent((new LineLinked(
                 new Date(),
                 this.boardId,
                 getId()
+        )));
+    }
+
+    public void removeLinkedWidget(String widgetId) {
+        if(headWidgetId != null && headWidgetId.equals(widgetId)) {
+            this.headWidgetId = null;
+        }
+        if(tailWidgetId != null && tailWidgetId.equals(widgetId)) {
+            this.tailWidgetId = null;
+        }
+
+        addDomainEvent((new LinkedStickyNoteIdDeleted(
+                new Date()
         )));
     }
 }

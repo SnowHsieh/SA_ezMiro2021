@@ -2,6 +2,7 @@ package ntut.csie.selab.application.springboot.web;
 import ntut.csie.selab.adapter.websocket.BoardWebSocketController;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
+import ntut.csie.selab.usecase.eventHandler.NotifyLine;
 import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -21,6 +22,7 @@ public class EzMiroWebMain implements CommandLineRunner {
     private DomainEventBus domainEventBus;
     private NotifyBoard notifyBoard;
     private NotifyUsersInBoard notifyUsersInBoard;
+    private NotifyLine notifyLine;
 
     @Autowired
     public void setDomainEventBus(DomainEventBus domainEventBus) {
@@ -28,9 +30,10 @@ public class EzMiroWebMain implements CommandLineRunner {
     }
 
     @Autowired
-    public void setNotifyBoard(NotifyBoard notifyBoard, NotifyUsersInBoard notifyUsersInBoard) {
+    public void setNotifyBoard(NotifyBoard notifyBoard, NotifyUsersInBoard notifyUsersInBoard, NotifyLine notifyLine) {
         this.notifyBoard = notifyBoard;
         this.notifyUsersInBoard = notifyUsersInBoard;
+        this.notifyLine = notifyLine;
     }
 
     public static void main(String[] args) {
@@ -45,6 +48,7 @@ public class EzMiroWebMain implements CommandLineRunner {
 
         domainEventBus.register(notifyBoard);
         domainEventBus.register(notifyUsersInBoard);
+        domainEventBus.register(notifyLine);
     }
 
     @Bean

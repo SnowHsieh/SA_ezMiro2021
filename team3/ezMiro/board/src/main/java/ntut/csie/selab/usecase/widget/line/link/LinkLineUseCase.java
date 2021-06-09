@@ -30,16 +30,16 @@ public class LinkLineUseCase {
 
             Line selectedLine = (Line) line.get();
             selectedLine.clearDomainEvents();
-            selectedLine.link(input.getEndPoint(), stickyNote.get());
+            selectedLine.link(input.getEndPoint(), stickyNote.get().getId());
             lineRepository.save(selectedLine);
             domainEventBus.postAll(selectedLine);
             output.setLineId(selectedLine.getId());
             output.setBoardId(selectedLine.getBoardId());
             output.setEndPoint(input.getEndPoint());
             if(input.getEndPoint().equals("head")) {
-                output.setTargetId(selectedLine.getHeadWidget().getId());
+                output.setTargetId(selectedLine.getHeadWidgetId());
             } else {
-                output.setTargetId(selectedLine.getTailWidget().getId());
+                output.setTargetId(selectedLine.getTailWidgetId());
             }
         } else {
             throw new RuntimeException("line not found, line id = " + input.getLineId());

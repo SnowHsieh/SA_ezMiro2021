@@ -9,11 +9,13 @@ import ntut.csie.selab.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.selab.usecase.board.movecursor.MoveCursorUseCase;
 import ntut.csie.selab.usecase.board.query.getcontent.GetBoardContentUseCase;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
+import ntut.csie.selab.usecase.eventHandler.NotifyLine;
 import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
 import ntut.csie.selab.usecase.websocket.WebSocket;
 import ntut.csie.selab.usecase.widget.LineRepository;
 import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 import ntut.csie.selab.usecase.widget.line.create.CreateLineUseCase;
+import ntut.csie.selab.usecase.widget.line.delete.DeleteLineUseCase;
 import ntut.csie.selab.usecase.widget.line.link.LinkLineUseCase;
 import ntut.csie.selab.usecase.widget.line.move.MoveLineUseCase;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetUseCase;
@@ -44,6 +46,11 @@ public class UseCaseInjection {
     @Bean(name="createNotifyUsersInBoard")
     public NotifyUsersInBoard createNotifyUsersInBoard() {
         return new NotifyUsersInBoard(boardRepository, stickyNoteRepository, lineRepository, eventBus, boardWebSocket);
+    }
+
+    @Bean(name="createNotifyLine")
+    public NotifyLine createNotifyLine() {
+        return new NotifyLine(boardRepository, lineRepository, eventBus);
     }
 
     @Bean(name="GetBoardContentUseCase")
@@ -101,6 +108,11 @@ public class UseCaseInjection {
     @Bean("EditFontSizeOfStickyNoteUseCase")
     public EditFontSizeOfStickyNoteUseCase editFontSizeOfStickyNoteUseCase() {
         return new EditFontSizeOfStickyNoteUseCase(stickyNoteRepository, eventBus);
+    }
+
+    @Bean("DeleteLineUseCase")
+    public DeleteLineUseCase deleteLineUseCase() {
+        return new DeleteLineUseCase(lineRepository, eventBus);
     }
 
     @Bean("EnterBoardUseCase")
