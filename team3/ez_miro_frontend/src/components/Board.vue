@@ -6,7 +6,7 @@
     <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
       <li @click="deleteWidget()" class="list-group-item">Delete</li>
       <li class="list-group-item">
-        <input type="color" id="favcolor" name="favcolor" v-model="selectedStickyNoteColor" @change="changeColorOfStickyNoteWith(selectedStickyNoteColor)">Custom Color</li>
+        <input type="color" id="favcolor" name="favcolor" v-model="selectedWidgetColor" @change="changeColorOfStickyNoteWith(selectedWidgetColor)">Custom Color</li>
       <li class="list-group-item">
         <button type="button" class="btn btn-default btn-circle" style="background-color: #4CAF50;" @click="changeColorOfStickyNoteWith('#4CAF50')"></button>
         <button type="button" class="btn btn-default btn-circle" style="background-color: #41ABD8;" @click="changeColorOfStickyNoteWith('#41ABD8')"></button>
@@ -36,7 +36,8 @@ import {
   EditFontSizeOfStickyNoteBy,
   CreateLine,
   MoveLineBy,
-  LinkLine
+  LinkLine,
+  DeleteLineBy
 } from '@/apis/Widget'
 import '@/models/StickyNote'
 import '@/models/Line'
@@ -60,9 +61,9 @@ export default {
         top: '-1px',
         left: '-1px'
       },
-      selectedStickyNote: null,
+      selectedWidget: null,
       ungroupTarget: {},
-      selectedStickyNoteColor: '#000000',
+      selectedWidgetColor: '#000000',
       webSocket: null,
       isSamplingCursorDelayFinish: true,
       isSamplingWidgetDelayFinish: true,
@@ -136,6 +137,12 @@ export default {
       const canvas = this.canvas
       canvas.getObjects().forEach(function (o) {
         if (o.id === widgetDto.widgetId) {
+          if (o.circleTail !== null) {
+            canvas.remove(o.circleTail)
+          }
+          if (o.circleHead !== null) {
+            canvas.remove(o.circleHead)
+          }
           canvas.remove(o)
         }
       })
@@ -459,10 +466,16 @@ export default {
       return result
     },
     async deleteWidget () {
-      const res = await DeleteStickyNoteBy(this.selectedStickyNote.id, this.boardId)
+      let res = null
+      if (this.selectedWidget.get('type') === 'stickyNote') {
+        res = await DeleteStickyNoteBy(this.selectedWidget.id, this.boardId)
+      } else if (this.selectedWidget.get('type') === 'line') {
+        res = await DeleteLineBy(this.selectedWidget.id, this.boardId)
+      }
+
       if (res !== null) {
         this.isDisplayRightClickMenu = false
-        this.selectedStickyNote = null
+        this.selectedWidget = null
       }
     },
     async loadAllStickyNote (widgets) {
@@ -490,9 +503,9 @@ export default {
     },
     setTarget (target) {
       if (target !== null) {
-        this.selectedStickyNote = target
+        this.selectedWidget = target
       } else {
-        this.selectedStickyNote = null
+        this.selectedWidget = null
       }
     },
     ungroup (group) {
@@ -534,23 +547,23 @@ export default {
       })
     },
     async changeColorOfStickyNoteWith (color) {
-      const res = await ChangeColorOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, color)
+      const res = await ChangeColorOfStickyNoteBy(this.selectedWidget.id, this.boardId, color)
       if (res !== null) {
-        this.selectedStickyNote.rectObject.set('fill', color)
+        this.selectedWidget.rectObject.set('fill', color)
         this.canvas.renderAll()
       }
       this.isDisplayRightClickMenu = false
     },
     async bringToFront () {
-      await this.canvas.bringToFront(this.selectedStickyNote)
-      const zOrder = this.getZOrderOf(this.selectedStickyNote)
-      await ChangeZOrderOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, zOrder)
+      await this.canvas.bringToFront(this.selectedWidget)
+      const zOrder = this.getZOrderOf(this.selectedWidget)
+      await ChangeZOrderOfStickyNoteBy(this.selectedWidget.id, this.boardId, zOrder)
       this.isDisplayRightClickMenu = false
     },
     async sendToback () {
-      await this.canvas.sendToBack(this.selectedStickyNote)
-      const zOrder = this.getZOrderOf(this.selectedStickyNote)
-      await ChangeZOrderOfStickyNoteBy(this.selectedStickyNote.id, this.boardId, zOrder)
+      await this.canvas.sendToBack(this.selectedWidget)
+      const zOrder = this.getZOrderOf(this.selectedWidget)
+      await ChangeZOrderOfStickyNoteBy(this.selectedWidget.id, this.boardId, zOrder)
       this.isDisplayRightClickMenu = false
     },
     buildFabricObjectOfStickyNote (widget) {

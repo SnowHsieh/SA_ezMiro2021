@@ -25,7 +25,8 @@ public abstract class Widget extends AggregateRoot<String> {
         addDomainEvent((new WidgetDeleted(
                 new Date(),
                 this.boardId,
-                getId()
+                getId(),
+                type
         )));
     }
 

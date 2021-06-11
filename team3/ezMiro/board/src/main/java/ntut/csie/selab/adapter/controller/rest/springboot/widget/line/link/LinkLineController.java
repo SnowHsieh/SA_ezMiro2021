@@ -1,20 +1,12 @@
 package ntut.csie.selab.adapter.controller.rest.springboot.widget.line.link;
 
-import ntut.csie.selab.entity.model.widget.Coordinate;
-import ntut.csie.selab.usecase.widget.line.create.CreateLineUseCase;
 import ntut.csie.selab.usecase.widget.line.link.LinkLineInput;
 import ntut.csie.selab.usecase.widget.line.link.LinkLineOutput;
 import ntut.csie.selab.usecase.widget.line.link.LinkLineUseCase;
-import ntut.csie.selab.usecase.widget.line.move.MoveLineInput;
-import ntut.csie.selab.usecase.widget.line.move.MoveLineOutput;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "${CORS_URLS}")

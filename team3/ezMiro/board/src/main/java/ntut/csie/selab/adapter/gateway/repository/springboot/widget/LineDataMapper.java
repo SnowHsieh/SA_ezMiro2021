@@ -16,11 +16,11 @@ public class LineDataMapper {
         LineData lineData = new LineData(line.getId(), line.getBoardId(),
                 line.getCoordinate().getTopLeft().x, line.getCoordinate().getTopLeft().y,
                 line.getCoordinate().getBottomRight().x, line.getCoordinate().getBottomRight().y);
-        if (line.getHeadWidget() != null) {
-            lineData.setHeadWidget(StickyNoteDataMapper.domainToData((StickyNote) line.getHeadWidget()));
+        if (line.getHeadWidgetId() != null) {
+            lineData.setHeadWidgetId(line.getHeadWidgetId());
         }
-        if (line.getTailWidget() != null) {
-            lineData.setTailWidget(StickyNoteDataMapper.domainToData((StickyNote) line.getTailWidget()));
+        if (line.getTailWidgetId() != null) {
+            lineData.setTailWidgetId(line.getTailWidgetId());
         }
 
         return lineData;
@@ -36,13 +36,12 @@ public class LineDataMapper {
         Coordinate coordinate = new Coordinate(lineData.getTopLeftX(), lineData.getTopLeftY(), lineData.getBottomRightX(), lineData.getBottomRightY());
 
         Line line = new Line(lineData.getLineId(), lineData.getBoardId(), coordinate);
-        if (lineData.getHeadWidget() != null) {
-            line.setHeadWidget(StickyNoteDataMapper.dataToDomain(lineData.getHeadWidget()));
+        if (lineData.getHeadWidgetId() != null) {
+            line.setHeadWidgetId(lineData.getHeadWidgetId());
         }
-        if (lineData.getTailWidget() != null) {
-            line.setTailWidget(StickyNoteDataMapper.dataToDomain(lineData.getTailWidget()));
+        if (lineData.getTailWidgetId() != null) {
+            line.setTailWidgetId(lineData.getTailWidgetId());
         }
-
         return line;
     }
 }

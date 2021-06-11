@@ -94,7 +94,12 @@ public class NotifyUsersInBoard {
 
     @Subscribe
     public void notifyWidgetDeletionToAllUser(WidgetDeleted widgetDeleted) {
-        Optional<Widget> widget = stickyNoteRepository.findById(widgetDeleted.getWidgetId());
+        Optional<Widget> widget;
+        if (widgetDeleted.getType().equals(WidgetType.STICKY_NOTE.getType())) {
+            widget = stickyNoteRepository.findById(widgetDeleted.getWidgetId());
+        } else {
+            widget = lineRepository.findById(widgetDeleted.getWidgetId());
+        }
 
         if (widget.isPresent()) {
             throw new RuntimeException("Widget not deleted, widget id = " + widgetDeleted.getWidgetId());

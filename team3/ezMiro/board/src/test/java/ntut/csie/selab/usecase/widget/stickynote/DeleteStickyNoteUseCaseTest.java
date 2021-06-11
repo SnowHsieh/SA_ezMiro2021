@@ -3,20 +3,26 @@ package ntut.csie.selab.usecase.widget.stickynote;
 import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidgetRepositoryPeer;
+import ntut.csie.selab.adapter.gateway.repository.springboot.widget.LineRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
+import ntut.csie.selab.adapter.widget.LineRepositoryImpl;
 import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.board.CommittedWidget;
 import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Line;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.board.BoardRepository;
 import ntut.csie.selab.usecase.eventHandler.NotifyBoard;
+import ntut.csie.selab.usecase.eventHandler.NotifyLine;
 import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
 import ntut.csie.selab.usecase.websocket.WebSocket;
+import ntut.csie.selab.usecase.widget.LineRepository;
 import ntut.csie.selab.usecase.widget.StickyNoteRepository;
+import ntut.csie.selab.usecase.widget.line.MoveLineUseCaseTest;
 import ntut.csie.selab.usecase.widget.stickynote.delete.DeleteStickyNoteInput;
 import ntut.csie.selab.usecase.widget.stickynote.delete.DeleteStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.stickynote.delete.DeleteStickyNoteUseCase;
@@ -40,6 +46,9 @@ public class DeleteStickyNoteUseCaseTest {
 
     @Autowired
     private StickyNoteRepositoryPeer stickyNoteRepositoryPeer;
+
+    @Autowired
+    private LineRepositoryPeer lineRepositoryPeer;
 
     @Autowired
     private BoardRepositoryPeer boardRepositoryPeer;
@@ -104,6 +113,48 @@ public class DeleteStickyNoteUseCaseTest {
         Assert.assertFalse(stickyNoteRepository.findById(output.getStickyNoteId()).isPresent());
         Assert.assertEquals(0, boardRepository.findById(boardId).get().getWidgetIds().size());
         Assert.assertEquals(3, domainEventBus.getCount());
+    }
+
+    @Test
+    public void delete_sticky_note_which_has_a_linking_line_should_successd() {
+        // Arrange
+        BoardRepository boardRepository = new BoardRepositoryImpl(boardRepositoryPeer);
+        StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
+        LineRepository lineRepository = new LineRepositoryImpl(lineRepositoryPeer);
+
+        String boardId = "0";
+        String lineId = "1";
+        Coordinate lineCoordinate = new Coordinate(1, 1, 2, 2);
+        Line line = new Line(lineId, boardId, lineCoordinate);
+
+        lineRepository.save(line);
+        String stickyNoteId = "2";
+        Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
+        Widget stickyNote = new StickyNote(stickyNoteId, boardId, stickyNoteCoordinate);
+        stickyNoteRepository.save(stickyNote);
+
+        line.link("head", stickyNote.getId());
+        lineRepository.save(line);
+
+        WebSocket webSocket = new FakeBoardWebSocket();
+        DomainEventBus domainEventBus = new DomainEventBus();
+        NotifyUsersInBoard notifyUsersInBoard = new NotifyUsersInBoard(boardRepository, stickyNoteRepository, domainEventBus, webSocket);
+        NotifyLine notifyLine = new NotifyLine(boardRepository, lineRepository, domainEventBus);
+        domainEventBus.register(notifyUsersInBoard);
+        domainEventBus.register(notifyLine);
+
+        DeleteStickyNoteUseCase deleteStickyNoteUseCase = new DeleteStickyNoteUseCase(stickyNoteRepository, domainEventBus);
+        DeleteStickyNoteInput input = new DeleteStickyNoteInput();
+        DeleteStickyNoteOutput output = new DeleteStickyNoteOutput();
+        input.setStickyNoteId(stickyNoteId);
+
+        // Act
+        deleteStickyNoteUseCase.execute(input, output);
+
+        // Assert
+        Assert.assertNotNull(output.getStickyNoteId());
+        Assert.assertFalse(stickyNoteRepository.findById(output.getStickyNoteId()).isPresent());
+        Assert.assertNull(((Line) lineRepository.findById(line.getId()).get()).getHeadWidgetId());
     }
 
     private Board createBoardHasStickNoteWith(String boardId, String stickyNoteId) {

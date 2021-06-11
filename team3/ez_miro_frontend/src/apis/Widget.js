@@ -29,6 +29,16 @@ export const DeleteStickyNoteBy = async (id, boardId) => {
   }
 }
 
+export const DeleteLineBy = async (id, boardId) => {
+  try {
+    const res = await axios.delete(`${host}/ez-miro/boards/${boardId}/widgets/lines/${id}`)
+    return res.data
+  } catch (err) {
+    console.error(err)
+    return err
+  }
+}
+
 export const EditTextOfStickyNoteBy = async (id, boardId, newText) => {
   try {
     const res = await axios.put(`${host}/ez-miro/boards/${boardId}/widgets/sticky-notes/${id}/text`, { newText })

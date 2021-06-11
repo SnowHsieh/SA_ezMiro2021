@@ -69,8 +69,8 @@ public class LinkLineUseCaseTest {
         Assert.assertEquals(targetId, output.getTargetId());
         Assert.assertTrue(lineRepository.findById(output.getLineId()).isPresent());
         Assert.assertEquals(lineId, actualLine.getId());
-        Assert.assertEquals(targetId, actualLine.getHeadWidget().getId());
-        Assert.assertNull(actualLine.getTailWidget());
+        Assert.assertEquals(targetId, actualLine.getHeadWidgetId());
+        Assert.assertNull(actualLine.getTailWidgetId());
         Assert.assertEquals(1, domainEventBus.getCount());
     }
 }

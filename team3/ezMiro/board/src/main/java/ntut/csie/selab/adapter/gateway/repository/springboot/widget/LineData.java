@@ -1,8 +1,9 @@
 package ntut.csie.selab.adapter.gateway.repository.springboot.widget;
 
-import ntut.csie.selab.entity.model.widget.Widget;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "line")
@@ -26,13 +27,11 @@ public class LineData {
     @Column(name = "bottom_right_y")
     private int bottomRightY;
 
-    @OneToOne
-    @JoinColumn(name = "head_widget_id", referencedColumnName = "widget_id")
-    private StickyNoteData headWidget;
+    @Column(name = "head_widget_id")
+    private String headWidgetId;
 
-    @OneToOne
-    @JoinColumn(name = "tail_widget_id", referencedColumnName = "widget_id")
-    private StickyNoteData tailWidget;
+    @Column(name = "tail_widget_id")
+    private String tailWidgetId;
 
     public LineData() {
     }
@@ -98,19 +97,19 @@ public class LineData {
         this.bottomRightY = bottomRightY;
     }
 
-    public StickyNoteData getHeadWidget() {
-        return headWidget;
+    public String getHeadWidgetId() {
+        return headWidgetId;
     }
 
-    public void setHeadWidget(StickyNoteData headWidget) {
-        this.headWidget = headWidget;
+    public void setHeadWidgetId(String headWidgetId) {
+        this.headWidgetId = headWidgetId;
     }
 
-    public StickyNoteData getTailWidget() {
-        return tailWidget;
+    public String getTailWidgetId() {
+        return tailWidgetId;
     }
 
-    public void setTailWidget(StickyNoteData tailWidget) {
-        this.tailWidget = tailWidget;
+    public void setTailWidgetId(String tailWidgetId) {
+        this.tailWidgetId = tailWidgetId;
     }
 }
