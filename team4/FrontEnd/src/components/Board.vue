@@ -53,8 +53,8 @@ import {
 import { webSocketHostIp } from '../config/config.js'
 import uuidGenerator from '../utils/uuidGenerator.js'
 import {
-  attachTextfigure,
-  unattachTextfigure,
+  attachConnectableFigure,
+  unattachConnectableFigure,
   changeLinePath,
   createLineApi,
   deleteLine
@@ -62,7 +62,7 @@ import {
 export default {
   data () {
     return {
-      boardId: 'c48fa029-43f6-4f76-84a5-1f62c57667bd',
+      boardId: '7c4ad339-883b-4e85-8278-73224c44330d',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -169,8 +169,8 @@ export default {
       this.associationMap.push({
         key: line,
         value: {
-          srcTextFigureId: figure.srcTextFigureId,
-          destTextFigureId: figure.destTextFigureId
+          srcConnectableFigureId: figure.srcConnectableFigureId,
+          destConnectableFigureId: figure.destConnectableFigureId
         }
       })
       this.canvas.renderAll()
@@ -299,14 +299,13 @@ export default {
       })
       this.associationMap.forEach(lineItem => {
         _this.canvas.getObjects().filter(object => object.type === 'group').forEach(stickyNoteOnCanvas => {
-          console.log('314 stickyNoteOnCanvas.id', stickyNoteOnCanvas.id, ' lineItem.value.srcTextFigureId ', lineItem.value.srcTextFigureId, lineItem.value.destTextFigureId)
-          if (lineItem.value.srcTextFigureId && lineItem.value.srcTextFigureId === stickyNoteOnCanvas.id) {
+          if (lineItem.value.srcConnectableFigureId && lineItem.value.srcConnectableFigureId === stickyNoteOnCanvas.id) {
             console.log('sObject1', stickyNoteOnCanvas)
             lineItem.key.srcPoint.xOffset = (lineItem.key.srcPoint.get('left') - stickyNoteOnCanvas.get('left')) / stickyNoteOnCanvas.width
             lineItem.key.srcPoint.yOffset = (lineItem.key.srcPoint.get('top') - stickyNoteOnCanvas.get('top')) / stickyNoteOnCanvas.height
             stickyNoteOnCanvas.attachPointSet.add(lineItem.key.srcPoint)
           }
-          if (lineItem.value.destTextFigureId && lineItem.value.destTextFigureId === stickyNoteOnCanvas.id) {
+          if (lineItem.value.destConnectableFigureId && lineItem.value.destConnectableFigureId === stickyNoteOnCanvas.id) {
             console.log('sObject2', stickyNoteOnCanvas)
             lineItem.key.destPoint.xOffset = (lineItem.key.destPoint.get('left') - stickyNoteOnCanvas.get('left')) / stickyNoteOnCanvas.width
             lineItem.key.destPoint.yOffset = (lineItem.key.destPoint.get('top') - stickyNoteOnCanvas.get('top')) / stickyNoteOnCanvas.height
@@ -349,8 +348,8 @@ export default {
     listenEventsOnCanvas () {
       var _this = this
       // listen event on context menu
-      _this.addListenerOfChangeTextFigureColor()
-      _this.addListenerOfDeleteTextFigure()
+      _this.addListenerOfChangeConnectableFigureColor()
+      _this.addListenerOfDeleteConnectableFigure()
       _this.addListenerOfBringToFront()
       _this.addListenerOfBringForward()
       _this.addListenerOfSendBackward()
@@ -447,10 +446,10 @@ export default {
                     stickyNote.attachPointSet.delete(e.target)
                     const line = e.target.line1 ? e.target.line1 : e.target.line2
                     if (line.srcPoint === e.target) {
-                      unattachTextfigure(_this.boardId, line.get('id'), 'source')
+                      unattachConnectableFigure(_this.boardId, line.get('id'), 'source')
                       resolve('Success')
                     } else if (line.destPoint === e.target) {
-                      unattachTextfigure(_this.boardId, line.get('id'), 'destination')
+                      unattachConnectableFigure(_this.boardId, line.get('id'), 'destination')
                       resolve('Success')
                     }
                   } else {
@@ -465,12 +464,12 @@ export default {
                     const line = e.target.line1 ? e.target.line1 : e.target.line2
                     if (line.srcPoint === e.target) {
                       setTimeout(function () {
-                        attachTextfigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'source')
+                        attachConnectableFigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'source')
                       }, 500)
                       return true
                     } else if (line.destPoint === e.target) {
                       setTimeout(function () {
-                        attachTextfigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'destination')
+                        attachConnectableFigure(_this.boardId, line.get('id'), stickyNote.get('id'), 'destination')
                       }, 500)
                       return true
                     }
@@ -479,19 +478,6 @@ export default {
                 // solve change sn
                 // 中點不能被attach
               })
-              // if (isPointAttached === false) {
-              //   const line = e.target.line1 ? e.target.line1 : e.target.line2
-              //   _this.canvas.getObjects().filter(x => x.attachPointSet !== undefined).forEach(function (stickyNote) {
-              //     if (stickyNote.attachPointSet.has(e.target)) {
-              //       stickyNote.attachPointSet.delete(e.target)
-              //       if (line.srcPoint === e.target) {
-              //         unattachTextfigure(_this.boardId, line.get('id'), 'source')
-              //       } else if (line.destPoint === e.target) {
-              //         unattachTextfigure(_this.boardId, line.get('id'), 'destination')
-              //       }
-              //     }
-              //   })
-              // }
             }
           }
         })
@@ -570,7 +556,7 @@ export default {
     hideContextMenu () {
       this.contextMenu.style.display = 'none'
     },
-    addListenerOfChangeTextFigureColor () {
+    addListenerOfChangeConnectableFigureColor () {
       var _this = this
       var newHandler = function () {
         _this.activeObjects.forEach((target) => {
@@ -581,7 +567,7 @@ export default {
       }
       _this.favcolor.addEventListener('change', newHandler)
     },
-    addListenerOfDeleteTextFigure () {
+    addListenerOfDeleteConnectableFigure () {
       var _this = this
       var newHandler = function () {
         _this.activeObjects.forEach((target) => {
@@ -874,18 +860,18 @@ export default {
             console.log(e)
           }
           break
-        case 'TextfigureAttachedByLineDomainEvent':
+        case 'ConnectableFigureAttachedByLineDomainEvent':
           console.log(receivedData)
           try {
             const line = _this.canvas.getObjects().filter(line => line.get('id') === receivedData.figureId)[0]
             let attachedStickyNote
-            if (receivedData.srcTextFigureId) {
-              attachedStickyNote = _this.canvas.getObjects().filter(stickyNote => stickyNote.get('id') === receivedData.srcTextFigureId)[0]
+            if (receivedData.srcConnectableFigureId) {
+              attachedStickyNote = _this.canvas.getObjects().filter(stickyNote => stickyNote.get('id') === receivedData.srcConnectableFigureId)[0]
               attachedStickyNote.attachPointSet.add(line.srcPoint)
               line.srcPoint.xOffset = (line.srcPoint.get('left') - attachedStickyNote.get('left')) / attachedStickyNote.width
               line.srcPoint.yOffset = (line.srcPoint.get('top') - attachedStickyNote.get('top')) / attachedStickyNote.height
-            } else if (receivedData.destTextFigureId) {
-              attachedStickyNote = _this.canvas.getObjects().filter(stickyNote => stickyNote.get('id') === receivedData.destTextFigureId)[0]
+            } else if (receivedData.destConnectableFigureId) {
+              attachedStickyNote = _this.canvas.getObjects().filter(stickyNote => stickyNote.get('id') === receivedData.destConnectableFigureId)[0]
               attachedStickyNote.attachPointSet.add(line.destPoint)
               line.destPoint.xOffset = (line.destPoint.get('left') - attachedStickyNote.get('left')) / attachedStickyNote.width
               line.destPoint.yOffset = (line.destPoint.get('top') - attachedStickyNote.get('top')) / attachedStickyNote.height
@@ -895,16 +881,16 @@ export default {
             console.log(e)
           }
           break
-        case 'TextfigureUnattachedDomainEvent':
+        case 'ConnectableFigureUnattachedDomainEvent':
           console.log(receivedData)
           try {
             const line = _this.canvas.getObjects().filter(line => line.get('id') === receivedData.figureId)[0]
             let attachedStickyNote
             if (receivedData.attachEndPointKind === 'source') {
-              attachedStickyNote = _this.canvas.getObjects().filter(stickyNote => stickyNote.get('id') === receivedData.textFigureIdToBeUnattached)[0]
+              attachedStickyNote = _this.canvas.getObjects().filter(stickyNote => stickyNote.get('id') === receivedData.connectableFigureIdToBeUnattached)[0]
               attachedStickyNote.attachPointSet.delete(line.srcPoint)
             } else if (receivedData.attachEndPointKind === 'destination') {
-              attachedStickyNote = _this.canvas.getObjects().filter(stickyNote => stickyNote.get('id') === receivedData.textFigureIdToBeUnattached)[0]
+              attachedStickyNote = _this.canvas.getObjects().filter(stickyNote => stickyNote.get('id') === receivedData.connectableFigureIdToBeUnattached)[0]
               attachedStickyNote.attachPointSet.delete(line.destPoint)
             }
             _this.canvas.renderAll()

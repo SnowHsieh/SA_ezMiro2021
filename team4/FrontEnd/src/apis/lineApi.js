@@ -58,12 +58,12 @@ export const changeLinePath = async (boardId, figure) => {
   }
 }
 
-export const attachTextfigure = async (boardId, lineId, textFigureId, attachEndPointKind) => {
+export const attachConnectableFigure = async (boardId, lineId, connectableFigureId, attachEndPointKind) => {
   try {
-    const res = await axios.post(`${hostIp}/board/${boardId}/attachTextfigure`,
+    const res = await axios.post(`${hostIp}/board/${boardId}/attachConnectableFigure`,
       {
         figureId: lineId,
-        textFigureId: textFigureId,
+        connectableFigureId: connectableFigureId,
         attachEndPointKind: attachEndPointKind
       }
     )
@@ -73,15 +73,15 @@ export const attachTextfigure = async (boardId, lineId, textFigureId, attachEndP
   }
 }
 
-export const unattachTextfigure = async (boardId, lineId, attachEndPointKind) => {
+export const unattachConnectableFigure = async (boardId, lineId, attachEndPointKind) => {
   try {
-    const res = await axios.post(`${hostIp}/board/${boardId}/unattachTextfigure`,
+    const res = await axios.post(`${hostIp}/board/${boardId}/unattachConnectableFigure`,
       {
         figureId: lineId,
         attachEndPointKind: attachEndPointKind
       }
     )
-    console.log('unattachTextfigure api: ', res.status)
+    console.log('unattachConnectableFigure api: ', res.status)
     return res.status
   } catch (err) {
     console.log(err)

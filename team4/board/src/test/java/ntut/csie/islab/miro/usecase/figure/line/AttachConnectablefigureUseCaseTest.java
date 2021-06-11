@@ -27,7 +27,7 @@ public class AttachConnectablefigureUseCaseTest extends AbstractSpringBootJpaTes
         domainEventBus.register(notifyBoardAdapter);
     }
     @Test
-    public void test_attach_text_figure_usecase() {
+    public void test_connectable_text_figure_usecase() {
 
         List<Position> positionList = new ArrayList<>();
         positionList.add(new Position(0, 50));
