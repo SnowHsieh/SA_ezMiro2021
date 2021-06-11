@@ -277,11 +277,11 @@ export default {
       return figureList
     },
     initCanvas () {
-      const width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-      const height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+      // const width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+      // const height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
       this.canvas = new fabric.Canvas('canvas', {
-        width: width,
-        height: height,
+        width: 10000,
+        height: 10000,
         fireRightClick: true, // <-- enable firing of right click events
         stopContextMenu: true, // <--  prevent context menu from showing
         freeDrawingCursor: 'none'
@@ -758,14 +758,11 @@ export default {
           _this.updateUserCursor(receivedData)
           break
         case 'BoardEnteredDomainEvent':
-          break
-        case 'CursorCreatedDomainEvent':
           _this.addUserCursor(receivedData)
           this.updateCursorFlag = true
           this.sendMouseData()
           break
-        case 'CursorDeletedDomainEvent':
-          // console.log(receivedData)
+        case 'BoardLeftDomainEvent' :
           _this.delUserCursor(receivedData.userId)
           break
         case 'StickyNoteCreatedDomainEvent':

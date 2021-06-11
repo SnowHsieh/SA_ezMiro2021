@@ -7,8 +7,6 @@ import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.usecase.figure.connectablefigure.StickyNoteRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.BoardSession;
-import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorCreatedDomainEvent;
-import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorDeletedDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorMovedDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.event.BoardEnteredDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.event.BoardLeftDomainEvent;
@@ -81,26 +79,11 @@ public class NotifyBoardSessionBroadcaster {
     }
 
     @Subscribe
-    public void whenCursorCreated(CursorCreatedDomainEvent cursorCreatedDomainEvent) {
-        Board board = boardRepository.findById(cursorCreatedDomainEvent.boardId()).get();
-        List<BoardSession> boardSessions = board.getBoardSessionList();
-        System.out.println("whenCursorCreated notify:" + board);
-        boardSessions.forEach(each -> broadcast(cursorCreatedDomainEvent, each.getBoardSessionId().getId()));
-    }
-
-    @Subscribe
     public void whenCursorMoved(CursorMovedDomainEvent cursorMovedDomainEvent) {
         Board board = boardRepository.findById(cursorMovedDomainEvent.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
         System.out.println("whenCursorMoved notify:" + board);
         boardSessions.forEach(each -> broadcast(cursorMovedDomainEvent, each.getBoardSessionId().getId()));
-    }
-
-    @Subscribe
-    public void whenCursorDeleted(CursorDeletedDomainEvent cursorDeletedDomainEvent) {
-        Board board = boardRepository.findById(cursorDeletedDomainEvent.boardId()).get();
-        List<BoardSession> boardSessions = board.getBoardSessionList();
-        boardSessions.forEach(each -> broadcast(cursorDeletedDomainEvent, each.getBoardSessionId().getId()));
     }
 
     @Subscribe

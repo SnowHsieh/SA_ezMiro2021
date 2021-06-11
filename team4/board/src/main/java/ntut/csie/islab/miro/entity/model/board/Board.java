@@ -1,8 +1,6 @@
 package ntut.csie.islab.miro.entity.model.board;
 
 import ntut.csie.islab.miro.entity.model.Position;
-import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorCreatedDomainEvent;
-import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorDeletedDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.cursor.event.CursorMovedDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.event.*;
 import ntut.csie.sslab.ddd.model.AggregateRoot;
@@ -120,7 +118,6 @@ public class Board extends AggregateRoot<UUID> {
     public void acceptUserEntry(BoardSessionId boardSessionId, UUID userId) {
         BoardSession boardSession = new BoardSession(getBoardId(), userId, boardSessionId);
         boardSessionList.add(boardSession);
-        addDomainEvent(new CursorCreatedDomainEvent(getBoardId(), userId));
         addDomainEvent(new BoardEnteredDomainEvent(boardSession.getBoardId(), boardSession.getUserId(), boardSession.getBoardSessionId()));
     }
 
@@ -131,7 +128,6 @@ public class Board extends AggregateRoot<UUID> {
                 break;
             }
         }
-        addDomainEvent(new CursorDeletedDomainEvent(getBoardId(), userId));
         addDomainEvent(new BoardLeftDomainEvent(getBoardId(), userId, boardSessionId));
     }
 
