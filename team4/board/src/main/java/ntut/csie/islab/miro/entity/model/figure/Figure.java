@@ -11,57 +11,17 @@ import java.util.UUID;
 
 public abstract class Figure extends AggregateRoot<UUID> {
     private UUID boardId;
-    // line
-    private List<Position> positionList;
-    private UUID srcConnectableFigureId;
-    private UUID destConnectableFigureId;
-    private ArrowKindEnum srcArrowKind; //NONE,CIRCLE,ARROW
-    private ArrowKindEnum destArrowKind; //NONE,CIRCLE,ARROW
-    private int strokeWidth;
-    private String color;
-    // connectableFigure
-    private Position position;
-    private String content;
-    private Style style;
 
-
-    // line
-    public Figure(UUID boardId, List<Position> positionList, int strokeWidth, String color) {
+    public Figure(UUID boardId) {
         super(UUID.randomUUID());
         this.boardId = boardId;
-        this.positionList = positionList;
-        this.srcArrowKind = ArrowKindEnum.NONE;
-        this.destArrowKind = ArrowKindEnum.NONE;
-        this.strokeWidth = strokeWidth;
-        this.color = color;
     }
 
-    public Figure(UUID boardId, UUID figureId, List<Position> positionList, int strokeWidth, String color) {
+    public Figure(UUID boardId, UUID figureId) {
         super(figureId);
         this.boardId = boardId;
-        this.positionList = positionList;
-        this.srcArrowKind = ArrowKindEnum.NONE;
-        this.destArrowKind = ArrowKindEnum.NONE;
-        this.strokeWidth = strokeWidth;
-        this.color = color;
     }
 
-    // connectableFigure
-    public Figure(UUID boardId, Position position, String content, Style style) {
-        super(UUID.randomUUID());
-        this.boardId = boardId;
-        this.position = position;
-        this.content = content;
-        this.style = style;
-    }
-
-    public Figure(UUID boardId, UUID stickyNoteId, Position position, String content, Style style) {
-        super(stickyNoteId);
-        this.boardId = boardId;
-        this.position = position;
-        this.content = content;
-        this.style = style;
-    }
 
     public UUID getFigureId() {
         return this.getId();
@@ -75,86 +35,49 @@ public abstract class Figure extends AggregateRoot<UUID> {
         this.boardId = boardId;
     }
 
-    public List<Position> getPositionList() {
-        return positionList;
-    }
+    public abstract List<Position> getPositionList();
 
-    public void setPositionList(List<Position> positionList) {
-        this.positionList = positionList;
-    }
+    public abstract void setPositionList(List<Position> positionList);
 
-    public ArrowKindEnum getSrcArrowKind() {
-        return srcArrowKind;
-    }
+    public abstract ArrowKindEnum getSrcArrowKind();
 
-    public void setSrcArrowKind(ArrowKindEnum srcArrowKind) {
-        this.srcArrowKind = srcArrowKind;
-    }
+    public abstract void setSrcArrowKind(ArrowKindEnum srcArrowKind);
 
-    public ArrowKindEnum getDestArrowKind() {
-        return destArrowKind;
-    }
+    public abstract ArrowKindEnum getDestArrowKind();
 
-    public void setDestArrowKind(ArrowKindEnum destArrowKind) {
-        this.destArrowKind = destArrowKind;
-    }
+    public abstract void setDestArrowKind(ArrowKindEnum destArrowKind);
 
-    public int getStrokeWidth() {
-        return strokeWidth;
-    }
+    public abstract int getStrokeWidth();
 
-    public void setStrokeWidth(int strokeWidth) {
-        this.strokeWidth = strokeWidth;
-    }
+    public abstract void setStrokeWidth(int strokeWidth);
 
-    public String getColor() {
-        return color;
-    }
+    public abstract String getColor();
 
-    public void setColor(String color) {
-        this.color = color;
-    }
+    public abstract void setColor(String color);
 
-    public Position getPosition() {
-        return position;
-    }
 
-    public void setPosition(Position position) {
-        this.position = position;
-    }
+    public abstract UUID getSrcConnectableFigureId();
 
-    public String getContent() {
-        return content;
-    }
+    public abstract void setSrcConnectableFigureId(UUID srcConnectableFigureId);
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+    public abstract UUID getDestConnectableFigureId();
 
-    public Style getStyle() {
-        return style;
-    }
+    public abstract void setDestConnectableFigureId(UUID destConnectableFigureId);
 
-    public void setStyle(Style style) {
-        this.style = style;
-    }
+    //to ConnectableFigure
+    public abstract Position getPosition();
 
-    public UUID getSrcConnectableFigureId() {
-        return srcConnectableFigureId;
-    }
+    public abstract void setPosition(Position position);
 
-    public void setSrcConnectableFigureId(UUID srcConnectableFigureId) {
-        this.srcConnectableFigureId = srcConnectableFigureId;
-    }
+    public abstract String getContent();
 
-    public UUID getDestConnectableFigureId() {
-        return destConnectableFigureId;
-    }
+    public abstract void setContent(String content);
 
-    public void setDestConnectableFigureId(UUID destConnectableFigureId) {
-        this.destConnectableFigureId = destConnectableFigureId;
-    }
+    public abstract Style getStyle();
 
+    public abstract void setStyle(Style style);
+
+    //set DomainEvent
     public abstract void markAsRemoved(UUID boardId, UUID figureId);
 
     public abstract void changeContent(String newContent);

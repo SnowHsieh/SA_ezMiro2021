@@ -6,6 +6,7 @@ import ntut.csie.islab.miro.entity.model.figure.connectablefigure.stickynote.eve
 import ntut.csie.islab.miro.entity.model.figure.connectablefigure.Style;
 import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.figure.connectablefigure.ConnectableFigure;
+import ntut.csie.islab.miro.entity.model.figure.line.ArrowKindEnum;
 
 
 import java.util.List;
@@ -13,17 +14,17 @@ import java.util.UUID;
 
 public class StickyNote extends ConnectableFigure {
 
+
     public StickyNote(UUID boardId, Position position, String content, Style style) {
         super(boardId, position, content, style);
-
         addDomainEvent(new StickyNoteCreatedDomainEvent(boardId, getFigureId()));
     }
 
-    public StickyNote(UUID boardId,UUID stickyNoteId, Position position, String content, Style style) {
-        super(boardId,stickyNoteId, position, content, style);
-
+    public StickyNote(UUID boardId, UUID stickyNoteId, Position position, String content, Style style) {
+        super(boardId, stickyNoteId, position, content, style);
         addDomainEvent(new StickyNoteCreatedDomainEvent(boardId, stickyNoteId));
     }
+
 
     @Override
     public void markAsRemoved(UUID boardId, UUID figureId) {
@@ -87,10 +88,13 @@ public class StickyNote extends ConnectableFigure {
     }
 
 
-    private Boolean isValidSide(double newWidth,double newHeight){
+
+
+    private Boolean isValidSide(double newWidth, double newHeight) {
         return newWidth > 0 && newHeight > 0;
     }
-    private Boolean isDifferentSide(double newWidth,double newHeight){
+
+    private Boolean isDifferentSide(double newWidth, double newHeight) {
         return this.getStyle().getWidth() != newWidth || this.getStyle().getHeight() != newHeight;
     }
 }
