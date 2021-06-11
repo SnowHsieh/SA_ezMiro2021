@@ -11,7 +11,7 @@ public class BoardData {
     @Column(name="board_id")
     private String boardId;
 
-    @Column(name="project_id")
+    @Column(name="project_id", nullable = false)
     private String projectId;
 
     @Column(name="board_name")

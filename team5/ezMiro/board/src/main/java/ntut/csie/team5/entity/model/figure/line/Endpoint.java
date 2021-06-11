@@ -63,4 +63,19 @@ public class Endpoint {
         result = 31 * result + id.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Endpoint [ id = ");
+        sb.append(id);
+        sb.append(", positionX = ");
+        sb.append(positionX);
+        sb.append(", positionY = ");
+        sb.append(positionY);
+        sb.append(", connectedFigureId = ");
+        sb.append(connectedFigureId);
+        sb.append(" ]");
+        return sb.toString();
+    }
 }

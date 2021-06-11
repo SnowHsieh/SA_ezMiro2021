@@ -115,11 +115,14 @@ const line = {
     }).then()
   },
   connectLine (figureId, endpointId, connectFigureId) {
+    console.log(`${figureId} ${endpointId} ${connectFigureId}`)
     api.line.connectLine({
       figureId: figureId,
       endpointId: endpointId,
       connectFigureId: connectFigureId
-    }).then()
+    }).then((data) => {
+      console.log(data)
+    })
   },
   disconnectLine (figureId, endpointId) {
     api.line.disconnectLine({

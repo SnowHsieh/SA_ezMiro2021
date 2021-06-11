@@ -14,8 +14,9 @@ public class EndpointMapper {
     }
 
     public static Endpoint transformToDomain(EndpointData data) {
+        System.out.println(data.toString());
         Endpoint endpoint = new Endpoint(
-                data.getId(),
+                data.getEndpointId(),
                 data.getPositionX(),
                 data.getPositionY(),
                 data.getConnectedFigureId()
@@ -25,6 +26,7 @@ public class EndpointMapper {
     }
 
     public static EndpointData transformToData(Endpoint endpoint) {
+        System.out.println(endpoint.toString());
         EndpointData endpointData = new EndpointData(
                 endpoint.getId(),
                 endpoint.getPositionX(),

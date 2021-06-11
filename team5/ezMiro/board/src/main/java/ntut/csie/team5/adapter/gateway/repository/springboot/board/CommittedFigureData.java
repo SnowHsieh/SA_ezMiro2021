@@ -10,7 +10,7 @@ public class CommittedFigureData {
     @Column(name = "figure_id")
     private String figureId;
 
-    @Column(name = "board_id")
+    @Column(name = "board_id", nullable = false)
     private String boardId;
 
     @Column(name = "z_order")

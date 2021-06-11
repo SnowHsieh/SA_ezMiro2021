@@ -46,6 +46,7 @@ public class Line extends Figure {
     }
 
     public void connectToFigure(String endpointId, String connectFigureId) {
+        System.out.println(String.format("connect to figure: endpointId: %s, connectedFigureId: %s", endpointId, connectFigureId));
         if (this.endpointA.getId().equals(endpointId)) {
             this.endpointA.setConnectedFigureId(connectFigureId);
             addDomainEvent(new LineConnected(getId(), getEndpointA().getId(), connectFigureId, getBoardId(), getFigureType()));
@@ -81,5 +82,18 @@ public class Line extends Figure {
 
     public void setEndpointB(Endpoint endpointB) {
         this.endpointB = endpointB;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Line [ id = ");
+        sb.append(id);
+        sb.append(", endpoitnA = ");
+        sb.append(endpointA.toString());
+        sb.append(", endpoitnB = ");
+        sb.append(endpointB.toString());
+        sb.append(" ]");
+        return sb.toString();
     }
 }

@@ -3,11 +3,13 @@ package ntut.csie.team5.adapter.gateway.repository.springboot.figure.line;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Embeddable
+@Entity
+@Table(name = "endpoint")
 public class EndpointData implements Serializable {
 
-    @Column(name = "id")
-    private String id;
+    @Id
+    @Column(name = "endpoint_id")
+    private String endpointId;
 
     @Column(name = "position_x")
     private int positionX;
@@ -15,25 +17,25 @@ public class EndpointData implements Serializable {
     @Column(name = "position_y")
     private int positionY;
 
-    @Column(name = "connected_figure_id", columnDefinition = "LONGVARBINARY")
+    @Column(name = "connected_figure_id")
     private String connectedFigureId;
 
     public EndpointData() {
     }
 
-    public EndpointData(String id, int positionX, int positionY, String connectedFigureId) {
-        this.id = id;
+    public EndpointData(String endpointId, int positionX, int positionY, String connectedFigureId) {
+        this.endpointId = endpointId;
         this.positionX = positionX;
         this.positionY = positionY;
         this.connectedFigureId = connectedFigureId;
     }
 
-    public String getId() {
-        return id;
+    public String getEndpointId() {
+        return endpointId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setEndpointId(String endpointId) {
+        this.endpointId = endpointId;
     }
 
     public int getPositionX() {
@@ -58,5 +60,20 @@ public class EndpointData implements Serializable {
 
     public void setConnectedFigureId(String connectedFigureId) {
         this.connectedFigureId = connectedFigureId;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("EndpointData [ id = ");
+        sb.append(endpointId);
+        sb.append(", positionX = ");
+        sb.append(positionX);
+        sb.append(", positionY = ");
+        sb.append(positionY);
+        sb.append(", connectedFigureId = ");
+        sb.append(connectedFigureId);
+        sb.append(" ]");
+        return sb.toString();
     }
 }

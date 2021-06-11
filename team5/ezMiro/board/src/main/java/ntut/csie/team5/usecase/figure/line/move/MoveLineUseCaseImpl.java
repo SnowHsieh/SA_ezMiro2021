@@ -35,6 +35,7 @@ public class MoveLineUseCaseImpl implements MoveLineUseCase {
         }
 
         line.moveLine(input.getOffsetX(), input.getOffsetY());
+        System.out.println("MoveLineUseCaseImpl");
         lineRepository.save(line);
         domainEventBus.postAll(line);
 

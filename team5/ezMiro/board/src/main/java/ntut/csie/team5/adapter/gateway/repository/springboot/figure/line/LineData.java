@@ -10,25 +10,15 @@ public class LineData {
     @Column(name = "line_id")
     private String lineId;
 
-    @Column(name = "board_id")
+    @Column(name = "board_id", nullable = false)
     private String boardId;
 
-    @Embedded
-    @AttributeOverrides( {
-            @AttributeOverride(name="id", column = @Column(name="endpoint_a_id")),
-            @AttributeOverride(name="positionX", column = @Column(name="endpoint_a_position_x")),
-            @AttributeOverride(name="positionY", column = @Column(name="endpoint_a_position_y")),
-            @AttributeOverride(name="connectedFigureId", column = @Column(name="endpoint_a_connected_figure_id"))
-    })
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "endpoint_a_id")
     private EndpointData endpointDataA;
 
-    @Embedded
-    @AttributeOverrides( {
-            @AttributeOverride(name="id", column = @Column(name="endpoint_b_id")),
-            @AttributeOverride(name="positionX", column = @Column(name="endpoint_b_position_x")),
-            @AttributeOverride(name="positionY", column = @Column(name="endpoint_b_position_y")),
-            @AttributeOverride(name="connectedFigureId", column = @Column(name="endpoint_b_connected_figure_id"))
-    })
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "endpoint_b_id")
     private EndpointData endpointDataB;
 
     public LineData() {

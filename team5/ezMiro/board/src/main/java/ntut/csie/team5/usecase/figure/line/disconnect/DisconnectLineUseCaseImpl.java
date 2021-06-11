@@ -36,7 +36,7 @@ public class DisconnectLineUseCaseImpl implements DisconnectLineUseCase {
         }
 
         line.disconnectToFigure(input.getEndpointId());
-
+        System.out.println("DisconnectLineUseCaseImpl");
         lineRepository.save(line);
         domainEventBus.postAll(line);
 

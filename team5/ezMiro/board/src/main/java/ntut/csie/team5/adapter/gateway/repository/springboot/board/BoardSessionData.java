@@ -10,10 +10,10 @@ public class BoardSessionData {
     @Column(name = "board_session_id")
     private  String boardSessionId;
 
-    @Column(name = "board_id")
+    @Column(name = "board_id", nullable = false)
     private  String boardId;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private  String userId;
 
     public BoardSessionData() {
