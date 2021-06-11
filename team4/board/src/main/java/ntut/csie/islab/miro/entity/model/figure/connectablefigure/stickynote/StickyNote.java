@@ -15,13 +15,13 @@ import java.util.UUID;
 public class StickyNote extends ConnectableFigure {
 
 
-    public StickyNote(UUID boardId, Position position, String content, Style style) {
-        super(boardId, position, content, style);
+    public StickyNote(UUID boardId, Position position, String content, double width, double height, Style style) {
+        super(boardId, position, content, width, height, style);
         addDomainEvent(new StickyNoteCreatedDomainEvent(boardId, getFigureId()));
     }
 
-    public StickyNote(UUID boardId, UUID stickyNoteId, Position position, String content, Style style) {
-        super(boardId, stickyNoteId, position, content, style);
+    public StickyNote(UUID boardId, UUID stickyNoteId, Position position, String content, double width, double height, Style style) {
+        super(boardId, stickyNoteId, position, content, width, height, style);
         addDomainEvent(new StickyNoteCreatedDomainEvent(boardId, stickyNoteId));
     }
 
@@ -60,10 +60,10 @@ public class StickyNote extends ConnectableFigure {
     @Override
     public void resize(Double newWidth, Double newHeight) {
         if (isValidSide(newWidth, newHeight) && isDifferentSide(newWidth, newHeight)) {
-            Double oldWidth = this.getStyle().getWidth();
-            Double oldHeight = this.getStyle().getHeight();
-            this.getStyle().setWidth(newWidth);
-            this.getStyle().setHeight(newHeight);
+            Double oldWidth = this.getWidth();
+            Double oldHeight = this.getHeight();
+            this.setWidth(newWidth);
+            this.setHeight(newHeight);
             addDomainEvent(new StickyNoteResizedDomainEvent(this.getBoardId(), this.getFigureId(), oldWidth, oldHeight, newWidth, newHeight));
         }
     }
@@ -88,13 +88,11 @@ public class StickyNote extends ConnectableFigure {
     }
 
 
-
-
     private Boolean isValidSide(double newWidth, double newHeight) {
         return newWidth > 0 && newHeight > 0;
     }
 
     private Boolean isDifferentSide(double newWidth, double newHeight) {
-        return this.getStyle().getWidth() != newWidth || this.getStyle().getHeight() != newHeight;
+        return this.getWidth() != newWidth || this.getHeight() != newHeight;
     }
 }

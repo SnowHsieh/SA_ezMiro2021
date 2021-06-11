@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StickyNoteDomainEventTest {
     private ConnectableFigure createStickyNote() {
-        return new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
+        return new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", 87.2, 100,new Style(10, ShapeKindEnum.TRIANGLE,  "#123456"));
     }
 
     @Test
@@ -87,16 +87,16 @@ public class StickyNoteDomainEventTest {
         stickyNote.clearDomainEvents();
         assertEquals(0, stickyNote.getDomainEvents().size());
 
-        Double oldWidth = stickyNote.getStyle().getWidth();;
-        Double oldHeight = stickyNote.getStyle().getHeight();;
+        Double oldWidth = stickyNote.getWidth();;
+        Double oldHeight = stickyNote.getHeight();;
 
         Double newHeight = 100.0;
         Double newWidth = 100.0;
 
         stickyNote.resize(newWidth, newHeight);
 
-        assertEquals(newWidth, stickyNote.getStyle().getWidth());
-        assertEquals(newHeight, stickyNote.getStyle().getHeight());
+        assertEquals(newWidth, stickyNote.getWidth());
+        assertEquals(newHeight, stickyNote.getHeight());
         assertEquals(1, stickyNote.getDomainEvents().size());
         assertEquals(StickyNoteResizedDomainEvent.class, stickyNote.getDomainEvents().get(0).getClass());
 

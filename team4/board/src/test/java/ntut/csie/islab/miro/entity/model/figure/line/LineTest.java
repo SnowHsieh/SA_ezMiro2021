@@ -30,7 +30,7 @@ public class LineTest {
 
         int strokeWidth = 5;
         String color = "#000000";
-        Figure line = new Line(boardId,positionList,strokeWidth,color);
+        Figure line = new Line(boardId, positionList, strokeWidth, color);
         assertEquals(boardId, line.getBoardId());
         assertEquals(positionList.size(), line.getPositionList().size());
         assertEquals(ArrowKindEnum.NONE, line.getSrcArrowKind());
@@ -46,28 +46,30 @@ public class LineTest {
         assertEquals(destArrowKind, line.getDestArrowKind());
 
     }
+
     @Test
     public void test_a_line_attach_connectableFigure() {
         UUID boardId = UUID.randomUUID();
         List<Position> positionList = new ArrayList<>();
         int strokeWidth = 5;
         String color = "#000000";
-        Figure line = new Line(boardId,positionList,strokeWidth,color);
-        ConnectableFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
-        line.attachConnectableFigure(sn.getFigureId(),"source");
-        assertEquals(sn.getFigureId(),line.getSrcConnectableFigureId());
+        Figure line = new Line(boardId, positionList, strokeWidth, color);
+        ConnectableFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", 87.2, 100, new Style(10, ShapeKindEnum.TRIANGLE, "#123456"));
+        line.attachConnectableFigure(sn.getFigureId(), "source");
+        assertEquals(sn.getFigureId(), line.getSrcConnectableFigureId());
     }
+
     @Test
     public void test_line_unattach_from_connectableFigure() {
         UUID boardId = UUID.randomUUID();
         List<Position> positionList = new ArrayList<>();
         int strokeWidth = 5;
         String color = "#000000";
-        Figure line = new Line(boardId,positionList,strokeWidth,color);
-        ConnectableFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", new Style(10, ShapeKindEnum.TRIANGLE, 87.2, 100, "#123456"));
-        line.attachConnectableFigure(sn.getFigureId(),"source");
-        assertEquals(sn.getFigureId(),line.getSrcConnectableFigureId());
+        Figure line = new Line(boardId, positionList, strokeWidth, color);
+        ConnectableFigure sn = new StickyNote(UUID.randomUUID(), new Position(1.0, 1.0), "content", 87.2, 100, new Style(10, ShapeKindEnum.TRIANGLE, "#123456"));
+        line.attachConnectableFigure(sn.getFigureId(), "source");
+        assertEquals(sn.getFigureId(), line.getSrcConnectableFigureId());
         line.unattachConnectableFigure("source");
-        assertEquals(null,line.getSrcConnectableFigureId());
+        assertEquals(null, line.getSrcConnectableFigureId());
     }
 }

@@ -142,6 +142,26 @@ public class Line extends Figure {
     }
 
     @Override
+    public double getWidth() {
+        return 0;
+    }
+
+    @Override
+    public void setWidth(double width) {
+
+    }
+
+    @Override
+    public double getHeight() {
+        return 0;
+    }
+
+    @Override
+    public void setHeight(double height) {
+
+    }
+
+    @Override
     public void markAsRemoved(UUID boardId, UUID figureId) {
         addDomainEvent(new LineDeletedDomainEvent(boardId, figureId));
     }

@@ -23,6 +23,8 @@ public class CreateStickyNoteUseCase {
         ConnectableFigure stickyNote = new StickyNote(input.getBoardId(),
                 input.getPosition(),
                 input.getContent(),
+                input.getWidth(),
+                input.getHeight(),
                 input.getStyle());
         stickyNoteRepository.save((StickyNote) stickyNote);
         domainEventBus.postAll(stickyNote);

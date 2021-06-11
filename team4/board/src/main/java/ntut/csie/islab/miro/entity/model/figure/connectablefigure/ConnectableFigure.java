@@ -11,19 +11,25 @@ import java.util.UUID;
 public abstract class ConnectableFigure extends Figure {
     private Position position;
     private String content;
+    private double width;
+    private double height;
     private Style style;
 
-    public ConnectableFigure(UUID boardId, Position position, String content, Style style) {
+    public ConnectableFigure(UUID boardId, Position position, String content, double width, double height, Style style) {
         super(boardId);
         this.position = position;
         this.content = content;
+        this.width = width;
+        this.height = height;
         this.style = style;
     }
 
-    public ConnectableFigure(UUID boardId, UUID stickyNoteId, Position position, String content, Style style) {
+    public ConnectableFigure(UUID boardId, UUID stickyNoteId, Position position, String content, double width, double height, Style style) {
         super(boardId, stickyNoteId);
         this.position = position;
         this.content = content;
+        this.width = width;
+        this.height = height;
         this.style = style;
     }
 
@@ -68,6 +74,25 @@ public abstract class ConnectableFigure extends Figure {
         this.style = style;
     }
 
+    @Override
+    public double getWidth() {
+        return width;
+    }
+
+    @Override
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    @Override
+    public double getHeight() {
+        return height;
+    }
+
+    @Override
+    public void setHeight(double height) {
+        this.height = height;
+    }
 
     @Override
     public List<Position> getPositionList() {

@@ -26,18 +26,18 @@ public class StickyNoteData {
     @Column(name = "position_y")
     private double positionY;
 
+    @Column(name = "width")
+    private double width;
+
+    @Column(name = "height")
+    private double height;
+
     //style
     @Column(name = "font_size")
     private int fontSize;
 
     @Column(name = "shape_kind")
     private int shapeKind;
-
-    @Column(name = "width")
-    private double width;
-
-    @Column(name = "height")
-    private double height;
 
     @Column(name = "color")
     private String color;

@@ -27,7 +27,7 @@ public class ResizeStickyNoteUseCaseTest extends AbstractSpringBootJpaTest {
 
         assertNotNull(output.getId());
         assertEquals(ExitCode.SUCCESS,output.getExitCode());
-        assertEquals(100,stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getStyle().getWidth());
-        assertEquals(150,stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getStyle().getHeight());
+        assertEquals(100,stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getWidth());
+        assertEquals(150,stickyNoteRepository.findById(UUID.fromString(output.getId())).get().getHeight());
     }
 }

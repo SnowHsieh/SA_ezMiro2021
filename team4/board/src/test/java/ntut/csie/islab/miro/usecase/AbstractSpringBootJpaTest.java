@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-@ContextConfiguration(classes= JpaApplicationTest.class)
+@ContextConfiguration(classes = JpaApplicationTest.class)
 @TestPropertySource(locations = "classpath:test.properties")
 //@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 //@ExtendWith(SpringExtension.class)
@@ -83,7 +83,7 @@ public abstract class AbstractSpringBootJpaTest {
         userId = UUID.randomUUID();
 
 
-        createBoardUseCaseOutput = setCreateBoard(teamId,"testBoard");
+        createBoardUseCaseOutput = setCreateBoard(teamId, "testBoard");
         assertNotNull(createBoardUseCaseOutput.getId()); //
         assertEquals(ExitCode.SUCCESS, createBoardUseCaseOutput.getExitCode());
         board = boardRepository.findById(UUID.fromString(createBoardUseCaseOutput.getId())).get();
@@ -93,12 +93,14 @@ public abstract class AbstractSpringBootJpaTest {
                 boardId,
                 new Position(0, 0),
                 "",
-                new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900"));
+                100,
+                100,
+                new Style(12, ShapeKindEnum.RECTANGLE, "#f9f900"));
 
 
     }
 
-    public CqrsCommandPresenter setCreateBoard (UUID teamId, String boardName){
+    public CqrsCommandPresenter setCreateBoard(UUID teamId, String boardName) {
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCase(domainEventBus, boardRepository);
         CreateBoardInput createBoardInput = createBoardUseCase.newInput();
         CqrsCommandPresenter createBoardUseCaseOutput = CqrsCommandPresenter.newInstance();
@@ -108,19 +110,22 @@ public abstract class AbstractSpringBootJpaTest {
         return createBoardUseCaseOutput;
     }
 
-    public CqrsCommandPresenter generateCreateStickyNoteUseCaseOutput(UUID boardId, Position position, String content, Style style) {
+    public CqrsCommandPresenter generateCreateStickyNoteUseCaseOutput(UUID boardId, Position position, String content, double width, double height, Style style) {
         CreateStickyNoteUseCase createStickyNoteUseCase = new CreateStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         CreateStickyNoteInput input = createStickyNoteUseCase.newInput();
         input.setBoardId(boardId);
         input.setPosition(position.getX(), position.getY());
         input.setContent(content);
+        input.setWidth(width);
+        input.setHeight(height);
         input.setStyle(style);
 
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         createStickyNoteUseCase.execute(input, output);
         return output;
     }
-    public CqrsCommandPresenter generateChangeStickyNoteContentUseCaseOutput(UUID boardId, UUID figureId, String newContent ) {
+
+    public CqrsCommandPresenter generateChangeStickyNoteContentUseCaseOutput(UUID boardId, UUID figureId, String newContent) {
         ChangeStickyNoteContentUseCase changeStickyNoteContentUseCase = new ChangeStickyNoteContentUseCase(stickyNoteRepository, domainEventBus);
         ChangeStickyNoteContentInput input = changeStickyNoteContentUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
@@ -131,14 +136,14 @@ public abstract class AbstractSpringBootJpaTest {
         return output;
     }
 
-    public CqrsCommandPresenter generateChangeStickyNoteColorUseCaseOutput(UUID boardId, UUID figureId, String newColor ) {
-        ChangeStickyNoteColorUseCase changeStickyNoteColorUseCase = new ChangeStickyNoteColorUseCase(stickyNoteRepository,  domainEventBus);
+    public CqrsCommandPresenter generateChangeStickyNoteColorUseCaseOutput(UUID boardId, UUID figureId, String newColor) {
+        ChangeStickyNoteColorUseCase changeStickyNoteColorUseCase = new ChangeStickyNoteColorUseCase(stickyNoteRepository, domainEventBus);
         ChangeStickyNoteColorInput input = changeStickyNoteColorUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);
         input.setFigureId(figureId);
         input.setColor(newColor);
-        changeStickyNoteColorUseCase.execute(input,output);
+        changeStickyNoteColorUseCase.execute(input, output);
         return output;
     }
 

@@ -25,7 +25,9 @@ public class CreateStickyNoteUseCaseTest extends AbstractSpringBootJpaTest {
         input.setBoardId(boardId);
         input.setPosition(1.0,1.0);
         input.setContent("123");
-        input.setStyle(new Style(12, ShapeKindEnum.CIRCLE, 87.87,100, "#948700"));
+        input.setWidth(87.87);
+        input.setHeight(100);
+        input.setStyle(new Style(12, ShapeKindEnum.CIRCLE, "#948700"));
         createStickyNoteUseCase.execute(input, output);
 
         assertNotNull(output.getId());

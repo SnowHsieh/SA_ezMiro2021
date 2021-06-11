@@ -26,6 +26,7 @@ public class UnattachConnectableFigureUseCaseTest extends AbstractSpringBootJpaT
         super.setUp();
         domainEventBus.register(notifyBoardAdapter);
     }
+
     @Test
     public void test_unattach_text_figure_usecase() {
 
@@ -40,11 +41,13 @@ public class UnattachConnectableFigureUseCaseTest extends AbstractSpringBootJpaT
         );
         CqrsCommandPresenter newStickyNote = generateCreateStickyNoteUseCaseOutput(
                 board.getBoardId(),
-                new Position(1.0,1.0),
+                new Position(1.0, 1.0),
                 "Content1",
-                new Style(12, ShapeKindEnum.CIRCLE, 87.87,100, "#948700"));
+                87.87,
+                100,
+                new Style(12, ShapeKindEnum.CIRCLE, "#948700"));
 
-        CqrsCommandPresenter attachConnectableFigureOutput =  generateAttachConnectableFigureUseCase(
+        CqrsCommandPresenter attachConnectableFigureOutput = generateAttachConnectableFigureUseCase(
                 boardId,
                 UUID.fromString(newLine.getId()),
                 UUID.fromString(newStickyNote.getId()),

@@ -42,7 +42,9 @@ public class AttachConnectablefigureUseCaseTest extends AbstractSpringBootJpaTes
                 board.getBoardId(),
                 new Position(1.0,1.0),
                 "Content1",
-                new Style(12, ShapeKindEnum.CIRCLE, 87.87,100, "#948700"));
+                87.87,
+                100,
+                new Style(12, ShapeKindEnum.CIRCLE,  "#948700"));
 
 
         AttachConnectablefigureUseCase attachConnectablefigureUseCase = new AttachConnectablefigureUseCase(domainEventBus, lineRepository);

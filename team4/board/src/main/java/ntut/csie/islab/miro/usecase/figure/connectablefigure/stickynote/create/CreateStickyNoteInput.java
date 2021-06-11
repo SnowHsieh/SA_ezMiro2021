@@ -9,6 +9,8 @@ public class CreateStickyNoteInput {
     private UUID boardId;
     private Position position;
     private String content;
+    private double width;
+    private double height;
     private Style style;
 
     public UUID getBoardId() {
@@ -38,10 +40,28 @@ public class CreateStickyNoteInput {
     public void setPosition(Position position) {
         this.position = position;
     }
+
     public void setPosition(double x, double y) {
-        this.position = new Position(x,y);
+        this.position = new Position(x, y);
     }
+
     public Position getPosition() {
         return this.position;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
     }
 }

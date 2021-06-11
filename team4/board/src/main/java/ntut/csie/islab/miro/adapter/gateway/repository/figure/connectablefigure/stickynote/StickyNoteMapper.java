@@ -19,11 +19,11 @@ public class StickyNoteMapper {
                         stickyNoteData.getPositionX(),
                         stickyNoteData.getPositionY()),
                 stickyNoteData.getContent(),
+                stickyNoteData.getWidth(),
+                stickyNoteData.getHeight(),
                 new Style(
                         stickyNoteData.getFontSize(),
                         ShapeKindEnum.fromInteger(stickyNoteData.getShapeKind()),
-                        stickyNoteData.getWidth(),
-                        stickyNoteData.getHeight(),
                         stickyNoteData.getColor())
                 );
 
@@ -50,8 +50,8 @@ public class StickyNoteMapper {
                 stickyNote.getContent(),
                 stickyNote.getStyle().getFontSize(),
                 stickyNote.getStyle().getShape().ordinal(),
-                stickyNote.getStyle().getWidth(),
-                stickyNote.getStyle().getHeight(),
+                stickyNote.getWidth(),
+                stickyNote.getHeight(),
                 stickyNote.getStyle().getColor()
         );
         return stickyNoteData;

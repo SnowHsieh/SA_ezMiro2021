@@ -3,15 +3,11 @@ package ntut.csie.islab.miro.entity.model.figure.connectablefigure;
 public class Style {
     private int fontSize;
     private ShapeKindEnum shape;
-    private double width;
-    private double height;
     private String color;
 
-    public Style(int fontSize, ShapeKindEnum shape, double width, double height, String color) {
+    public Style(int fontSize, ShapeKindEnum shape, String color) {
         this.fontSize = fontSize;
         this.shape = shape;
-        this.width = width;
-        this.height = height;
         this.color = color;
     }
 
@@ -29,22 +25,6 @@ public class Style {
 
     public void setShape(ShapeKindEnum shape) {
         this.shape = shape;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public void setWidth(double width) {
-        this.width = width;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
     }
 
     public String getColor() {

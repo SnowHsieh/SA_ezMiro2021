@@ -77,6 +77,13 @@ public abstract class Figure extends AggregateRoot<UUID> {
 
     public abstract void setStyle(Style style);
 
+    public abstract double getWidth() ;
+
+    public abstract void setWidth(double width) ;
+
+    public abstract double getHeight() ;
+
+    public abstract void setHeight(double height) ;
     //set DomainEvent
     public abstract void markAsRemoved(UUID boardId, UUID figureId);
 

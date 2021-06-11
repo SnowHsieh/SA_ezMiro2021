@@ -32,16 +32,20 @@ public class CreateStickyNoteController {
         String content = "";
         Position position = null;
         Style style = null;
+        double width = 0.0;
+        double height = 0.0;
+
         JSONObject styleJsonObject;
         try {
             JSONObject stickyNoteJSON = new JSONObject(stickyNoteInfo);
             content = stickyNoteJSON.getString("content");
             position = new Position(stickyNoteJSON.getJSONObject("position").getDouble("x"), stickyNoteJSON.getJSONObject("position").getDouble("y"));
+            width = stickyNoteJSON.getDouble("width");
+            height = stickyNoteJSON.getDouble("height");
+
             styleJsonObject = stickyNoteJSON.getJSONObject("style");
             style = new Style(styleJsonObject.getInt("fontSize"),
                     ShapeKindEnum.values()[styleJsonObject.getInt("shape")],
-                    styleJsonObject.getDouble("width"),
-                    styleJsonObject.getDouble("height"),
                     styleJsonObject.getString("color"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -52,6 +56,8 @@ public class CreateStickyNoteController {
         input.setBoardId(boardId);
         input.setPosition(position);
         input.setContent(content);
+        input.setWidth(width);
+        input.setHeight(height);
         input.setStyle(style);
 
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
