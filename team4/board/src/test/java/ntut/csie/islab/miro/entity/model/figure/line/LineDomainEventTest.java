@@ -47,7 +47,7 @@ public class LineDomainEventTest {
         assertEquals(LineDeletedDomainEvent.class, line.getDomainEvents().get(1).getClass());
     }
     @Test
-    public void line_attach_a_textfigure_then_publishes_a_textfigure_attached_by_line_domain_event(){
+    public void line_attach_a_connectableFigure_then_publishes_a_connectableFigure_attached_by_line_domain_event(){
         UUID boardId = UUID.randomUUID();
         List<Position> positionList = new ArrayList<>();
         int strokeWidth = 5;
@@ -60,7 +60,7 @@ public class LineDomainEventTest {
         assertEquals(ConnectableFigureAttachedByLineDomainEvent.class, line.getDomainEvents().get(1).getClass());
     }
     @Test
-    public void line_unattach_a_textfigure_then_publishes_a_textfigure_unattached_by_line_domain_event(){
+    public void line_unattach_a_connectable_figure_then_publishes_a_connectable_figure_unattached_by_line_domain_event(){
         UUID boardId = UUID.randomUUID();
         List<Position> positionList = new ArrayList<>();
         int strokeWidth = 5;

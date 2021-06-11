@@ -7,18 +7,18 @@ import java.util.UUID;
 
 public class FigureUncommittedDomainEvent extends DomainEvent {
     private final UUID boardId;
-    private final UUID textFigureId;
-    public FigureUncommittedDomainEvent(UUID boardId, UUID textFigureId) {
+    private final UUID connectableFigureId;
+    public FigureUncommittedDomainEvent(UUID boardId, UUID connectableFigureId) {
         super(DateProvider.now());
         this.boardId = boardId;
-        this.textFigureId = textFigureId;
+        this.connectableFigureId = connectableFigureId;
     }
 
     public UUID getBoardId() {
         return boardId;
     }
 
-    public UUID getTextFigureId() {
-        return textFigureId;
+    public UUID getConnectableFigureId() {
+        return connectableFigureId;
     }
 }

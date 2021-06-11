@@ -155,13 +155,13 @@ public abstract class AbstractSpringBootJpaTest {
         return output;
     }
 
-    public CqrsCommandPresenter generateAttachTextfigureUseCase(UUID boardId, UUID figureId, UUID textFigureId,String attachEndPointKind) {
+    public CqrsCommandPresenter generateAttachConnectableFigureUseCase(UUID boardId, UUID figureId, UUID connectableFigureId, String attachEndPointKind) {
         AttachConnectablefigureUseCase attachConnectablefigureUseCase = new AttachConnectablefigureUseCase(domainEventBus, lineRepository);
         AttachConnectableFigureInput input = attachConnectablefigureUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);
         input.setFigureId(figureId);
-        input.setConnectableFigureId(textFigureId);
+        input.setConnectableFigureId(connectableFigureId);
         input.setAttachEndPointKind(attachEndPointKind);
 
         attachConnectablefigureUseCase.execute(input, output);

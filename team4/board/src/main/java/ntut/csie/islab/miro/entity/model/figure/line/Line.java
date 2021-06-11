@@ -75,21 +75,21 @@ public class Line extends Figure {
 
     @Override
     public void unattachConnectableFigure(String attachEndPointKind) {
-        UUID unattachedTextFigureId = null;
+        UUID unattachedConnectableFigureId = null;
 
 
         if (attachEndPointKind.equals("source")){
-            unattachedTextFigureId =  this.getSrcConnectableFigureId();
+            unattachedConnectableFigureId =  this.getSrcConnectableFigureId();
             this.setSrcConnectableFigureId(null);
         }
         else if (attachEndPointKind.equals("destination")){
-            unattachedTextFigureId =  this.getDestConnectableFigureId();
+            unattachedConnectableFigureId =  this.getDestConnectableFigureId();
             this.setDestConnectableFigureId(null);
         }
         else{
             //todo: alert bug
         }
-        addDomainEvent(new ConnectableFigureUnattachedDomainEvent(this.getBoardId(), this.getFigureId(),unattachedTextFigureId,attachEndPointKind));
+        addDomainEvent(new ConnectableFigureUnattachedDomainEvent(this.getBoardId(), this.getFigureId(),unattachedConnectableFigureId,attachEndPointKind));
     }
 
 

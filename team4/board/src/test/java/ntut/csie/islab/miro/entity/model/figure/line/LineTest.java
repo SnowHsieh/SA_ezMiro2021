@@ -47,7 +47,7 @@ public class LineTest {
 
     }
     @Test
-    public void test_a_line_attach_textfigure() {
+    public void test_a_line_attach_connectableFigure() {
         UUID boardId = UUID.randomUUID();
         List<Position> positionList = new ArrayList<>();
         int strokeWidth = 5;
@@ -58,7 +58,7 @@ public class LineTest {
         assertEquals(sn.getFigureId(),line.getSrcConnectableFigureId());
     }
     @Test
-    public void test_line_unattach_from_textfigure() {
+    public void test_line_unattach_from_connectableFigure() {
         UUID boardId = UUID.randomUUID();
         List<Position> positionList = new ArrayList<>();
         int strokeWidth = 5;

@@ -44,16 +44,16 @@ public class UnattachConnectableFigureUseCaseTest extends AbstractSpringBootJpaT
                 "Content1",
                 new Style(12, ShapeKindEnum.CIRCLE, 87.87,100, "#948700"));
 
-        CqrsCommandPresenter attachTextfigureOutput =  generateAttachTextfigureUseCase(
+        CqrsCommandPresenter attachConnectableFigureOutput =  generateAttachConnectableFigureUseCase(
                 boardId,
                 UUID.fromString(newLine.getId()),
                 UUID.fromString(newStickyNote.getId()),
                 "destination"
         );
 
-        assertNotNull(attachTextfigureOutput.getId());
-        assertEquals(ExitCode.SUCCESS, attachTextfigureOutput.getExitCode());
-        Line attachedLine = lineRepository.findById(UUID.fromString(attachTextfigureOutput.getId())).get();
+        assertNotNull(attachConnectableFigureOutput.getId());
+        assertEquals(ExitCode.SUCCESS, attachConnectableFigureOutput.getExitCode());
+        Line attachedLine = lineRepository.findById(UUID.fromString(attachConnectableFigureOutput.getId())).get();
         assertNotNull(attachedLine);
         assertEquals(UUID.fromString(newStickyNote.getId()), attachedLine.getDestConnectableFigureId());
 

@@ -219,16 +219,6 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
         assertEquals(1, oneFigureInBoardViewModel.getFigureDtos().size());
 
 
-//        CqrsCommandPresenter editDomainEventStickyNoteOutput = editStickyNoteUseCaseOutput(
-//                boardId,
-//                domainEventStickyNote.getId(),
-//                "sticky\n note \n created",
-//                new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f28500")
-//        );
-
-//        assertEquals("sticky\n note \n created", textFigureRepository.findById(UUID.fromString(editDomainEventStickyNoteOutput.getId())).get().getContent());
-//        assertEquals("#f28500", textFigureRepository.findById(UUID.fromString(editDomainEventStickyNoteOutput.getId())).get().getStyle().getColor());
-
         //Check BoardContent = 1
         GetBoardContentPresenter oneFigureEditedInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
         assertEquals(boardId, oneFigureEditedInBoardPresenter.getBoardId());
@@ -364,16 +354,6 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
         assertEquals(boardId, fourFiguresInBoardViewModel.getBoardId());
         assertEquals(4, fourFiguresInBoardViewModel.getFigureDtos().size());
 
-//        // getcontent DomainEventStickyNote
-//        CqrsCommandPresenter editDomainEventStickyNoteOutput = editStickyNoteUseCaseOutput(
-//                boardId,
-//                domainEventStickyNote.getId(),
-//                "sticky\n note \n created",
-//                new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f28500")
-//        );
-
-//        assertEquals("sticky\n note \n created", textFigureRepository.findById(UUID.fromString(editDomainEventStickyNoteOutput.getId())).get().getContent());
-//        assertEquals("#f28500", textFigureRepository.findById(UUID.fromString(editDomainEventStickyNoteOutput.getId())).get().getStyle().getColor());
 
         //Check BoardContent = 4
         GetBoardContentPresenter oneFigureEditedInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
@@ -386,19 +366,6 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
         //Check domainEventStickyNote is EditEvent(Content and Color had been changed) Success
         FigureDto domainEventStickyNoteDto = getSpecifiedFigureDto(oneFigureEditedInBoardViewModel, domainEventStickyNote.getId());
         assertEquals(boardId, domainEventStickyNoteDto.getBoardId());
-//        assertEquals("sticky\n note \n created", domainEventStickyNoteDto.getContent());
-//        assertEquals("#f28500", domainEventStickyNoteDto.getStyle().getColor());
-
-//        //getcontent CommandStickyNote
-//        CqrsCommandPresenter editCommandStickyNoteOutput = editStickyNoteUseCaseOutput(
-//                boardId,
-//                commandStickyNote.getId(),
-//                "create sticky note",
-//                new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#0080ff")
-//        );
-//
-//        assertEquals("create sticky note", textFigureRepository.findById(UUID.fromString(editCommandStickyNoteOutput.getId())).get().getContent());
-//        assertEquals("#0080ff", textFigureRepository.findById(UUID.fromString(editCommandStickyNoteOutput.getId())).get().getStyle().getColor());
 
         //Check BoardContent = 4
         GetBoardContentPresenter commandStickyNoteEditedInBoardPresenter = generateGetBoardContentUseCaseOutput(boardId);
@@ -413,27 +380,6 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
                 commandStickyNoteEditedInBoardViewModel,
                 commandStickyNote.getId());
         assertEquals(boardId, commandStickyNoteDto.getBoardId());
-//        assertEquals("create sticky note", commandStickyNoteDto.getContent());
-//        assertEquals("#0080ff", commandStickyNoteDto.getStyle().getColor());
-
-//        //getcontent ReadModelStickyNote
-//        CqrsCommandPresenter editReadModelStickyNoteOutput = editStickyNoteUseCaseOutput(
-//                boardId,
-//                readModelStickyNote.getId(),
-//                "stickNoteId,\n" +
-//                        "\n" +
-//                        "content,\n" +
-//                        "\n" +
-//                        "style(font,shape,size,color)",
-//                new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#28ff28")
-//        );
-
-//        assertEquals("stickNoteId,\n" +
-//                "\n" +
-//                "content,\n" +
-//                "\n" +
-//                "style(font,shape,size,color)", textFigureRepository.findById(UUID.fromString(editReadModelStickyNoteOutput.getId())).get().getContent());
-//        assertEquals("#28ff28", textFigureRepository.findById(UUID.fromString(editReadModelStickyNoteOutput.getId())).get().getStyle().getColor());
 
 
         //Check BoardContent = 4
@@ -449,22 +395,6 @@ public class GetBoardContentUseCaseTest extends AbstractSpringBootJpaTest {
                 readModelStickyNoteEditedInBoardViewModel,
                 readModelStickyNote.getId());
         assertEquals(boardId, readModelStickyNoteDto.getBoardId());
-//        assertEquals("stickNoteId,\n" +
-//                "\n" +
-//                "content,\n" +
-//                "\n" +
-//                "style(font,shape,size,color)", readModelStickyNoteDto.getContent());
-//        assertEquals("#28ff28", readModelStickyNoteDto.getStyle().getColor());
-
-
-//        CqrsCommandPresenter editAggregateStickyNoteOutput = editStickyNoteUseCaseOutput(
-//                boardId,
-//                aggregateStickyNote.getId(),
-//                "sticky note",
-//                new Style(12, ShapeKindEnum.RECTANGLE, 100, 100, "#f9f900")
-//        );
-//        assertEquals("sticky note", textFigureRepository.findById(UUID.fromString(editAggregateStickyNoteOutput.getId())).get().getContent());
-//        assertEquals("#f9f900", textFigureRepository.findById(UUID.fromString(editAggregateStickyNoteOutput.getId())).get().getStyle().getColor());
 
 
         //Check BoardContent = 4
