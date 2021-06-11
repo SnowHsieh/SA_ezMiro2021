@@ -23,6 +23,8 @@ public class FigureDto {
     //connectableFigure
     private Position position;
     private String content;
+    private double width;
+    private double height;
     private Style style;
 
 
@@ -128,5 +130,21 @@ public class FigureDto {
 
     public void setKind(String kind) {
         this.kind = kind;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
     }
 }

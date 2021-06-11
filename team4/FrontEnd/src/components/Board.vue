@@ -62,7 +62,7 @@ import {
 export default {
   data () {
     return {
-      boardId: '7c4ad339-883b-4e85-8278-73224c44330d',
+      boardId: 'e027708c-829a-42cf-8bb8-415f06d7195d',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -324,8 +324,8 @@ export default {
         id: figure.figureId,
         originX: 'center',
         originY: 'center',
-        width: figure.style.width,
-        height: figure.style.height,
+        width: figure.width,
+        height: figure.height,
         fill: figure.style.color,
         shadow: shadow
       })
@@ -776,11 +776,11 @@ export default {
               x: 100,
               y: 100
             },
+            width: 150.0,
+            height: 150.0,
             style: {
               fontSize: 20,
               shape: 2,
-              width: 150.0,
-              height: 150.0,
               color: '#ffa150'
             }
           }

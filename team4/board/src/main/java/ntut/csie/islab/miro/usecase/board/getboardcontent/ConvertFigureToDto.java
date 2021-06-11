@@ -31,6 +31,8 @@ public class ConvertFigureToDto {
         //connectableFigure
         dto.setContent(figure.getContent());
         dto.setPosition(figure.getPosition());
+        dto.setWidth(figure.getWidth());
+        dto.setHeight(figure.getHeight());
         dto.setStyle(figure.getStyle());
         return dto;
     }

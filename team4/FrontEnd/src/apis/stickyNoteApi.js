@@ -10,11 +10,11 @@ export const createStickyNoteApi = async (boardId) => {
           x: 100,
           y: 100
         },
+        width: 150.0,
+        height: 150.0,
         style: {
           fontSize: 20,
           shape: 2,
-          width: 150.0,
-          height: 150.0,
           color: '#ffa150'
         }
       }
