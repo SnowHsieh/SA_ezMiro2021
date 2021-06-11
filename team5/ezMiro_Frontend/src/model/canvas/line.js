@@ -12,7 +12,8 @@ export default fabric.util.createClass(fabric.Line, {
   _registerMovedEvent: _registerMovedEvent,
   _registerDeletedEvent: _registerDeletedEvent,
   move: move,
-  moveEndpoint: moveEndpoint
+  moveEndpoint: moveEndpoint,
+  connectLineEndpointToFigure: connectLineEndpointToFigure
 })
 
 function initialize (figureId, endpointA, endpointB) {
@@ -87,6 +88,7 @@ function _registerAddedEvent () {
         this.endpointA.connectedFigure = this.canvas.getFigure(this.endpointA.connectedFigureId)
         this.endpointA._handleFigureMoving = handleFigureMoving.bind(this.endpointA)
         this.endpointA.connectedFigure.on('moving', this.endpointA._handleFigureMoving)
+        this.endpointA.connectedFigure.on('scaling', this.endpointA._handleFigureMoving)
         this.set({
           evented: false
         })
@@ -96,6 +98,7 @@ function _registerAddedEvent () {
         this.endpointB.connectedFigure = this.canvas.getFigure(this.endpointB.connectedFigureId)
         this.endpointB._handleFigureMoving = handleFigureMoving.bind(this.endpointB)
         this.endpointB.connectedFigure.on('moving', this.endpointB._handleFigureMoving)
+        this.endpointB.connectedFigure.on('scaling', this.endpointB._handleFigureMoving)
         this.set({
           evented: false
         })
@@ -142,10 +145,10 @@ function _registerMovedEvent () {
       y1: this.endpointA.top
     })
     this.setCoords()
-    lineAPI.moveLineEndpoint(this.figureId, this.endpointA.id, this.endpointA.left, this.endpointA.top)
+    // lineAPI.moveLineEndpoint(this.figureId, this.endpointA.id, this.endpointA.left, this.endpointA.top)
   })
 
-  this.endpointA.on('moved', () => {
+  this.endpointA.on('moved', async () => {
     const canvasObjects = this.canvas.getObjects()
     let connectedFigure = null
     for (let i = canvasObjects.length - 1; i >= 0; i--) {
@@ -158,18 +161,20 @@ function _registerMovedEvent () {
     if (this.endpointA.connectedFigure !== connectedFigure) {
       if (this.endpointA.connectedFigure !== null) {
         this.endpointA.connectedFigure.off('moving', this.endpointA._handleFigureMoving)
+        this.endpointA.connectedFigure.off('scaling', this.endpointA._handleFigureMoving)
         this.endpointA.connectedFigure = null
         this.endpointA._handleFigureMoving = null
-        lineAPI.disconnectLine(this.figureId, this.endpointA.id)
+        await lineAPI.disconnectLine(this.figureId, this.endpointA.id)
       }
       if (connectedFigure !== null) {
         this.endpointA.connectedFigure = connectedFigure
         this.endpointA._handleFigureMoving = handleFigureMoving.bind(this.endpointA)
         this.endpointA.connectedFigure.on('moving', this.endpointA._handleFigureMoving)
+        this.endpointA.connectedFigure.on('scaling', this.endpointA._handleFigureMoving)
         this.set({
           evented: false
         })
-        lineAPI.connectLine(this.figureId, this.endpointA.id, connectedFigure.figureId)
+        await lineAPI.connectLine(this.figureId, this.endpointA.id, connectedFigure.figureId)
       }
     }
     if (this.endpointA.connectedFigure !== null) {
@@ -181,6 +186,7 @@ function _registerMovedEvent () {
         evented: true
       })
     }
+    lineAPI.moveLineEndpoint(this.figureId, this.endpointA.id, this.endpointA.left, this.endpointA.top)
   })
 
   this.endpointB.on('moving', () => {
@@ -189,10 +195,10 @@ function _registerMovedEvent () {
       y2: this.endpointB.top
     })
     this.setCoords()
-    lineAPI.moveLineEndpoint(this.figureId, this.endpointB.id, this.endpointB.left, this.endpointB.top)
+    // lineAPI.moveLineEndpoint(this.figureId, this.endpointB.id, this.endpointB.left, this.endpointB.top)
   })
 
-  this.endpointB.on('moved', () => {
+  this.endpointB.on('moved', async () => {
     const canvasObjects = this.canvas.getObjects()
     let connectedFigure = null
     for (let i = canvasObjects.length - 1; i >= 0; i--) {
@@ -205,18 +211,20 @@ function _registerMovedEvent () {
     if (this.endpointB.connectedFigure !== connectedFigure) {
       if (this.endpointB.connectedFigure !== null) {
         this.endpointB.connectedFigure.off('moving', this.endpointB._handleFigureMoving)
+        this.endpointB.connectedFigure.off('scaling', this.endpointB._handleFigureMoving)
         this.endpointB.connectedFigure = null
         this.endpointB._handleFigureMoving = null
-        lineAPI.disconnectLine(this.figureId, this.endpointB.id)
+        await lineAPI.disconnectLine(this.figureId, this.endpointB.id)
       }
       if (connectedFigure !== null) {
         this.endpointB.connectedFigure = connectedFigure
         this.endpointB._handleFigureMoving = handleFigureMoving.bind(this.endpointB)
         this.endpointB.connectedFigure.on('moving', this.endpointB._handleFigureMoving)
+        this.endpointB.connectedFigure.on('scaling', this.endpointB._handleFigureMoving)
         this.set({
           evented: false
         })
-        lineAPI.connectLine(this.figureId, this.endpointB.id, connectedFigure.figureId)
+        await lineAPI.connectLine(this.figureId, this.endpointB.id, connectedFigure.figureId)
       }
     }
     if (this.endpointB.connectedFigure !== null) {
@@ -228,6 +236,7 @@ function _registerMovedEvent () {
         evented: true
       })
     }
+    lineAPI.moveLineEndpoint(this.figureId, this.endpointB.id, this.endpointB.left, this.endpointB.top)
   })
 }
 
@@ -297,6 +306,30 @@ function moveEndpoint (id, positionX, positionY) {
       y2: this.endpointB.top
     })
     this.setCoords()
+  }
+}
+
+function connectLineEndpointToFigure (endpointId, connectedFigureId) {
+  if (this.endpointA.endpointId === endpointId) {
+    this.endpointA.connectedFigureId = connectedFigureId
+    this.endpointA.connectedFigure = this.canvas.getFigure(connectedFigureId)
+    this.endpointA._handleFigureMoving = handleFigureMoving.bind(this.endpointA)
+    this.endpointA.connectedFigure.on('moving', this.endpointA._handleFigureMoving)
+    this.endpointA.connectedFigure.on('scaling', this.endpointA._handleFigureMoving)
+    this.set({
+      evented: false
+    })
+    this.endpointA._handleFigureMoving()
+  } else if (this.endpointB.endpointId === endpointId) {
+    this.endpointB.connectedFigureId = connectedFigureId
+    this.endpointB.connectedFigure = this.canvas.getFigure(connectedFigureId)
+    this.endpointB._handleFigureMoving = handleFigureMoving.bind(this.endpointB)
+    this.endpointB.connectedFigure.on('moving', this.endpointB._handleFigureMoving)
+    this.endpointB.connectedFigure.on('scaling', this.endpointB._handleFigureMoving)
+    this.set({
+      evented: false
+    })
+    this.endpointB._handleFigureMoving()
   }
 }
 

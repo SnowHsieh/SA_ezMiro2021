@@ -19,6 +19,7 @@ export default fabric.util.createClass(fabric.Canvas, {
   addLine: addLine,
   moveLine: moveLine,
   moveLineEndpoint: moveLineEndpoint,
+  connectLineEndpointToFigure: connectLineEndpointToFigure,
   removeFigure: removeFigure
 })
 
@@ -29,6 +30,7 @@ function initialize (id, width, height, boardId) {
     height: height
   })
   this.boardId = boardId
+  this.selection = false
 }
 
 function getFigure (figureId) {
@@ -70,10 +72,10 @@ function changeNoteText (figureId, text) {
   }
 }
 
-function changeNoteColor (figureId, color) {
+function changeNoteColor (figureId, color, callAPI) {
   const note = this.getFigure(figureId)
   if (note !== undefined && note.isType('note')) {
-    note.changeColor(color)
+    note.changeColor(color, callAPI)
   }
 }
 
@@ -106,7 +108,6 @@ function moveLine (figureId, offsetX, offsetY) {
 }
 
 function moveLineEndpoint (figureId, endpointId, positionX, positionY) {
-  console.log(`${figureId} ${endpointId} ${positionX} ${positionY}`)
   const line = this.getFigure(figureId)
 
   if (line === undefined || !line.isType('line')) {
@@ -119,4 +120,13 @@ function moveLineEndpoint (figureId, endpointId, positionX, positionY) {
 function removeFigure (figureId) {
   this.remove(this.figures[figureId])
   delete this.figures[figureId]
+}
+
+function connectLineEndpointToFigure (figureId, endpointId, connectedFigureId) {
+  const line = this.getFigure(figureId)
+  if (line === undefined || !line.isType('line')) {
+    return
+  }
+
+  line.connectLineEndpointToFigure(endpointId, connectedFigureId)
 }

@@ -35,7 +35,6 @@ public class MoveLineEndpointUseCaseImpl implements MoveLineEndpointUseCase {
         }
 
         line.moveEndpoint(input.getEndpointId(), input.getPositionX(), input.getPositionY());
-        System.out.println("MoveLineEndpointUseCaseImpl");
         lineRepository.save(line);
         domainEventBus.postAll(line);
 

@@ -37,7 +37,6 @@ public class ConnectLineUseCaseImpl implements ConnectLineUseCase {
         }
 
         line.connectToFigure(input.getEndpointId(), input.getFigureId());
-        System.out.println("ConnectLineUseCaseImpl");
         lineRepository.save(line);
         domainEventBus.postAll(line);
 

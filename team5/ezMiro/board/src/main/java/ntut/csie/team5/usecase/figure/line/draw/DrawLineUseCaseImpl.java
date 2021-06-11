@@ -34,7 +34,6 @@ public class DrawLineUseCaseImpl implements DrawLineUseCase {
                 .endpointB(input.getEndpointB())
                 .figureType(input.getFigureType())
                 .build();
-        System.out.println("DrawLineUseCaseImpl");
         lineRepository.save(line);
         domainEventBus.postAll(line);
 

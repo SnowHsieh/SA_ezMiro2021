@@ -99,7 +99,7 @@ function _recalcTextboxFontSize () {
       }
       lineNumber += 1
     })
-    this.textbox.width = maxLineTextWidth
+    this.textbox.set('width', maxLineTextWidth)
 
     const maxFixedWidth = this.rect.getScaledWidth() * 0.85
     const maxFiexdHeight = this.rect.getScaledHeight() * 0.85
@@ -109,7 +109,7 @@ function _recalcTextboxFontSize () {
 
     newFontSize *= maxFixedWidth / (this.textbox.width + 1)
 
-    this.textbox.width = maxFixedWidth
+    this.textbox.set('width', maxFixedWidth)
     this.textbox.set('fontSize', newFontSize)
     while (this.textbox.height > maxFiexdHeight) {
       const scale = this.textbox.height / maxFiexdHeight
@@ -159,12 +159,14 @@ function changeText (text) {
   this._recalcTextboxPosition()
 }
 
-function changeColor (color) {
+function changeColor (color, callAPI) {
   this.rect.set({
     stroke: color,
     fill: color
   })
-  noteAPI.changeNoteColor(this.figureId, color)
+  if (callAPI) {
+    noteAPI.changeNoteColor(this.figureId, color)
+  }
 }
 
 function _registerMovedEvent () {

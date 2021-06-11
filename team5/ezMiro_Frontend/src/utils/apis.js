@@ -114,9 +114,8 @@ const line = {
       figureId: figureId
     }).then()
   },
-  connectLine (figureId, endpointId, connectFigureId) {
-    console.log(`${figureId} ${endpointId} ${connectFigureId}`)
-    api.line.connectLine({
+  async connectLine (figureId, endpointId, connectFigureId) {
+    await api.line.connectLine({
       figureId: figureId,
       endpointId: endpointId,
       connectFigureId: connectFigureId
@@ -124,8 +123,8 @@ const line = {
       console.log(data)
     })
   },
-  disconnectLine (figureId, endpointId) {
-    api.line.disconnectLine({
+  async disconnectLine (figureId, endpointId) {
+    await api.line.disconnectLine({
       figureId: figureId,
       endpointId: endpointId
     }).then()

@@ -46,7 +46,6 @@ public class Line extends Figure {
     }
 
     public void connectToFigure(String endpointId, String connectFigureId) {
-        System.out.println(String.format("connect to figure: endpointId: %s, connectedFigureId: %s", endpointId, connectFigureId));
         if (this.endpointA.getId().equals(endpointId)) {
             this.endpointA.setConnectedFigureId(connectFigureId);
             addDomainEvent(new LineConnected(getId(), getEndpointA().getId(), connectFigureId, getBoardId(), getFigureType()));

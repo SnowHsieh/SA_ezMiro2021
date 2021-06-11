@@ -258,7 +258,7 @@ export default {
         } else if (data.type === 'NoteMoved') {
           this.canvas.moveNote(data.figureId, data.newLeftTopPositionX, data.newLeftTopPositionY)
         } else if (data.type === 'NoteColorChanged') {
-          // TODO
+          this.canvas.changeNoteColor(data.figureId, data.newColor, false)
         } else if (data.type === 'NoteResized') {
           this.canvas.resizeNote(data.figureId, data.newWidth, data.newHeight)
         } else if (data.type === 'NoteTextEdited') {
@@ -270,7 +270,9 @@ export default {
         } else if (data.type === 'LineMoved') {
           this.canvas.moveLine(data.figureId, data.offsetX, data.offsetY)
         } else if (data.type === 'LineEndpointMoved') {
-          // this.canvas.moveLineEndpoint(data.figureId, data.endpointId, data.newPositionX, data.newPositionY)
+          this.canvas.moveLineEndpoint(data.figureId, data.endpointId, data.newPositionX, data.newPositionY)
+        } else if (data.type === 'LineConnected') {
+          this.canvas.connectLineEndpointToFigure(data.figureId, data.endpointId, data.connectedFigureId)
         }
         this.canvas.renderAll()
       }
@@ -288,7 +290,7 @@ export default {
     },
     changeNoteColor (color) {
       if (this.activeObject.isType('note')) {
-        this.canvas.changeNoteColor(this.activeObject.figureId, color)
+        this.canvas.changeNoteColor(this.activeObject.figureId, color, true)
         this.canvas.renderAll()
       }
     },

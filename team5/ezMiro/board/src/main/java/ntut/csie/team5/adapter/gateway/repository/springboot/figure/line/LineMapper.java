@@ -27,7 +27,6 @@ public class LineMapper {
     }
 
     public static LineData transformToData(Line line) {
-        System.out.println(line.toString());
         LineData lineData = new LineData(
                 line.getId(),
                 line.getBoardId(),
