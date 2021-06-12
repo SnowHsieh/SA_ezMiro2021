@@ -82,7 +82,6 @@ public class NotifyBoardSessionBroadcaster {
     public void whenCursorMoved(CursorMovedDomainEvent cursorMovedDomainEvent) {
         Board board = boardRepository.findById(cursorMovedDomainEvent.getBoardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
-        System.out.println("whenCursorMoved notify:" + board);
         boardSessions.forEach(each -> broadcast(cursorMovedDomainEvent, each.getBoardSessionId().getId()));
     }
 
@@ -90,7 +89,6 @@ public class NotifyBoardSessionBroadcaster {
     public void whenBoardEntered(BoardEnteredDomainEvent boardEnteredDomainEvent) {
         Board board = boardRepository.findById(boardEnteredDomainEvent.boardId()).get();
         List<BoardSession> boardSessions = board.getBoardSessionList();
-        System.out.println("whenBoardEntered notify:" + board);
         boardSessions.forEach(each -> broadcast(boardEnteredDomainEvent, each.getBoardSessionId().getId()));
     }
 

@@ -67,10 +67,7 @@ public class BoardSessionWebSocketAdapter {
             jsonObject = jsonObject.getJSONObject("message");
             event = jsonObject.getString("event");
             info = jsonObject.getJSONObject("info");
-//            System.out.println("event in onMessage is: "+jsonObject.toString());
-            System.out.println("eventhandler start");
             websocketEventHandler(event, info);
-            System.out.println("eventhandler end");
         }catch (JSONException err){
             System.out.println("onMessage err:" + err);
         }
@@ -86,7 +83,6 @@ public class BoardSessionWebSocketAdapter {
     public void onOpen(Session session,
                        @PathParam("boardId") String boardId,
                        @PathParam("userId") String userId) throws IOException {
-        System.out.println(userId.toString() + "加入了戰局");
         EnterBoardInput input = enterBoardUseCase.newInput();
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
         input.setUserId(UUID.fromString(userId));
@@ -97,7 +93,6 @@ public class BoardSessionWebSocketAdapter {
 
     @OnClose
     public void onClose(Session session) {
-        System.out.println(session.getId() + "離開了戰局");
         String boardSessionId = ((WebSocketBroadcaster)boardSessionBroadcaster).getBoardSessionIdBySessionId(session.getId());
         LeaveBoardInput input = leaveBoardUseCase.newInput();
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();

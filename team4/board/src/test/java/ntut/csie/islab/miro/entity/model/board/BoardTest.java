@@ -18,8 +18,6 @@ class BoardTest {
 
     @Test
     public void commit_a_figure(){
-
-        System.out.println(FigureTypeEnum.LINE.toString());
         Board board = createBoard();
         UUID figureId = UUID.randomUUID();
         board.commitFigure(figureId, FigureTypeEnum.STICKYNOTE);

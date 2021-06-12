@@ -66,7 +66,6 @@ public class Board extends AggregateRoot<UUID> {
 
     public void uncommitFigure(UUID figureId) {
         requireNotNull("figureId id", figureId);
-        System.out.println("uncommitFigure:" + figureId);
         removeFigure(figureId);
         addDomainEvent(new FigureUncommittedDomainEvent(getBoardId(), figureId));
 

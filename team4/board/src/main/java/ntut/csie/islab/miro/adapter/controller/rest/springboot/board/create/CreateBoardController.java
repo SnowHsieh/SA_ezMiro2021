@@ -30,7 +30,6 @@ public class CreateBoardController {
         try {
             JSONObject boardJSON = new JSONObject(boardInfo);
             boardName = boardJSON.getString("boardName");
-            System.out.println("post: "+boardName);
         } catch (JSONException e) {
             e.printStackTrace();
         }

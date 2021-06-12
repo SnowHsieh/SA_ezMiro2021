@@ -15,7 +15,7 @@
         <ul>
           <label>
             <li>ColorPicker
-              <input type="color" id="favcolor" name="favcolor" list="colors" style="margin-left: 4rem" />
+              <input type="color" id="pickerColor" name="pickerColor" list="colors" style="margin-left: 4rem" />
               <datalist id="colors">
                 <option>#fffabb</option>
                 <option>#c8dd57</option>
@@ -62,14 +62,14 @@ import {
 export default {
   data () {
     return {
-      boardId: '4330e5ad-41d5-4ccc-8e8c-09a6cf6ae6cf',
+      boardId: 'c06a6073-dab0-486f-849d-d30f9dcaec03',
       canvasContext: null,
       boardContent: null,
       canvas: null,
       time: 0,
       contextMenu: null,
       delButton: null,
-      favcolor: null,
+      pickerColor: null,
       bringToFrontButton: null,
       bringForwardButton: null,
       sendBackwardButton: null,
@@ -100,7 +100,7 @@ export default {
     this.canvas.renderAll()
     this.contextMenu = document.getElementById('contextMenu')
     this.delButton = document.getElementById('delButton')
-    this.favcolor = document.getElementById('favcolor')
+    this.pickerColor = document.getElementById('pickerColor')
     this.bringToFrontButton = document.getElementById('bringToFrontButton')
     this.bringForwardButton = document.getElementById('bringForwardButton')
     this.sendBackwardButton = document.getElementById('sendBackwardButton')
@@ -230,48 +230,42 @@ export default {
     },
     async createStickyNote () {
       try {
-        const res = await createStickyNoteApi(this.boardId)
-        console.log(res.data.message)
+        await createStickyNoteApi(this.boardId)
       } catch (err) {
         console.log(err)
       }
     },
     async changeStickyNoteContent (figure) {
       try {
-        const res = await changeStickyNoteContentApi(this.boardId, figure)
-        console.log(res.data.message)
+        await changeStickyNoteContentApi(this.boardId, figure)
       } catch (err) {
         console.log(err)
       }
     },
     async changeStickyNoteColor (figure) {
       try {
-        const res = await changeStickyNoteColorApi(this.boardId, figure)
-        console.log(res.data.message)
+        await changeStickyNoteColorApi(this.boardId, figure)
       } catch (err) {
         console.log(err)
       }
     },
     async resizeStickyNote (figure) {
       try {
-        const res = await resizeStickyNoteApi(this.boardId, figure)
-        console.log(res.data.message)
+        await resizeStickyNoteApi(this.boardId, figure)
       } catch (err) {
         console.log(err)
       }
     },
     async moveStickyNote (figure) {
       try {
-        const res = await moveStickyNoteApi(this.boardId, figure)
-        console.log(res.data.message)
+        await moveStickyNoteApi(this.boardId, figure)
       } catch (err) {
         console.log(err)
       }
     },
     async deleteStickyNote (figure) {
       try {
-        const res = await deleteStickyNoteApi(this.boardId, figure)
-        console.log(res.data.message)
+        await deleteStickyNoteApi(this.boardId, figure)
       } catch (err) {
         console.log(err)
       }
@@ -290,8 +284,8 @@ export default {
       // const width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
       // const height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
       this.canvas = new fabric.Canvas('canvas', {
-        width: 6000,
-        height: 2812,
+        width: 15000,
+        height: 5624,
         fireRightClick: true, // <-- enable firing of right click events
         stopContextMenu: true, // <--  prevent context menu from showing
         freeDrawingCursor: 'none'
@@ -310,13 +304,11 @@ export default {
       this.associationMap.forEach(lineItem => {
         _this.canvas.getObjects().filter(object => object.type === 'group').forEach(stickyNoteOnCanvas => {
           if (lineItem.value.srcConnectableFigureId && lineItem.value.srcConnectableFigureId === stickyNoteOnCanvas.id) {
-            console.log('sObject1', stickyNoteOnCanvas)
             lineItem.key.srcPoint.xOffset = (lineItem.key.srcPoint.get('left') - stickyNoteOnCanvas.get('left')) / stickyNoteOnCanvas.width
             lineItem.key.srcPoint.yOffset = (lineItem.key.srcPoint.get('top') - stickyNoteOnCanvas.get('top')) / stickyNoteOnCanvas.height
             stickyNoteOnCanvas.attachPointSet.add(lineItem.key.srcPoint)
           }
           if (lineItem.value.destConnectableFigureId && lineItem.value.destConnectableFigureId === stickyNoteOnCanvas.id) {
-            console.log('sObject2', stickyNoteOnCanvas)
             lineItem.key.destPoint.xOffset = (lineItem.key.destPoint.get('left') - stickyNoteOnCanvas.get('left')) / stickyNoteOnCanvas.width
             lineItem.key.destPoint.yOffset = (lineItem.key.destPoint.get('top') - stickyNoteOnCanvas.get('top')) / stickyNoteOnCanvas.height
             stickyNoteOnCanvas.attachPointSet.add(lineItem.key.destPoint)
@@ -371,6 +363,7 @@ export default {
       _this.listenToObjectScaled()
       _this.listenToObjectMoving()
       _this.listenToMouseDoubleClick()
+      // _this.listenToMouseScrollWheel()
     },
     listenToMouseDoubleClick () {
       var _this = this
@@ -491,6 +484,19 @@ export default {
           }
         })
     },
+    listenToMouseScrollWheel () {
+      const _this = this
+      _this.canvas.on('mouse:wheel', function (opt) {
+        const delta = opt.e.deltaY
+        let zoom = _this.canvas.getZoom()
+        zoom *= 0.999 ** delta
+        if (zoom > 20) zoom = 20
+        if (zoom < 0.01) zoom = 0.01
+        _this.canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom)
+        opt.e.preventDefault()
+        opt.e.stopPropagation()
+      })
+    },
     listenToObjectScaled () {
       var _this = this
       _this.canvas.on(
@@ -542,9 +548,11 @@ export default {
     },
     showContextMenu (event) {
       this.contextMenu.style.display = 'block'
-      this.contextMenu.style.left = event.e.clientX + 'px'
-      this.contextMenu.style.top = event.e.clientY + 'px'
-      this.favcolor.value = this.canvas.getActiveObject().item(0).get('fill') // it is for group
+      // this.contextMenu.style.left = event.e.clientX + 'px'
+      // this.contextMenu.style.top = event.e.clientY + 'px'
+      this.contextMenu.style.left = this.canvas.getPointer(event.e).x + 20 + 'px'
+      this.contextMenu.style.top = this.canvas.getPointer(event.e).y + 20 + 'px'
+      this.pickerColor.value = this.canvas.getActiveObject().item(0).get('fill') // it is for group
     },
     hideContextMenu () {
       this.contextMenu.style.display = 'none'
@@ -553,12 +561,12 @@ export default {
       var _this = this
       var newHandler = function () {
         _this.activeObjects.forEach((target) => {
-          target.item(0).set('fill', _this.favcolor.value) // rect fill
+          target.item(0).set('fill', _this.pickerColor.value) // rect fill
           _this.changeStickyNoteColor(target)
         })
         _this.hideContextMenu()
       }
-      _this.favcolor.addEventListener('change', newHandler)
+      _this.pickerColor.addEventListener('change', newHandler)
     },
     addListenerOfDeleteFigure () {
       var _this = this
@@ -737,15 +745,14 @@ export default {
       }
     },
     websocketonopen: function () {
-      console.log('WebSocket连接成功')
+      console.log('WebSocket connected')
     },
     websocketonerror: function () {
-      console.log('WebSocket连接发生错误')
+      console.log('WebSocket connection error')
     },
     websocketonmessage: function (e) {
       const _this = this
       const receivedData = JSON.parse(e.data)
-      // console.log(receivedData)
       switch (receivedData.event) {
         case 'CursorMovedDomainEvent':
           _this.updateUserCursor(receivedData)
@@ -779,7 +786,6 @@ export default {
         case 'StickyNoteDeletedDomainEvent':
           try {
             const stickyNoteObject = this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
-            console.log('sn delete de', stickyNoteObject)
             this.canvas.remove(stickyNoteObject)
           } catch (e) {
             console.log(e)
@@ -824,7 +830,6 @@ export default {
           try {
             const lineObject0 = _this.canvas.getObjects().filter(object => object.id === receivedData.figureId)[0]
             const endPointObjects = _this.canvas.getObjects().filter(object => object.attachedLineId === receivedData.figureId)
-            console.log('endPointObjects: ', endPointObjects)
             _this.canvas.remove(lineObject0)
             endPointObjects.forEach(function (endPoint) {
               _this.canvas.remove(endPoint)
@@ -834,7 +839,6 @@ export default {
           }
           break
         case 'LinePathChangedDomainEvent':
-          // console.log(receivedData)
           try {
             _this.canvas.getObjects().filter(x => x.get('id') === receivedData.figureId).forEach(function (line) {
               line.set('points', receivedData.newPositionList)
@@ -844,16 +848,13 @@ export default {
                 ep.set('left', receivedData.newPositionList[i].x)
                 ep.set('top', receivedData.newPositionList[i].y)
               }
-              // line.set('visible', true)
             })
-
             _this.canvas.renderAll()
           } catch (e) {
             console.log(e)
           }
           break
         case 'ConnectableFigureAttachedByLineDomainEvent':
-          console.log(receivedData)
           try {
             const line = _this.canvas.getObjects().filter(line => line.get('id') === receivedData.figureId)[0]
             let attachedStickyNote
@@ -874,7 +875,6 @@ export default {
           }
           break
         case 'ConnectableFigureUnattachedDomainEvent':
-          console.log(receivedData)
           try {
             const line = _this.canvas.getObjects().filter(line => line.get('id') === receivedData.figureId)[0]
             let attachedStickyNote
@@ -893,7 +893,7 @@ export default {
       }
     },
     websocketclose: function (e) {
-      console.log('connection closed ()')
+      console.log('connection closed')
     },
     socketInit () {
       this.myUserId = uuidGenerator.generateUUID()

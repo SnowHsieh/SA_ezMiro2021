@@ -63,10 +63,6 @@ public class DeleteStickyNoteUseCaseTest extends AbstractSpringBootJpaTest {
         assertNotNull(stickyNoteRepository.findById(preGeneratedStickyNoteId).get());
         //check stickynote created and committed to board.
         assertEquals(2, board.getCommittedFigures().size());
-        for (CommittedFigure c : board.getCommittedFigures()) {
-            System.out.println("bef del:" + c.getFigureId());
-        }
-        System.out.println(boardRepository.findById(board.getBoardId()).get().getCommittedFigures().size());
 
         DeleteStickyNoteUseCase deleteStickyNoteUseCase = new DeleteStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         DeleteStickyNoteInput input = deleteStickyNoteUseCase.newInput();
