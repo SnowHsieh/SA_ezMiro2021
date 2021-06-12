@@ -3,7 +3,7 @@ package ntut.csie.islab.miro.usecase.board.changefigureorder;
 import java.util.List;
 import java.util.UUID;
 
-public class ChangeFigureOrderListOnBoardInput {
+public class ChangeFigureOrderInput {
     private UUID boardId;
     private UUID FigureId;
     private List<UUID> figureIdOrderList;

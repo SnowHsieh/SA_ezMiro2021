@@ -7,11 +7,11 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 
-public class AttachConnectablefigureUseCase {
+public class AttachConnectableFigureUseCase {
     private DomainEventBus domainEventBus;
     private LineRepository lineRepository;
 
-    public AttachConnectablefigureUseCase(DomainEventBus domainEventBus, LineRepository lineRepository) {
+    public AttachConnectableFigureUseCase(DomainEventBus domainEventBus, LineRepository lineRepository) {
         this.domainEventBus = domainEventBus;
         this.lineRepository = lineRepository;
     }

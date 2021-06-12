@@ -1,7 +1,7 @@
 package ntut.csie.islab.miro.application.springboot.web.config;
 
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
-import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderListOnBoardUseCase;
+import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderUseCase;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
 import ntut.csie.islab.miro.usecase.board.cursor.MoveCursorUseCase;
 import ntut.csie.islab.miro.usecase.board.enterboard.EnterBoardUseCase;
@@ -9,7 +9,7 @@ import ntut.csie.islab.miro.usecase.board.getboardcontent.GetBoardContentUseCase
 import ntut.csie.islab.miro.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.islab.miro.usecase.eventhandler.NotifyBoard;
 import ntut.csie.islab.miro.usecase.figure.line.LineRepository;
-import ntut.csie.islab.miro.usecase.figure.line.attachconnectablefigure.AttachConnectablefigureUseCase;
+import ntut.csie.islab.miro.usecase.figure.line.attachconnectablefigure.AttachConnectableFigureUseCase;
 import ntut.csie.islab.miro.usecase.figure.line.changepath.ChangeLinePathUseCase;
 import ntut.csie.islab.miro.usecase.figure.line.create.CreateLineUseCase;
 import ntut.csie.islab.miro.usecase.figure.line.delete.DeleteLineUseCase;
@@ -49,9 +49,9 @@ public class UseCaseInjection {
         return new CreateBoardUseCase(eventBus, boardRepository);
     }
 
-    @Bean(name = "changeFigureOrderListOnBoardUseCase")
-    public ChangeFigureOrderListOnBoardUseCase changeFigureOrderListOnBoardUseCase() {
-        return new ChangeFigureOrderListOnBoardUseCase(boardRepository, eventBus);
+    @Bean(name = "changeFigureOrderUseCase")
+    public ChangeFigureOrderUseCase changeFigureOrderUseCase() {
+        return new ChangeFigureOrderUseCase(boardRepository, eventBus);
     }
 
 
@@ -122,8 +122,8 @@ public class UseCaseInjection {
     }
 
     @Bean(name = "attachConnectableFigureUseCase")
-    public AttachConnectablefigureUseCase attachConnectableFigureUseCase() {
-        return new AttachConnectablefigureUseCase(eventBus, lineRepository);
+    public AttachConnectableFigureUseCase attachConnectableFigureUseCase() {
+        return new AttachConnectableFigureUseCase(eventBus, lineRepository);
     }
 
     @Bean(name = "unattachConnectableFigureUseCase")

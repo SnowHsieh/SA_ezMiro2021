@@ -6,7 +6,7 @@ import ntut.csie.islab.miro.entity.model.figure.connectablefigure.ShapeKindEnum;
 import ntut.csie.islab.miro.entity.model.figure.connectablefigure.Style;
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
 import ntut.csie.islab.miro.usecase.figure.line.attachconnectablefigure.AttachConnectableFigureInput;
-import ntut.csie.islab.miro.usecase.figure.line.attachconnectablefigure.AttachConnectablefigureUseCase;
+import ntut.csie.islab.miro.usecase.figure.line.attachconnectablefigure.AttachConnectableFigureUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class AttachConnectablefigureUseCaseTest extends AbstractSpringBootJpaTest {
+public class AttachConnectableFigureUseCaseTest extends AbstractSpringBootJpaTest {
     @BeforeEach
     @Override
     public void setUp() {
@@ -27,7 +27,7 @@ public class AttachConnectablefigureUseCaseTest extends AbstractSpringBootJpaTes
         domainEventBus.register(notifyBoardAdapter);
     }
     @Test
-    public void test_connectable_text_figure_usecase() {
+    public void test_attach_connectable_figure_usecase() {
 
         List<Position> positionList = new ArrayList<>();
         positionList.add(new Position(0, 50));
@@ -47,15 +47,15 @@ public class AttachConnectablefigureUseCaseTest extends AbstractSpringBootJpaTes
                 new Style(12, ShapeKindEnum.CIRCLE,  "#948700"));
 
 
-        AttachConnectablefigureUseCase attachConnectablefigureUseCase = new AttachConnectablefigureUseCase(domainEventBus, lineRepository);
-        AttachConnectableFigureInput input = attachConnectablefigureUseCase.newInput();
+        AttachConnectableFigureUseCase attachConnectableFigureUseCase = new AttachConnectableFigureUseCase(domainEventBus, lineRepository);
+        AttachConnectableFigureInput input = attachConnectableFigureUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);
         input.setFigureId(UUID.fromString(newLine.getId()));
         input.setConnectableFigureId(UUID.fromString(newStickyNote.getId()));
         input.setAttachEndPointKind("destination");
 
-        attachConnectablefigureUseCase.execute(input, output);
+        attachConnectableFigureUseCase.execute(input, output);
         assertNotNull(output.getId());
         assertEquals(ExitCode.SUCCESS, output.getExitCode());
 

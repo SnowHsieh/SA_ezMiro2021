@@ -1,14 +1,11 @@
 package ntut.csie.islab.miro.usecase.board;
 
-import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.CommittedFigure;
 import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.usecase.AbstractSpringBootJpaTest;
-import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderListOnBoardInput;
-import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderListOnBoardUseCase;
-import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
+import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderInput;
+import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
-import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +17,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ChangeFigureOrderListOnBoardUseCaseTest extends AbstractSpringBootJpaTest {
+public class ChangeFigureOrderUseCaseTest extends AbstractSpringBootJpaTest {
 
     @BeforeEach
     @Override
@@ -31,8 +28,8 @@ public class ChangeFigureOrderListOnBoardUseCaseTest extends AbstractSpringBootJ
     @Test
     public void test_modifyFigureUseCase(){
         assertEquals(0,board.getCommittedFigures().size());
-        ChangeFigureOrderListOnBoardUseCase changeFigureOrderListOnBoardUseCase = new ChangeFigureOrderListOnBoardUseCase(boardRepository, domainEventBus);
-        ChangeFigureOrderListOnBoardInput input = changeFigureOrderListOnBoardUseCase.newInput();
+        ChangeFigureOrderUseCase changeFigureOrderUseCase = new ChangeFigureOrderUseCase(boardRepository, domainEventBus);
+        ChangeFigureOrderInput input = changeFigureOrderUseCase.newInput();
 
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         List<UUID> figureOrderList = new ArrayList<>();
@@ -47,7 +44,7 @@ public class ChangeFigureOrderListOnBoardUseCaseTest extends AbstractSpringBootJ
 
         input.setBoardId(board.getBoardId());
         input.setCommittedFigureListOrder(figureOrderList);
-        changeFigureOrderListOnBoardUseCase.execute(input, output);
+        changeFigureOrderUseCase.execute(input, output);
 
         assertNotNull(output.getId());
         assertEquals(ExitCode.SUCCESS,output.getExitCode());

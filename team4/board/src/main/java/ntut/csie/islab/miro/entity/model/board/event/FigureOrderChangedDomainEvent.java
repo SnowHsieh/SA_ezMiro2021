@@ -8,11 +8,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class FigureChangedDomainEvent extends DomainEvent {
+public class FigureOrderChangedDomainEvent extends DomainEvent {
     private final UUID boardId;
     private final List<CommittedFigure> figureOrderList;
 
-    public FigureChangedDomainEvent(UUID boardId, List<CommittedFigure> figureOrderList) {
+    public FigureOrderChangedDomainEvent(UUID boardId, List<CommittedFigure> figureOrderList) {
         super(DateProvider.now());
         this.boardId = boardId;
         this.figureOrderList = figureOrderList;

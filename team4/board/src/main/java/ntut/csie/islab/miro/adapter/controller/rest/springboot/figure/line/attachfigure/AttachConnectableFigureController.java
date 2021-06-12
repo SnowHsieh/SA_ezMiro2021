@@ -2,7 +2,7 @@ package ntut.csie.islab.miro.adapter.controller.rest.springboot.figure.line.atta
 
 
 import ntut.csie.islab.miro.usecase.figure.line.attachconnectablefigure.AttachConnectableFigureInput;
-import ntut.csie.islab.miro.usecase.figure.line.attachconnectablefigure.AttachConnectablefigureUseCase;
+import ntut.csie.islab.miro.usecase.figure.line.attachconnectablefigure.AttachConnectableFigureUseCase;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 
@@ -17,11 +17,11 @@ import java.util.UUID;
 @RestController
 @CrossOrigin
 public class AttachConnectableFigureController {
-    private AttachConnectablefigureUseCase attachConnectablefigureUseCase;
+    private AttachConnectableFigureUseCase attachConnectableFigureUseCase;
 
     @Autowired
-    public void setAttachConnectableFigureUseCase(AttachConnectablefigureUseCase attachConnectablefigureUseCase) {
-        this.attachConnectablefigureUseCase = attachConnectablefigureUseCase;
+    public void setAttachConnectableFigureUseCase(AttachConnectableFigureUseCase attachConnectableFigureUseCase) {
+        this.attachConnectableFigureUseCase = attachConnectableFigureUseCase;
     }
 
     @PostMapping(path = "/board/{boardId}/attachConnectableFigure", consumes = "application/json", produces = "application/json")
@@ -39,13 +39,13 @@ public class AttachConnectableFigureController {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        AttachConnectableFigureInput input = attachConnectablefigureUseCase.newInput();
+        AttachConnectableFigureInput input = attachConnectableFigureUseCase.newInput();
         input.setBoardId(boardId);
         input.setFigureId(figureId);
         input.setConnectableFigureId(connectableFigureId);
         input.setAttachEndPointKind(attachEndPointKind);
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
-        attachConnectablefigureUseCase.execute(input, presenter);
+        attachConnectableFigureUseCase.execute(input, presenter);
         return presenter.buildViewModel();
     }
 }

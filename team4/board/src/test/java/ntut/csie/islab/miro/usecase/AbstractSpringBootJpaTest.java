@@ -12,7 +12,7 @@ import ntut.csie.islab.miro.entity.model.figure.connectablefigure.ShapeKindEnum;
 import ntut.csie.islab.miro.entity.model.figure.connectablefigure.Style;
 import ntut.csie.islab.miro.usecase.figure.line.LineRepository;
 import ntut.csie.islab.miro.usecase.figure.line.attachconnectablefigure.AttachConnectableFigureInput;
-import ntut.csie.islab.miro.usecase.figure.line.attachconnectablefigure.AttachConnectablefigureUseCase;
+import ntut.csie.islab.miro.usecase.figure.line.attachconnectablefigure.AttachConnectableFigureUseCase;
 import ntut.csie.islab.miro.usecase.figure.line.create.CreateLineInput;
 import ntut.csie.islab.miro.usecase.figure.line.create.CreateLineUseCase;
 import ntut.csie.islab.miro.usecase.figure.connectablefigure.StickyNoteRepository;
@@ -161,7 +161,7 @@ public abstract class AbstractSpringBootJpaTest {
     }
 
     public CqrsCommandPresenter generateAttachConnectableFigureUseCase(UUID boardId, UUID figureId, UUID connectableFigureId, String attachEndPointKind) {
-        AttachConnectablefigureUseCase attachConnectablefigureUseCase = new AttachConnectablefigureUseCase(domainEventBus, lineRepository);
+        AttachConnectableFigureUseCase attachConnectablefigureUseCase = new AttachConnectableFigureUseCase(domainEventBus, lineRepository);
         AttachConnectableFigureInput input = attachConnectablefigureUseCase.newInput();
         CqrsCommandPresenter output = CqrsCommandPresenter.newInstance();
         input.setBoardId(boardId);

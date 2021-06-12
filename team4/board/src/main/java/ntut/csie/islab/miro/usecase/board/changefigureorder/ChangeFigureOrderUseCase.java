@@ -7,20 +7,20 @@ import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 
-public class ChangeFigureOrderListOnBoardUseCase {
+public class ChangeFigureOrderUseCase {
     private DomainEventBus domainEventBus;
     private BoardRepository boardRepository;
 
-    public ChangeFigureOrderListOnBoardUseCase(BoardRepository boardRepository, DomainEventBus domainEventBus) {
+    public ChangeFigureOrderUseCase(BoardRepository boardRepository, DomainEventBus domainEventBus) {
         this.boardRepository = boardRepository;
         this.domainEventBus = domainEventBus;
     }
-    public ChangeFigureOrderListOnBoardInput newInput() {
-        return new ChangeFigureOrderListOnBoardInput();
+    public ChangeFigureOrderInput newInput() {
+        return new ChangeFigureOrderInput();
     }
 
 
-    public void execute(ChangeFigureOrderListOnBoardInput input, CqrsCommandPresenter output) {
+    public void execute(ChangeFigureOrderInput input, CqrsCommandPresenter output) {
         Board board = this.boardRepository.findById(input.getBoardId()).orElse(null);
         if (null == board){
             output.setId(input.getBoardId().toString())

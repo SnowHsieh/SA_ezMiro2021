@@ -102,7 +102,7 @@ public class Board extends AggregateRoot<UUID> {
         }
         figureList = newCommittedFigureList;
 
-        addDomainEvent(new FigureChangedDomainEvent(this.getBoardId(), this.figureList));
+        addDomainEvent(new FigureOrderChangedDomainEvent(this.getBoardId(), this.figureList));
 
     }
 
