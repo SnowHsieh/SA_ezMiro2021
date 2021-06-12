@@ -62,7 +62,7 @@ import {
 export default {
   data () {
     return {
-      boardId: 'e027708c-829a-42cf-8bb8-415f06d7195d',
+      boardId: 'db3d65e5-ef60-4c41-b132-4f8e345e0c36',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -82,6 +82,7 @@ export default {
       mouseData: null,
       updateCursorFlag: true,
       updateFigureFlag: true,
+      updateLineFlag: true,
       snapDistance: 80,
       linelist: [],
       associationMap: []
@@ -115,11 +116,18 @@ export default {
     updateFlag () {
       this.updateCursorFlag = true
       this.updateFigureFlag = true
+      this.updateLineFlag = true
     },
     sendMouseData () {
       if (this.updateCursorFlag) {
         this.sendMessage(JSON.stringify(this.mouseData))
         this.updateCursorFlag = false
+      }
+    },
+    sendLinePathData (line) {
+      if (this.updateLineFlag) {
+        changeLinePath(this.boardId, line)
+        this.updateLineFlag = false
       }
     },
     async getBoardContent () {
@@ -509,7 +517,7 @@ export default {
                   const newPositionY = e.target.get('top') + attachPoint.yOffset * e.target.height
                   attachPoint.set('left', newPositionX)
                   attachPoint.set('top', newPositionY)
-                  _this.canvas.fire('object:moved', { target: attachPoint })
+                  _this.canvas.fire('object:moving', { target: attachPoint })
                 })
               }
             }
@@ -520,14 +528,15 @@ export default {
       var _this = this
       _this.canvas.on(
         {
-          'object:moved': function (e) {
+          'object:moving': function (e) {
             if (e.target.type === 'circle') {
               const p = e.target // circle
               p.line.points[p.index].x = p.left
               p.line.points[p.index].y = p.top
-              setTimeout(function () {
-                changeLinePath(_this.boardId, p.line)
-              }, 100)
+              _this.sendLinePathData(p.line)
+              // setTimeout(function () {
+              //   changeLinePath(_this.boardId, p.line)
+              // }, 100)
               _this.canvas.renderAll()
             }
           }
