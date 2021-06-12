@@ -62,7 +62,7 @@ import {
 export default {
   data () {
     return {
-      boardId: 'db3d65e5-ef60-4c41-b132-4f8e345e0c36',
+      boardId: '4330e5ad-41d5-4ccc-8e8c-09a6cf6ae6cf',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -151,7 +151,8 @@ export default {
         strokeWidth: figure.strokeWidth, // 筆觸寬度
         hasControls: false, // 選中時是否可以放大縮小
         hasRotatingPoint: true, // 選中時是否可以旋轉
-        hasBorders: true, // 選中時是否有邊框
+        hasBorders: false, // 選中時是否有邊框
+        selectable: false,
         srcPoint: null,
         destPoint: null,
         objectCaching: false
@@ -289,8 +290,8 @@ export default {
       // const width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
       // const height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
       this.canvas = new fabric.Canvas('canvas', {
-        width: 10000,
-        height: 10000,
+        width: 6000,
+        height: 2812,
         fireRightClick: true, // <-- enable firing of right click events
         stopContextMenu: true, // <--  prevent context menu from showing
         freeDrawingCursor: 'none'
@@ -358,7 +359,7 @@ export default {
       var _this = this
       // listen event on context menu
       _this.addListenerOfChangeConnectableFigureColor()
-      _this.addListenerOfDeleteConnectableFigure()
+      _this.addListenerOfDeleteFigure()
       _this.addListenerOfBringToFront()
       _this.addListenerOfBringForward()
       _this.addListenerOfSendBackward()
@@ -368,7 +369,6 @@ export default {
       _this.listenToMouseMove()
       _this.listenToMouseDown()
       _this.listenToObjectScaled()
-      _this.listenToObjectMoved()
       _this.listenToObjectMoving()
       _this.listenToMouseDoubleClick()
     },
@@ -520,28 +520,15 @@ export default {
                   _this.canvas.fire('object:moving', { target: attachPoint })
                 })
               }
-            }
-          }
-        })
-    },
-    listenToObjectMoved () {
-      var _this = this
-      _this.canvas.on(
-        {
-          'object:moving': function (e) {
-            if (e.target.type === 'circle') {
+            } else if (e.target.type === 'circle') {
               const p = e.target // circle
               p.line.points[p.index].x = p.left
               p.line.points[p.index].y = p.top
               _this.sendLinePathData(p.line)
-              // setTimeout(function () {
-              //   changeLinePath(_this.boardId, p.line)
-              // }, 100)
               _this.canvas.renderAll()
             }
           }
-        }
-      )
+        })
     },
     ungroup (group) {
       var _this = this
@@ -573,7 +560,7 @@ export default {
       }
       _this.favcolor.addEventListener('change', newHandler)
     },
-    addListenerOfDeleteConnectableFigure () {
+    addListenerOfDeleteFigure () {
       var _this = this
       var newHandler = function () {
         _this.activeObjects.forEach((target) => {
@@ -581,7 +568,7 @@ export default {
             if (target.type === 'group') {
               _this.deleteStickyNote(target)
             } else {
-              deleteLine(_this.boardId, target)
+              deleteLine(_this.boardId, target.line)
             }
           }
         })
