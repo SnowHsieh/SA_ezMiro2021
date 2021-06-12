@@ -145,7 +145,8 @@ export default {
         hasRotatingPoint: true, // 選中時是否可以旋轉
         hasBorders: true, // 選中時是否有邊框
         srcPoint: null,
-        destPoint: null
+        destPoint: null,
+        objectCaching: false
         // evented: false  // false means event on line can't be triggered
       })
       this.canvas.add(
@@ -522,10 +523,6 @@ export default {
           'object:moved': function (e) {
             if (e.target.type === 'circle') {
               const p = e.target // circle
-              // check point index :pindex
-              // update line points [pindex]
-              // render
-              console.log()
               p.line.points[p.index].x = p.left
               p.line.points[p.index].y = p.top
               setTimeout(function () {
@@ -851,7 +848,9 @@ export default {
                 ep.set('left', receivedData.newPositionList[i].x)
                 ep.set('top', receivedData.newPositionList[i].y)
               }
+              // line.set('visible', true)
             })
+
             _this.canvas.renderAll()
           } catch (e) {
             console.log(e)
