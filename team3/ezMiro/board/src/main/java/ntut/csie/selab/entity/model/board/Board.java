@@ -49,12 +49,12 @@ public class Board extends AggregateRoot<String> {
     }
 
     public void changeZOrder(int originZOrder, int newZOrder) {
-        sortAscendByZOrder(committedWidgets);
         if (originZOrder < newZOrder) {
             shiftZOrderInRange(originZOrder, newZOrder, newZOrder, committedWidgets, -1);
         } else {
             shiftZOrderInRange(newZOrder, originZOrder, newZOrder, committedWidgets, 1);
         }
+        sortAscendByZOrder(committedWidgets);
         addDomainEvent(new WidgetZOrderChanged(new Date(), id, committedWidgets.get(newZOrder).getWidgetId()));
     }
 

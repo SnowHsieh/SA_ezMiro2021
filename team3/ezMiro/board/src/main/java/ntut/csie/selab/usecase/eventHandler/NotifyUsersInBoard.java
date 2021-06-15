@@ -174,7 +174,6 @@ public class NotifyUsersInBoard {
         if (board.isPresent()) {
             Board selectedBoard = board.get();
             CommittedWidgetDtoMapper mapper = new CommittedWidgetDtoMapper();
-//            List<CommittedWidgetDto> committedWidgetDtos = mapper.domainToDto((selectedBoard.getCommittedWidgets()));
             CommittedWidgetDto committedWidgetDto = mapper.domainToDto(selectedBoard.getCommittedWidgetBy(widgetZOrderChanged.getWidgetId()).get());
 
             ObjectMapper objectMapper = new ObjectMapper();

@@ -214,7 +214,13 @@ export default {
       const canvas = this.canvas
       canvas.getObjects().forEach(function (o) {
         if (o.id === widgetDto.widgetId) {
-          canvas.moveTo(o, widgetDto.zorder)
+          console.log(widgetDto)
+          if (widgetDto.zorder === 0) {
+            canvas.sendToBack(o)
+          } else {
+            canvas.bringToFront(o)
+          }
+          return false
         }
       })
     },
@@ -577,14 +583,14 @@ export default {
       this.isDisplayRightClickMenu = false
     },
     async bringToFront () {
-      await this.canvas.bringToFront(this.selectedWidget)
-      const zOrder = this.getZOrderOf(this.selectedWidget)
+      const topZOrder = this.canvas.getObjects().length - 1
+      const circleCount = this.canvas.getObjects().filter(object => object.get('type') === 'circle').length
+      const zOrder = topZOrder - circleCount
       await ChangeZOrderOfStickyNoteBy(this.selectedWidget.id, this.boardId, zOrder)
       this.isDisplayRightClickMenu = false
     },
     async sendToback () {
-      await this.canvas.sendToBack(this.selectedWidget)
-      const zOrder = this.getZOrderOf(this.selectedWidget)
+      const zOrder = 0
       await ChangeZOrderOfStickyNoteBy(this.selectedWidget.id, this.boardId, zOrder)
       this.isDisplayRightClickMenu = false
     },
