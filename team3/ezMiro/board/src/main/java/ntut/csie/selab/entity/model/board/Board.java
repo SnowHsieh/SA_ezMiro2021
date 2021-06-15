@@ -3,7 +3,7 @@ package ntut.csie.selab.entity.model.board;
 import ntut.csie.selab.entity.model.board.event.BoardCreated;
 import ntut.csie.selab.entity.model.board.event.BoardCursorMoved;
 import ntut.csie.selab.entity.model.board.event.BoardEntered;
-import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
+import ntut.csie.selab.entity.model.board.event.BoardLeft;
 import ntut.csie.selab.entity.model.widget.event.WidgetZOrderChanged;
 import ntut.csie.selab.model.AggregateRoot;
 
@@ -17,14 +17,12 @@ public class Board extends AggregateRoot<String> {
     private String teamId;
     private String boardName;
     private List<CommittedWidget> committedWidgets;
-    private Set<Cursor> cursorSet;
 
     public Board(String id, String teamId, String boardName) {
         super(id);
         this.teamId = teamId;
         this.boardName = boardName;
         this.committedWidgets = new ArrayList<>();
-        this.cursorSet = new HashSet<>();
 
         addDomainEvent(new BoardCreated(new Date(), id, teamId));
     }
@@ -50,21 +48,13 @@ public class Board extends AggregateRoot<String> {
         sortAscendByZOrder(committedWidgets);
     }
 
-    public Cursor getCursorBy(String userId) {
-        return cursorSet.stream().filter(e -> e.getUserId().equals(userId)).findFirst().orElse(null);
-    }
-
-    public void setCursors(Set<Cursor> cursorSet) {
-        this.cursorSet = cursorSet;
-    }
-
     public void changeZOrder(int originZOrder, int newZOrder) {
-        sortAscendByZOrder(committedWidgets);
         if (originZOrder < newZOrder) {
             shiftZOrderInRange(originZOrder, newZOrder, newZOrder, committedWidgets, -1);
         } else {
             shiftZOrderInRange(newZOrder, originZOrder, newZOrder, committedWidgets, 1);
         }
+        sortAscendByZOrder(committedWidgets);
         addDomainEvent(new WidgetZOrderChanged(new Date(), id, committedWidgets.get(newZOrder).getWidgetId()));
     }
 
@@ -88,9 +78,10 @@ public class Board extends AggregateRoot<String> {
     }
 
     public void moveCursorOf(String userId, Point point) {
-        cursorSet.remove(cursorSet.stream().filter(e -> e.getUserId().equals(userId)).findFirst().orElse(null));
-        cursorSet.add(new Cursor(this.id, userId, point));
-        addDomainEvent(new BoardCursorMoved(new Date(), id, cursorSet));
+        // TODO 完成後刪除
+//        cursorSet.remove(cursorSet.stream().filter(e -> e.getUserId().equals(userId)).findFirst().orElse(null));
+//        cursorSet.add(new Cursor(this.id, userId, point));
+        addDomainEvent(new BoardCursorMoved(new Date(), new Cursor(id, userId, point)));
     }
 
     public Optional<CommittedWidget> getCommittedWidgetBy(String widgetId) {
@@ -114,21 +105,11 @@ public class Board extends AggregateRoot<String> {
     }
 
     public void addCursor(Cursor cursor) {
-        cursorSet.add(cursor);
-
-        addDomainEvent(new BoardEntered(new Date(), id, cursorSet));
+        addDomainEvent(new BoardEntered(new Date(), id, cursor));
     }
 
     public void removeCursorBy(String userId) {
-        cursorSet.removeIf(cursor -> cursor.getUserId().equals(userId));
-    }
-
-    public int getCursorCount() {
-        return cursorSet.size();
-    }
-
-    public Set<Cursor> getCursors() {
-        return cursorSet;
+        addDomainEvent(new BoardLeft(new Date(), id, userId));
     }
 
 }

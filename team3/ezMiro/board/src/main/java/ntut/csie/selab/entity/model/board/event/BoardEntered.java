@@ -7,21 +7,21 @@ import java.util.Date;
 import java.util.Set;
 
 public class BoardEntered extends DomainEvent {
-    public String boardId;
-    public Set<Cursor> cursors;
+    private String boardId;
+    private Cursor cursor;
 
-    public BoardEntered(Date occurredOn, String boardId, Set<Cursor> cursors) {
+    public BoardEntered(Date occurredOn, String boardId, Cursor cursor) {
         super(occurredOn);
 
         this.boardId = boardId;
-        this.cursors = cursors;
+        this.cursor = cursor;
     }
 
     public String getBoardId() {
         return boardId;
     }
 
-    public Set<Cursor> getCursors() {
-        return cursors;
+    public Cursor getCursor() {
+        return cursor;
     }
 }

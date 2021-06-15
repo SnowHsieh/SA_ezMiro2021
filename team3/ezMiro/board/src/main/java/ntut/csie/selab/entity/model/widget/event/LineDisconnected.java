@@ -4,18 +4,16 @@ import ntut.csie.selab.model.DomainEvent;
 
 import java.util.Date;
 
-public class LineLinked extends DomainEvent {
+public class LineDisconnected extends DomainEvent {
     private String boardId;
     private String lineId;
-    private String widgetId;
-    private String endPoint;
+    private String lineEndPoint;
 
-    public LineLinked(Date occurredOn, String boardId, String lineId, String widgetId, String endPoint) {
+    public LineDisconnected(Date occurredOn, String boardId, String lineId, String lineEndPoint) {
         super(occurredOn);
         this.boardId = boardId;
         this.lineId = lineId;
-        this.widgetId = widgetId;
-        this.endPoint = endPoint;
+        this.lineEndPoint = lineEndPoint;
     }
 
     public String getBoardId() {
@@ -26,11 +24,7 @@ public class LineLinked extends DomainEvent {
         return lineId;
     }
 
-    public String getWidgetId() {
-        return widgetId;
-    }
-
-    public String getEndPoint() {
-        return endPoint;
+    public String getLineEndPoint() {
+        return lineEndPoint;
     }
 }

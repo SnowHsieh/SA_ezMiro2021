@@ -16,6 +16,7 @@ import ntut.csie.selab.usecase.widget.LineRepository;
 import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 import ntut.csie.selab.usecase.widget.line.create.CreateLineUseCase;
 import ntut.csie.selab.usecase.widget.line.delete.DeleteLineUseCase;
+import ntut.csie.selab.usecase.widget.line.disconnect.DisconnectLineUseCase;
 import ntut.csie.selab.usecase.widget.line.link.LinkLineUseCase;
 import ntut.csie.selab.usecase.widget.line.move.MoveLineUseCase;
 import ntut.csie.selab.usecase.widget.query.getwidget.GetWidgetUseCase;
@@ -56,6 +57,11 @@ public class UseCaseInjection {
     @Bean(name="GetBoardContentUseCase")
     public GetBoardContentUseCase getBoardContentUseCase() {
         return new GetBoardContentUseCase(boardRepository, stickyNoteRepository, lineRepository);
+    }
+
+    @Bean(name="DisconnectLineUseCase")
+    public DisconnectLineUseCase disconnectLineUseCase() {
+        return new DisconnectLineUseCase(lineRepository, eventBus);
     }
 
     @Bean(name="CreateBoardUseCase")

@@ -26,10 +26,6 @@ public class BoardData {
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<CommittedWidgetData> committedWidgets;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
-//    @JoinColumn(name = "board_id")
-    private Set<CursorData> cursors;
-
     public BoardData() {
     }
 
@@ -37,14 +33,12 @@ public class BoardData {
         this.boardId = boardId;
     }
 
-    public BoardData(String boardId, String teamId, String boardName, Set<CursorData> cursors, List<CommittedWidgetData> committedWidgets) {
+    public BoardData(String boardId, String teamId, String boardName, List<CommittedWidgetData> committedWidgets) {
         this.boardId = boardId;
         this.teamId = teamId;
         this.boardName = boardName;
         this.committedWidgets = new HashSet<>();
         this.committedWidgets.addAll(committedWidgets);
-        this.cursors = new HashSet<>();
-        this.cursors.addAll(cursors);
     }
 
     public String getBoardId() {
@@ -57,10 +51,6 @@ public class BoardData {
 
     public String getBoardName() {
         return boardName;
-    }
-
-    public Set<CursorData> getCursors() {
-        return cursors;
     }
 
     public Set<CommittedWidgetData> getCommittedWidgets() {

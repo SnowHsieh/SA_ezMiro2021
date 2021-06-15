@@ -23,10 +23,9 @@ public class LeaveBoardUseCase {
 
         if (board.isPresent()) {
             Board selectedBoard = board.get();
+            selectedBoard.clearDomainEvents();
             selectedBoard.removeCursorBy(input.getUserId());
-            boardRepository.save(selectedBoard);
-            output.setCursorCountInBoard(selectedBoard.getCursorCount());
-            output.setCursors(selectedBoard.getCursors());
+            domainEventBus.postAll(selectedBoard);
         } else {
             throw new RuntimeException("board not found, board id = " + input.getBoardId());
         }

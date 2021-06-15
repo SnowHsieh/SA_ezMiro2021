@@ -5,22 +5,13 @@ import ntut.csie.selab.entity.model.board.Cursor;
 import java.util.Set;
 
 public class EnterBoardOutput {
-    private Set<Cursor> cursor;
-    private int cursorCountInBoard;
+    private Cursor cursor;
 
-    public Set<Cursor> getCursor() {
+    public Cursor getCursor() {
         return cursor;
     }
 
-    public void setCursor(Set<Cursor> cursor) {
+    public void setCursor(Cursor cursor) {
         this.cursor = cursor;
-    }
-
-    public int getCursorCountInBoard() {
-        return cursorCountInBoard;
-    }
-
-    public void setCursorCountInBoard(int cursorCountInBoard) {
-        this.cursorCountInBoard = cursorCountInBoard;
     }
 }

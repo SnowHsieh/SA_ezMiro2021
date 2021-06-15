@@ -7,21 +7,14 @@ import java.util.Date;
 import java.util.Set;
 
 public class BoardCursorMoved extends DomainEvent {
-    private String boardId;
-    private Set<Cursor> cursors;
+    private Cursor cursor;
 
-    public BoardCursorMoved(Date date, String boardId, Set<Cursor> cursors) {
+    public BoardCursorMoved(Date date, Cursor cursor) {
         super(date);
-
-        this.boardId = boardId;
-        this.cursors = cursors;
+        this.cursor = cursor;
     }
 
-    public String getBoardId() {
-        return boardId;
-    }
-
-    public Set<Cursor> getCursors() {
-        return cursors;
+    public Cursor getCursor() {
+        return cursor;
     }
 }

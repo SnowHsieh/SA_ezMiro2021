@@ -11,8 +11,11 @@
         <button type="button" class="btn btn-default btn-circle" style="background-color: #4CAF50;" @click="changeColorOfStickyNoteWith('#4CAF50')"></button>
         <button type="button" class="btn btn-default btn-circle" style="background-color: #41ABD8;" @click="changeColorOfStickyNoteWith('#41ABD8')"></button>
         <button type="button" class="btn btn-default btn-circle" style="background-color: #FFFAAD;" @click="changeColorOfStickyNoteWith('#FFFAAD')"></button>
+      </li>
+      <li class="list-group-item">
         <button type="button" class="btn btn-default btn-circle" style="background-color: #FFB22E;" @click="changeColorOfStickyNoteWith('#FFB22E')"></button>
         <button type="button" class="btn btn-default btn-circle" style="background-color: #CB56F5;" @click="changeColorOfStickyNoteWith('#CB56F5')"></button>
+        <button type="button" class="btn btn-default btn-circle" style="background-color: #F5E642;" @click="changeColorOfStickyNoteWith('#F5E642')"></button>
       </li>
       <li class="list-group-item" @click="bringToFront">bring to front</li>
       <li class="list-group-item" @click="sendToback">send to back</li>
@@ -88,8 +91,10 @@ export default {
     initCanvas () {
       this.canvas = new fabric.Canvas('canvas', {
         fireRightClick: true,
-        width: window.innerWidth,
-        height: window.innerHeight
+        // width: window.innerWidth,
+        // height: window.innerHeight
+        width: 10000,
+        height: 10000
       })
       this.bindCanvasEventListener()
     },
@@ -120,8 +125,13 @@ export default {
           me.whenColorOfWidgetChanged(message.widgets)
         } else if (message.domainEvent === 'notifyWidgetZOrderRearrangedToAllUser') {
           me.whenZOrderOfWidgetChanged(message.widgets)
+        } else if (message.domainEvent === 'boardEntered') {
+          me.handleCursorCreation(message.cursor)
+        } else if (message.domainEvent === 'boardCursorMoved') {
+          me.handleCursorMovement(message.cursor)
+        } else if (message.domainEvent === 'boardLeft') {
+          me.handleCursorDeletion(message.cursor)
         } else {
-          me.handleCursorMessage(message.cursors)
           me.handleWidgetMessage(message.widgets)
         }
       }
@@ -209,18 +219,39 @@ export default {
       const canvas = this.canvas
       canvas.getObjects().forEach(function (o) {
         if (o.id === widgetDto.widgetId) {
-          canvas.moveTo(o, widgetDto.zorder)
+          console.log(widgetDto)
+          if (widgetDto.zorder === 0) {
+            canvas.sendToBack(o)
+          } else {
+            canvas.bringToFront(o)
+          }
+          return false
         }
       })
     },
-    handleCursorMessage (cursors) {
-      if (cursors !== undefined) {
-        for (let index = 0; index < cursors.length; index++) {
-          if (cursors[index].userId === this.user.name) {
-            cursors.splice(index, 1)
-          }
+    handleCursorCreation (cursor) {
+      console.log('someone entered board.')
+      if (this.user.name !== cursor.userId) {
+        this.collaborator.push(cursor)
+        MoveCursor(this.boardId, this.composeCursorInfo(this.user.x, this.user.y))
+      }
+    },
+    handleCursorMovement (cursor) {
+      var user = this.collaborator.find(user => user.userId === cursor.userId)
+      if (user !== undefined) {
+        user.x = cursor.x
+        user.y = cursor.y
+      } else if (this.user.name !== cursor.userId) {
+        this.collaborator.push(cursor)
+      }
+    },
+    handleCursorDeletion (cursor) {
+      console.log('someone left board.')
+      console.log(cursor)
+      for (let i = 0; i < this.collaborator.length; i++) {
+        if (this.collaborator[i].userId === cursor.userId) {
+          this.collaborator.splice(i, 1)
         }
-        this.collaborator = cursors
       }
     },
     handleWidgetMessage (widgets) {
@@ -275,7 +306,9 @@ export default {
           me.isSamplingCursorDelayFinish = false
           setTimeout(function () {
             me.isSamplingCursorDelayFinish = true
-            MoveCursor(me.boardId, me.composeCursorInfo(e.absolutePointer.x, e.absolutePointer.y))
+            me.user.x = e.absolutePointer.x
+            me.user.y = e.absolutePointer.y
+            MoveCursor(me.boardId, me.composeCursorInfo(me.user.x, me.user.y))
           }, 100)
         }
       })
@@ -555,14 +588,14 @@ export default {
       this.isDisplayRightClickMenu = false
     },
     async bringToFront () {
-      await this.canvas.bringToFront(this.selectedWidget)
-      const zOrder = this.getZOrderOf(this.selectedWidget)
+      const topZOrder = this.canvas.getObjects().length - 1
+      const circleCount = this.canvas.getObjects().filter(object => object.get('type') === 'circle').length
+      const zOrder = topZOrder - circleCount
       await ChangeZOrderOfStickyNoteBy(this.selectedWidget.id, this.boardId, zOrder)
       this.isDisplayRightClickMenu = false
     },
     async sendToback () {
-      await this.canvas.sendToBack(this.selectedWidget)
-      const zOrder = this.getZOrderOf(this.selectedWidget)
+      const zOrder = 0
       await ChangeZOrderOfStickyNoteBy(this.selectedWidget.id, this.boardId, zOrder)
       this.isDisplayRightClickMenu = false
     },

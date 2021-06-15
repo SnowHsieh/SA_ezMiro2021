@@ -66,34 +66,9 @@ public class BoardWebSocketController {
         LeaveBoardOutput output = new LeaveBoardOutput();
         input.setBoardId(boardId);
         input.setUserId(usernick);
-        leaveBoardUseCase.execute(input, output);
         boardWebSocket.removeSessionFrom(boardId, session);
-        boardWebSocket.sendMessageForAllUsersIn(boardId, convertCursorToMessage(output.getCursors()));
+        leaveBoardUseCase.execute(input, output);
         String info = "Board[" + boardId + "]中成員[" + usernick + "]的連線已斷開" ;
         System.out.println(info);
-    }
-
-    private JSONObject convertCursorToMessage(Set<Cursor> cursorSet) {
-        JSONArray parsedCursors = new JSONArray();
-        cursorSet.forEach(cursor -> {
-            JSONObject parsedCursor = new JSONObject();
-            try {
-                parsedCursor.put("userId", cursor.getUserId());
-                parsedCursor.put("x", cursor.getPoint().x);
-                parsedCursor.put("y", cursor.getPoint().y);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            parsedCursors.put(parsedCursor);
-        });
-
-        JSONObject message = new JSONObject();
-        try {
-            message.put("cursors", parsedCursors);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return message;
     }
 }
