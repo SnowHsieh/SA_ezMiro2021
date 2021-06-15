@@ -11,8 +11,11 @@
         <button type="button" class="btn btn-default btn-circle" style="background-color: #4CAF50;" @click="changeColorOfStickyNoteWith('#4CAF50')"></button>
         <button type="button" class="btn btn-default btn-circle" style="background-color: #41ABD8;" @click="changeColorOfStickyNoteWith('#41ABD8')"></button>
         <button type="button" class="btn btn-default btn-circle" style="background-color: #FFFAAD;" @click="changeColorOfStickyNoteWith('#FFFAAD')"></button>
+      </li>
+      <li class="list-group-item">
         <button type="button" class="btn btn-default btn-circle" style="background-color: #FFB22E;" @click="changeColorOfStickyNoteWith('#FFB22E')"></button>
         <button type="button" class="btn btn-default btn-circle" style="background-color: #CB56F5;" @click="changeColorOfStickyNoteWith('#CB56F5')"></button>
+        <button type="button" class="btn btn-default btn-circle" style="background-color: #F5E642;" @click="changeColorOfStickyNoteWith('#F5E642')"></button>
       </li>
       <li class="list-group-item" @click="bringToFront">bring to front</li>
       <li class="list-group-item" @click="sendToback">send to back</li>
@@ -88,8 +91,10 @@ export default {
     initCanvas () {
       this.canvas = new fabric.Canvas('canvas', {
         fireRightClick: true,
-        width: window.innerWidth,
-        height: window.innerHeight
+        // width: window.innerWidth,
+        // height: window.innerHeight
+        width: 10000,
+        height: 10000
       })
       this.bindCanvasEventListener()
     },
