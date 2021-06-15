@@ -9,6 +9,7 @@ export default fabric.util.createClass(fabric.Group, {
   textOffsetLeft: 0,
   textOffsetTop: 0,
   _prevObjectStacking: null,
+  isEditingTextbox: false,
   initialize: initialize,
   _registerEventListener: _registerEventListener,
   _registerMovedEvent: _registerMovedEvent,
@@ -60,6 +61,7 @@ function initialize (figureId, x, y, width, height, color, text) {
   this._recalcTextboxPosition()
   this._setControlsVisible()
   this._registerEventListener()
+  this.addWithUpdate()
 }
 
 function _setControlsVisible () {
@@ -81,10 +83,17 @@ function _setControlsVisible () {
 function _recalcTextboxPosition () {
   this._recalcTextboxFontSize()
 
-  const rectLeftTop = this.rect.getPointByOrigin('left', 'top')
-  this.textbox.set('width', this.textbox.getScaledWidth() * 0.8)
-  this.textbox.set('left', rectLeftTop.x + this.rect.getScaledWidth() / 2 - this.textbox.getScaledWidth() / 2)
-  this.textbox.set('top', rectLeftTop.y + this.rect.getScaledHeight() / 2 - this.textbox.getScaledHeight() / 2)
+  if (this.isEditingTextbox) {
+    const leftTop = this.getPointByOrigin('left', 'top')
+    this.textbox.set('width', this.getScaledWidth() * 0.8)
+    this.textbox.set('left', leftTop.x + this.getScaledWidth() / 2 - this.textbox.getScaledWidth() / 2)
+    this.textbox.set('top', leftTop.y + this.getScaledHeight() / 2 - this.textbox.getScaledHeight() / 2)
+  } else {
+    const rectLeftTop = this.rect.getPointByOrigin('left', 'top')
+    this.textbox.set('width', this.rect.getScaledWidth() * 0.8)
+    this.textbox.set('left', rectLeftTop.x + this.rect.getScaledWidth() / 2 - this.textbox.getScaledWidth() / 2)
+    this.textbox.set('top', rectLeftTop.y + this.rect.getScaledHeight() / 2 - this.textbox.getScaledHeight() / 2)
+  }
 }
 
 function _recalcTextboxFontSize () {
@@ -225,10 +234,21 @@ function _registerEditTextEvent () {
     noteAPI.editNoteText(this.figureId, this.textbox.text)
   })
 
+  this.textbox.on('editing:entered', () => {
+    this.isEditingTextbox = true
+    this._recalcTextboxPosition()
+  })
+
   this.textbox.on('editing:exited', () => {
+    this.isEditingTextbox = false
     this.textbox.selectable = false
     this.textbox.evented = false
+    this.textbox.scaleX = this.rect.scaleX
+    this.textbox.scaleY = this.rect.scaleY
     this.selectable = true
+    this.canvas.remove(this.textbox)
+    this.add(this.textbox)
+    this._recalcTextboxPosition()
   })
 }
 
@@ -241,6 +261,11 @@ function _registerMouseEvent () {
   this.on('mousedblclick', () => {
     this.textbox.selectable = true
     this.textbox.evented = true
+    this.remove(this.textbox)
+    this.textbox.scaleX = this.scaleX
+    this.textbox.scaleY = this.scaleY
+
+    this.canvas.add(this.textbox)
     this.canvas.setActiveObject(this.textbox)
     this.textbox.enterEditing()
     this.selectable = false
