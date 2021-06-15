@@ -25,6 +25,7 @@ public class MoveCursorUseCaseImpl implements MoveCursorUseCase {
     @Override
     public void execute(MoveCursorInput input, CqrsCommandPresenter output) {
         Board board = boardRepository.findById(input.getBoardId()).orElse(null);
+
         if (null == board) {
             output.setId(input.getBoardId())
                     .setExitCode(ExitCode.FAILURE)

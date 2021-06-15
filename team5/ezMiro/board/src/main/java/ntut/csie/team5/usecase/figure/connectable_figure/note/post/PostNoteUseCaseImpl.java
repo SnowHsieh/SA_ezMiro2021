@@ -45,7 +45,6 @@ public class PostNoteUseCaseImpl implements PostNoteUseCase {
     private class PostNoteInputImpl implements PostNoteInput {
 
         private String boardId;
-//        private Point leftTopPosition;
         private int leftTopPositionX;
         private int leftTopPositionY;
         private int height;

@@ -24,9 +24,9 @@ public class MoveNoteUseCaseImpl implements MoveNoteUseCase {
 
     @Override
     public void execute(MoveNoteInput input, CqrsCommandOutput output) {
-        Figure figure = noteRepository.findById(input.getFigureId()).orElse(null);
+        Note note = noteRepository.findById(input.getFigureId()).orElse(null);
 
-        if(null == figure)
+        if(null == note)
         {
             output.setId(input.getFigureId())
                     .setExitCode(ExitCode.FAILURE)
@@ -34,19 +34,17 @@ public class MoveNoteUseCaseImpl implements MoveNoteUseCase {
             return;
         }
 
-        Note note = (Note)figure;
         note.changePosition(input.getLeftTopPositionX(), input.getLeftTopPositionY());
         noteRepository.save(note);
         domainEventBus.postAll(note);
 
-        output.setId(figure.getId());
+        output.setId(note.getId());
         output.setExitCode(ExitCode.SUCCESS);
     }
 
     private class MoveNoteInputImpl implements MoveNoteInput {
 
         private String figureId;
-//        private Point leftTopPosition;
         private int leftTopPositionX;
         private int leftTopPositionY;
 

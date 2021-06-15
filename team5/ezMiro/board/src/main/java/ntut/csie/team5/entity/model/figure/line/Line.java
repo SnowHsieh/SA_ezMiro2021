@@ -21,7 +21,6 @@ public class Line extends Figure {
     }
 
     public void moveEndpoint(String endpointId, int positionX, int positionY) {
-
         if(this.endpointA.getId().equals(endpointId)) {
             int oldPositionX = this.endpointA.getPositionX();
             int oldPositionY = this.endpointA.getPositionY();

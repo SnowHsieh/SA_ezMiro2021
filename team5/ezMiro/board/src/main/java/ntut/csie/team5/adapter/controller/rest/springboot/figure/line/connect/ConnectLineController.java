@@ -40,9 +40,9 @@ public class ConnectLineController {
         ConnectLineInput connectLineInput = connectLineUseCase.newInput();
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
-        connectLineInput.setLineId(figureId);
+        connectLineInput.setFigureId(figureId);
         connectLineInput.setEndpointId(endpointId);
-        connectLineInput.setFigureId(connectFigureId);
+        connectLineInput.setConnectedFigureId(connectFigureId);
 
         connectLineUseCase.execute(connectLineInput, presenter);
         return presenter.buildViewModel();

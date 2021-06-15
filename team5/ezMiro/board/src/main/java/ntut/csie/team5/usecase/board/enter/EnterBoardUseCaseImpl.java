@@ -27,6 +27,7 @@ public class EnterBoardUseCaseImpl implements EnterBoardUseCase {
     @Override
     public void execute(EnterBoardInput input, CqrsCommandOutput output) {
         Board board = boardRepository.findById(input.getBoardId()).orElse(null);
+
         if (null == board) {
             output.setId(input.getBoardId())
                     .setExitCode(ExitCode.FAILURE)

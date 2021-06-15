@@ -224,6 +224,16 @@ export default {
           return
         }
 
+        if (data.type === 'NotePosted' || data.type === 'LineDrew') {
+          const isExist = this.canvas.getObjects().some((target) => {
+            return target.figureId === data.figureId
+          })
+
+          if (isExist) {
+            return
+          }
+        }
+
         const isActive = this.canvas.getActiveObjects().some((target) => {
           if (target.isType('endpoint')) {
             return target.line.figureId === data.figureId

@@ -17,7 +17,6 @@ public class CreateBoardUseCaseTest extends AbstractTest {
 
     @Test
     public void should_succeed_when_create_board() {
-
         CreateBoardUseCase createBoardUseCase = new CreateBoardUseCaseImpl(boardRepository, domainEventBus);
         CreateBoardInput createBoardInput = createBoardUseCase.newInput();
         CqrsCommandPresenter createBoardOutput = CqrsCommandPresenter.newInstance();

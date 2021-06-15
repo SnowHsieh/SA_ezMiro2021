@@ -60,12 +60,8 @@ public class WebSocketController {
 
         enterBoardUseCase.execute(input, presenter);
 
-        String message = "有新成員[" + userId + "]加入畫布!";
-        System.out.println(message);
-
         session.setMaxIdleTimeout(30 * 60);
         ((WebSocketBroadcaster) boardSessionBroadcaster).addSession(presenter.getId(), session);
-//        webSocketBroadcaster.sendMessageToAllUser(boardId, message);
     }
 
     @OnClose
@@ -80,10 +76,7 @@ public class WebSocketController {
 
         leaveBoardUseCase.execute(input, presenter);
 
-        String message = "成員[" + userId + "]退出畫布!";
-        System.out.println(message);
         ((WebSocketBroadcaster) boardSessionBroadcaster).removeSession(presenter.getId());
-//        ((WebSocketBroadcaster) boardSessionBroadcaster).sendMessageToAllUser(boardId, message);
     }
 
     @OnMessage
