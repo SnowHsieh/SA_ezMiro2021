@@ -193,9 +193,9 @@ public abstract class AbstractTest {
         String lineId = drawLine(boardId, endpointA, endpointB);
         Line line = lineRepository.findById(lineId).orElse(null);
 
-        connectLineInput.setLineId(lineId);
+        connectLineInput.setFigureId(lineId);
         connectLineInput.setEndpointId(line.getEndpointA().getId());
-        connectLineInput.setFigureId(noteId);
+        connectLineInput.setConnectedFigureId(noteId);
 
         connectLineUseCase.execute(connectLineInput, connectLineOutput);
         return connectLineOutput.getId();

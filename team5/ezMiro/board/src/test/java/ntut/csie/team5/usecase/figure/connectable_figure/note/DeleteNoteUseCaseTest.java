@@ -18,24 +18,13 @@ public class DeleteNoteUseCaseTest extends AbstractTest {
 
     @Test
     public void should_succeed_when_delete_note() {
-        PostNoteUseCase postNoteUseCase = new PostNoteUseCaseImpl(noteRepository, domainEventBus);
-        PostNoteInput postNoteInput = postNoteUseCase.newInput();
-        CqrsCommandPresenter postNoteOutput = CqrsCommandPresenter.newInstance();
-
-        postNoteInput.setBoardId(boardId);
-        postNoteInput.setLeftTopPositionX(defaultLeftTopPositionX);
-        postNoteInput.setLeftTopPositionY(defaultLeftTopPositionY);
-        postNoteInput.setColor(defaultColor);
-
-        postNoteUseCase.execute(postNoteInput, postNoteOutput);
-
-        String figureId = postNoteOutput.getId();
+        String noteId = postNote(boardId, defaultLeftTopPositionX, defaultLeftTopPositionY, defaultHeight, defaultWidth, defaultColor);
 
         DeleteNoteUseCase deleteNoteUseCase = new DeleteNoteUseCaseImpl(noteRepository, domainEventBus);
         DeleteNoteInput deleteNoteInput = deleteNoteUseCase.newInput();
         CqrsCommandPresenter deleteNoteOutput = CqrsCommandPresenter.newInstance();
 
-        deleteNoteInput.setFigureId(figureId);
+        deleteNoteInput.setFigureId(noteId);
 
         deleteNoteUseCase.execute(deleteNoteInput, deleteNoteOutput);
 

@@ -26,6 +26,7 @@ public class LeaveBoardUseCaseImpl implements LeaveBoardUseCase {
     @Override
     public void execute(LeaveBoardInput input, CqrsCommandPresenter output) {
         Board board = boardRepository.findById(input.getBoardId()).orElse(null);
+
         if (null == board) {
             output.setId(input.getBoardId())
                     .setExitCode(ExitCode.FAILURE)
@@ -34,14 +35,12 @@ public class LeaveBoardUseCaseImpl implements LeaveBoardUseCase {
             return;
         }
 
-        BoardSessionId boardSessionId = BoardSessionId.valueOf(input.getBoardSessionId());
-
         board.acceptUserLeaving(input.getBoardSessionId(), input.getUserId());
 
         boardRepository.save(board);
         domainEventBus.postAll(board);
 
-        output.setId(boardSessionId.id());
+        output.setId(input.getBoardSessionId());
         output.setExitCode(ExitCode.SUCCESS);
 
     }
@@ -49,8 +48,8 @@ public class LeaveBoardUseCaseImpl implements LeaveBoardUseCase {
     private class LeaveBoardInputImpl implements LeaveBoardInput {
 
         private String boardId;
-        private String boardSessionId;
         private String userId;
+        private String boardSessionId;
 
         @Override
         public String getBoardId() {
@@ -63,16 +62,6 @@ public class LeaveBoardUseCaseImpl implements LeaveBoardUseCase {
         }
 
         @Override
-        public String getBoardSessionId() {
-            return boardSessionId;
-        }
-
-        @Override
-        public void setBoardSessionId(String boardSessionId) {
-            this.boardSessionId = boardSessionId;
-        }
-
-        @Override
         public String getUserId() {
             return userId;
         }
@@ -80,6 +69,16 @@ public class LeaveBoardUseCaseImpl implements LeaveBoardUseCase {
         @Override
         public void setUserId(String userId) {
             this.userId = userId;
+        }
+
+        @Override
+        public String getBoardSessionId() {
+            return boardSessionId;
+        }
+
+        @Override
+        public void setBoardSessionId(String boardSessionId) {
+            this.boardSessionId = boardSessionId;
         }
     }
 }

@@ -4,15 +4,15 @@ import ntut.csie.sslab.ddd.usecase.Input;
 
 public interface ConnectLineInput extends Input {
 
-    String getLineId();
+    String getFigureId();
 
-    void setLineId(String lineId);
+    void setFigureId(String figureId);
 
     String getEndpointId();
 
     void setEndpointId(String endpointId);
 
-    String getFigureId();
+    String getConnectedFigureId();
 
-    void setFigureId(String figureId);
+    void setConnectedFigureId(String connectedFigureId);
 }

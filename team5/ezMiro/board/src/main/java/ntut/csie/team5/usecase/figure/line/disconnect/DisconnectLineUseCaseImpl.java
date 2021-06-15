@@ -5,8 +5,6 @@ import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 import ntut.csie.team5.entity.model.figure.line.Line;
 import ntut.csie.team5.usecase.figure.line.LineRepository;
-import ntut.csie.team5.usecase.figure.line.connect.ConnectLineInput;
-import ntut.csie.team5.usecase.figure.line.connect.ConnectLineUseCaseImpl;
 
 public class DisconnectLineUseCaseImpl implements DisconnectLineUseCase {
 
@@ -26,12 +24,12 @@ public class DisconnectLineUseCaseImpl implements DisconnectLineUseCase {
 
     @Override
     public void execute(DisconnectLineInput input, CqrsCommandOutput output) {
-        Line line = lineRepository.findById(input.getLineId()).orElse(null);
+        Line line = lineRepository.findById(input.getFigureId()).orElse(null);
 
         if (null == line) {
-            output.setId(input.getLineId())
+            output.setId(input.getFigureId())
                     .setExitCode(ExitCode.FAILURE)
-                    .setMessage("Disconnect line failed: line not found, line id = " + input.getLineId());
+                    .setMessage("Disconnect line failed: line not found, line id = " + input.getFigureId());
             return;
         }
 
@@ -45,17 +43,17 @@ public class DisconnectLineUseCaseImpl implements DisconnectLineUseCase {
 
     private class DisconnectLineInputImpl implements DisconnectLineInput {
 
-        private String lineId;
+        private String figureId;
         private String endpointId;
 
         @Override
-        public String getLineId() {
-            return lineId;
+        public String getFigureId() {
+            return figureId;
         }
 
         @Override
-        public void setLineId(String lineId) {
-            this.lineId = lineId;
+        public void setFigureId(String figureId) {
+            this.figureId = figureId;
         }
 
         @Override

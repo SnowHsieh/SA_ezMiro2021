@@ -2,7 +2,6 @@ package ntut.csie.team5.adapter.controller.rest.springboot.figure.line.disconnec
 
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
-import ntut.csie.team5.usecase.figure.line.connect.ConnectLineInput;
 import ntut.csie.team5.usecase.figure.line.disconnect.DisconnectLineInput;
 import ntut.csie.team5.usecase.figure.line.disconnect.DisconnectLineUseCase;
 import org.json.JSONException;
@@ -39,7 +38,7 @@ public class DisconnectLineController {
         DisconnectLineInput disconnectLineInput = disconnectLineUseCase.newInput();
         CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
 
-        disconnectLineInput.setLineId(figureId);
+        disconnectLineInput.setFigureId(figureId);
         disconnectLineInput.setEndpointId(endpointId);
 
         disconnectLineUseCase.execute(disconnectLineInput, presenter);

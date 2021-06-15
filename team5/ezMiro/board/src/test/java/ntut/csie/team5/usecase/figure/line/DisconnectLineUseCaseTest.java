@@ -23,7 +23,7 @@ public class DisconnectLineUseCaseTest extends AbstractTest {
         DisconnectLineInput disconnectLineInput = disconnectLineUseCase.newInput();
         CqrsCommandPresenter disconnectLineOutput = CqrsCommandPresenter.newInstance();
 
-        disconnectLineInput.setLineId(lineId);
+        disconnectLineInput.setFigureId(lineId);
         disconnectLineInput.setEndpointId(line.getEndpointA().getId());
 
         disconnectLineUseCase.execute(disconnectLineInput, disconnectLineOutput);

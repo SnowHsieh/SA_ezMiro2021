@@ -27,13 +27,13 @@ public class DrawLineUseCaseImpl implements DrawLineUseCase {
 
     @Override
     public void execute(DrawLineInput input, CqrsCommandOutput output) {
-
         Line line = LineBuilder.newInstance()
                 .boardId(input.getBoardId())
                 .endpointA(input.getEndpointA())
                 .endpointB(input.getEndpointB())
                 .figureType(input.getFigureType())
                 .build();
+
         lineRepository.save(line);
         domainEventBus.postAll(line);
 

@@ -3,12 +3,8 @@ package ntut.csie.team5.usecase.figure.line.connect;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
-import ntut.csie.team5.entity.model.figure.FigureType;
-import ntut.csie.team5.entity.model.figure.line.Endpoint;
 import ntut.csie.team5.entity.model.figure.line.Line;
-import ntut.csie.team5.usecase.figure.connectable_figure.note.NoteRepository;
 import ntut.csie.team5.usecase.figure.line.LineRepository;
-import ntut.csie.team5.usecase.figure.line.draw.DrawLineInput;
 
 public class ConnectLineUseCaseImpl implements ConnectLineUseCase {
 
@@ -27,16 +23,16 @@ public class ConnectLineUseCaseImpl implements ConnectLineUseCase {
 
     @Override
     public void execute(ConnectLineInput input, CqrsCommandOutput output) {
-        Line line = lineRepository.findById(input.getLineId()).orElse(null);
+        Line line = lineRepository.findById(input.getFigureId()).orElse(null);
 
         if (null == line) {
-            output.setId(input.getLineId())
+            output.setId(input.getFigureId())
                     .setExitCode(ExitCode.FAILURE)
-                    .setMessage("Connect line failed: line not found, line id = " + input.getLineId());
+                    .setMessage("Connect line failed: line not found, line id = " + input.getFigureId());
             return;
         }
 
-        line.connectToFigure(input.getEndpointId(), input.getFigureId());
+        line.connectToFigure(input.getEndpointId(), input.getConnectedFigureId());
         lineRepository.save(line);
         domainEventBus.postAll(line);
 
@@ -46,18 +42,18 @@ public class ConnectLineUseCaseImpl implements ConnectLineUseCase {
 
     private class ConnectLineInputImpl implements ConnectLineInput {
 
-        private String lineId;
-        private String endpointId;
         private String figureId;
+        private String endpointId;
+        private String connectedFigureId;
 
         @Override
-        public String getLineId() {
-            return lineId;
+        public String getFigureId() {
+            return figureId;
         }
 
         @Override
-        public void setLineId(String lineId) {
-            this.lineId = lineId;
+        public void setFigureId(String figureId) {
+            this.figureId = figureId;
         }
 
         @Override
@@ -71,13 +67,13 @@ public class ConnectLineUseCaseImpl implements ConnectLineUseCase {
         }
 
         @Override
-        public String getFigureId() {
-            return figureId;
+        public String getConnectedFigureId() {
+            return connectedFigureId;
         }
 
         @Override
-        public void setFigureId(String figureId) {
-            this.figureId = figureId;
+        public void setConnectedFigureId(String connectedFigureId) {
+            this.connectedFigureId = connectedFigureId;
         }
     }
 }

@@ -24,9 +24,9 @@ public class ResizeNoteUseCaseImpl implements ResizeNoteUseCase {
 
     @Override
     public void execute(ResizeNoteInput input, CqrsCommandOutput output) {
-        Figure figure = noteRepository.findById(input.getFigureId()).orElse(null);
+        Note note = noteRepository.findById(input.getFigureId()).orElse(null);
 
-        if(null == figure)
+        if(null == note)
         {
             output.setId(input.getFigureId())
                     .setExitCode(ExitCode.FAILURE)
@@ -34,12 +34,11 @@ public class ResizeNoteUseCaseImpl implements ResizeNoteUseCase {
             return;
         }
 
-        Note note = (Note)figure;
         note.changeSize(input.getHeight(), input.getWidth());
         noteRepository.save(note);
         domainEventBus.postAll(note);
 
-        output.setId(figure.getId());
+        output.setId(note.getId());
         output.setExitCode(ExitCode.SUCCESS);
     }
 
