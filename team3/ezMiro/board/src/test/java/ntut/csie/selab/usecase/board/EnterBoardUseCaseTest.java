@@ -29,8 +29,7 @@ public class EnterBoardUseCaseTest {
         enterBoardUseCase.execute(input, output);
 
         // Assert
-        Assert.assertNotNull(output.getCursor().stream().filter(cursor -> cursor.getUserId().equals(userId)).findFirst().orElse(null));
-        Assert.assertEquals(1, output.getCursorCountInBoard());
-
+        Assert.assertEquals(boardId, output.getCursor().getBoardId());
+        Assert.assertEquals(userId, output.getCursor().getUserId());
     }
 }

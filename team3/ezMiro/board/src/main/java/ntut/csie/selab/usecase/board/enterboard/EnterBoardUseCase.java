@@ -17,19 +17,16 @@ public class EnterBoardUseCase {
         this.domainEventBus = domainEventBus;
     }
 
-
-
     public void execute(EnterBoardInput input, EnterBoardOutput output) {
         Optional<Board> board = boardRepository.findById(input.getBoardId());
 
         if (board.isPresent()) {
             Board selectedBoard = board.get();
-            selectedBoard.addCursor(new Cursor(input.getBoardId(), input.getUserId(), new Point(100, 100)));
-            boardRepository.save(selectedBoard);
+            selectedBoard.clearDomainEvents();
+            Cursor addedCursor = new Cursor(input.getBoardId(), input.getUserId(), new Point(100, 100));
+            selectedBoard.addCursor(addedCursor);
+            output.setCursor(addedCursor);
             domainEventBus.postAll(selectedBoard);
-
-            output.setCursorCountInBoard(selectedBoard.getCursorCount());
-            output.setCursor(selectedBoard.getCursors());
         } else {
             throw new RuntimeException("board not found, board id = " + input.getBoardId());
         }

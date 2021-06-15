@@ -6,6 +6,7 @@ import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.board.Cursor;
 import ntut.csie.selab.entity.model.board.event.BoardCursorMoved;
 import ntut.csie.selab.entity.model.board.event.BoardEntered;
+import ntut.csie.selab.entity.model.board.event.BoardLeft;
 import ntut.csie.selab.entity.model.board.event.WidgetCreationNotifiedToAllUser;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
@@ -21,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.awt.*;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
@@ -248,17 +250,41 @@ public class NotifyUsersInBoard {
     @Subscribe
     public void whenBoardEntered(BoardEntered boardEntered) {
         String boardId = boardEntered.getBoardId();
-        Set<Cursor> cursors = boardEntered.getCursors();
-
-        webSocket.sendMessageForAllUsersIn(boardId, convertCursorToMessage(cursors));
+        JSONObject message = new JSONObject();
+        try {
+            message.put("domainEvent", "boardEntered");
+            message.put("cursor", convertCursorToMessage(boardEntered.getCursor()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        webSocket.sendMessageForAllUsersIn(boardId, message);
     }
 
     @Subscribe
     public void whenBoardCursorMoved(BoardCursorMoved boardCursorMoved) {
-        String boardId = boardCursorMoved.getBoardId();
-        Set<Cursor> cursors = boardCursorMoved.getCursors();
+        Cursor cursor = boardCursorMoved.getCursor();
+        JSONObject message = new JSONObject();
+        try {
+            message.put("domainEvent", "boardCursorMoved");
+            message.put("cursor", convertCursorToMessage(cursor));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        webSocket.sendMessageForAllUsersIn(cursor.getBoardId(), message);
+    }
 
-        webSocket.sendMessageForAllUsersIn(boardId, convertCursorToMessage(cursors));
+    @Subscribe
+    public void whenBoardLeft(BoardLeft boardLeft) {
+        JSONObject message = new JSONObject();
+        try {
+            message.put("domainEvent", "boardLeft");
+            JSONObject cursor = new JSONObject();
+            cursor.put("userId", boardLeft.getUserId());
+            message.put("cursor", cursor);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        webSocket.sendMessageForAllUsersIn(boardLeft.getBoardId(), message);
     }
 
     @Subscribe
@@ -288,28 +314,16 @@ public class NotifyUsersInBoard {
         }
     }
 
-    private JSONObject convertCursorToMessage(Set<Cursor> cursorSet) {
-        JSONArray parsedCursors = new JSONArray();
-        cursorSet.forEach(cursor -> {
-            JSONObject parsedCursor = new JSONObject();
-            try {
-                parsedCursor.put("userId", cursor.getUserId());
-                parsedCursor.put("x", cursor.getPoint().x);
-                parsedCursor.put("y", cursor.getPoint().y);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            parsedCursors.put(parsedCursor);
-        });
-
-        JSONObject message = new JSONObject();
+    private JSONObject convertCursorToMessage(Cursor cursor) {
+        JSONObject parsedCursor = new JSONObject();
         try {
-            message.put("cursors", parsedCursors);
-        } catch (Exception e) {
+            parsedCursor.put("userId", cursor.getUserId());
+            parsedCursor.put("x", cursor.getPoint().x);
+            parsedCursor.put("y", cursor.getPoint().y);
+        } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        return message;
+        return parsedCursor;
     }
 }
 

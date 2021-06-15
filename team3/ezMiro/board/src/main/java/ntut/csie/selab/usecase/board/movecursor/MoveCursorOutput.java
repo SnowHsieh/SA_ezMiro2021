@@ -7,7 +7,6 @@ import java.util.Set;
 
 public class MoveCursorOutput {
     private String boardId;
-    private Set<Cursor> cursors;
 
     public String getBoardId() {
         return boardId;
@@ -15,13 +14,5 @@ public class MoveCursorOutput {
 
     public void setBoardId(String boardId) {
         this.boardId = boardId;
-    }
-
-    public Set<Cursor> getCursors() {
-        return cursors;
-    }
-
-    public void setCursors(Set<Cursor> cursors) {
-        this.cursors = cursors;
     }
 }

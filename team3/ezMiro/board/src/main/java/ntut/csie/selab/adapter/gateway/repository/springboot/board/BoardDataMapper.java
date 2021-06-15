@@ -10,14 +10,12 @@ import java.util.Set;
 
 public class BoardDataMapper {
     public static BoardData domainToData(Board board) {
-        Set<Cursor> cursors = board.getCursors();
         List<CommittedWidget> committedWidgets = board.getCommittedWidgets();
-        return new BoardData(board.getId(), board.getTeamId(), board.getBoardName(), CursorDataMapper.domainToData(cursors), CommittedWidgetDataMapper.domainToData(committedWidgets));
+        return new BoardData(board.getId(), board.getTeamId(), board.getBoardName(), CommittedWidgetDataMapper.domainToData(committedWidgets));
     }
 
     public static Board DataToDomain(BoardData selectedBoardData) {
         Board board = new Board(selectedBoardData.getBoardId(), selectedBoardData.getTeamId(), selectedBoardData.getBoardName());
-        board.setCursors(CursorDataMapper.dataToDomain(selectedBoardData.getCursors()));
         board.setCommittedWidgets(new ArrayList<>(CommittedWidgetDataMapper.dataToDomain(selectedBoardData.getCommittedWidgets())));
         return board;
     }

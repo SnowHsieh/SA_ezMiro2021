@@ -33,7 +33,6 @@ public class LeaveBoardUseCaseTest {
         leaveBoardUseCase.execute(input, output);
 
         // Assert
-        Assert.assertNull(output.getCursors().stream().filter(cursor -> cursor.getUserId().equals(userId)).findFirst().orElse(null));
         Assert.assertEquals(0, output.getCursorCountInBoard());
 
     }

@@ -120,8 +120,13 @@ export default {
           me.whenColorOfWidgetChanged(message.widgets)
         } else if (message.domainEvent === 'notifyWidgetZOrderRearrangedToAllUser') {
           me.whenZOrderOfWidgetChanged(message.widgets)
+        } else if (message.domainEvent === 'boardEntered') {
+          me.handleCursorCreation(message.cursor)
+        } else if (message.domainEvent === 'boardCursorMoved') {
+          me.handleCursorMovement(message.cursor)
+        } else if (message.domainEvent === 'boardLeft') {
+          me.handleCursorDeletion(message.cursor)
         } else {
-          me.handleCursorMessage(message.cursors)
           me.handleWidgetMessage(message.widgets)
         }
       }
@@ -213,14 +218,29 @@ export default {
         }
       })
     },
-    handleCursorMessage (cursors) {
-      if (cursors !== undefined) {
-        for (let index = 0; index < cursors.length; index++) {
-          if (cursors[index].userId === this.user.name) {
-            cursors.splice(index, 1)
-          }
+    handleCursorCreation (cursor) {
+      console.log('someone entered board.')
+      if (this.user.name !== cursor.userId) {
+        this.collaborator.push(cursor)
+        MoveCursor(this.boardId, this.composeCursorInfo(this.user.x, this.user.y))
+      }
+    },
+    handleCursorMovement (cursor) {
+      var user = this.collaborator.find(user => user.userId === cursor.userId)
+      if (user !== undefined) {
+        user.x = cursor.x
+        user.y = cursor.y
+      } else if (this.user.name !== cursor.userId) {
+        this.collaborator.push(cursor)
+      }
+    },
+    handleCursorDeletion (cursor) {
+      console.log('someone left board.')
+      console.log(cursor)
+      for (let i = 0; i < this.collaborator.length; i++) {
+        if (this.collaborator[i].userId === cursor.userId) {
+          this.collaborator.splice(i, 1)
         }
-        this.collaborator = cursors
       }
     },
     handleWidgetMessage (widgets) {
@@ -275,7 +295,9 @@ export default {
           me.isSamplingCursorDelayFinish = false
           setTimeout(function () {
             me.isSamplingCursorDelayFinish = true
-            MoveCursor(me.boardId, me.composeCursorInfo(e.absolutePointer.x, e.absolutePointer.y))
+            me.user.x = e.absolutePointer.x
+            me.user.y = e.absolutePointer.y
+            MoveCursor(me.boardId, me.composeCursorInfo(me.user.x, me.user.y))
           }, 100)
         }
       })

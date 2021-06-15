@@ -38,6 +38,5 @@ public class MoveCursorUseCaseTest {
 
         // Assert
         Assert.assertEquals(boardId, output.getBoardId());
-        Assert.assertEquals(point, Objects.requireNonNull(output.getCursors().stream().filter(cursor -> cursor.getUserId().equals(userId)).findFirst().orElse(null)).getPoint());
     }
 }

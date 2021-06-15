@@ -22,9 +22,7 @@ public class MoveCursorUseCase {
         if (board.isPresent()) {
             Board selectedBoard = board.get();
             selectedBoard.moveCursorOf(input.getUserId(), input.getPoint());
-            boardRepository.save(selectedBoard);
             domainEventBus.postAll(selectedBoard);
-            output.setCursors(selectedBoard.getCursors());
             output.setBoardId(input.getBoardId());
         } else {
             throw new RuntimeException("board not found, board id = " + input.getBoardId());
