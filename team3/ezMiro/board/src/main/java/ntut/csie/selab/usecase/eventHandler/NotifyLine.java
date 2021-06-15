@@ -26,7 +26,7 @@ public class NotifyLine {
         List<Widget> lines = lineRepository.findAllByHeadWidgetOrTailWidget(widgetDeleted.getWidgetId());
 
         for(Widget line : lines) {
-            ((Line) line).removeLinkedWidget(widgetDeleted.getWidgetId());
+            ((Line) line).disconnectWidgetById(widgetDeleted.getWidgetId());
         }
         lineRepository.saveAll(lines);
     }

@@ -1,5 +1,6 @@
 package ntut.csie.selab.entity.model.widget;
 
+import ntut.csie.selab.entity.model.widget.event.LineDisconnected;
 import ntut.csie.selab.entity.model.widget.event.LineLinked;
 import ntut.csie.selab.entity.model.widget.event.LinkedStickyNoteIdDeleted;
 
@@ -44,7 +45,7 @@ public class Line extends Widget {
         )));
     }
 
-    public void removeLinkedWidget(String widgetId) {
+    public void disconnectWidgetById(String widgetId) {
         if(headWidgetId != null && headWidgetId.equals(widgetId)) {
             this.headWidgetId = null;
         }
@@ -52,8 +53,24 @@ public class Line extends Widget {
             this.tailWidgetId = null;
         }
 
-        addDomainEvent((new LinkedStickyNoteIdDeleted(
+        addDomainEvent(new LinkedStickyNoteIdDeleted(
                 new Date()
-        )));
+        ));
+    }
+
+    public void disconnectWidgetByEndPoint(String lineEndPoint) {
+        if (lineEndPoint.equals(LineEndPoint.HEAD.getEndPoint())) {
+            this.headWidgetId = null;
+        } else if (lineEndPoint.equals(LineEndPoint.TAIL.getEndPoint())) {
+            this.tailWidgetId = null;
+        } else {
+            throw new RuntimeException();
+        }
+
+        addDomainEvent(new LineDisconnected(
+                new Date(),
+                this.id,
+                lineEndPoint
+        ));
     }
 }
