@@ -41,7 +41,9 @@ public class Line extends Widget {
         addDomainEvent((new LineLinked(
                 new Date(),
                 this.boardId,
-                getId()
+                getId(),
+                widgetId,
+                endPoint
         )));
     }
 
@@ -69,6 +71,7 @@ public class Line extends Widget {
 
         addDomainEvent(new LineDisconnected(
                 new Date(),
+                this.boardId,
                 this.id,
                 lineEndPoint
         ));

@@ -247,6 +247,35 @@ public class NotifyUsersInBoard {
     }
 
     @Subscribe
+    public void whenLineLinked(LineLinked lineLinked) {
+        String boardId = lineLinked.getBoardId();
+        JSONObject message = new JSONObject();
+        try {
+            message.put("domainEvent", "lineLinked");
+            message.put("lineId", lineLinked.getLineId());
+            message.put("targetId", lineLinked.getWidgetId());
+            message.put("endPoint", lineLinked.getEndPoint());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        webSocket.sendMessageForAllUsersIn(boardId, message);
+    }
+
+    @Subscribe
+    public void whenLineDisconnected(LineDisconnected lineDisconnected) {
+        String boardId = lineDisconnected.getBoardId();
+        JSONObject message = new JSONObject();
+        try {
+            message.put("domainEvent", "lineDisconnected");
+            message.put("lineId", lineDisconnected.getLineId());
+            message.put("endPoint", lineDisconnected.getLineEndPoint());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        webSocket.sendMessageForAllUsersIn(boardId, message);
+    }
+
+    @Subscribe
     public void whenBoardEntered(BoardEntered boardEntered) {
         String boardId = boardEntered.getBoardId();
         JSONObject message = new JSONObject();
