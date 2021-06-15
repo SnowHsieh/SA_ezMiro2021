@@ -20,6 +20,7 @@ export default fabric.util.createClass(fabric.Canvas, {
   moveLine: moveLine,
   moveLineEndpoint: moveLineEndpoint,
   connectLineEndpointToFigure: connectLineEndpointToFigure,
+  disconnectLineEndpoint: disconnectLineEndpoint,
   removeFigure: removeFigure
 })
 
@@ -31,6 +32,39 @@ function initialize (id, width, height, boardId) {
   })
   this.boardId = boardId
   this.selection = false
+
+  const moveCanvasInfo = {
+    isDragging: false,
+    lastX: 0,
+    lastY: 0
+  }
+
+  this.on('mouse:down', (e) => {
+    console.log(e.e.altKey)
+    if (e.e.altKey) {
+      moveCanvasInfo.isDragging = true
+      this.selection = false
+      moveCanvasInfo.lastX = e.e.clientX
+      moveCanvasInfo.lastY = e.e.clientY
+    }
+  })
+
+  this.on('mouse:move', (e) => {
+    if (moveCanvasInfo.isDragging) {
+      // 同 canvas transform method
+      // 計算移動量
+      this.viewportTransform[4] += e.e.clientX - moveCanvasInfo.lastX
+      this.viewportTransform[5] += e.e.clientY - moveCanvasInfo.lastY
+      this.requestRenderAll()
+      moveCanvasInfo.lastX = e.e.clientX
+      moveCanvasInfo.lastY = e.e.clientY
+    }
+  })
+
+  this.on('mouse:up', (opt) => {
+    moveCanvasInfo.isDragging = false
+    moveCanvasInfo.selection = true
+  })
 }
 
 function getFigure (figureId) {
@@ -129,4 +163,13 @@ function connectLineEndpointToFigure (figureId, endpointId, connectedFigureId) {
   }
 
   line.connectLineEndpointToFigure(endpointId, connectedFigureId)
+}
+
+function disconnectLineEndpoint (figureId, endpointId) {
+  const line = this.getFigure(figureId)
+  if (line === undefined || !line.isType('line')) {
+    return
+  }
+
+  line.disconnectLineEndpoint(endpointId)
 }

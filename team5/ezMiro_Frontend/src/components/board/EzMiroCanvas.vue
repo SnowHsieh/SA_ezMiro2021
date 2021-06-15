@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="overflow-x-auto overflow-y-hide" :style="{ height: '100vh' }">
     <v-card
       @contextmenu="show"
     >
@@ -233,7 +233,6 @@ export default {
         if (isActive) {
           return
         }
-
         if (data.type === 'BoardEntered') {
           this.activeCursorCanvas.addCursor(data.userId)
           this.webSocket.send(
@@ -272,7 +271,9 @@ export default {
         } else if (data.type === 'LineEndpointMoved') {
           this.canvas.moveLineEndpoint(data.figureId, data.endpointId, data.newPositionX, data.newPositionY)
         } else if (data.type === 'LineConnected') {
-          this.canvas.connectLineEndpointToFigure(data.figureId, data.endpointId, data.connectedFigureId)
+          this.canvas.connectLineEndpointToFigure(data.lineId, data.endpointId, data.connectedFigureId)
+        } else if (data.type === 'LineDisconnected') {
+          this.canvas.disconnectLineEndpoint(data.lineId, data.endpointId)
         }
         this.canvas.renderAll()
       }

@@ -13,7 +13,10 @@ export default fabric.util.createClass(fabric.Line, {
   _registerDeletedEvent: _registerDeletedEvent,
   move: move,
   moveEndpoint: moveEndpoint,
-  connectLineEndpointToFigure: connectLineEndpointToFigure
+  connectLineEndpointToFigure: connectLineEndpointToFigure,
+  disconnectLineEndpoint: disconnectLineEndpoint,
+  setEndpointWhenConnected: setEndpointWhenConnected,
+  setEndpointWhenDisconnected: setEndpointWhenDisconnected
 })
 
 function initialize (figureId, endpointA, endpointB) {
@@ -85,24 +88,12 @@ function _registerAddedEvent () {
   this.on('added', () => {
     this.canvas.on('finish_loading', () => {
       if (this.endpointA.connectedFigureId !== '') {
-        this.endpointA.connectedFigure = this.canvas.getFigure(this.endpointA.connectedFigureId)
-        this.endpointA._handleFigureMoving = handleFigureMoving.bind(this.endpointA)
-        this.endpointA.connectedFigure.on('moving', this.endpointA._handleFigureMoving)
-        this.endpointA.connectedFigure.on('scaling', this.endpointA._handleFigureMoving)
-        this.set({
-          evented: false
-        })
-        this.endpointA._handleFigureMoving()
+        const connectedFigure = this.canvas.getFigure(this.endpointA.connectedFigureId)
+        this.setEndpointWhenConnected(this.endpointA, connectedFigure)
       }
       if (this.endpointB.connectedFigureId !== '') {
-        this.endpointB.connectedFigure = this.canvas.getFigure(this.endpointB.connectedFigureId)
-        this.endpointB._handleFigureMoving = handleFigureMoving.bind(this.endpointB)
-        this.endpointB.connectedFigure.on('moving', this.endpointB._handleFigureMoving)
-        this.endpointB.connectedFigure.on('scaling', this.endpointB._handleFigureMoving)
-        this.set({
-          evented: false
-        })
-        this.endpointB._handleFigureMoving()
+        const connectedFigure = this.canvas.getFigure(this.endpointB.connectedFigureId)
+        this.setEndpointWhenConnected(this.endpointB, connectedFigure)
       }
       this.canvas.renderAll()
     })
@@ -160,20 +151,11 @@ function _registerMovedEvent () {
     }
     if (this.endpointA.connectedFigure !== connectedFigure) {
       if (this.endpointA.connectedFigure !== null) {
-        this.endpointA.connectedFigure.off('moving', this.endpointA._handleFigureMoving)
-        this.endpointA.connectedFigure.off('scaling', this.endpointA._handleFigureMoving)
-        this.endpointA.connectedFigure = null
-        this.endpointA._handleFigureMoving = null
+        this.setEndpointWhenDisconnected(this.endpointA)
         await lineAPI.disconnectLine(this.figureId, this.endpointA.id)
       }
       if (connectedFigure !== null) {
-        this.endpointA.connectedFigure = connectedFigure
-        this.endpointA._handleFigureMoving = handleFigureMoving.bind(this.endpointA)
-        this.endpointA.connectedFigure.on('moving', this.endpointA._handleFigureMoving)
-        this.endpointA.connectedFigure.on('scaling', this.endpointA._handleFigureMoving)
-        this.set({
-          evented: false
-        })
+        this.setEndpointWhenConnected(this.endpointA, connectedFigure)
         await lineAPI.connectLine(this.figureId, this.endpointA.id, connectedFigure.figureId)
       }
     }
@@ -210,20 +192,11 @@ function _registerMovedEvent () {
     }
     if (this.endpointB.connectedFigure !== connectedFigure) {
       if (this.endpointB.connectedFigure !== null) {
-        this.endpointB.connectedFigure.off('moving', this.endpointB._handleFigureMoving)
-        this.endpointB.connectedFigure.off('scaling', this.endpointB._handleFigureMoving)
-        this.endpointB.connectedFigure = null
-        this.endpointB._handleFigureMoving = null
+        this.setEndpointWhenDisconnected(this.endpointB)
         await lineAPI.disconnectLine(this.figureId, this.endpointB.id)
       }
       if (connectedFigure !== null) {
-        this.endpointB.connectedFigure = connectedFigure
-        this.endpointB._handleFigureMoving = handleFigureMoving.bind(this.endpointB)
-        this.endpointB.connectedFigure.on('moving', this.endpointB._handleFigureMoving)
-        this.endpointB.connectedFigure.on('scaling', this.endpointB._handleFigureMoving)
-        this.set({
-          evented: false
-        })
+        this.setEndpointWhenConnected(this.endpointB, connectedFigure)
         await lineAPI.connectLine(this.figureId, this.endpointB.id, connectedFigure.figureId)
       }
     }
@@ -310,26 +283,19 @@ function moveEndpoint (id, positionX, positionY) {
 }
 
 function connectLineEndpointToFigure (endpointId, connectedFigureId) {
-  if (this.endpointA.endpointId === endpointId) {
-    this.endpointA.connectedFigureId = connectedFigureId
-    this.endpointA.connectedFigure = this.canvas.getFigure(connectedFigureId)
-    this.endpointA._handleFigureMoving = handleFigureMoving.bind(this.endpointA)
-    this.endpointA.connectedFigure.on('moving', this.endpointA._handleFigureMoving)
-    this.endpointA.connectedFigure.on('scaling', this.endpointA._handleFigureMoving)
-    this.set({
-      evented: false
-    })
-    this.endpointA._handleFigureMoving()
-  } else if (this.endpointB.endpointId === endpointId) {
-    this.endpointB.connectedFigureId = connectedFigureId
-    this.endpointB.connectedFigure = this.canvas.getFigure(connectedFigureId)
-    this.endpointB._handleFigureMoving = handleFigureMoving.bind(this.endpointB)
-    this.endpointB.connectedFigure.on('moving', this.endpointB._handleFigureMoving)
-    this.endpointB.connectedFigure.on('scaling', this.endpointB._handleFigureMoving)
-    this.set({
-      evented: false
-    })
-    this.endpointB._handleFigureMoving()
+  const connectedFigure = this.canvas.getFigure(connectedFigureId)
+  if (this.endpointA.id === endpointId) {
+    this.setEndpointWhenConnected(this.endpointA, connectedFigure)
+  } else if (this.endpointB.id === endpointId) {
+    this.setEndpointWhenConnected(this.endpointB, connectedFigure)
+  }
+}
+
+function disconnectLineEndpoint (endpointId) {
+  if (this.endpointA.id === endpointId) {
+    this.setEndpointWhenDisconnected(this.endpointA)
+  } else if (this.endpointB.id === endpointId) {
+    this.setEndpointWhenDisconnected(this.endpointB)
   }
 }
 
@@ -359,4 +325,25 @@ function getClosestACoord (point, oCoords) {
     }
   })
   return aCoord
+}
+
+function setEndpointWhenConnected (endpoint, connectedFigure) {
+  endpoint.connectedFigure = connectedFigure
+  endpoint._handleFigureMoving = handleFigureMoving.bind(endpoint)
+  endpoint.connectedFigure.on('moving', endpoint._handleFigureMoving)
+  endpoint.connectedFigure.on('scaling', endpoint._handleFigureMoving)
+  endpoint.connectedFigure.on('websocket moving', endpoint._handleFigureMoving)
+  this.set({
+    evented: false
+  })
+  endpoint._handleFigureMoving()
+}
+
+function setEndpointWhenDisconnected (endpoint) {
+  endpoint.connectedFigure.off('moving', endpoint._handleFigureMoving)
+  endpoint.connectedFigure.off('scaling', endpoint._handleFigureMoving)
+  endpoint.connectedFigure.off('websocket moving', endpoint._handleFigureMoving)
+  endpoint.connectedFigure = null
+  endpoint._handleFigureMoving = null
+  endpoint.connectedFigureId = ''
 }

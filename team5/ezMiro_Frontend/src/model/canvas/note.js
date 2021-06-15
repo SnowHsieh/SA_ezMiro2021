@@ -141,6 +141,7 @@ function movePosition (left, top) {
   })
   this.addWithUpdate()
   this._recalcTextboxPosition()
+  this.fire('websocket moving')
 }
 
 function resize (width, height) {
