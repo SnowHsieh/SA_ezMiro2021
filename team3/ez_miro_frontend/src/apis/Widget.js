@@ -131,3 +131,12 @@ export const LinkLine = async (boardId, info) => {
     console.error(err)
   }
 }
+
+export const DisconnectLine = async (boardId, info) => {
+  try {
+    const res = await axios.put(`${host}/ez-miro/boards/${boardId}/widgets/lines/disconnect`, info)
+    return res.data
+  } catch (err) {
+    console.error(err)
+  }
+}

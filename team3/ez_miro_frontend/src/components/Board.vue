@@ -40,6 +40,7 @@ import {
   CreateLine,
   MoveLineBy,
   LinkLine,
+  DisconnectLine,
   DeleteLineBy
 } from '@/apis/Widget'
 import '@/models/StickyNote'
@@ -131,6 +132,8 @@ export default {
           me.handleCursorMovement(message.cursor)
         } else if (message.domainEvent === 'boardLeft') {
           me.handleCursorDeletion(message.cursor)
+        } else if (message.domainEvent === 'lineDisconnected') {
+
         } else {
           me.handleWidgetMessage(message.widgets)
         }
@@ -253,6 +256,21 @@ export default {
           this.collaborator.splice(i, 1)
         }
       }
+    },
+    handleLineDisconnection (line) {
+      console.log(line)
+      // const me = this
+      // this.canvas.getObjects().forEach(function (o) {
+      //   if (o.id === line.lineId) {
+      //     // DisconnectLine
+      //     if (line.endPoint === 'head') {
+      //       line.circleHead.connectedWidgetId = null
+      //     } else {
+      //       o.circleTail.connectedWidgetId = null
+      //     }
+      //     // const newLine = me.buildFabricObjectOfLine(line)
+      //   }
+      // })
     },
     handleWidgetMessage (widgets) {
       if (widgets !== undefined) {
@@ -723,6 +741,14 @@ export default {
             }
           })
         }, 200)
+        me.canvas.forEachObject(function (obj) {
+          if (!e.target.intersectsWithObject(obj) && e.target.connectedWidgetId !== null) {
+            DisconnectLine(me.boardId, {
+              lineId: line.id,
+              endPoint: 'head'
+            })
+          }
+        })
       })
 
       line.circleTail.on('moved', function (e) {
@@ -736,6 +762,14 @@ export default {
             }
           })
         }, 200)
+        me.canvas.forEachObject(function (obj) {
+          if (!e.target.intersectsWithObject(obj) && e.target.connectedWidgetId !== null) {
+            DisconnectLine(me.boardId, {
+              lineId: line.id,
+              endPoint: 'tail'
+            })
+          }
+        })
       })
       return line
     },
