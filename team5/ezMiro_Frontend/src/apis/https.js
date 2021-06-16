@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8080/'
+  baseURL: 'http://25.61.152.159:8080/'
 })
 
 export default function (method, url, data) {

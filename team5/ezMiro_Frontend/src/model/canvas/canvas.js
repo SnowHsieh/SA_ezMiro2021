@@ -6,8 +6,10 @@ import { uuid } from 'vue-uuid'
 
 export default fabric.util.createClass(fabric.Canvas, {
   boardId: '',
+  distance: 10,
   figures: {},
   initialize: initialize,
+  drawGridFrame: drawGridFrame,
   getFigure: getFigure,
   postNote: postNote,
   addNote: addNote,
@@ -65,6 +67,7 @@ function initialize (id, width, height, boardId) {
     moveCanvasInfo.isDragging = false
     moveCanvasInfo.selection = true
   })
+  this.drawGridFrame()
 }
 
 function getFigure (figureId) {
@@ -172,4 +175,38 @@ function disconnectLineEndpoint (figureId, endpointId) {
   }
 
   line.disconnectLineEndpoint(endpointId)
+}
+
+function drawGridFrame () {
+  this.renderOnAddRemove = false
+  const longer = 12000
+  let vLine
+  let hLine
+  const distance = this.distance
+  for (let i = 1; i * distance < longer; i++) {
+    const lineDef = {
+      fill: 'black',
+      stroke: 'rgba(0, 0, 0, 0.1)',
+      strokeWidth: 1,
+      selectable: false
+    }
+    // draw vLine
+    if (i * distance >= 8000 && i % 5 === 0) {
+      vLine = new fabric.Line([i * distance, 0, i * distance, 8000], lineDef)
+      // if (i % 5 === 0) {
+      vLine.stroke = 'rgba(0, 0, 0, 0.7)'
+      // }
+      this.add(vLine)
+    }
+    // draw hLine
+    if (i * distance < 3000 && i % 5 === 0) {
+      hLine = new fabric.Line([8000, i * distance, this.width, i * distance], lineDef)
+      // if (i % 5 === 0) {
+      hLine.stroke = 'rgba(0, 0, 0, 0.7)'
+      // }
+      this.add(hLine)
+    }
+  }
+  this.renderOnAddRemove = true
+  this.renderAll()
 }

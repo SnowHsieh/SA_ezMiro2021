@@ -270,6 +270,12 @@ function _registerMouseEvent () {
     this.textbox.enterEditing()
     this.selectable = false
   })
+
+  this.on('moving', () => {
+    const distance = 10
+    this.left = Math.round(this.left / distance) * distance
+    this.top = Math.round(this.top / distance) * distance
+  })
 }
 
 function _registerSelectedEvent () {
