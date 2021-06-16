@@ -1,8 +1,9 @@
 <template>
   <div class="board" oncontextmenu="return false">
-    <button type="button" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.LINE)">Line</button>
-    <button type="button" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.STICKY_NOTE)">Sticky Note</button>
-    <canvas id="canvas" ref='board'></canvas>
+    <!-- <h5 class="ml-2" v-show="isDataLoaded">{{ user.name }}</h5> -->
+    <button type="button" class="btn btn-success mr-3" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.LINE)" v-show="isDataLoaded">Line</button>
+    <button type="button" class="btn btn-warning" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.STICKY_NOTE)" v-show="isDataLoaded">Sticky Note</button>
+    <canvas id="canvas" ref='board' :class="canvasStyle"></canvas>
     <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
       <li @click="deleteWidget()" class="list-group-item">Delete</li>
       <li class="list-group-item">
@@ -23,6 +24,13 @@
     <div class="cursors" v-for="user in this.collaborator" v-bind:key="user.userId" :style="{'top': user.y + 'px', 'left': user.x + 'px'}">
       {{user.userId}}
     </div>
+    <div class="d-flex justify-content-center">
+    <button class="btn btn-outline-secondary" type="button" disabled>
+      <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+      Loading...
+    </button>
+    </div>
+
   </div>
 </template>
 
@@ -71,9 +79,11 @@ export default {
       isSamplingCursorDelayFinish: true,
       isSamplingWidgetDelayFinish: true,
       isSamplingLineDelayFinish: true,
-      user: null,
+      user: { name: '' },
       collaborator: [],
-      widgetTypeOfCreation: 0
+      widgetTypeOfCreation: 0,
+      isDataLoaded: false,
+      canvasStyle: ''
     }
   },
   async created () {
@@ -86,6 +96,8 @@ export default {
     this.loadAllLine(this.boardContent.lineDtos)
     this.user = this.createStubUser()
     this.initWebSocketAndBingEventListener()
+    this.isDataLoaded = true
+    this.canvasStyle = 'border border-secondary'
   },
   methods: {
     initCanvas () {
