@@ -1,8 +1,10 @@
 <template>
   <div class="board" oncontextmenu="return false">
-    <!-- <h5 class="ml-2" v-show="isDataLoaded">{{ user.name }}</h5> -->
+  <div class="d-flex" style="z-index:99999;position:fixed;top:0;left:0">
+    <h5 class="mr-2" v-show="isDataLoaded">{{ user.name }}</h5>
     <button type="button" class="btn btn-success mr-3" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.LINE)" v-show="isDataLoaded">Line</button>
     <button type="button" class="btn btn-warning" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.STICKY_NOTE)" v-show="isDataLoaded">Sticky Note</button>
+  </div>
     <canvas id="canvas" ref='board' :class="canvasStyle"></canvas>
     <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
       <li @click="deleteWidget()" class="list-group-item">Delete</li>
