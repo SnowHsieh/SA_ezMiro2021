@@ -48,6 +48,7 @@ import {
   CreateLine,
   MoveLineBy,
   LinkLine,
+  DisconnectLine,
   DeleteLineBy
 } from '@/apis/Widget'
 import '@/models/StickyNote'
@@ -143,6 +144,8 @@ export default {
           me.handleCursorMovement(message.cursor)
         } else if (message.domainEvent === 'boardLeft') {
           me.handleCursorDeletion(message.cursor)
+        } else if (message.domainEvent === 'lineDisconnected') {
+          me.handleLineDisconnection(message.line)
         } else {
           me.handleWidgetMessage(message.widgets)
         }
@@ -231,7 +234,6 @@ export default {
       const canvas = this.canvas
       canvas.getObjects().forEach(function (o) {
         if (o.id === widgetDto.widgetId) {
-          console.log(widgetDto)
           if (widgetDto.zorder === 0) {
             canvas.sendToBack(o)
           } else {
@@ -265,6 +267,39 @@ export default {
           this.collaborator.splice(i, 1)
         }
       }
+    },
+    handleLineDisconnection (line) {
+      const me = this
+      this.canvas.getObjects().forEach(function (o) {
+        if (o.id === line.lineId) {
+          if (line.endPoint === 'head') {
+            o.circleHead.connectedWidgetId = null
+          } else {
+            o.circleTail.connectedWidgetId = null
+          }
+
+          const newLineDto = {
+            headWidgetId: o.circleHead.connectedWidgetId,
+            tailWidgetId: o.circleTail.connectedWidgetId,
+            topLeftX: o.x1,
+            topLeftY: o.y1,
+            bottomRightX: o.x2,
+            bottomRightY: o.y2,
+            type: 'line',
+            widgetId: o.id
+          }
+
+          me.canvas.remove(o.circleHead)
+          me.canvas.remove(o.circleTail)
+          me.canvas.remove(o)
+          o.circleHead.off('moving')
+          o.circleTail.off('moving')
+          o.off('moving')
+          me.boardContent.widgetDtos.push(newLineDto)
+          me.loadLineIntoCanvas(newLineDto)
+          return false
+        }
+      })
     },
     handleWidgetMessage (widgets) {
       if (widgets !== undefined) {
@@ -735,6 +770,23 @@ export default {
             }
           })
         }, 200)
+
+        const lineHeadPointer = { x: line.x1, y: line.y1 }
+        me.canvas.forEachObject(function (obj) {
+          if (obj.id === line.circleHead.connectedWidgetId) {
+            const { mtr, ...coordsWithoutMtr } = obj.oCoords
+            const connectedCrood = me.getCloestACrood(lineHeadPointer, Object.values(coordsWithoutMtr))
+            const connectedPointer = { x: connectedCrood.x, y: connectedCrood.y }
+            const deviation = 2
+            if (Math.abs(connectedPointer.x - lineHeadPointer.x) > deviation || Math.abs(connectedPointer.y - lineHeadPointer.y) > deviation) {
+              DisconnectLine(me.boardId, {
+                lineId: line.id,
+                endPoint: 'head'
+              })
+              return false
+            }
+          }
+        })
       })
 
       line.circleTail.on('moved', function (e) {
@@ -748,6 +800,23 @@ export default {
             }
           })
         }, 200)
+
+        const lineTailPointer = { x: line.x2, y: line.y2 }
+        me.canvas.forEachObject(function (obj) {
+          if (obj.id === line.circleTail.connectedWidgetId) {
+            const { mtr, ...coordsWithoutMtr } = obj.oCoords
+            const connectedCrood = me.getCloestACrood(lineTailPointer, Object.values(coordsWithoutMtr))
+            const connectedPointer = { x: connectedCrood.x, y: connectedCrood.y }
+            const deviation = 2
+            if (Math.abs(connectedPointer.x - lineTailPointer.x) > deviation || Math.abs(connectedPointer.y - lineTailPointer.y) > deviation) {
+              DisconnectLine(me.boardId, {
+                lineId: line.id,
+                endPoint: 'tail'
+              })
+              return false
+            }
+          }
+        })
       })
       return line
     },
