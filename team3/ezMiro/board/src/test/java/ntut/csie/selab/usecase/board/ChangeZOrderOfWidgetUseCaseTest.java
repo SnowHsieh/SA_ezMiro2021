@@ -7,7 +7,7 @@ import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRe
 import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
 import ntut.csie.selab.domain.MockFactory;
 import ntut.csie.selab.entity.model.board.Board;
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.board.edit.zorder.ChangeZOrderOfWidgetInput;
@@ -185,7 +185,7 @@ public class ChangeZOrderOfWidgetUseCaseTest {
         CreateStickyNoteInput createStickyNoteInput = new CreateStickyNoteInput();
         CreateStickyNoteOutput createStickyNoteOutput = new CreateStickyNoteOutput();
         createStickyNoteInput.setBoardId(boardId);
-        createStickyNoteInput.setCoordinate(new Coordinate(1, 1, 1, 1));
+        createStickyNoteInput.setPosition(new Position(1, 1, 1, 1));
 
         createStickyNoteUseCase.execute(createStickyNoteInput, createStickyNoteOutput);
         generatedWidgetIds.add(createStickyNoteOutput.getStickyNoteId());

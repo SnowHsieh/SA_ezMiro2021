@@ -65,3 +65,26 @@
   top: 0;
   left: 0;
 }
+
+.user-bar{
+  position: fixed;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.collaborator{
+  font-size:20px;
+  &::before {
+    // content: '';
+    // content: url('./assets/polyBear.jpg');
+    position: relative;
+    width: 30px;
+    height: auto;
+    // width: 20px;
+    // height: auto;
+  }
+}

@@ -6,7 +6,7 @@ import ntut.csie.selab.adapter.gateway.repository.springboot.widget.LineReposito
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
 import ntut.csie.selab.adapter.widget.LineRepositoryImpl;
 import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.entity.model.widget.Line;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
@@ -19,7 +19,6 @@ import ntut.csie.selab.usecase.widget.StickyNoteRepository;
 import ntut.csie.selab.usecase.widget.line.move.MoveLineInput;
 import ntut.csie.selab.usecase.widget.line.move.MoveLineOutput;
 import ntut.csie.selab.usecase.widget.line.move.MoveLineUseCase;
-import ntut.csie.selab.usecase.widget.stickynote.MoveStickyNoteUseCaseTest;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -63,18 +62,18 @@ public class MoveLineUseCaseTest {
         MoveLineOutput output = new MoveLineOutput();
         String boardId = "1";
         String lineId = "lineId";
-        Coordinate lineCoordinate = new Coordinate(1, 1, 2, 2);
-        Widget line = new Line(lineId, boardId, lineCoordinate);
+        Position linePosition = new Position(1, 1, 2, 2);
+        Widget line = new Line(lineId, boardId, linePosition);
         lineRepository.save(line);
         input.setLineId(lineId);
-        input.setCoordinate(new Coordinate(100, 250, 200, 250));
+        input.setPosition(new Position(100, 250, 200, 250));
 
         // Act
         moveLineUseCase.execute(input, output);
 
         // Assert
-        Assert.assertEquals(new Point(100, 250), output.getCoordinate().getTopLeft());
-        Assert.assertEquals(new Point(200, 250), output.getCoordinate().getBottomRight());
+        Assert.assertEquals(new Point(100, 250), output.getPosition().getTopLeft());
+        Assert.assertEquals(new Point(200, 250), output.getPosition().getBottomRight());
         Assert.assertEquals(2, domainEventBus.getCount());
     }
 

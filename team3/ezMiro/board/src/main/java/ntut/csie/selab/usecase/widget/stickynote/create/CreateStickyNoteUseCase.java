@@ -19,13 +19,13 @@ public class CreateStickyNoteUseCase {
 
     public void execute(CreateStickyNoteInput input, CreateStickyNoteOutput output) {
         String stickyNoteId = UUID.randomUUID().toString();
-        Widget widget = new StickyNote(stickyNoteId, input.getBoardId(), input.getCoordinate());
+        Widget widget = new StickyNote(stickyNoteId, input.getBoardId(), input.getPosition());
 
         stickyNoteRepository.save(widget);
         domainEventBus.postAll(widget);
 
         output.setStickyNoteId(widget.getId());
         output.setBoardId(widget.getBoardId());
-        output.setCoordinate(widget.getCoordinate());
+        output.setPosition(widget.getPosition());
     }
 }

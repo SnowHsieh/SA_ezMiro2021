@@ -9,7 +9,7 @@ import ntut.csie.selab.adapter.widget.LineRepositoryImpl;
 import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.board.CommittedWidget;
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.entity.model.widget.Line;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
@@ -22,7 +22,6 @@ import ntut.csie.selab.usecase.eventHandler.NotifyUsersInBoard;
 import ntut.csie.selab.usecase.websocket.WebSocket;
 import ntut.csie.selab.usecase.widget.LineRepository;
 import ntut.csie.selab.usecase.widget.StickyNoteRepository;
-import ntut.csie.selab.usecase.widget.line.MoveLineUseCaseTest;
 import ntut.csie.selab.usecase.widget.stickynote.delete.DeleteStickyNoteInput;
 import ntut.csie.selab.usecase.widget.stickynote.delete.DeleteStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.stickynote.delete.DeleteStickyNoteUseCase;
@@ -61,8 +60,8 @@ public class DeleteStickyNoteUseCaseTest {
         // Arrange
         StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         String stickyNoteId = "1";
-        Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
-        Widget stickyNote = new StickyNote(stickyNoteId, "0", stickyNoteCoordinate);
+        Position stickyNotePosition = new Position(1, 1, 2, 2);
+        Widget stickyNote = new StickyNote(stickyNoteId, "0", stickyNotePosition);
         stickyNoteRepository.save(stickyNote);
 
         DomainEventBus domainEventBus = new DomainEventBus();
@@ -90,8 +89,8 @@ public class DeleteStickyNoteUseCaseTest {
 
         StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         WebSocket webSocket = new FakeBoardWebSocket();
-        Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
-        Widget stickyNote = new StickyNote(stickyNoteId, boardId, stickyNoteCoordinate);
+        Position stickyNotePosition = new Position(1, 1, 2, 2);
+        Widget stickyNote = new StickyNote(stickyNoteId, boardId, stickyNotePosition);
         stickyNoteRepository.save(stickyNote);
         stickyNote.clearDomainEvents();
 
@@ -124,13 +123,13 @@ public class DeleteStickyNoteUseCaseTest {
 
         String boardId = "0";
         String lineId = "1";
-        Coordinate lineCoordinate = new Coordinate(1, 1, 2, 2);
-        Line line = new Line(lineId, boardId, lineCoordinate);
+        Position linePosition = new Position(1, 1, 2, 2);
+        Line line = new Line(lineId, boardId, linePosition);
 
         lineRepository.save(line);
         String stickyNoteId = "2";
-        Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
-        Widget stickyNote = new StickyNote(stickyNoteId, boardId, stickyNoteCoordinate);
+        Position stickyNotePosition = new Position(1, 1, 2, 2);
+        Widget stickyNote = new StickyNote(stickyNoteId, boardId, stickyNotePosition);
         stickyNoteRepository.save(stickyNote);
 
         line.link("head", stickyNote.getId());

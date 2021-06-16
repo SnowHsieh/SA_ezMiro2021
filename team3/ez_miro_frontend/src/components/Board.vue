@@ -1,42 +1,43 @@
 <template>
   <div class="board" oncontextmenu="return false">
-  <div class="d-flex tool-bar">
+  <div class="tool-bar">
     <h5 class="mr-2" v-show="isDataLoaded">我是：{{ user.name }}</h5>
     <button type="button" class="btn btn-success mr-3 widgetButton" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.LINE)" :class="{'active': this.widgetTypeOfCreation === CREATE_WIDGET_TYPE.LINE}" v-show="isDataLoaded">Line</button>
     <button type="button" class="btn btn-warning widgetButton" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.STICKY_NOTE)" :class="{'active': this.widgetTypeOfCreation === CREATE_WIDGET_TYPE.STICKY_NOTE}" v-show="isDataLoaded">Sticky Note</button>
+  </div>
+  <div class="user-bar">
     <label style="font-size:20px;" class="ml-2">看板裡有：</label>
-    <label class="mr-2" style="font-size:20px;" v-for="user in this.collaborator" v-bind:key="user.userId">
+    <label class="mr-2 collaborator" v-for="user in this.collaborator" v-bind:key="user.userId">
       {{user.userId}}
     </label>
   </div>
-    <canvas id="canvas" ref='board' :class="canvasStyle"></canvas>
-    <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
-      <li @click="deleteWidget()" class="list-group-item">Delete</li>
-      <li class="list-group-item">
-        <input type="color" id="favcolor" name="favcolor" v-model="selectedWidgetColor" @change="changeColorOfStickyNoteWith(selectedWidgetColor)">Custom Color</li>
-      <li class="list-group-item">
-        <button type="button" class="btn btn-default btn-circle" style="background-color: #4CAF50;" @click="changeColorOfStickyNoteWith('#4CAF50')"></button>
-        <button type="button" class="btn btn-default btn-circle" style="background-color: #41ABD8;" @click="changeColorOfStickyNoteWith('#41ABD8')"></button>
-        <button type="button" class="btn btn-default btn-circle" style="background-color: #FFFAAD;" @click="changeColorOfStickyNoteWith('#FFFAAD')"></button>
-      </li>
-      <li class="list-group-item">
-        <button type="button" class="btn btn-default btn-circle" style="background-color: #FFB22E;" @click="changeColorOfStickyNoteWith('#FFB22E')"></button>
-        <button type="button" class="btn btn-default btn-circle" style="background-color: #CB56F5;" @click="changeColorOfStickyNoteWith('#CB56F5')"></button>
-        <button type="button" class="btn btn-default btn-circle" style="background-color: #F5E642;" @click="changeColorOfStickyNoteWith('#F5E642')"></button>
-      </li>
-      <li class="list-group-item" @click="bringToFront">bring to front</li>
-      <li class="list-group-item" @click="sendToback">send to back</li>
-    </ul>
-    <div class="cursors" v-for="user in this.collaborator" v-bind:key="user.userId" :style="{'top': user.y + 'px', 'left': user.x + 'px'}">
-      {{user.userId}}
-    </div>
-    <div class="d-flex justify-content-center">
-    <button class="btn btn-outline-secondary" type="button" disabled>
-      <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-      Loading...
-    </button>
-    </div>
-
+  <canvas id="canvas" ref='board' :class="canvasStyle"></canvas>
+  <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
+    <li @click="deleteWidget()" class="list-group-item">Delete</li>
+    <li class="list-group-item">
+      <input type="color" id="favcolor" name="favcolor" v-model="selectedWidgetColor" @change="changeColorOfStickyNoteWith(selectedWidgetColor)">Custom Color</li>
+    <li class="list-group-item">
+      <button type="button" class="btn btn-default btn-circle" style="background-color: #4CAF50;" @click="changeColorOfStickyNoteWith('#4CAF50')"></button>
+      <button type="button" class="btn btn-default btn-circle" style="background-color: #41ABD8;" @click="changeColorOfStickyNoteWith('#41ABD8')"></button>
+      <button type="button" class="btn btn-default btn-circle" style="background-color: #FFFAAD;" @click="changeColorOfStickyNoteWith('#FFFAAD')"></button>
+    </li>
+    <li class="list-group-item">
+      <button type="button" class="btn btn-default btn-circle" style="background-color: #FFB22E;" @click="changeColorOfStickyNoteWith('#FFB22E')"></button>
+      <button type="button" class="btn btn-default btn-circle" style="background-color: #CB56F5;" @click="changeColorOfStickyNoteWith('#CB56F5')"></button>
+      <button type="button" class="btn btn-default btn-circle" style="background-color: #F5E642;" @click="changeColorOfStickyNoteWith('#F5E642')"></button>
+    </li>
+    <li class="list-group-item" @click="bringToFront">bring to front</li>
+    <li class="list-group-item" @click="sendToback">send to back</li>
+  </ul>
+  <div class="cursors" v-for="user in this.collaborator" v-bind:key="user.userId" :style="{'top': user.y + 'px', 'left': user.x + 'px'}">
+    {{user.userId}}
+  </div>
+  <div class="d-flex justify-content-center">
+  <button class="btn btn-outline-secondary" type="button" disabled>
+    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+    Loading...
+  </button>
+  </div>
   </div>
 </template>
 

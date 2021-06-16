@@ -4,7 +4,7 @@ import ntut.csie.selab.adapter.gateway.repository.springboot.widget.LineReposito
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
 import ntut.csie.selab.adapter.widget.LineRepositoryImpl;
 import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.entity.model.widget.Line;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
@@ -55,9 +55,9 @@ public class LinkLineUseCaseTest {
         input.setTargetId(targetId);
         input.setEndPoint(endPoint);
 
-        Widget line = new Line(lineId, boardId, new Coordinate(1, 1, 100, 1));
+        Widget line = new Line(lineId, boardId, new Position(1, 1, 100, 1));
         lineRepository.save(line);
-        Widget stickyNote = new StickyNote(targetId, boardId, new Coordinate(2, 2, 200, 200));
+        Widget stickyNote = new StickyNote(targetId, boardId, new Position(2, 2, 200, 200));
         stickyNoteRepository.save(stickyNote);
 
         // Act

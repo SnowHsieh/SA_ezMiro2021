@@ -11,8 +11,8 @@ public class Line extends Widget {
     private String headWidgetId;
     private String tailWidgetId;
 
-    public Line(String id, String boardId, Coordinate coordinate) {
-        super(id, boardId, coordinate, WidgetType.LINE.getType());
+    public Line(String id, String boardId, Position position) {
+        super(id, boardId, position, WidgetType.LINE.getType());
     }
 
     public String getHeadWidgetId() {

@@ -10,8 +10,8 @@ public class StickyNote extends Widget {
     private String textColor;
     private int fontSize;
 
-    public StickyNote(String id, String boardId, Coordinate coordinate) {
-        super(id, boardId, coordinate, WidgetType.STICKY_NOTE.getType());
+    public StickyNote(String id, String boardId, Position position) {
+        super(id, boardId, position, WidgetType.STICKY_NOTE.getType());
         this.textColor = "#000000";
         this.text = "";
     }

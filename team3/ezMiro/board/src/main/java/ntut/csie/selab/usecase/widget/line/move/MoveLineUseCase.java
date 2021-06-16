@@ -22,11 +22,11 @@ public class MoveLineUseCase {
         if (line.isPresent()) {
             Widget selectedLine = line.get();
             selectedLine.clearDomainEvents();
-            selectedLine.move(input.getCoordinate());
+            selectedLine.move(input.getPosition());
             lineRepository.save(selectedLine);
             domainEventBus.postAll(selectedLine);
             output.setLineId(input.getLineId());
-            output.setCoordinate(input.getCoordinate());
+            output.setPosition(input.getPosition());
 
         } else {
             throw new RuntimeException("line not found, line id = " + input.getLineId());

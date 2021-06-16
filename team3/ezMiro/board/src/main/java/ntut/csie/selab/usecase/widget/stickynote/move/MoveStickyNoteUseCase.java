@@ -20,11 +20,11 @@ public class MoveStickyNoteUseCase {
         if (stickyNote.isPresent()) {
             Widget selectedStickyNote = stickyNote.get();
             selectedStickyNote.clearDomainEvents();
-            selectedStickyNote.move(input.getCoordinate());
+            selectedStickyNote.move(input.getPosition());
             stickyNoteRepository.save(selectedStickyNote);
             domainEventBus.postAll(selectedStickyNote);
             output.setStickyNoteId(selectedStickyNote.getId());
-            output.setCoordinate(selectedStickyNote.getCoordinate());
+            output.setPosition(selectedStickyNote.getPosition());
         } else {
             throw new RuntimeException("Sticky note not found, sticky note id = " + input.getStickyNoteId());
         }

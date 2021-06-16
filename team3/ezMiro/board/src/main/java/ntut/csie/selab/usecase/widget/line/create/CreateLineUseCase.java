@@ -17,13 +17,13 @@ public class CreateLineUseCase {
 
     public void execute(CreateLineInput input, CreateLineOutput output) {
         String lineId = UUID.randomUUID().toString();
-        Line line = new Line(lineId, input.getBoardId(), input.getCoordinate());
+        Line line = new Line(lineId, input.getBoardId(), input.getPosition());
 
         lineRepository.save(line);
         domainEventBus.postAll(line);
 
         output.setLineId(line.getId());
         output.setBoardId(line.getBoardId());
-        output.setCoordinate(line.getCoordinate());
+        output.setPosition(line.getPosition());
     }
 }

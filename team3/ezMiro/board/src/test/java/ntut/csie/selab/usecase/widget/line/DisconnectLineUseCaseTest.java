@@ -6,7 +6,7 @@ import ntut.csie.selab.adapter.gateway.repository.springboot.widget.LineReposito
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
 import ntut.csie.selab.adapter.widget.LineRepositoryImpl;
 import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.entity.model.widget.Line;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
@@ -56,13 +56,13 @@ public class DisconnectLineUseCaseTest {
 
         String boardId = "0";
         String lineId = "1";
-        Coordinate lineCoordinate = new Coordinate(1, 1, 2, 2);
-        Line line = new Line(lineId, boardId, lineCoordinate);
+        Position linePosition = new Position(1, 1, 2, 2);
+        Line line = new Line(lineId, boardId, linePosition);
 
         lineRepository.save(line);
         String stickyNoteId = "2";
-        Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
-        Widget stickyNote = new StickyNote(stickyNoteId, boardId, stickyNoteCoordinate);
+        Position stickyNotePosition = new Position(1, 1, 2, 2);
+        Widget stickyNote = new StickyNote(stickyNoteId, boardId, stickyNotePosition);
         stickyNoteRepository.save(stickyNote);
 
         String endPoint = "head";

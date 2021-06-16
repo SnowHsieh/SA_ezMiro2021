@@ -2,7 +2,7 @@ package ntut.csie.selab.usecase.widget.stickynote;
 
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
 import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
@@ -34,8 +34,8 @@ public class ChangeColorOfStickyNoteUseCaseTest {
         // Arrange
         StickyNoteRepository stickyNoteRepository = new StickyNoteRepositoryImpl(stickyNoteRepositoryPeer);
         String stickyNodeId = "1";
-        Coordinate coordinate = new Coordinate(1, 1, 2, 2);
-        Widget stickyNote = new StickyNote(stickyNodeId, "0", coordinate);
+        Position position = new Position(1, 1, 2, 2);
+        Widget stickyNote = new StickyNote(stickyNodeId, "0", position);
         stickyNoteRepository.save(stickyNote);
         DomainEventBus domainEventBus = new DomainEventBus();
         ChangeColorOfStickyNoteUseCase changeColorOfStickyNoteUseCase = new ChangeColorOfStickyNoteUseCase(stickyNoteRepository, domainEventBus);

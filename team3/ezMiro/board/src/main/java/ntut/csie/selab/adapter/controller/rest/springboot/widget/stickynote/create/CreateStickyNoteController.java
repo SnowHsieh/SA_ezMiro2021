@@ -1,7 +1,7 @@
 package ntut.csie.selab.adapter.controller.rest.springboot.widget.stickynote.create;
 
 
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteInput;
 import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteOutput;
 import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteUseCase;
@@ -43,7 +43,7 @@ public class CreateStickyNoteController {
         }
 
         input.setBoardId(boardId);
-        input.setCoordinate(new Coordinate(topLeftX, topLeftY, bottomRightX, bottomRightY));
+        input.setPosition(new Position(topLeftX, topLeftY, bottomRightX, bottomRightY));
         createStickyNoteUseCase.execute(input, output);
 
         return output.getStickyNoteId();

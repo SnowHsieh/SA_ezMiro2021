@@ -1,12 +1,12 @@
 package ntut.csie.selab.usecase.widget.stickynote.create;
 
 
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 
 public class CreateStickyNoteOutput {
     private String stickyNoteId;
     private String boardId;
-    private Coordinate coordinate;
+    private Position position;
 
     public String getStickyNoteId() {
         return stickyNoteId;
@@ -16,16 +16,16 @@ public class CreateStickyNoteOutput {
         return boardId;
     }
 
-    public Coordinate getCoordinate() {
-        return coordinate;
+    public Position getPosition() {
+        return position;
     }
 
     public void setBoardId(String boardId) {
         this.boardId = boardId;
     }
 
-    public void setCoordinate(Coordinate coordinate) {
-        this.coordinate = coordinate;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public void setStickyNoteId(String stickyNoteId) {

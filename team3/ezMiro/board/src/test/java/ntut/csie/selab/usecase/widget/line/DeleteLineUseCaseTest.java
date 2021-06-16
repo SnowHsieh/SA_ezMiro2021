@@ -2,7 +2,7 @@ package ntut.csie.selab.usecase.widget.line;
 
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.LineRepositoryPeer;
 import ntut.csie.selab.adapter.widget.LineRepositoryImpl;
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.entity.model.widget.Line;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
@@ -37,8 +37,8 @@ public class DeleteLineUseCaseTest {
 
         String boardId = "0";
         String lineId = "1";
-        Coordinate lineCoordinate = new Coordinate(1, 1, 2, 2);
-        Widget line = new Line(lineId, boardId, lineCoordinate);
+        Position linePosition = new Position(1, 1, 2, 2);
+        Widget line = new Line(lineId, boardId, linePosition);
         lineRepository.save(line);
 
         DeleteLineUseCase deleteLineUseCase = new DeleteLineUseCase(lineRepository, domainEventBus);

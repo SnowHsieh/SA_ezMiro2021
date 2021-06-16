@@ -7,7 +7,7 @@ import ntut.csie.selab.adapter.gateway.repository.springboot.board.CommittedWidg
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
 import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
 import ntut.csie.selab.entity.model.board.Board;
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.board.BoardRepository;
@@ -55,15 +55,15 @@ public class CreateStickyNoteUseCaseTest {
         CreateStickyNoteInput input = new CreateStickyNoteInput();
         CreateStickyNoteOutput output = new CreateStickyNoteOutput();
         input.setBoardId("1");
-        input.setCoordinate(new Coordinate(1, 1, 2, 2));
+        input.setPosition(new Position(1, 1, 2, 2));
 
         // Act
         createStickyNoteUseCase.execute(input, output);
 
         // Assert
         Assert.assertEquals("1", output.getBoardId());
-        Assert.assertEquals(new Point(1, 1), output.getCoordinate().getTopLeft());
-        Assert.assertEquals(new Point(2, 2), output.getCoordinate().getBottomRight());
+        Assert.assertEquals(new Point(1, 1), output.getPosition().getTopLeft());
+        Assert.assertEquals(new Point(2, 2), output.getPosition().getBottomRight());
         Assert.assertTrue(stickyNoteRepository.findById(output.getStickyNoteId()).isPresent());
         Assert.assertEquals(output.getStickyNoteId(), stickyNoteRepository.findById(output.getStickyNoteId()).get().getId());
         Assert.assertEquals(1, domainEventBus.getCount());
@@ -88,7 +88,7 @@ public class CreateStickyNoteUseCaseTest {
         CreateStickyNoteInput input = new CreateStickyNoteInput();
         CreateStickyNoteOutput output = new CreateStickyNoteOutput();
         input.setBoardId(boardId);
-        input.setCoordinate(new Coordinate(1, 1, 2, 2));
+        input.setPosition(new Position(1, 1, 2, 2));
 
         // Act
         createStickyNoteUseCase.execute(input, output);

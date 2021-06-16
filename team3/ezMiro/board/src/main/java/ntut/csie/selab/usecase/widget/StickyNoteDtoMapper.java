@@ -1,6 +1,6 @@
 package ntut.csie.selab.usecase.widget;
 
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 
@@ -10,14 +10,14 @@ import java.util.List;
 public class StickyNoteDtoMapper {
 
     public StickyNoteDto domainToDto(Widget widget) {
-        Coordinate coordinate = widget.getCoordinate();
-        int width = coordinate.getBottomRight().x - coordinate.getTopLeft().x;
-        int height = coordinate.getBottomRight().y - coordinate.getTopLeft().y;
+        Position position = widget.getPosition();
+        int width = position.getBottomRight().x - position.getTopLeft().x;
+        int height = position.getBottomRight().y - position.getTopLeft().y;
         StickyNote stickyNote = (StickyNote) widget;
         return new StickyNoteDto(
                 stickyNote.getId(),
-                coordinate.getTopLeft().x,
-                coordinate.getTopLeft().y,
+                position.getTopLeft().x,
+                position.getTopLeft().y,
                 width,
                 height,
                 stickyNote.getColor(),

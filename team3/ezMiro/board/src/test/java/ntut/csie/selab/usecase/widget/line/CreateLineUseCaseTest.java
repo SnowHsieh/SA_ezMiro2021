@@ -2,7 +2,7 @@ package ntut.csie.selab.usecase.widget.line;
 
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.LineRepositoryPeer;
 import ntut.csie.selab.adapter.widget.LineRepositoryImpl;
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.JpaApplicationTest;
 import ntut.csie.selab.usecase.widget.LineRepository;
@@ -39,15 +39,15 @@ public class CreateLineUseCaseTest {
         CreateLineOutput output = new CreateLineOutput();
         String boardId = "1";
         input.setBoardId(boardId);
-        input.setCoordinate(new Coordinate(1, 1, 2, 2));
+        input.setPosition(new Position(1, 1, 2, 2));
 
         // Act
         createLineUseCase.execute(input, output);
 
         // Assert
         Assert.assertEquals("1", output.getBoardId());
-        Assert.assertEquals(new Point(1, 1), output.getCoordinate().getTopLeft());
-        Assert.assertEquals(new Point(2, 2), output.getCoordinate().getBottomRight());
+        Assert.assertEquals(new Point(1, 1), output.getPosition().getTopLeft());
+        Assert.assertEquals(new Point(2, 2), output.getPosition().getBottomRight());
         Assert.assertTrue(lineRepository.findById(output.getLineId()).isPresent());
         Assert.assertEquals(output.getLineId(), lineRepository.findById(output.getLineId()).get().getId());
         Assert.assertEquals(1, domainEventBus.getCount());

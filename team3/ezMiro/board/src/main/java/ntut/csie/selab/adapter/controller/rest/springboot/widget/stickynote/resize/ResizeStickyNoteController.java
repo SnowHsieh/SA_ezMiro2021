@@ -1,6 +1,6 @@
 package ntut.csie.selab.adapter.controller.rest.springboot.widget.stickynote.resize;
 
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.usecase.widget.stickynote.resize.ResizeStickyNoteUseCase;
 import ntut.csie.selab.usecase.widget.stickynote.resize.ResizeStickyNoteInput;
 import ntut.csie.selab.usecase.widget.stickynote.resize.ResizeStickyNoteOutput;
@@ -40,7 +40,7 @@ public class ResizeStickyNoteController {
         }
 
         input.setStickyNoteId(stickyNoteId);
-        input.setCoordinate(new Coordinate(topLeftX, topLeftY, bottomLeftX, bottomLeftY));
+        input.setPosition(new Position(topLeftX, topLeftY, bottomLeftX, bottomLeftY));
         resizeStickyNoteUseCase.execute(input, output);
 
         return output.getStickyNoteId();

@@ -21,12 +21,12 @@ public class ResizeStickyNoteUseCase {
         if (widget.isPresent()) {
             Widget stickyNote = widget.get();
             stickyNote.clearDomainEvents();
-            stickyNote.resize(input.getCoordinate());
+            stickyNote.resize(input.getPosition());
             stickyNoteRepository.save(stickyNote);
             eventBus.postAll(stickyNote);
 
             output.setStickyNoteId(input.getStickyNoteId());
-            output.setCoordinate(input.getCoordinate());
+            output.setPosition(input.getPosition());
         } else {
             throw new RuntimeException("Sticky note not found, sticky note id = " + input.getStickyNoteId());
         }

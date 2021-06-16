@@ -1,10 +1,10 @@
 package ntut.csie.selab.usecase.widget.stickynote.move;
 
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 
 public class MoveStickyNoteInput {
     private String stickyNoteId;
-    private Coordinate coordinate;
+    private Position position;
 
     public String getStickyNoteId() {
         return stickyNoteId;
@@ -14,11 +14,11 @@ public class MoveStickyNoteInput {
         this.stickyNoteId = stickyNoteId;
     }
 
-    public Coordinate getCoordinate() {
-        return coordinate;
+    public Position getPosition() {
+        return position;
     }
 
-    public void setCoordinate(Coordinate coordinate) {
-        this.coordinate = coordinate;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 }

@@ -7,14 +7,14 @@ import java.util.Date;
 
 public abstract class Widget extends AggregateRoot<String> {
     protected String boardId;
-    protected Coordinate coordinate;
+    protected Position position;
     protected String color;
     protected String type;
 
-    public Widget(String id, String boardId, Coordinate coordinate, String type) {
+    public Widget(String id, String boardId, Position position, String type) {
         super(id);
         this.boardId = boardId;
-        this.coordinate = coordinate;
+        this.position = position;
         this.color = "#FFFAAD";
         this.type = type;
 
@@ -34,22 +34,22 @@ public abstract class Widget extends AggregateRoot<String> {
         return boardId;
     }
 
-    public Coordinate getCoordinate() {
-        return coordinate;
+    public Position getPosition() {
+        return position;
     }
 
-    public void setCoordinate(Coordinate coordinate) {
-        this.coordinate = coordinate;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
-    public void move(Coordinate coordinate) {
-        setCoordinate(coordinate);
+    public void move(Position position) {
+        setPosition(position);
 
         addDomainEvent(new WidgetMoved(new Date(), boardId, id, type));
     }
 
-    public void resize(Coordinate coordinate) {
-        setCoordinate(coordinate);
+    public void resize(Position position) {
+        setPosition(position);
 
         addDomainEvent(new WidgetResized(new Date(), boardId, id));
     }

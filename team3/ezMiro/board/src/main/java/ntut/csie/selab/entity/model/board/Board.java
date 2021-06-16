@@ -24,7 +24,7 @@ public class Board extends AggregateRoot<String> {
         this.teamId = teamId;
         this.boardName = boardName;
         this.committedWidgets = new ArrayList<>();
-
+        this.cursors = new HashSet<>();
         addDomainEvent(new BoardCreated(new Date(), id, teamId));
     }
 

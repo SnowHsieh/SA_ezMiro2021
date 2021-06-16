@@ -1,6 +1,6 @@
 package ntut.csie.selab.adapter.gateway.repository.springboot.widget;
 
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 
@@ -13,10 +13,10 @@ public class StickyNoteDataMapper {
         return new StickyNoteData(
                 stickyNote.getId(),
                 stickyNote.getBoardId(),
-                stickyNote.getCoordinate().getTopLeft().x,
-                stickyNote.getCoordinate().getTopLeft().y,
-                stickyNote.getCoordinate().getBottomRight().x,
-                stickyNote.getCoordinate().getBottomRight().y,
+                stickyNote.getPosition().getTopLeft().x,
+                stickyNote.getPosition().getTopLeft().y,
+                stickyNote.getPosition().getBottomRight().x,
+                stickyNote.getPosition().getBottomRight().y,
                 stickyNote.getColor(),
                 stickyNote.getTextColor(),
                 stickyNote.getText(),
@@ -31,9 +31,9 @@ public class StickyNoteDataMapper {
     }
 
     public static Widget dataToDomain(StickyNoteData stickyNoteData) {
-        Coordinate coordinate = new Coordinate(stickyNoteData.getTopLeftX(), stickyNoteData.getTopLeftY(), stickyNoteData.getBottomRightX(), stickyNoteData.getBottomRightY());
+        Position position = new Position(stickyNoteData.getTopLeftX(), stickyNoteData.getTopLeftY(), stickyNoteData.getBottomRightX(), stickyNoteData.getBottomRightY());
         // TODO 要把widget型態(sticky note, line, etc.)存入資料庫，用Mapper時用Factory生不同的instance，這邊先stickynote寫死
-        StickyNote stickyNote = new StickyNote(stickyNoteData.getWidgetId(), stickyNoteData.getBoardId(), coordinate);
+        StickyNote stickyNote = new StickyNote(stickyNoteData.getWidgetId(), stickyNoteData.getBoardId(), position);
         stickyNote.setColor(stickyNoteData.getColor());
         stickyNote.setTextColor(stickyNoteData.getTextColor());
         stickyNote.setText(stickyNoteData.getText());

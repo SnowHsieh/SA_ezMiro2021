@@ -4,7 +4,7 @@ import ntut.csie.selab.adapter.board.BoardRepositoryImpl;
 import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardRepositoryPeer;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
 import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.model.DomainEventBus;
@@ -52,21 +52,21 @@ public class MoveStickyNoteUseCaseTest {
         domainEventBus.register(notifyUsersInBoard);
 
         String stickyNoteId = "1";
-        Coordinate stickyNoteCoordinate = new Coordinate(1, 1, 2, 2);
-        Widget stickyNote = new StickyNote(stickyNoteId, "0", stickyNoteCoordinate);
+        Position stickyNotePosition = new Position(1, 1, 2, 2);
+        Widget stickyNote = new StickyNote(stickyNoteId, "0", stickyNotePosition);
         stickyNoteRepository.save(stickyNote);
         MoveStickyNoteUseCase moveStickyNoteUseCase = new MoveStickyNoteUseCase(stickyNoteRepository, domainEventBus);
         MoveStickyNoteInput input = new MoveStickyNoteInput();
         MoveStickyNoteOutput output = new MoveStickyNoteOutput();
         input.setStickyNoteId(stickyNoteId);
-        input.setCoordinate(new Coordinate(4, 4, 5, 5));
+        input.setPosition(new Position(4, 4, 5, 5));
 
         // Act
         moveStickyNoteUseCase.execute(input, output);
 
         // Assert
-        Assert.assertEquals(new Point(4, 4), output.getCoordinate().getTopLeft());
-        Assert.assertEquals(new Point(5, 5), output.getCoordinate().getBottomRight());
+        Assert.assertEquals(new Point(4, 4), output.getPosition().getTopLeft());
+        Assert.assertEquals(new Point(5, 5), output.getPosition().getBottomRight());
         Assert.assertEquals(2, domainEventBus.getCount());
     }
 

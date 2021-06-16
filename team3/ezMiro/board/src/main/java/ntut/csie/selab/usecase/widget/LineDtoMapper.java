@@ -11,10 +11,10 @@ public class LineDtoMapper {
         Line line = (Line) widget;
         return new LineDto(
                 line.getId(),
-                line.getCoordinate().getTopLeft().x,
-                line.getCoordinate().getTopLeft().y,
-                line.getCoordinate().getBottomRight().x,
-                line.getCoordinate().getBottomRight().y,
+                line.getPosition().getTopLeft().x,
+                line.getPosition().getTopLeft().y,
+                line.getPosition().getBottomRight().x,
+                line.getPosition().getBottomRight().y,
                 line.getHeadWidgetId() == null ? null : line.getHeadWidgetId(),
                 line.getTailWidgetId() == null ? null : line.getTailWidgetId()
         );

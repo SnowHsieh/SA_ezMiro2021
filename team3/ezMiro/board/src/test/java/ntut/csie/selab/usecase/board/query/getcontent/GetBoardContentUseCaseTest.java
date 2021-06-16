@@ -7,7 +7,7 @@ import ntut.csie.selab.adapter.presenter.board.getcontent.BoardContentViewModel;
 import ntut.csie.selab.adapter.widget.LineRepositoryImpl;
 import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
 import ntut.csie.selab.entity.model.board.Board;
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.entity.model.widget.WidgetType;
@@ -78,19 +78,19 @@ public class GetBoardContentUseCaseTest {
         Board board = new Board(boardId,"firstTeam", "firstBoard");
         boardRepository.save(board);
 
-        Widget readModel = new StickyNote("readModelId", boardId, new Coordinate(0, 20, 10, 30));
+        Widget readModel = new StickyNote("readModelId", boardId, new Position(0, 20, 10, 30));
         stickyNoteRepository.save(readModel);
         board.commitWidgetCreation("readModelId");
 
-        Widget command = new StickyNote("commandId", boardId, new Coordinate(15, 20, 25, 30));
+        Widget command = new StickyNote("commandId", boardId, new Position(15, 20, 25, 30));
         stickyNoteRepository.save(command);
         board.commitWidgetCreation("commandId");
 
-        Widget aggregate = new StickyNote("aggregateId", boardId, new Coordinate(20, 0, 30, 10));
+        Widget aggregate = new StickyNote("aggregateId", boardId, new Position(20, 0, 30, 10));
         stickyNoteRepository.save(aggregate);
         board.commitWidgetCreation("aggregateId");
 
-        Widget domainEvent = new StickyNote("domainEventId", boardId, new Coordinate(30, 20, 40, 30));
+        Widget domainEvent = new StickyNote("domainEventId", boardId, new Position(30, 20, 40, 30));
         stickyNoteRepository.save(domainEvent);
         board.commitWidgetCreation("domainEventId");
     }

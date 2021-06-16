@@ -3,7 +3,7 @@ package ntut.csie.selab.usecase.widget.query.getwidget;
 import ntut.csie.selab.adapter.gateway.repository.springboot.widget.StickyNoteRepositoryPeer;
 import ntut.csie.selab.adapter.presenter.widget.getwidget.StickyNoteViewModel;
 import ntut.csie.selab.adapter.widget.StickyNoteRepositoryImpl;
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.usecase.JpaApplicationTest;
@@ -53,7 +53,7 @@ public class GetWidgetUseCaseTest {
         String boardId = "boardId";
         String stickyNoteId = "stickyNoteId";
 
-        Widget readModel = new StickyNote(stickyNoteId, boardId, new Coordinate(0, 20, 10, 30));
+        Widget readModel = new StickyNote(stickyNoteId, boardId, new Position(0, 20, 10, 30));
         stickyNoteRepository.save(readModel);
     }
 }

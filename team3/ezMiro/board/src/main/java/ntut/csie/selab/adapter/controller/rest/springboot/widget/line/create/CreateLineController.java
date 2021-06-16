@@ -1,10 +1,9 @@
 package ntut.csie.selab.adapter.controller.rest.springboot.widget.line.create;
 
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 import ntut.csie.selab.usecase.widget.line.create.CreateLineInput;
 import ntut.csie.selab.usecase.widget.line.create.CreateLineOutput;
 import ntut.csie.selab.usecase.widget.line.create.CreateLineUseCase;
-import ntut.csie.selab.usecase.widget.stickynote.create.CreateStickyNoteOutput;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +41,7 @@ public class CreateLineController {
         }
 
         input.setBoardId(boardId);
-        input.setCoordinate(new Coordinate(topLeftX, topLeftY, bottomRightX, bottomRightY));
+        input.setPosition(new Position(topLeftX, topLeftY, bottomRightX, bottomRightY));
         createLineUseCase.execute(input, output);
 
         return output.getLineId();

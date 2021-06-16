@@ -1,11 +1,11 @@
 package ntut.csie.selab.usecase.widget.line.create;
 
-import ntut.csie.selab.entity.model.widget.Coordinate;
+import ntut.csie.selab.entity.model.widget.Position;
 
 public class CreateLineOutput {
     private String lineId;
     private String boardId;
-    private Coordinate coordinate;
+    private Position position;
 
     public String getLineId() {
         return lineId;
@@ -15,8 +15,8 @@ public class CreateLineOutput {
         return boardId;
     }
 
-    public Coordinate getCoordinate() {
-        return coordinate;
+    public Position getPosition() {
+        return position;
     }
 
     public void setLineId(String lineId) {
@@ -27,7 +27,7 @@ public class CreateLineOutput {
         this.boardId = boardId;
     }
 
-    public void setCoordinate(Coordinate coordinate) {
-        this.coordinate = coordinate;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 }
