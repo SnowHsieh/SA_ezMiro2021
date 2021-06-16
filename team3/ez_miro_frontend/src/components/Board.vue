@@ -258,7 +258,7 @@ export default {
       }
     },
     handleLineDisconnection (line) {
-      console.log(line)
+      console.log('handleLineDisconnection', line)
       // const me = this
       // this.canvas.getObjects().forEach(function (o) {
       //   if (o.id === line.lineId) {
@@ -741,12 +741,21 @@ export default {
             }
           })
         }, 200)
+
+        const lineHeadPointer = { x: line.x1, y: line.y1 }
         me.canvas.forEachObject(function (obj) {
-          if (!e.target.intersectsWithObject(obj) && e.target.connectedWidgetId !== null) {
-            DisconnectLine(me.boardId, {
-              lineId: line.id,
-              endPoint: 'head'
-            })
+          if (obj.id === line.circleHead.connectedWidgetId) {
+            const { mtr, ...coordsWithoutMtr } = obj.oCoords
+            const connectedCrood = me.getCloestACrood(lineHeadPointer, Object.values(coordsWithoutMtr))
+            const connectedPointer = { x: connectedCrood.x, y: connectedCrood.y }
+            const deviation = 2
+            if (Math.abs(connectedPointer.x - lineHeadPointer.x) > deviation || Math.abs(connectedPointer.y - lineHeadPointer.y) > deviation) {
+              DisconnectLine(me.boardId, {
+                lineId: line.id,
+                endPoint: 'head'
+              })
+              return false
+            }
           }
         })
       })
@@ -762,12 +771,21 @@ export default {
             }
           })
         }, 200)
+
+        const lineTailPointer = { x: line.x2, y: line.y2 }
         me.canvas.forEachObject(function (obj) {
-          if (!e.target.intersectsWithObject(obj) && e.target.connectedWidgetId !== null) {
-            DisconnectLine(me.boardId, {
-              lineId: line.id,
-              endPoint: 'tail'
-            })
+          if (obj.id === line.circleTail.connectedWidgetId) {
+            const { mtr, ...coordsWithoutMtr } = obj.oCoords
+            const connectedCrood = me.getCloestACrood(lineTailPointer, Object.values(coordsWithoutMtr))
+            const connectedPointer = { x: connectedCrood.x, y: connectedCrood.y }
+            const deviation = 2
+            if (Math.abs(connectedPointer.x - lineTailPointer.x) > deviation || Math.abs(connectedPointer.y - lineTailPointer.y) > deviation) {
+              DisconnectLine(me.boardId, {
+                lineId: line.id,
+                endPoint: 'tail'
+              })
+              return false
+            }
           }
         })
       })
