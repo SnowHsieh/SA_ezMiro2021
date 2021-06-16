@@ -1,8 +1,9 @@
 <template>
   <div class="board" oncontextmenu="return false">
-    <button type="button" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.LINE)">Line</button>
-    <button type="button" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.STICKY_NOTE)">Sticky Note</button>
-    <canvas id="canvas" ref='board'></canvas>
+    <!-- <h5 class="ml-2" v-show="isDataLoaded">{{ user.name }}</h5> -->
+    <button type="button" class="btn btn-success mr-3" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.LINE)" v-show="isDataLoaded">Line</button>
+    <button type="button" class="btn btn-warning" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.STICKY_NOTE)" v-show="isDataLoaded">Sticky Note</button>
+    <canvas id="canvas" ref='board' :class="canvasStyle"></canvas>
     <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
       <li @click="deleteWidget()" class="list-group-item">Delete</li>
       <li class="list-group-item">
@@ -23,6 +24,13 @@
     <div class="cursors" v-for="user in this.collaborator" v-bind:key="user.userId" :style="{'top': user.y + 'px', 'left': user.x + 'px'}">
       {{user.userId}}
     </div>
+    <div class="d-flex justify-content-center">
+    <button class="btn btn-outline-secondary" type="button" disabled>
+      <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+      Loading...
+    </button>
+    </div>
+
   </div>
 </template>
 
@@ -40,6 +48,7 @@ import {
   CreateLine,
   MoveLineBy,
   LinkLine,
+  DisconnectLine,
   DeleteLineBy
 } from '@/apis/Widget'
 import '@/models/StickyNote'
@@ -71,9 +80,11 @@ export default {
       isSamplingCursorDelayFinish: true,
       isSamplingWidgetDelayFinish: true,
       isSamplingLineDelayFinish: true,
-      user: null,
+      user: { name: '' },
       collaborator: [],
-      widgetTypeOfCreation: 0
+      widgetTypeOfCreation: 0,
+      isDataLoaded: false,
+      canvasStyle: ''
     }
   },
   async created () {
@@ -86,6 +97,8 @@ export default {
     this.loadAllLine(this.boardContent.lineDtos)
     this.user = this.createStubUser()
     this.initWebSocketAndBingEventListener()
+    this.isDataLoaded = true
+    this.canvasStyle = 'border border-secondary'
   },
   methods: {
     initCanvas () {
@@ -115,15 +128,15 @@ export default {
       }
       this.webSocket.onmessage = async function (e) {
         const message = await JSON.parse(e.data)
-        if (message.domainEvent === 'widgetDeletionNotifiedToAllUser') {
+        if (message.domainEvent === 'widgetDeleted') {
           me.whenWidgetDeleted(message.widgets)
-        } else if (message.domainEvent === 'notifyTextOfWidgetModifiedToAllUser') {
+        } else if (message.domainEvent === 'textOfWidgetEdited') {
           me.whenTextOfWidgetEdited(message.widgets)
-        } else if (message.domainEvent === 'notifyWidgetResizedToAllUser') {
+        } else if (message.domainEvent === 'widgetResized') {
           me.whenWidgetResized(message.widgets)
-        } else if (message.domainEvent === 'notifyColorOfWidgetModifiedToAllUser') {
+        } else if (message.domainEvent === 'colorOfWidgetChanged') {
           me.whenColorOfWidgetChanged(message.widgets)
-        } else if (message.domainEvent === 'notifyWidgetZOrderRearrangedToAllUser') {
+        } else if (message.domainEvent === 'widgetZOrderChanged') {
           me.whenZOrderOfWidgetChanged(message.widgets)
         } else if (message.domainEvent === 'boardEntered') {
           me.handleCursorCreation(message.cursor)
@@ -131,6 +144,8 @@ export default {
           me.handleCursorMovement(message.cursor)
         } else if (message.domainEvent === 'boardLeft') {
           me.handleCursorDeletion(message.cursor)
+        } else if (message.domainEvent === 'lineDisconnected') {
+          me.handleLineDisconnection(message.line)
         } else {
           me.handleWidgetMessage(message.widgets)
         }
@@ -219,7 +234,6 @@ export default {
       const canvas = this.canvas
       canvas.getObjects().forEach(function (o) {
         if (o.id === widgetDto.widgetId) {
-          console.log(widgetDto)
           if (widgetDto.zorder === 0) {
             canvas.sendToBack(o)
           } else {
@@ -253,6 +267,39 @@ export default {
           this.collaborator.splice(i, 1)
         }
       }
+    },
+    handleLineDisconnection (line) {
+      const me = this
+      this.canvas.getObjects().forEach(function (o) {
+        if (o.id === line.lineId) {
+          if (line.endPoint === 'head') {
+            o.circleHead.connectedWidgetId = null
+          } else {
+            o.circleTail.connectedWidgetId = null
+          }
+
+          const newLineDto = {
+            headWidgetId: o.circleHead.connectedWidgetId,
+            tailWidgetId: o.circleTail.connectedWidgetId,
+            topLeftX: o.x1,
+            topLeftY: o.y1,
+            bottomRightX: o.x2,
+            bottomRightY: o.y2,
+            type: 'line',
+            widgetId: o.id
+          }
+
+          me.canvas.remove(o.circleHead)
+          me.canvas.remove(o.circleTail)
+          me.canvas.remove(o)
+          o.circleHead.off('moving')
+          o.circleTail.off('moving')
+          o.off('moving')
+          me.boardContent.widgetDtos.push(newLineDto)
+          me.loadLineIntoCanvas(newLineDto)
+          return false
+        }
+      })
     },
     handleWidgetMessage (widgets) {
       if (widgets !== undefined) {
@@ -723,6 +770,23 @@ export default {
             }
           })
         }, 200)
+
+        const lineHeadPointer = { x: line.x1, y: line.y1 }
+        me.canvas.forEachObject(function (obj) {
+          if (obj.id === line.circleHead.connectedWidgetId) {
+            const { mtr, ...coordsWithoutMtr } = obj.oCoords
+            const connectedCrood = me.getCloestACrood(lineHeadPointer, Object.values(coordsWithoutMtr))
+            const connectedPointer = { x: connectedCrood.x, y: connectedCrood.y }
+            const deviation = 2
+            if (Math.abs(connectedPointer.x - lineHeadPointer.x) > deviation || Math.abs(connectedPointer.y - lineHeadPointer.y) > deviation) {
+              DisconnectLine(me.boardId, {
+                lineId: line.id,
+                endPoint: 'head'
+              })
+              return false
+            }
+          }
+        })
       })
 
       line.circleTail.on('moved', function (e) {
@@ -736,6 +800,23 @@ export default {
             }
           })
         }, 200)
+
+        const lineTailPointer = { x: line.x2, y: line.y2 }
+        me.canvas.forEachObject(function (obj) {
+          if (obj.id === line.circleTail.connectedWidgetId) {
+            const { mtr, ...coordsWithoutMtr } = obj.oCoords
+            const connectedCrood = me.getCloestACrood(lineTailPointer, Object.values(coordsWithoutMtr))
+            const connectedPointer = { x: connectedCrood.x, y: connectedCrood.y }
+            const deviation = 2
+            if (Math.abs(connectedPointer.x - lineTailPointer.x) > deviation || Math.abs(connectedPointer.y - lineTailPointer.y) > deviation) {
+              DisconnectLine(me.boardId, {
+                lineId: line.id,
+                endPoint: 'tail'
+              })
+              return false
+            }
+          }
+        })
       })
       return line
     },

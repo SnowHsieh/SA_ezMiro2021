@@ -116,7 +116,7 @@ public class NotifyUsersInBoard {
 
         try {
             widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(widgetDeletedDto)));
-            message.put("domainEvent", "widgetDeletionNotifiedToAllUser");
+            message.put("domainEvent", "widgetDeleted");
             message.put("widgets", widgetsInfo);
         } catch (Exception e) {
             e.printStackTrace();
@@ -182,7 +182,7 @@ public class NotifyUsersInBoard {
 
             try {
                 widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(committedWidgetDto)));
-                message.put("domainEvent", "notifyWidgetZOrderRearrangedToAllUser");
+                message.put("domainEvent", "widgetZOrderChanged");
                 message.put("widgets", widgetsInfo);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -209,7 +209,7 @@ public class NotifyUsersInBoard {
 
         try {
             widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(stickyNoteDto)));
-            message.put("domainEvent", "notifyWidgetResizedToAllUser");
+            message.put("domainEvent", "widgetResized");
             message.put("widgets", widgetsInfo);
         } catch (Exception e) {
             e.printStackTrace();
@@ -235,7 +235,7 @@ public class NotifyUsersInBoard {
             try {
                 widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(stickyNoteDto)));
                 message.put("widgets", widgetsInfo);
-                message.put("domainEvent", "notifyTextOfWidgetModifiedToAllUser");
+                message.put("domainEvent", "textOfWidgetEdited");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -250,6 +250,7 @@ public class NotifyUsersInBoard {
     public void whenLineLinked(LineLinked lineLinked) {
         String boardId = lineLinked.getBoardId();
         JSONObject message = new JSONObject();
+        JSONObject lineInfo = new JSONObject();
         try {
             message.put("domainEvent", "lineLinked");
             message.put("lineId", lineLinked.getLineId());
@@ -264,11 +265,13 @@ public class NotifyUsersInBoard {
     @Subscribe
     public void whenLineDisconnected(LineDisconnected lineDisconnected) {
         String boardId = lineDisconnected.getBoardId();
+        JSONObject lineInfo = new JSONObject();
         JSONObject message = new JSONObject();
         try {
+            lineInfo.put("lineId", lineDisconnected.getLineId());
+            lineInfo.put("endPoint", lineDisconnected.getLineEndPoint());
+            message.put("line", lineInfo);
             message.put("domainEvent", "lineDisconnected");
-            message.put("lineId", lineDisconnected.getLineId());
-            message.put("endPoint", lineDisconnected.getLineEndPoint());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -332,7 +335,7 @@ public class NotifyUsersInBoard {
             try {
                 widgetsInfo.put(new JSONObject(objectMapper.writeValueAsString(stickyNoteDto)));
                 message.put("widgets", widgetsInfo);
-                message.put("domainEvent", "notifyColorOfWidgetModifiedToAllUser");
+                message.put("domainEvent", "colorOfWidgetChanged");
             } catch (Exception e) {
                 e.printStackTrace();
             }
