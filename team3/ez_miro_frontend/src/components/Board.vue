@@ -1,9 +1,13 @@
 <template>
   <div class="board" oncontextmenu="return false">
   <div class="d-flex tool-bar">
-    <h5 class="mr-2" v-show="isDataLoaded">{{ user.name }}</h5>
+    <h5 class="mr-2" v-show="isDataLoaded">我是：{{ user.name }}</h5>
     <button type="button" class="btn btn-success mr-3 widgetButton" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.LINE)" :class="{'active': this.widgetTypeOfCreation === CREATE_WIDGET_TYPE.LINE}" v-show="isDataLoaded">Line</button>
     <button type="button" class="btn btn-warning widgetButton" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.STICKY_NOTE)" :class="{'active': this.widgetTypeOfCreation === CREATE_WIDGET_TYPE.STICKY_NOTE}" v-show="isDataLoaded">Sticky Note</button>
+    <label style="font-size:20px;" class="ml-2">看板裡有：</label>
+    <label class="mr-2" style="font-size:20px;" v-for="user in this.collaborator" v-bind:key="user.userId">
+      {{user.userId}}
+    </label>
   </div>
     <canvas id="canvas" ref='board' :class="canvasStyle"></canvas>
     <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
