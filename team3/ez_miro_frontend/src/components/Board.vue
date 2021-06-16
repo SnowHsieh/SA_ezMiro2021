@@ -127,15 +127,15 @@ export default {
       }
       this.webSocket.onmessage = async function (e) {
         const message = await JSON.parse(e.data)
-        if (message.domainEvent === 'widgetDeletionNotifiedToAllUser') {
+        if (message.domainEvent === 'widgetDeleted') {
           me.whenWidgetDeleted(message.widgets)
-        } else if (message.domainEvent === 'notifyTextOfWidgetModifiedToAllUser') {
+        } else if (message.domainEvent === 'textOfWidgetEdited') {
           me.whenTextOfWidgetEdited(message.widgets)
-        } else if (message.domainEvent === 'notifyWidgetResizedToAllUser') {
+        } else if (message.domainEvent === 'widgetResized') {
           me.whenWidgetResized(message.widgets)
-        } else if (message.domainEvent === 'notifyColorOfWidgetModifiedToAllUser') {
+        } else if (message.domainEvent === 'colorOfWidgetChanged') {
           me.whenColorOfWidgetChanged(message.widgets)
-        } else if (message.domainEvent === 'notifyWidgetZOrderRearrangedToAllUser') {
+        } else if (message.domainEvent === 'widgetZOrderChanged') {
           me.whenZOrderOfWidgetChanged(message.widgets)
         } else if (message.domainEvent === 'boardEntered') {
           me.handleCursorCreation(message.cursor)
