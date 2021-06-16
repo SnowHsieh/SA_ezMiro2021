@@ -280,6 +280,9 @@ export default {
           me.canvas.remove(o.circleHead)
           me.canvas.remove(o.circleTail)
           me.canvas.remove(o)
+          o.circleHead.off('moving')
+          o.circleTail.off('moving')
+          o.off('moving')
           me.boardContent.widgetDtos.push(newLineDto)
           me.loadLineIntoCanvas(newLineDto)
           return false
