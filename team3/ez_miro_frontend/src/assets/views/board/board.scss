@@ -47,3 +47,21 @@
     background-repeat: no-repeat;
   }
 }
+.active {
+  opacity: 0.7;
+}
+
+.widgetButton {
+  width: 150px;
+}
+
+.tool-bar {
+  z-index:99999;
+  position:fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  top: 0;
+  left: 0;
+}

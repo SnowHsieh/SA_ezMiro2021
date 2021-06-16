@@ -1,6 +1,10 @@
 <template>
   <div class="home">
-    <button @click='createBoardAndEnter()'>Create Board And Enter</button>
+    <div class="enterBoard">
+      <input v-model="userName" placeholder="請輸入暱稱">
+      <input v-model="boardId" placeholder="請輸入看板ID">
+      <button @click='createBoardAndEnter()'>Create Board And Enter</button>
+    </div>
   </div>
 </template>
 
@@ -10,13 +14,22 @@ export default {
   name: 'Home',
   components: {
   },
+  data () {
+    return {
+      userName: '',
+      boardId: ''
+    }
+  },
   methods: {
     async createBoardAndEnter () {
-      const boardId = await CreateBoard()
+      if (this.boardId === '') {
+        this.boardId = await CreateBoard()
+      }
       this.$router.push({
         name: 'Board',
         params: {
-          boardId: boardId
+          boardId: this.boardId,
+          userName: this.userName
         }
       })
     }

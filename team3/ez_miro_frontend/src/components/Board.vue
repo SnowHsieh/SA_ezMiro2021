@@ -1,9 +1,9 @@
 <template>
   <div class="board" oncontextmenu="return false">
-  <div class="d-flex" style="z-index:99999;position:fixed;top:0;left:0">
+  <div class="d-flex tool-bar">
     <h5 class="mr-2" v-show="isDataLoaded">{{ user.name }}</h5>
-    <button type="button" class="btn btn-success mr-3" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.LINE)" v-show="isDataLoaded">Line</button>
-    <button type="button" class="btn btn-warning" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.STICKY_NOTE)" v-show="isDataLoaded">Sticky Note</button>
+    <button type="button" class="btn btn-success mr-3 widgetButton" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.LINE)" :class="{'active': this.widgetTypeOfCreation === CREATE_WIDGET_TYPE.LINE}" v-show="isDataLoaded">Line</button>
+    <button type="button" class="btn btn-warning widgetButton" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.STICKY_NOTE)" :class="{'active': this.widgetTypeOfCreation === CREATE_WIDGET_TYPE.STICKY_NOTE}" v-show="isDataLoaded">Sticky Note</button>
   </div>
     <canvas id="canvas" ref='board' :class="canvasStyle"></canvas>
     <ul class="right-click-menu list-group" :style="rightClickMenuStyle" :class="{'right-click-menu-display': isDisplayRightClickMenu}">
@@ -114,11 +114,15 @@ export default {
       this.bindCanvasEventListener()
     },
     createStubUser () {
-      return {
-        name: `匿名北極熊${Math.floor((Math.random() * 100) + 1)}`,
-        x: 0,
-        y: 0
+      var user = {}
+      if (this.$route.params.userName !== '' && this.$route.params.userName !== undefined) {
+        user.name = this.$route.params.userName
+      } else {
+        user.name = `匿名北極熊${Math.floor((Math.random() * 100) + 1)}`
       }
+      user.x = 0
+      user.y = 0
+      return user
     },
     initWebSocketAndBingEventListener () {
       const me = this
@@ -399,7 +403,6 @@ export default {
             info.bottomRightX = e.absolutePointer.x + 50
             info.bottomRightY = e.absolutePointer.y + 50
             CreateLine(me.boardId, info)
-            me.setWidgetTypeOfCreation(me.CREATE_WIDGET_TYPE.STICKY_NOTE)
           }
         }
       })
