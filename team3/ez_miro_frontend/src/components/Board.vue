@@ -133,7 +133,7 @@ export default {
         } else if (message.domainEvent === 'boardLeft') {
           me.handleCursorDeletion(message.cursor)
         } else if (message.domainEvent === 'lineDisconnected') {
-
+          me.handleLineDisconnection(message.line)
         } else {
           me.handleWidgetMessage(message.widgets)
         }
@@ -222,7 +222,6 @@ export default {
       const canvas = this.canvas
       canvas.getObjects().forEach(function (o) {
         if (o.id === widgetDto.widgetId) {
-          console.log(widgetDto)
           if (widgetDto.zorder === 0) {
             canvas.sendToBack(o)
           } else {
@@ -258,19 +257,30 @@ export default {
       }
     },
     handleLineDisconnection (line) {
-      console.log('handleLineDisconnection', line)
-      // const me = this
-      // this.canvas.getObjects().forEach(function (o) {
-      //   if (o.id === line.lineId) {
-      //     // DisconnectLine
-      //     if (line.endPoint === 'head') {
-      //       line.circleHead.connectedWidgetId = null
-      //     } else {
-      //       o.circleTail.connectedWidgetId = null
-      //     }
-      //     // const newLine = me.buildFabricObjectOfLine(line)
-      //   }
-      // })
+      const me = this
+      this.canvas.getObjects().forEach(function (o) {
+        if (o.id === line.lineId) {
+          if (line.endPoint === 'head') {
+            o.circleHead.connectedWidgetId = null
+          } else {
+            o.circleTail.connectedWidgetId = null
+          }
+
+          const newLineDto = {
+            headWidgetId: o.circleHead.connectedWidgetId,
+            tailWidgetId: o.circleTail.connectedWidgetId,
+            topLeftX: o.x1,
+            topLeftY: o.y1,
+            bottomRightX: o.x2,
+            bottomRightY: o.y2,
+            type: 'line',
+            widgetId: o.id
+          }
+          me.deleteWidgetInCanvas(o)
+          me.boardContent.widgetDtos.push(newLineDto)
+          me.loadLineIntoCanvas(newLineDto)
+        }
+      })
     },
     handleWidgetMessage (widgets) {
       if (widgets !== undefined) {
