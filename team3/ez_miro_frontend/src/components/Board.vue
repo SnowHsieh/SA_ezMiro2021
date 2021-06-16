@@ -146,6 +146,8 @@ export default {
           me.handleCursorDeletion(message.cursor)
         } else if (message.domainEvent === 'lineDisconnected') {
           me.handleLineDisconnection(message.line)
+        } else if (message.domainEvent === 'lineLinked') {
+          me.handleLineLink(message)
         } else {
           me.handleWidgetMessage(message.widgets)
         }
@@ -294,12 +296,21 @@ export default {
           me.canvas.remove(o)
           o.circleHead.off('moving')
           o.circleTail.off('moving')
+          o.circleHead.off('moved')
+          o.circleTail.off('moved')
           o.off('moving')
           me.boardContent.widgetDtos.push(newLineDto)
           me.loadLineIntoCanvas(newLineDto)
           return false
         }
       })
+    },
+    handleLineLink ({ lineId, endPoint, targetId }) {
+      const me = this
+      const selectedLine = this.canvas.getObjects().find((widget) => widget.id === lineId)
+      const circle = endPoint === 'head' ? selectedLine.circleHead : selectedLine.circleTail
+      circle.connectedWidgetId = targetId
+      me.connectCircleToWidget(circle)
     },
     handleWidgetMessage (widgets) {
       if (widgets !== undefined) {
