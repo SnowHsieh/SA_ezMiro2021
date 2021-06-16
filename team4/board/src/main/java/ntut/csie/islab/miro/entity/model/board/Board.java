@@ -133,7 +133,7 @@ public class Board extends AggregateRoot<UUID> {
     public void setCursorPosition(UUID userId, Position newPosition) {
         BoardSession boardSession = this.getBoardSessionList().stream().filter(x -> x.getUserId().equals(userId)).findFirst().get();
         Position oldPosition = boardSession.getCursorPosition();
-        boardSession.setCursorPosition(newPosition);
+        boardSession.setCursorPosition(newPosition); //這邊要改成直接丟一個新的boardSession
         addDomainEvent(new CursorMovedDomainEvent(getBoardId(), boardSession.getUserId(), oldPosition, newPosition));
     }
 }

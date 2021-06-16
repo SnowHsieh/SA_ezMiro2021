@@ -27,7 +27,7 @@ public class ChangeLinePathUseCaseTest extends AbstractSpringBootJpaTest {
     }
 
     @Test
-    public void test_create_line_path_usecase() {
+    public void test_change_line_path_usecase() {
         List<Position> positionList = new ArrayList<>();
         positionList.add(new Position(0, 50));
         positionList.add(new Position(100, 150));

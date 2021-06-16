@@ -19,23 +19,12 @@ public class CommittedFigure extends ValueObject {
         return boardId;
     }
 
-    public void setBoardId(UUID boardId) {
-        this.boardId = boardId;
-    }
-
     public UUID getFigureId() {
         return figureId;
-    }
-
-    public void setFigureId(UUID figureId) {
-        this.figureId = figureId;
     }
 
     public FigureTypeEnum getFigureType() {
         return figureType;
     }
 
-    public void setFigureType(FigureTypeEnum figureType) {
-        this.figureType = figureType;
-    }
 }
