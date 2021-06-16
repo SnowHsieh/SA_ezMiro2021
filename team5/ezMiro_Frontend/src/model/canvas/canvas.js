@@ -72,7 +72,7 @@ function getFigure (figureId) {
 }
 
 async function postNote (left, top, width, height, color) {
-  const figureId = miroAPI.note.postNote(this.boardId, left, top, width, height, color)
+  const figureId = await miroAPI.note.postNote(this.boardId, left, top, width, height, color)
   this.addNote(figureId, left, top, width, height, color, '')
 }
 

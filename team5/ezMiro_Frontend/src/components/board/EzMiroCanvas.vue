@@ -70,7 +70,8 @@ export default {
       { title: 'Command', color: '#6CD5F5' },
       { title: 'Domain Event', color: '#FD9E4B' },
       { title: 'Policy', color: '#C08AC9' },
-      { title: 'Aggregate', color: '#FFF9B2' }
+      { title: 'Aggregate', color: '#FFF9B2' },
+      { title: 'User', color: '#FEF445' }
     ],
     canvas: null,
     activeCursorCanvas: null,
@@ -224,16 +225,6 @@ export default {
           return
         }
 
-        if (data.type === 'NotePosted' || data.type === 'LineDrew') {
-          const isExist = this.canvas.getObjects().some((target) => {
-            return target.figureId === data.figureId
-          })
-
-          if (isExist) {
-            return
-          }
-        }
-
         const isActive = this.canvas.getActiveObjects().some((target) => {
           if (target.isType('endpoint')) {
             return target.line.figureId === data.figureId
@@ -246,7 +237,7 @@ export default {
         if (data.type === 'BoardEntered') {
           this.activeCursorCanvas.addCursor(data.userId)
           this.webSocket.send(
-            JSON.stringify({ x: this.mousePosition.x, y: this.mousePosition.y })
+            JSON.stringify({ type: 'MOVE_CURSOR', x: this.mousePosition.x, y: this.mousePosition.y })
           )
         } else if (data.type === 'CursorMoved') {
           const userCursor = this.activeCursorCanvas.getCursor(data.userId)
@@ -289,11 +280,14 @@ export default {
       }
       sendCursorTimerId = setInterval(() => {
         if (preMousePosition.x === this.mousePosition.x &&
-         preMousePosition.y === this.mousePosition.y) {
+          preMousePosition.y === this.mousePosition.y) {
+          this.webSocket.send(
+            JSON.stringify({ type: 'SEND_MESSAGE' })
+          )
           return
         }
         this.webSocket.send(
-          JSON.stringify({ x: this.mousePosition.x, y: this.mousePosition.y })
+          JSON.stringify({ type: 'MOVE_CURSOR', x: this.mousePosition.x, y: this.mousePosition.y })
         )
         preMousePosition.x = this.mousePosition.x
         preMousePosition.y = this.mousePosition.y

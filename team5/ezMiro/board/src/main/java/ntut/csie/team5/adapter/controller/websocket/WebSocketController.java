@@ -81,23 +81,33 @@ public class WebSocketController {
 
     @OnMessage
     public void onMessage(@PathParam(value = "boardId") String boardId, @PathParam(value = "userId") String userId, String message, Session session) {
-
-        MoveCursorInput input = moveCursorUseCase.newInput();
-        CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
-        String boardSessionId = ((WebSocketBroadcaster) boardSessionBroadcaster).getBoardSessionIdBySessionId(session.getId());
-
-        input.setBoardId(boardId);
-        input.setBoardSessionId(boardSessionId);
-
+        String messageType = "";
         try {
-            JSONObject pointer = new JSONObject(message);
-            input.setPositionX(pointer.getInt("x"));
-            input.setPositionY(pointer.getInt("y"));
+            JSONObject messageTypeJSON = new JSONObject(message);
+            if (messageTypeJSON.has("type")) {
+                messageType = messageTypeJSON.getString("type");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        if (messageType.equals("MOVE_CURSOR")) {
+            MoveCursorInput input = moveCursorUseCase.newInput();
+            CqrsCommandPresenter presenter = CqrsCommandPresenter.newInstance();
+            String boardSessionId = ((WebSocketBroadcaster) boardSessionBroadcaster).getBoardSessionIdBySessionId(session.getId());
 
-        moveCursorUseCase.execute(input, presenter);
+            input.setBoardId(boardId);
+            input.setBoardSessionId(boardSessionId);
+
+            try {
+                JSONObject pointer = new JSONObject(message);
+                input.setPositionX(pointer.getInt("x"));
+                input.setPositionY(pointer.getInt("y"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            moveCursorUseCase.execute(input, presenter);
+        }
     }
 
     @OnError

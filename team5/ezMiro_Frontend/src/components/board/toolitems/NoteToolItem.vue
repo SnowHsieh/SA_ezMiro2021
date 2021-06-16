@@ -38,7 +38,8 @@ export default {
       { title: 'Command', color: '#6CD5F5' },
       { title: 'Domain Event', color: '#FD9E4B' },
       { title: 'Policy', color: '#C08AC9' },
-      { title: 'Aggregate', color: '#FFF9B2' }
+      { title: 'Aggregate', color: '#FFF9B2' },
+      { title: 'User', color: '#FEF445' }
     ]
   }),
   methods: {
