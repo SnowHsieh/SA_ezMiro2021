@@ -17,6 +17,7 @@ public class Board extends AggregateRoot<String> {
     private String teamId;
     private String boardName;
     private List<CommittedWidget> committedWidgets;
+    private Set<Cursor> cursors;
 
     public Board(String id, String teamId, String boardName) {
         super(id);
@@ -98,10 +99,10 @@ public class Board extends AggregateRoot<String> {
             int zOrder = i;
             committedWidgets.add(new CommittedWidget(getId(), clone.get(i).getWidgetId(), zOrder));
         }
-
     }
 
     public void addCursor(Cursor cursor) {
+        cursors.add(cursor);
         addDomainEvent(new BoardEntered(new Date(), id, cursor));
     }
 
