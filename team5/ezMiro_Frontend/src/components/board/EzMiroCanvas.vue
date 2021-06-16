@@ -87,8 +87,8 @@ export default {
   async mounted () {
     console.log(this.boardId)
     const boardId = this.boardId
-    this.canvas = markRaw(new Canvas('canvas', 6000, 6000, boardId))
-    this.activeCursorCanvas = markRaw(new CursorCanvas('active_cursors_canvas', 6000, 6000))
+    this.canvas = markRaw(new Canvas('canvas', 12000, 6000, boardId))
+    this.activeCursorCanvas = markRaw(new CursorCanvas('active_cursors_canvas', 12000, 6000))
     this.registerEventBus()
     this.registerCanvasEvent()
     this.registerWindowEvent()
@@ -173,6 +173,7 @@ export default {
       console.log('getBoardContent')
       const boardContent = await miroApi.board.getBoardContent(this.boardId)
       this.canvas.clear()
+      // this.canvas.drawGridFrame()
       boardContent.forEach(figure => {
         console.log(figure)
         if (figure.figureType === 'NOTE') {
@@ -207,7 +208,7 @@ export default {
         name: `匿名使用者${Math.floor(Math.random() * 1000) + 1}`
       }
       this.webSocket = new WebSocket(
-        `ws://localhost:8080/WebSocketServer/${this.boardId}/${this.user.name}`
+        `ws://25.61.152.159:8080/WebSocketServer/${this.boardId}/${this.user.name}`
       )
 
       this.webSocket.onopen = (e) => {
@@ -291,7 +292,7 @@ export default {
         )
         preMousePosition.x = this.mousePosition.x
         preMousePosition.y = this.mousePosition.y
-      }, 200)
+      }, 2000)
     },
     changeNoteColor (color) {
       if (this.activeObject.isType('note')) {
