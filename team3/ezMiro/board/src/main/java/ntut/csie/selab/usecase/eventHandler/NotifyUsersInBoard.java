@@ -7,7 +7,6 @@ import ntut.csie.selab.entity.model.board.Cursor;
 import ntut.csie.selab.entity.model.board.event.BoardCursorMoved;
 import ntut.csie.selab.entity.model.board.event.BoardEntered;
 import ntut.csie.selab.entity.model.board.event.BoardLeft;
-import ntut.csie.selab.entity.model.board.event.WidgetCreationNotifiedToAllUser;
 import ntut.csie.selab.entity.model.widget.StickyNote;
 import ntut.csie.selab.entity.model.widget.Widget;
 import ntut.csie.selab.entity.model.widget.WidgetType;
@@ -22,10 +21,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.awt.*;
 import java.util.Date;
 import java.util.Optional;
-import java.util.Set;
 
 public class NotifyUsersInBoard {
 
@@ -87,7 +84,6 @@ public class NotifyUsersInBoard {
                 }
             }
 
-            domainEventBus.post(new WidgetCreationNotifiedToAllUser(new Date(), widgetCreated.getBoardId(), widgetCreated.getWidgetId()));
             webSocket.sendMessageForAllUsersIn(widgetCreated.getBoardId(), message);
         } else {
             throw new RuntimeException("Widget not found, widget id = " + widgetCreated.getWidgetId());
@@ -121,7 +117,7 @@ public class NotifyUsersInBoard {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        domainEventBus.post(new WidgetDeletionNotifiedToAllUser(new Date()));
+
         webSocket.sendMessageForAllUsersIn(widgetDeleted.getBoardId(), message);
     }
 
@@ -164,7 +160,6 @@ public class NotifyUsersInBoard {
             }
         }
 
-        domainEventBus.post(new WidgetMovementNotifiedToAllUser(new Date()));
         webSocket.sendMessageForAllUsersIn(widgetMoved.getBoardId(), message);
     }
 
@@ -187,7 +182,6 @@ public class NotifyUsersInBoard {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            domainEventBus.post(new WidgetResizeNotifiedToAllUser(new Date()));
             webSocket.sendMessageForAllUsersIn(widgetZOrderChanged.getBoardId(), message);
         }
     }
@@ -214,7 +208,6 @@ public class NotifyUsersInBoard {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        domainEventBus.post(new WidgetResizeNotifiedToAllUser(new Date()));
         webSocket.sendMessageForAllUsersIn(widgetResized.getBoardId(), message);
     }
 
@@ -239,7 +232,6 @@ public class NotifyUsersInBoard {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            domainEventBus.post(new WidgetTextOfWidgetModifiedToAllUser(new Date()));
             webSocket.sendMessageForAllUsersIn(textOfWidgetEdited.getBoardId(), message);
         } else {
             throw new RuntimeException("Widget not found, widget id = " + textOfWidgetEdited.getWidgetId());

@@ -2,9 +2,9 @@ package ntut.csie.selab.usecase.eventHandler;
 
 import com.google.common.eventbus.Subscribe;
 import ntut.csie.selab.entity.model.board.Board;
-import ntut.csie.selab.entity.model.board.event.WidgetCreationNotifiedToAllUser;
 import ntut.csie.selab.entity.model.board.event.WidgetDeletionCommitted;
 import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
+import ntut.csie.selab.entity.model.widget.event.WidgetCreationCommitted;
 import ntut.csie.selab.entity.model.widget.event.WidgetDeleted;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
@@ -30,7 +30,7 @@ public class NotifyBoard {
             Board selectedBoard = board.get();
             selectedBoard.commitWidgetCreation(widgetCreated.getWidgetId());
             boardRepository.save(selectedBoard);
-            domainEventBus.post(new WidgetCreationNotifiedToAllUser(new Date(), widgetCreated.getBoardId(), widgetCreated.getWidgetId()));
+            domainEventBus.post(new WidgetCreationCommitted(new Date()));
         } else {
             throw new RuntimeException("Board not found, board id = " + widgetCreated.getBoardId());
         }

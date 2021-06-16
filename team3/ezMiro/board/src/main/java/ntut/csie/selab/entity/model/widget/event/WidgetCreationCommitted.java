@@ -4,8 +4,8 @@ import ntut.csie.selab.model.DomainEvent;
 
 import java.util.Date;
 
-public class WidgetMovementNotifiedToAllUser extends DomainEvent {
-    public WidgetMovementNotifiedToAllUser(Date date) {
+public class WidgetCreationCommitted extends DomainEvent {
+    public WidgetCreationCommitted(Date date) {
         super(date);
     }
 }
