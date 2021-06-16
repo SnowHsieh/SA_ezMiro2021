@@ -205,6 +205,9 @@ export default {
         if (o.id === widgetDto.widgetId) {
           canvas.remove(o)
           me.loadStickyNoteIntoCanvas(widgetDto)
+          canvas.getObjects().filter(object => object.get('connectedWidgetId') === o.id).forEach(circle => {
+            me.connectCircleToWidget(circle)
+          })
         }
       })
       canvas.renderAll()
@@ -311,6 +314,8 @@ export default {
       const circle = endPoint === 'head' ? selectedLine.circleHead : selectedLine.circleTail
       circle.connectedWidgetId = targetId
       me.connectCircleToWidget(circle)
+      selectedLine.set('selectable', false)
+      selectedLine.set('evented', false)
     },
     handleWidgetMessage (widgets) {
       if (widgets !== undefined) {
@@ -724,8 +729,8 @@ export default {
         fill: 'red',
         stroke: 'black',
         strokeWidth: 5,
-        selectable: true,
-        evented: true
+        selectable: !(widget.headWidgetId || widget.tailWidgetId),
+        evented: !(widget.headWidgetId || widget.tailWidgetId)
       })
 
       const me = this
