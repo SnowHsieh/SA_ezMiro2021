@@ -276,9 +276,13 @@ export default {
             type: 'line',
             widgetId: o.id
           }
-          me.deleteWidgetInCanvas(o)
+
+          me.canvas.remove(o.circleHead)
+          me.canvas.remove(o.circleTail)
+          me.canvas.remove(o)
           me.boardContent.widgetDtos.push(newLineDto)
           me.loadLineIntoCanvas(newLineDto)
+          return false
         }
       })
     },
