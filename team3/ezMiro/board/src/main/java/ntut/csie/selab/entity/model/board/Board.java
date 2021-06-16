@@ -1,9 +1,6 @@
 package ntut.csie.selab.entity.model.board;
 
-import ntut.csie.selab.entity.model.board.event.BoardCreated;
-import ntut.csie.selab.entity.model.board.event.BoardCursorMoved;
-import ntut.csie.selab.entity.model.board.event.BoardEntered;
-import ntut.csie.selab.entity.model.board.event.BoardLeft;
+import ntut.csie.selab.entity.model.board.event.*;
 import ntut.csie.selab.entity.model.widget.event.WidgetZOrderChanged;
 import ntut.csie.selab.model.AggregateRoot;
 
@@ -88,6 +85,7 @@ public class Board extends AggregateRoot<String> {
 
     public void commitWidgetCreation(String widgetId) {
         committedWidgets.add(new CommittedWidget(this.id, widgetId, committedWidgets.size()));
+        addDomainEvent(new WidgetCreationCommitted(new Date()));
     }
 
     public void commitWidgetDeletion(String widgetId) {
@@ -99,6 +97,7 @@ public class Board extends AggregateRoot<String> {
             int zOrder = i;
             committedWidgets.add(new CommittedWidget(getId(), clone.get(i).getWidgetId(), zOrder));
         }
+        addDomainEvent(new WidgetDeletionCommitted(new Date()));
     }
 
     public void addCursor(Cursor cursor) {

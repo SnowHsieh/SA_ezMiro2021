@@ -67,7 +67,7 @@ public class ResizeStickyNoteUseCaseTest {
         // Assert
         Assert.assertEquals(new Point(10, 10), output.getPosition().getTopLeft());
         Assert.assertEquals(new Point(50, 50), output.getPosition().getBottomRight());
-        Assert.assertEquals(2, domainEventBus.getCount());
+        Assert.assertEquals(1, domainEventBus.getCount());
 
     }
 

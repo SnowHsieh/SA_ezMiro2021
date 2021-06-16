@@ -1,4 +1,4 @@
-package ntut.csie.selab.entity.model.widget.event;
+package ntut.csie.selab.entity.model.board.event;
 
 import ntut.csie.selab.model.DomainEvent;
 

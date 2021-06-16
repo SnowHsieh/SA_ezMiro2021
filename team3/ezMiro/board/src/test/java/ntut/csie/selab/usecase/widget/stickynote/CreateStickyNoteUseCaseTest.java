@@ -95,7 +95,7 @@ public class CreateStickyNoteUseCaseTest {
 
         // Assert
         Assert.assertEquals(1, committedWidgetRepositoryPeer.countByBoard(BoardDataMapper.domainToData(boardRepository.findById(boardId).get())));
-        Assert.assertEquals(3, domainEventBus.getCount());
+        Assert.assertEquals(2, domainEventBus.getCount());
     }
 
     private Board createSimpleBoardWith(String boardId) {

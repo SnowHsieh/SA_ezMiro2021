@@ -67,7 +67,7 @@ public class MoveStickyNoteUseCaseTest {
         // Assert
         Assert.assertEquals(new Point(4, 4), output.getPosition().getTopLeft());
         Assert.assertEquals(new Point(5, 5), output.getPosition().getBottomRight());
-        Assert.assertEquals(2, domainEventBus.getCount());
+        Assert.assertEquals(1, domainEventBus.getCount());
     }
 
     class FakeBoardWebSocket implements ntut.csie.selab.usecase.websocket.WebSocket {

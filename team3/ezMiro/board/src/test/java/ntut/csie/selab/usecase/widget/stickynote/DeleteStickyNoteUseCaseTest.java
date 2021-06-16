@@ -111,7 +111,7 @@ public class DeleteStickyNoteUseCaseTest {
         Assert.assertNotNull(output.getStickyNoteId());
         Assert.assertFalse(stickyNoteRepository.findById(output.getStickyNoteId()).isPresent());
         Assert.assertEquals(0, boardRepository.findById(boardId).get().getWidgetIds().size());
-        Assert.assertEquals(3, domainEventBus.getCount());
+        Assert.assertEquals(2, domainEventBus.getCount());
     }
 
     @Test

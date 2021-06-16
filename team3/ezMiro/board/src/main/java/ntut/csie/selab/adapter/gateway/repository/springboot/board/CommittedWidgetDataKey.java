@@ -1,4 +1,4 @@
-package ntut.csie.selab.adapter.gateway.repository.springboot.widget;
+package ntut.csie.selab.adapter.gateway.repository.springboot.board;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import javax.persistence.Column;

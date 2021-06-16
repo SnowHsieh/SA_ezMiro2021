@@ -1,6 +1,4 @@
-package ntut.csie.selab.adapter.gateway.repository.springboot.widget;
-
-import ntut.csie.selab.adapter.gateway.repository.springboot.board.BoardData;
+package ntut.csie.selab.adapter.gateway.repository.springboot.board;
 
 import javax.persistence.*;
 

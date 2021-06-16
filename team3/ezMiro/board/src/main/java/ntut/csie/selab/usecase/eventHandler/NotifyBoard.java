@@ -4,7 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import ntut.csie.selab.entity.model.board.Board;
 import ntut.csie.selab.entity.model.board.event.WidgetDeletionCommitted;
 import ntut.csie.selab.entity.model.widget.event.WidgetCreated;
-import ntut.csie.selab.entity.model.widget.event.WidgetCreationCommitted;
+import ntut.csie.selab.entity.model.board.event.WidgetCreationCommitted;
 import ntut.csie.selab.entity.model.widget.event.WidgetDeleted;
 import ntut.csie.selab.model.DomainEventBus;
 import ntut.csie.selab.usecase.board.BoardRepository;
@@ -28,9 +28,10 @@ public class NotifyBoard {
 
         if (board.isPresent()) {
             Board selectedBoard = board.get();
+            selectedBoard.clearDomainEvents();
             selectedBoard.commitWidgetCreation(widgetCreated.getWidgetId());
             boardRepository.save(selectedBoard);
-            domainEventBus.post(new WidgetCreationCommitted(new Date()));
+            domainEventBus.postAll(selectedBoard);
         } else {
             throw new RuntimeException("Board not found, board id = " + widgetCreated.getBoardId());
         }
@@ -42,9 +43,10 @@ public class NotifyBoard {
 
         if (board.isPresent()) {
             Board selectedBoard = board.get();
+            selectedBoard.clearDomainEvents();
             selectedBoard.commitWidgetDeletion(widgetDeleted.getWidgetId());
             boardRepository.save(selectedBoard);
-            domainEventBus.post(new WidgetDeletionCommitted(new Date()));
+            domainEventBus.postAll(selectedBoard);
         } else {
             throw new RuntimeException("Board not found, board id = " + widgetDeleted.getBoardId());
         }

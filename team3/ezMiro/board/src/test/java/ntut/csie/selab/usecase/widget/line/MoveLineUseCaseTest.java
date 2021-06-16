@@ -74,7 +74,7 @@ public class MoveLineUseCaseTest {
         // Assert
         Assert.assertEquals(new Point(100, 250), output.getPosition().getTopLeft());
         Assert.assertEquals(new Point(200, 250), output.getPosition().getBottomRight());
-        Assert.assertEquals(2, domainEventBus.getCount());
+        Assert.assertEquals(1, domainEventBus.getCount());
     }
 
     class FakeBoardWebSocket implements ntut.csie.selab.usecase.websocket.WebSocket {
