@@ -6,7 +6,7 @@
     <button type="button" class="btn btn-warning widgetButton" @click="setWidgetTypeOfCreation(CREATE_WIDGET_TYPE.STICKY_NOTE)" :class="{'active': this.widgetTypeOfCreation === CREATE_WIDGET_TYPE.STICKY_NOTE}" v-show="isDataLoaded">Sticky Note</button>
   </div>
   <div class="user-bar">
-    <label style="font-size:20px;" class="ml-2">看板裡有：</label>
+    <label style="font-size:20px;" class="ml-2" v-show="isDataLoaded">看板裡有：</label>
     <label class="mr-2 collaborator" v-for="user in this.collaborator" v-bind:key="user.userId">
       {{user.userId}}
     </label>
@@ -32,12 +32,12 @@
   <div class="cursors" v-for="user in this.collaborator" v-bind:key="user.userId" :style="{'top': user.y + 'px', 'left': user.x + 'px'}">
     {{user.userId}}
   </div>
-  <div class="d-flex justify-content-center">
-  <button class="btn btn-outline-secondary" type="button" disabled>
-    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-    Loading...
-  </button>
-  </div>
+    <div class="d-flex justify-content-center" v-show="isDataLoaded">
+    <button class="btn btn-outline-secondary" type="button" disabled>
+      <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+      Loading...
+    </button>
+    </div>
   </div>
 </template>
 
