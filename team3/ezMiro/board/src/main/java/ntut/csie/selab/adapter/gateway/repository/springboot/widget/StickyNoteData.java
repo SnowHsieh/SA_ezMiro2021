@@ -10,12 +10,6 @@ public class StickyNoteData {
     @Column(name="widget_id")
     private String widgetId;
 
-// TODO relation to board
-//    @ManyToOne
-//    @JoinColumn(
-//            name = "board_id",
-//            foreignKey = @ForeignKey(name = "id", value = ConstraintMode.NO_CONSTRAINT)
-//    )
     @Column(name="board_id", nullable = false)
     private String boardId;
 
