@@ -19,6 +19,13 @@ public class BoardSession extends ValueObject {
         this.cursorPosition = new Position(0.0, 0.0);
     }
 
+    public BoardSession(UUID boardId, UUID userId, BoardSessionId boardSessionId, Position cursorPosition) {
+        this.boardId = boardId;
+        this.userId = userId;
+        this.boardSessionId = boardSessionId;
+        this.cursorPosition = cursorPosition;
+    }
+
     public UUID getBoardId() {
         return boardId;
     }
