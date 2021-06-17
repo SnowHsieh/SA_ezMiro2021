@@ -208,7 +208,7 @@ export default {
         name: `匿名使用者${Math.floor(Math.random() * 1000) + 1}`
       }
       this.webSocket = new WebSocket(
-        `ws://25.61.152.159:8080/WebSocketServer/${this.boardId}/${this.user.name}`
+        `ws://localhost:8080/WebSocketServer/${this.boardId}/${this.user.name}`
       )
 
       this.webSocket.onopen = (e) => {
@@ -292,7 +292,7 @@ export default {
         )
         preMousePosition.x = this.mousePosition.x
         preMousePosition.y = this.mousePosition.y
-      }, 2000)
+      }, 200)
     },
     changeNoteColor (color) {
       if (this.activeObject.isType('note')) {
