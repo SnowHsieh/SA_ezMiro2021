@@ -14,8 +14,8 @@ public class Line extends Figure {
     private List<Position> positionList;
     private UUID srcConnectableFigureId;
     private UUID destConnectableFigureId;
-    private ArrowKindEnum srcArrowKind; //NONE,CIRCLE,ARROW
-    private ArrowKindEnum destArrowKind; //NONE,CIRCLE,ARROW
+    private ArrowKindEnum srcArrowKind; //NONE,ARROW
+    private ArrowKindEnum destArrowKind; //NONE,ARROW
     private int strokeWidth;
     private String color;
 
