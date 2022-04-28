@@ -4,6 +4,7 @@ import ntut.csie.islab.miro.entity.model.Position;
 import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
 import ntut.csie.islab.miro.entity.model.figure.Figure;
 import ntut.csie.islab.miro.entity.model.figure.connectablefigure.Style;
+import ntut.csie.islab.miro.entity.model.figure.connectablefigure.stickynote.event.StickyNoteColorChangedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.line.event.*;
 
 
@@ -178,7 +179,11 @@ public class Line extends Figure {
 
     @Override
     public void changeColor(String newColor) {
-
+        if (!newColor.isEmpty() && !this.getColor().equals(newColor)) {
+            String originalColor = this.getColor();
+            this.setColor(newColor);
+            addDomainEvent(new LineColorChangedDomainEvent(this.getBoardId(), this.getFigureId(), originalColor, newColor));
+        }
     }
 
     @Override

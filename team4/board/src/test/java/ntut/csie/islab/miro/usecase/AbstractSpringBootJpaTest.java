@@ -37,6 +37,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -62,6 +63,7 @@ public abstract class AbstractSpringBootJpaTest {
     public UUID userId;
     public CqrsCommandPresenter createBoardUseCaseOutput;
     public CqrsCommandPresenter preGeneratedStickyNote; // todo: delete it
+    public CqrsCommandPresenter preGeneratedLine; // todo: delete it
 
     @Autowired
     private BoardRepositoryPeer boardRepositoryPeer;
@@ -96,6 +98,15 @@ public abstract class AbstractSpringBootJpaTest {
                 100,
                 100,
                 new Style(12, ShapeKindEnum.RECTANGLE, "#f9f900"));
+
+        List<Position> linePositionList = new ArrayList<>();
+        linePositionList.add(new Position(0, 50));
+        linePositionList.add(new Position(100, 150));
+        preGeneratedLine = generateCreateLineUseCaseOutput(
+                boardId,
+                linePositionList,
+                10,
+                "#f9f900");
 
 
     }

@@ -10,6 +10,7 @@ import ntut.csie.islab.miro.usecase.board.leaveboard.LeaveBoardUseCase;
 import ntut.csie.islab.miro.usecase.eventhandler.NotifyBoard;
 import ntut.csie.islab.miro.usecase.figure.line.LineRepository;
 import ntut.csie.islab.miro.usecase.figure.line.attachconnectablefigure.AttachConnectableFigureUseCase;
+import ntut.csie.islab.miro.usecase.figure.line.changecolor.ChangeLineColorUseCase;
 import ntut.csie.islab.miro.usecase.figure.line.changepath.ChangeLinePathUseCase;
 import ntut.csie.islab.miro.usecase.figure.line.create.CreateLineUseCase;
 import ntut.csie.islab.miro.usecase.figure.line.delete.DeleteLineUseCase;
@@ -114,6 +115,11 @@ public class UseCaseInjection {
     @Bean(name = "deleteLineUseCase")
     public DeleteLineUseCase deleteLineUseCase() {
         return new DeleteLineUseCase(eventBus, lineRepository);
+    }
+
+    @Bean(name = "changeLineColorUseCase")
+    public ChangeLineColorUseCase changeLineColorUseCase() {
+        return new ChangeLineColorUseCase(lineRepository, eventBus);
     }
 
     @Bean(name = "changeLinePathUseCase")
