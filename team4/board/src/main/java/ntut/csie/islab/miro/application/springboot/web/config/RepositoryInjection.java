@@ -1,5 +1,7 @@
 package ntut.csie.islab.miro.application.springboot.web.config;
 
+import ntut.csie.islab.account.users.repository.UserRepositoryImpl;
+import ntut.csie.islab.account.users.usecase.UserRepository;
 import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryImpl;
 import ntut.csie.islab.miro.adapter.gateway.repository.figure.line.LineRepositoryPeer;
 import ntut.csie.islab.miro.adapter.gateway.repository.figure.connectablefigure.stickynote.StickyNoteRepositoryImpl;
@@ -47,6 +49,11 @@ public class RepositoryInjection {
     @Bean(name = "boardRepository")
     public BoardRepository boardRepository() {
         return new BoardRepositoryImpl(boardRepositoryPeer);
+    }
+
+    @Bean(name = "userRepository")
+    public UserRepository userRepository() {
+        return new UserRepositoryImpl();
     }
 
     @Bean(name = "stickyNoteRepository")

@@ -1,5 +1,10 @@
 package ntut.csie.islab.miro.application.springboot.web.config;
 
+import ntut.csie.islab.account.users.usecase.UserRepository;
+import ntut.csie.islab.account.users.usecase.login.LoginUseCase;
+import ntut.csie.islab.account.users.usecase.login.LoginUseCaseImpl;
+import ntut.csie.islab.account.users.usecase.register.RegisterUseCase;
+import ntut.csie.islab.account.users.usecase.register.RegisterUseCaseImpl;
 import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.usecase.board.changefigureorder.ChangeFigureOrderUseCase;
 import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
@@ -31,6 +36,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration("EzMiroUserCaseInjection")
 public class UseCaseInjection {
+    private UserRepository userRepository;
     private BoardRepository boardRepository;
     private StickyNoteRepository stickyNoteRepository;
     private LineRepository lineRepository;
@@ -43,6 +49,16 @@ public class UseCaseInjection {
     @Bean(name = "createNotifyBoard")
     public NotifyBoard createNotifyBoard() {
         return new NotifyBoard(boardRepository, eventBus);
+    }
+
+    @Bean(name = "registerUseCase")
+    public RegisterUseCase registerUseCase() {
+        return new RegisterUseCaseImpl(userRepository, eventBus);
+    }
+
+    @Bean(name = "loginUseCase")
+    public LoginUseCase loginUseCase() {
+        return new LoginUseCaseImpl(userRepository, eventBus);
     }
 
     @Bean(name = "createBoardUseCase")
@@ -137,6 +153,11 @@ public class UseCaseInjection {
         return new UnattachConnectableFigureUseCase(eventBus, lineRepository);
     }
 
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Autowired
     public void setBoardRepository(BoardRepository boardRepository) {

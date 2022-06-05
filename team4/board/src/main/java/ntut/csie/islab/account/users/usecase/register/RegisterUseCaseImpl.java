@@ -29,6 +29,7 @@ public class RegisterUseCaseImpl implements RegisterUseCase {
 
         output.setId(user.getId());
         output.setExitCode(ExitCode.SUCCESS);
+        output.setMessage("Register success");
     }
 
 

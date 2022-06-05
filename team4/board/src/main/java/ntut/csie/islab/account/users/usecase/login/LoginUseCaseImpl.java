@@ -28,6 +28,7 @@ public class LoginUseCaseImpl implements LoginUseCase {
                 domainEventBus.postAll(user);
                 output.setId(user.getId());
                 output.setExitCode(ExitCode.SUCCESS);
+                output.setMessage("Login success");
             }
             // no fail
         } else {
