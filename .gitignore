@@ -4,8 +4,7 @@ team4/.DS_Store
 team4/**/target/
 team4/target/
 team4/FrontEnd/node_modules/
-team4/FrontEnd/vue.config.js
-team4/FrontEnd/src/config/
+
 
 .DS_Store
 team3/**/target/
