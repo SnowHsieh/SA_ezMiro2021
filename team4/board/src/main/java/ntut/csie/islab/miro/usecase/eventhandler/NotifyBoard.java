@@ -1,6 +1,7 @@
 package ntut.csie.islab.miro.usecase.eventhandler;
 
 import ntut.csie.islab.miro.entity.model.board.FigureTypeEnum;
+import ntut.csie.islab.miro.entity.model.board.event.BoardCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.connectablefigure.stickynote.event.StickyNoteCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.connectablefigure.stickynote.event.StickyNoteDeletedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.line.event.LineCreatedDomainEvent;
@@ -9,9 +10,16 @@ import ntut.csie.islab.miro.usecase.board.BoardRepository;
 import ntut.csie.islab.miro.entity.model.board.Board;
 import ntut.csie.islab.miro.entity.model.board.event.FigureCommittedDomainEvent;
 import ntut.csie.islab.miro.entity.model.board.event.FigureUncommittedDomainEvent;
+import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardInput;
+import ntut.csie.islab.miro.usecase.board.createboard.CreateBoardUseCase;
+import ntut.csie.islab.team.entity.event.TeamCreatedDomainEvent;
+import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
+import java.util.UUID;
+
 public class NotifyBoard {
     private BoardRepository boardRepository;
     private DomainEventBus domainEventBus;
@@ -70,6 +78,15 @@ public class NotifyBoard {
         } else {
             throw new RuntimeException("Board not found, board id = " + lineDeleteDomainEvent.getBoardId());
         }
+    }
+
+    public void whenTeamCreated(TeamCreatedDomainEvent teamCreatedDomainEvent) {
+        String teamId = teamCreatedDomainEvent.getTeamId();
+        String boardId = teamCreatedDomainEvent.getBoardId();
+        Board board = new Board(UUID.fromString(teamId), UUID.fromString(boardId), teamCreatedDomainEvent.getTeamName());
+
+        boardRepository.save(board);
+        domainEventBus.postAll(board);
     }
 
 }

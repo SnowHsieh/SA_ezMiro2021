@@ -12,18 +12,20 @@ public class Team extends AggregateRoot<UUID> {
     String boardId;
     String teamName;
 
-    public Team(String teamName) {
+    public Team(String teamName, String boardId) {
         super(UUID.randomUUID());
         this.teamName = teamName;
+        this.boardId = boardId;
         memberList = new ArrayList<>();
-        addDomainEvent(new TeamCreatedDomainEvent(this.getId().toString(), boardId));
+        addDomainEvent(new TeamCreatedDomainEvent(this.getId().toString(), boardId, teamName));
     }
 
-    public Team(String teamName, String teamId) {
+    public Team(String teamName, String teamId, String boardId) {
         super(UUID.fromString(teamId));
         this.teamName = teamName;
+        this.boardId = boardId;
         memberList = new ArrayList<>();
-        addDomainEvent(new TeamCreatedDomainEvent(this.getId().toString(), boardId));
+        addDomainEvent(new TeamCreatedDomainEvent(this.getId().toString(), boardId, teamName));
     }
 
     public List<Member> getMemberList() {

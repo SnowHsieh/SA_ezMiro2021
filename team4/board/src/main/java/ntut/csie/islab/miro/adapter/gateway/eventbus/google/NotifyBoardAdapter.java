@@ -6,6 +6,7 @@ import ntut.csie.islab.miro.entity.model.figure.line.event.LineDeletedDomainEven
 import ntut.csie.islab.miro.entity.model.figure.connectablefigure.stickynote.event.StickyNoteCreatedDomainEvent;
 import ntut.csie.islab.miro.entity.model.figure.connectablefigure.stickynote.event.StickyNoteDeletedDomainEvent;
 import ntut.csie.islab.miro.usecase.eventhandler.NotifyBoard;
+import ntut.csie.islab.team.entity.event.TeamCreatedDomainEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +37,12 @@ public class NotifyBoardAdapter {
     @Subscribe
     public void whenFigureDeleted(LineDeletedDomainEvent lineDeletedDomainEvent) {
         notifyBoard.whenFigureDeleted(lineDeletedDomainEvent);
+    }
+
+    @Subscribe
+    public void whenTeamCreated(TeamCreatedDomainEvent teamCreatedDomainEvent) {
+        System.out.println("team cr");
+        notifyBoard.whenTeamCreated(teamCreatedDomainEvent);
     }
 
 }

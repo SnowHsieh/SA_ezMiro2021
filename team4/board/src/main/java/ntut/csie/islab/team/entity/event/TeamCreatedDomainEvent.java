@@ -8,10 +8,13 @@ import java.util.UUID;
 public class TeamCreatedDomainEvent extends DomainEvent {
     private final String teamId;
     private final String boardId;
-    public TeamCreatedDomainEvent(String id, String boardId) {
+    private final String teamName;
+
+    public TeamCreatedDomainEvent(String id, String boardId, String teamName) {
         super(DateProvider.now());
-        this.teamId=id;
-        this.boardId=boardId;
+        this.teamId = id;
+        this.boardId = boardId;
+        this.teamName = teamName;
     }
 
     public String getTeamId() {
@@ -20,5 +23,9 @@ public class TeamCreatedDomainEvent extends DomainEvent {
 
     public String getBoardId() {
         return boardId;
+    }
+
+    public String getTeamName() {
+        return teamName;
     }
 }

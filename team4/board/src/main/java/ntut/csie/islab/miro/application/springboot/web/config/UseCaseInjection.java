@@ -28,6 +28,9 @@ import ntut.csie.islab.miro.usecase.figure.connectablefigure.stickynote.delete.D
 import ntut.csie.islab.miro.usecase.figure.connectablefigure.stickynote.move.MoveStickyNoteUseCase;
 import ntut.csie.islab.miro.usecase.figure.connectablefigure.stickynote.resize.ResizeStickyNoteUseCase;
 import ntut.csie.islab.miro.usecase.websocket.BoardSessionBroadcaster;
+import ntut.csie.islab.team.TeamRepository;
+import ntut.csie.islab.team.usecase.CreateTeamUseCase;
+import ntut.csie.islab.team.usecase.CreateTeamUseCaseImpl;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +40,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration("EzMiroUserCaseInjection")
 public class UseCaseInjection {
     private UserRepository userRepository;
+    private TeamRepository teamRepository;
     private BoardRepository boardRepository;
     private StickyNoteRepository stickyNoteRepository;
     private LineRepository lineRepository;
@@ -59,6 +63,11 @@ public class UseCaseInjection {
     @Bean(name = "loginUseCase")
     public LoginUseCase loginUseCase() {
         return new LoginUseCaseImpl(userRepository, eventBus);
+    }
+
+    @Bean(name = "createTeamUseCase")
+    public CreateTeamUseCase createTeamUseCase() {
+        return new CreateTeamUseCaseImpl(teamRepository, eventBus);
     }
 
     @Bean(name = "createBoardUseCase")
@@ -157,6 +166,11 @@ public class UseCaseInjection {
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setTeamRepository(TeamRepository teamRepository) {
+        this.teamRepository = teamRepository;
     }
 
     @Autowired

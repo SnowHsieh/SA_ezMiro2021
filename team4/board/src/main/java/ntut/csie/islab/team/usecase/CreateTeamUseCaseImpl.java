@@ -7,6 +7,8 @@ import ntut.csie.sslab.ddd.model.DomainEventBus;
 import ntut.csie.sslab.ddd.usecase.cqrs.CqrsCommandOutput;
 import ntut.csie.sslab.ddd.usecase.cqrs.ExitCode;
 
+import java.util.UUID;
+
 public class CreateTeamUseCaseImpl implements CreateTeamUseCase {
     private TeamRepository teamRepository;
     private DomainEventBus domainEventBus;
@@ -18,16 +20,14 @@ public class CreateTeamUseCaseImpl implements CreateTeamUseCase {
 
     @Override
     public void execute(CreateTeamUseCaseInput input, CqrsCommandOutput output) {
-        Team team = new Team(input.getTeamName());
+        Team team = new Team(input.getTeamName(), UUID.randomUUID().toString());
         team.addMember(input.getAdmin(), "Admin");
-        team.setBoardId(input.getBoardId());
         teamRepository.save(team);
         domainEventBus.postAll(team);
 
         output.setId(team.getId().toString());
         output.setExitCode(ExitCode.SUCCESS);
-
-
+        output.setMessage("create team success");
     }
 
     @Override
@@ -38,7 +38,6 @@ public class CreateTeamUseCaseImpl implements CreateTeamUseCase {
     private static class CreateTeamUseCaseInputImpl implements CreateTeamUseCaseInput {
 
         private String username;
-        private String boardId;
         private String teamName;
 
 
@@ -62,14 +61,5 @@ public class CreateTeamUseCaseImpl implements CreateTeamUseCase {
             this.teamName = teamName;
         }
 
-        @Override
-        public String getBoardId() {
-            return boardId;
-        }
-
-        @Override
-        public void setBoarId(String boardId) {
-            this.boardId = boardId;
-        }
     }
 }

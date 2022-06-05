@@ -10,9 +10,4 @@ public interface CreateTeamUseCaseInput extends Input {
     String getTeamName();
 
     void setTeamName(String teamName);
-
-    String getBoardId();
-
-    void setBoarId(String boardId);
-
 }

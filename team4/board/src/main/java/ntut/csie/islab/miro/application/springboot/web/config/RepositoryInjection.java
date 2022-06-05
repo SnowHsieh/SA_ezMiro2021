@@ -11,6 +11,8 @@ import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryImpl
 import ntut.csie.islab.miro.adapter.gateway.repository.board.BoardRepositoryPeer;
 import ntut.csie.islab.miro.usecase.figure.line.LineRepository;
 import ntut.csie.islab.miro.usecase.figure.connectablefigure.StickyNoteRepository;
+import ntut.csie.islab.team.TeamRepository;
+import ntut.csie.islab.team.repository.TeamRepositoryImpl;
 import ntut.csie.sslab.ddd.adapter.gateway.GoogleEventBus;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +56,11 @@ public class RepositoryInjection {
     @Bean(name = "userRepository")
     public UserRepository userRepository() {
         return new UserRepositoryImpl();
+    }
+
+    @Bean(name = "teamRepository")
+    public TeamRepository teamRepository() {
+        return new TeamRepositoryImpl();
     }
 
     @Bean(name = "stickyNoteRepository")
