@@ -62,7 +62,7 @@ import {
 export default {
   data () {
     return {
-      boardId: 'c06a6073-dab0-486f-849d-d30f9dcaec03',
+      boardId: '0020e551-7618-4b97-b253-4c617b84226d',
       canvasContext: null,
       boardContent: null,
       canvas: null,
@@ -903,6 +903,9 @@ export default {
       if (this.socket.readyState === 1) {
         this.socket.send(data)
       }
+    },
+    receiveUserData () {
+      // const routerParams = this.$router.query.userdata;
     }
   }
 

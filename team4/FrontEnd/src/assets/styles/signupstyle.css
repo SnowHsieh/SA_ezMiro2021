@@ -1,0 +1,56 @@
+body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.login {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(178, 209, 209, 0.835);
+    text-align: center;
+    color: rgb(0, 0, 0);
+    border-radius: 10px;
+    padding: 30px;
+    font-family: monospace, "微軟正黑體", sans-serif;
+    width: 20%;
+}
+
+.login i {
+    font-size: 100px;
+    margin: 20px auto;
+}
+
+h4 {
+   margin: 5px auto;
+   padding: 5px;
+}
+input[type="text"],
+input[type="password"] {
+    font-size: 16px;
+    font-family: "微軟正黑體", sans-serif;
+    padding: 5px;
+    border-radius: 4px;
+    margin: 0 auto;
+    display: block;
+    width: 80%;
+}
+
+button {
+    border: 0;
+    padding: 6px 12px;
+    margin: 10px auto;
+    font-size: 18px;
+    font-family: "微軟正黑體", sans-serif;
+    background: rgb(48, 48, 48);
+    color: rgb(255, 255, 255);
+}
+
+@media (max-width:450px) {
+    .login {
+        width: 70%;
+    }
+}

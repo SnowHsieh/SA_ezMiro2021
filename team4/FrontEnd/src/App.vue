@@ -4,17 +4,15 @@
   </div>
 </template>
 <script>
-// import Board from './components/Board.vue'
 
 export default {
   name: 'App'
-  // components: {
-  //   Board
-  // }
 }
 </script>
 <style>
 @import './assets/styles/contextMenuStyle.css';
+@import './assets/styles/loginstyle.css';
+@import './assets/styles/signupstyle.css';
 #nav a {
   font-weight: bold;
   color: #2c3e50;
