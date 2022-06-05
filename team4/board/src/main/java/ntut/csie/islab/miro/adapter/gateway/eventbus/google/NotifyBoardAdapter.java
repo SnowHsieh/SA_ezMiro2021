@@ -41,7 +41,6 @@ public class NotifyBoardAdapter {
 
     @Subscribe
     public void whenTeamCreated(TeamCreatedDomainEvent teamCreatedDomainEvent) {
-        System.out.println("team cr");
         notifyBoard.whenTeamCreated(teamCreatedDomainEvent);
     }
 

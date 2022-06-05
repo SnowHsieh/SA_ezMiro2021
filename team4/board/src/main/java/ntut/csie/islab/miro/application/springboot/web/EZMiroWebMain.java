@@ -20,7 +20,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 @ComponentScan(basePackages = {"ntut.csie.islab.miro", "ntut.csie.islab.account", "ntut.csie.islab.team"})
-@EntityScan(basePackages = {"ntut.csie.islab.miro.adapter", "ntut.csie.islab.account.adapter"})
+@EntityScan(basePackages = {"ntut.csie.islab.miro.adapter", "ntut.csie.islab.account.adapter", "ntut.csie.islab.team.adapter"})
 @SpringBootApplication(exclude = {
         org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class
 })

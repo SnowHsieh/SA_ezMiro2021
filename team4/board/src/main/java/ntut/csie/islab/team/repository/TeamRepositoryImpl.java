@@ -34,11 +34,8 @@ public class TeamRepositoryImpl implements TeamRepository {
 
     @Override
     public void save(Team team) {
-
         Optional<Team> optionalTeam = teams.stream().filter(s -> s.getId().toString().equals(team.getId().toString())).findFirst();
-        if (optionalTeam.isPresent()) {
-            teams.remove(optionalTeam.get());
-        }
+        optionalTeam.ifPresent(value -> teams.remove(value));
         teams.add(team);
     }
 
