@@ -29,8 +29,10 @@ import ntut.csie.islab.miro.usecase.figure.connectablefigure.stickynote.move.Mov
 import ntut.csie.islab.miro.usecase.figure.connectablefigure.stickynote.resize.ResizeStickyNoteUseCase;
 import ntut.csie.islab.miro.usecase.websocket.BoardSessionBroadcaster;
 import ntut.csie.islab.team.TeamRepository;
-import ntut.csie.islab.team.usecase.CreateTeamUseCase;
-import ntut.csie.islab.team.usecase.CreateTeamUseCaseImpl;
+import ntut.csie.islab.team.usecase.createteam.CreateTeamUseCase;
+import ntut.csie.islab.team.usecase.createteam.CreateTeamUseCaseImpl;
+import ntut.csie.islab.team.usecase.getboard.GetBoardListByUserUseCase;
+import ntut.csie.islab.team.usecase.getboard.GetBoardListByUserUseCaseImpl;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -53,6 +55,10 @@ public class UseCaseInjection {
     @Bean(name = "createNotifyBoard")
     public NotifyBoard createNotifyBoard() {
         return new NotifyBoard(boardRepository, eventBus);
+    }
+    @Bean(name = "getBoardListByUserUseCase")
+    public GetBoardListByUserUseCase getBoardListByUserUseCase() {
+        return new GetBoardListByUserUseCaseImpl(teamRepository,boardRepository,eventBus);
     }
 
     @Bean(name = "registerUseCase")

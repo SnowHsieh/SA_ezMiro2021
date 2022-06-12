@@ -9,6 +9,7 @@
     <h2>密碼</h2>
     <input v-model="loginForm.password" type="password" placeholder="請輸入密碼"  />
     <button type="primary" @click="handleLogin" >Login</button>
+    <button type="primary" @click="redirectToRegister" >Register</button>
     <br>
   </div>
 </template>
@@ -39,22 +40,34 @@ export default {
       }
       console.log(this.loginForm)
       this.loginUser()
-      this.redirectToBoard()
     },
     async loginUser () {
       try {
-        await loginUserApi(this.loginForm)
-        console.log('login success')
+        const result = await loginUserApi(this.loginForm)
+        console.log(result)
+        // var jsonString = '{\"loginMsg\":\"Login success\",\"boardListJson\":\"[]\"}';
+        const parsedResult = JSON.parse(result.data.message)
+        if (parsedResult.loginMsg === 'Login success') {
+          this.redirectToBoardList(parsedResult.boardListJson)
+        } else {
+          alert('帳號不存在或密碼錯誤，請重新嘗試!')
+        }
       } catch (err) {
         console.log(err)
       }
     },
-    redirectToBoard () {
+    redirectToBoardList (boardListJson) {
       this.$router.push({
-        path: '/board',
+        path: '/boardlist',
         query: {
-          userdata: this.loginForm
+          boardList: boardListJson,
+          userName: this.loginForm.username
         }
+      })
+    },
+    redirectToRegister () {
+      this.$router.push({
+        path: '/register'
       })
     }
   }

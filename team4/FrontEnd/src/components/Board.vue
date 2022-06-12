@@ -62,7 +62,7 @@ import {
 export default {
   data () {
     return {
-      boardId: '0020e551-7618-4b97-b253-4c617b84226d',
+      boardId: this.$route.query.boardId,
       canvasContext: null,
       boardContent: null,
       canvas: null,
