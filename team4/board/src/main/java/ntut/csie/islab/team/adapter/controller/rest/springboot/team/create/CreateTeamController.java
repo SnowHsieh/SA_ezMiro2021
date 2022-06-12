@@ -1,9 +1,7 @@
 package ntut.csie.islab.team.adapter.controller.rest.springboot.team.create;
 
-import ntut.csie.islab.account.users.usecase.login.LoginUseCase;
-import ntut.csie.islab.account.users.usecase.login.LoginUseCaseInput;
-import ntut.csie.islab.team.usecase.CreateTeamUseCase;
-import ntut.csie.islab.team.usecase.CreateTeamUseCaseInput;
+import ntut.csie.islab.team.usecase.createteam.CreateTeamUseCase;
+import ntut.csie.islab.team.usecase.createteam.CreateTeamUseCaseInput;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandPresenter;
 import ntut.csie.sslab.ddd.adapter.presenter.cqrs.CqrsCommandViewModel;
 import org.json.JSONException;
