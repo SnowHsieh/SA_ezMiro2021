@@ -1,4 +1,4 @@
-package ntut.csie.islab.team.usecase;
+package ntut.csie.islab.team.usecase.createteam;
 
 import ntut.csie.sslab.ddd.usecase.Input;
 

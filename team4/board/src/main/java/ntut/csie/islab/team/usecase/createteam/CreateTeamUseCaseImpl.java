@@ -1,6 +1,5 @@
-package ntut.csie.islab.team.usecase;
+package ntut.csie.islab.team.usecase.createteam;
 
-import ntut.csie.islab.account.users.usecase.register.RegisterInput;
 import ntut.csie.islab.team.TeamRepository;
 import ntut.csie.islab.team.entity.Team;
 import ntut.csie.sslab.ddd.model.DomainEventBus;
